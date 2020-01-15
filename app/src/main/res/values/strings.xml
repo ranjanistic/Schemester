@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Schedule</string>
+    <string name="app_name">Schemester</string>
+    <string name="title_dayschedule_list">Full Schedule</string>
+    <string name="title_dayschedule_detail">Day Schedule Detail</string>
 </resources>

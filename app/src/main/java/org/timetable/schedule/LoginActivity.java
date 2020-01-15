@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -24,38 +26,37 @@ public class LoginActivity extends AppCompatActivity {
     Button login;
     EditText emailid, roll;
     FirebaseAuth mAuth;
-    FirebaseUser user;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    CustomLoadDialogClass customLoadDialogClass;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setStatusBarColor(this.getResources().getColor(R.color.dull_white));
+        window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
         mAuth = FirebaseAuth.getInstance();
         login = findViewById(R.id.registerbtn);
         emailid = findViewById(R.id.emailId);
         roll = findViewById(R.id.rollpass);
+        customLoadDialogClass = new CustomLoadDialogClass(this, new OnDialogLoadListener() {
+            @Override
+            public void onLoad() {
+            }
+            @Override
+            public String onLoadText() {
+                return "Need few moments...";
+            }
+        });
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registerInit();
+                    registerInit();
             }
         });
     }
-
-
-    public class regisTask extends AsyncTask<String,String,String> {
-        @Override
-        protected String doInBackground(String... creds){
-            String emailcred = creds[0];
-            String passcred = creds[1];
-            register(emailcred, passcred);
-            return emailcred;
-        }
-        @Override
-        protected void onPostExecute(String result){
-            super.onPostExecute(result);
-        }
-    }
-
     private void registerInit(){
         String email, pass;
         email = emailid.getText().toString();
@@ -68,13 +69,51 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Your college roll number required.", Toast.LENGTH_LONG).show();
             return;
         }
-         else {
-             new regisTask().execute(email, pass);
+        else {
+            customLoadDialogClass.show();
+            new regisTask().execute(email, pass);
         }
     }
 
+    public class regisTask extends AsyncTask<String,String,String> {
+        @Override
+        protected String doInBackground(String... creds){
+            String emailcred = creds[0];
+            String passcred = creds[1];
+            if(getLoginStatus()){
+                loginUser(emailcred, passcred);
+            }else {
+                register(emailcred, passcred);
+            }
+            return emailcred;
+        }
+        @Override
+        protected void onPostExecute(String result){
+            super.onPostExecute(result);
+        }
+    }
 
-    private void register(String uid, String passphrase){
+    private void loginUser(final String emailIdFinalLogin, String passwordFinalLogin){
+        mAuth.signInWithEmailAndPassword(emailIdFinalLogin, passwordFinalLogin)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(), "Logged in as "+emailIdFinalLogin, Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            overridePendingTransition(R.anim.top_out,R.anim.bottom_in);
+                            startActivity(intent);
+                            finish();
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(), "Login failed! An error occurred", Toast.LENGTH_LONG).show();
+                            customLoadDialogClass.dismiss();
+                        }
+                    }
+                });
+    }
+
+    private void register(final String uid, final String passphrase){
         mAuth.createUserWithEmailAndPassword(uid, passphrase)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -82,21 +121,38 @@ public class LoginActivity extends AppCompatActivity {
                         user = FirebaseAuth.getInstance().getCurrentUser();
                         if (task.isSuccessful()) {
                             storeLoginStatus(true);
+                            storeCredentials(uid,passphrase);
                             Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_LONG).show();
+                            customLoadDialogClass.hide();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            overridePendingTransition(R.anim.top_out,R.anim.bottom_in);
                             startActivity(intent);
+                            finish();
                         } else {
                             storeLoginStatus(false);
                             Toast.makeText(getApplicationContext(), "An error occurred. Network problem?", Toast.LENGTH_LONG).show();
+                            customLoadDialogClass.hide();
                         }
                     }
                 });
+    }
+    private Boolean getLoginStatus(){
+        SharedPreferences mSharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+        return mSharedPreferences.getBoolean("loginstatus", false);
     }
 
     private void storeLoginStatus(Boolean logged){
         SharedPreferences mSharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
         mEditor.putBoolean("loginstatus", logged);
+        mEditor.apply();
+    }
+
+    private void storeCredentials(String mail, String rollnum){
+        SharedPreferences mSharedPreferences = getSharedPreferences("credentials", MODE_PRIVATE);
+        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+        mEditor.putString("email", mail);
+        mEditor.putString("roll", rollnum);
         mEditor.apply();
     }
 }

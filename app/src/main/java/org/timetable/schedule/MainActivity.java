@@ -4,11 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -20,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,7 +34,7 @@ import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity {
     TextView p1,p2,p3,p4,p5,p6,p7,p8,p9, c1,c2,c3,c4,c5,c6,c7,c8,c9, semestertxt, noclass;
-    Button day,date, month;
+    Button day,date, month, fullview;
     int getDate;
     String getDay, getMonth;
     LinearLayout linearLayout;
@@ -41,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
         linearLayout = findViewById(R.id.linearLayout);
         scrollView = findViewById(R.id.scrollView);
@@ -53,6 +61,14 @@ public class MainActivity extends AppCompatActivity {
         } else{
             noclass.setVisibility(View.GONE);
         }
+        fullview = findViewById(R.id.full_schedule);
+        fullview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, FullScheduleActivity.class);
+                startActivity(i);
+            }
+        });
         p1 = findViewById(R.id.period1);
         p2 = findViewById(R.id.period2);
         p3 = findViewById(R.id.period3);
@@ -124,72 +140,94 @@ public class MainActivity extends AppCompatActivity {
                             }
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
-                            Toast.makeText(MainActivity.this, "fail exception", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "fail excepti" +
+                                    "on", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
         readDatabase(getDay);
-        if(checkPeriod("08:30")){
-            p1.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-        } else if(checkPeriod("09:30")){
-            p1.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p2.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-        }else if(checkPeriod("10:30")){
-            p1.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p2.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p3.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-        }else if(checkPeriod("11:30")){
-            p1.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p2.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p3.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p4.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-        }else if(checkPeriod("12:30")){
-            p1.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p2.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p3.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p4.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p5.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-        }else if(checkPeriod("13:30")){
-            p1.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p2.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p3.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p4.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p5.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p6.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-        }else if(checkPeriod("14:30")){
-            p1.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p2.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p3.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p4.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p5.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p6.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p7.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-        }else if(checkPeriod("15:30")){
-            p1.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p2.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p3.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p4.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p5.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p6.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p7.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p8.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
-        }else if(checkPeriod("16:30")){
-            p1.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p2.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p3.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p4.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p5.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p6.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p7.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p8.setBackgroundColor(getResources().getColor(R.color.blue_grey));
-            p9.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        if(checkPeriod("08:30:00", "09:30:00")){
+            p1.setBackgroundResource(R.drawable.roundactivetimecontainer);
+        } else if(checkPeriod("09:30:00:00", "10:30:00")){
+            p1.setBackgroundResource(R.drawable.roundtimecontainer);
+            p2.setBackgroundResource(R.drawable.roundactivetimecontainer);
+        }else if(checkPeriod("10:30:00", "11:30:00")){
+            p1.setBackgroundResource(R.drawable.roundtimecontainer);
+            p2.setBackgroundResource(R.drawable.roundtimecontainer);
+            p3.setBackgroundResource(R.drawable.roundactivetimecontainer);
+        }else if(checkPeriod("11:30:00","12:30:00")){
+            p1.setBackgroundResource(R.drawable.roundtimecontainer);
+            p2.setBackgroundResource(R.drawable.roundtimecontainer);
+            p3.setBackgroundResource(R.drawable.roundtimecontainer);
+            p4.setBackgroundResource(R.drawable.roundactivetimecontainer);
+        }else if(checkPeriod("12:30:00","13:30:00")){
+            p1.setBackgroundResource(R.drawable.roundtimecontainer);
+            p2.setBackgroundResource(R.drawable.roundtimecontainer);
+            p3.setBackgroundResource(R.drawable.roundtimecontainer);
+            p4.setBackgroundResource(R.drawable.roundtimecontainer);
+            p5.setBackgroundResource(R.drawable.roundactivetimecontainer);
+        }else if(checkPeriod("13:30:00","14:30:00")){
+            p1.setBackgroundResource(R.drawable.roundtimecontainer);
+            p2.setBackgroundResource(R.drawable.roundtimecontainer);
+            p3.setBackgroundResource(R.drawable.roundtimecontainer);
+            p4.setBackgroundResource(R.drawable.roundtimecontainer);
+            p5.setBackgroundResource(R.drawable.roundtimecontainer);
+            p6.setBackgroundResource(R.drawable.roundactivetimecontainer);
+        }else if(checkPeriod("14:30:00","15:30:00")){
+            p1.setBackgroundResource(R.drawable.roundtimecontainer);
+            p2.setBackgroundResource(R.drawable.roundtimecontainer);
+            p3.setBackgroundResource(R.drawable.roundtimecontainer);
+            p4.setBackgroundResource(R.drawable.roundtimecontainer);
+            p5.setBackgroundResource(R.drawable.roundtimecontainer);
+            p6.setBackgroundResource(R.drawable.roundtimecontainer);
+            p7.setBackgroundResource(R.drawable.roundactivetimecontainer);
+        }else if(checkPeriod("15:30:00","16:30:00")){
+            p1.setBackgroundResource(R.drawable.roundtimecontainer);
+            p2.setBackgroundResource(R.drawable.roundtimecontainer);
+            p3.setBackgroundResource(R.drawable.roundtimecontainer);
+            p4.setBackgroundResource(R.drawable.roundtimecontainer);
+            p5.setBackgroundResource(R.drawable.roundtimecontainer);
+            p6.setBackgroundResource(R.drawable.roundtimecontainer);
+            p7.setBackgroundResource(R.drawable.roundtimecontainer);
+            p8.setBackgroundResource(R.drawable.roundactivetimecontainer);
+        }else if(checkPeriod("16:30:00","17:30:00")){
+            p1.setBackgroundResource(R.drawable.roundtimecontainer);
+            p2.setBackgroundResource(R.drawable.roundtimecontainer);
+            p3.setBackgroundResource(R.drawable.roundtimecontainer);
+            p4.setBackgroundResource(R.drawable.roundtimecontainer);
+            p5.setBackgroundResource(R.drawable.roundtimecontainer);
+            p6.setBackgroundResource(R.drawable.roundtimecontainer);
+            p7.setBackgroundResource(R.drawable.roundtimecontainer);
+            p8.setBackgroundResource(R.drawable.roundtimecontainer);
+            p9.setBackgroundResource(R.drawable.roundactivetimecontainer);
+        } else {
+            p1.setBackgroundResource(R.drawable.roundtimecontainer);
+            p2.setBackgroundResource(R.drawable.roundtimecontainer);
+            p3.setBackgroundResource(R.drawable.roundtimecontainer);
+            p4.setBackgroundResource(R.drawable.roundtimecontainer);
+            p5.setBackgroundResource(R.drawable.roundtimecontainer);
+            p6.setBackgroundResource(R.drawable.roundtimecontainer);
+            p7.setBackgroundResource(R.drawable.roundtimecontainer);
+            p8.setBackgroundResource(R.drawable.roundtimecontainer);
+            p9.setBackgroundResource(R.drawable.roundtimecontainer);
         }
     }
 
-    private Boolean checkPeriod(String checktime){
-        @SuppressLint("SimpleDateFormat")
-        String currentTime = new SimpleDateFormat("HH:mm").format(new Date());
-        return currentTime.equals(checktime);
+    private Boolean checkPeriod(String begin, String end){
+        String currentTime = new SimpleDateFormat("HH:mm:ss").format(new Date());
+        SimpleDateFormat parser = new SimpleDateFormat("HH:mm:ss");
+        try {
+            Date start = parser.parse(begin);
+            Date finish = parser.parse(end);
+            Date userTime = parser.parse(currentTime);
+            assert userTime != null;
+            if (userTime.after(start) && userTime.before(finish)) {
+                return true;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private void readDatabase(String weekday){

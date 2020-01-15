@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="22sp"
-            android:inputType="number"
+            android:inputType="textVisiblePassword"
             android:hint="College Roll Number"
             android:textColor="@color/black"
             android:padding="22dp" />
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
-            android:background="@drawable/roundcontainerbox"
+            android:background="@drawable/square_btn"
             android:backgroundTint="@color/blue"
             android:paddingStart="22dp"
             android:paddingTop="20dp"
