@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -103,7 +105,7 @@ public class FullScheduleActivity extends AppCompatActivity {
 
             @Override
             public String onLoadText() {
-                return "Logging you out...";
+                return "Deleting your account";
             }
         });
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
@@ -250,12 +252,20 @@ public class FullScheduleActivity extends AppCompatActivity {
                 logOut();
             }
         });
+
+        final CustomVerificationDialog customVerificationDialog = new CustomVerificationDialog(FullScheduleActivity.this, new OnDialogApplyListener() {
+            @Override
+            public void onApply(String email, String password) {
+                customLoadDialogClass.show();
+                authenticate(email, password);
+            }
+        });
+
         Button deleteacc = findViewById(R.id.deletebtn);
         deleteacc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                customLoadDialogClass.show();
-                deleteUser();
+                customVerificationDialog.show();
             }
         });
         about.setOnClickListener(new View.OnClickListener() {
@@ -333,22 +343,35 @@ public class FullScheduleActivity extends AppCompatActivity {
     private void logOut(){
         FirebaseAuth.getInstance().signOut();
         Toast.makeText(FullScheduleActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
-        Intent i=new Intent(FullScheduleActivity.this, LoginActivity.class);
+        Intent i=new Intent(FullScheduleActivity.this, Splash.class);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
         startActivity(i);
-        finish();
     }
-
+    private void authenticate(String uid, String passphrase){
+        customLoadDialogClass.show();
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(uid, passphrase);
+        user.reauthenticate(credential)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(FullScheduleActivity.this, "Authentication passed", Toast.LENGTH_SHORT).show();
+                            deleteUser();
+                        } else {
+                            Toast.makeText(FullScheduleActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            customLoadDialogClass.hide();
+                        }
+                    }
+                });
+    }
     private void deleteUser(){
         user.delete()
                 .addOnCompleteListener (new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            SharedPreferences mSharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
-                            SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-                            mEditor.putBoolean("loginstatus", false);
-                            mEditor.apply();
+                            storeLoginStatus(false);
                             customLoadDialogClass.hide();
                             Toast.makeText(FullScheduleActivity.this, "Your account was deleted permanently.", Toast.LENGTH_SHORT).show();
                             Intent i=new Intent(FullScheduleActivity.this, LoginActivity.class);
