@@ -16,7 +16,7 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".FullScheduleActivity"
-            android:screenOrientation="sensorLandscape" />
+            android:screenOrientation="sensorLandscape" android:theme="@style/blueTheme"/>
         <activity
             android:name=".Splash"
             android:theme="@style/splashTheme">
@@ -26,8 +26,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".LoginActivity" android:theme="@style/blueTheme"/>
+        <activity android:name=".MainActivity" android:theme="@style/whiteTheme"/>
 
         <meta-data
             android:name="preloaded_fonts"

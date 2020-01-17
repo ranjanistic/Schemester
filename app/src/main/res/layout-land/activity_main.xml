@@ -8,118 +8,135 @@
     android:background="@color/white"
     tools:context=".MainActivity">
     <LinearLayout
+        android:id="@+id/mainLinearlayoutLandscape"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-
         <LinearLayout
-            android:id="@+id/column1"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="right"
-            android:orientation="vertical"
-            android:padding="18dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
-
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:gravity="end"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/sem_text"
+                android:layout_height="match_parent"
+                android:gravity="right"
+                android:orientation="vertical"
+                android:padding="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"
-                    android:fontFamily="@font/comfortaa_bold"
-                    android:text="Loading"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    android:textColor="@color/black"
-                    android:textSize="34dp"
-                    android:textStyle="bold" />
+                    android:layout_gravity="start|center_vertical"
+                    android:gravity="end"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/semesterTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="12dp"
-                    android:fontFamily="@font/comfortaa_bold"
-                    android:text="Semester"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/sem_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="12dp"
+                        android:fontFamily="@font/comfortaa_bold"
+                        android:text="Loading"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="@color/black"
+                        android:textSize="34dp"
+                        android:textStyle="bold" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/present_date"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center"
-                android:background="@drawable/round_btn"
-                android:backgroundTint="@color/colorAccent"
-                android:fontFamily="@font/comfortaa_bold"
-                android:gravity="center"
-                android:text="0"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="36sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
+                    <TextView
+                        android:id="@+id/semesterTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="12dp"
+                        android:fontFamily="@font/comfortaa_bold"
+                        android:text="Semester"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
                 <Button
-                    android:id="@+id/weekday_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="@font/montserrat"
-                    android:foregroundGravity="right"
-                    android:gravity="bottom"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:text="WeekDay"
-                    android:textAllCaps="false"
-                    android:textColor="@color/linktextcolor"
-                    android:textSize="20sp" />
-
-                <Button
-                    android:id="@+id/month_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/present_date"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
                     android:layout_gravity="center"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="@font/montserrat"
-                    android:gravity="top|end"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:text="Month"
+                    android:background="@drawable/round_btn"
+                    android:backgroundTint="@color/colorAccent"
+                    android:fontFamily="@font/comfortaa_bold"
+                    android:gravity="center"
+                    android:text="0"
                     android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:textColor="@color/linktextcolor"
-                    android:textSize="18sp" />
-            </LinearLayout>
+                    android:textColor="@color/white"
+                    android:textSize="36sp"
+                    android:textStyle="bold" />
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/weekday_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/montserrat"
+                        android:foregroundGravity="right"
+                        android:gravity="bottom"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:text="WeekDay"
+                        android:textAllCaps="false"
+                        android:textColor="@color/linktextcolor"
+                        android:textSize="20sp" />
+
+                    <Button
+                        android:id="@+id/month_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/montserrat"
+                        android:gravity="top|end"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:text="Month"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="@color/linktextcolor"
+                        android:textSize="18sp" />
+                </LinearLayout>
+                <Button
+                    android:id="@+id/full_schedule"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:background="@drawable/square_btn"
+                    android:backgroundTint="@color/dark_blue"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:layout_margin="12dp"
+                    android:text="View full week schedule"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -600,22 +617,6 @@
                             android:layout_height="0dp"
                             android:layout_weight="1" />
                     </LinearLayout>
-
-                    <Button
-                        android:id="@+id/full_schedule"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="22dp"
-                        android:background="@drawable/square_btn"
-                        android:backgroundTint="@color/dark_blue"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp"
-                        android:text="View full week schedule"
-                        android:textAlignment="center"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        android:textColor="@color/white"
-                        android:textSize="14sp" />
                 </LinearLayout>
 
             </ScrollView>
@@ -625,16 +626,18 @@
 
     <TextView
         android:id="@+id/noclasstext"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="No classes today. Enjoy!"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="28sp"
+        android:fontFamily="@font/montserrat"
+        android:gravity="center|start"
+        android:text="No classes \ntoday. \nEnjoy!"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        android:textColor="@color/blue"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
-        android:visibility="invisible"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

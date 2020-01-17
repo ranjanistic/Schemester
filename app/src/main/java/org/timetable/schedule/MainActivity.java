@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -42,14 +43,13 @@ public class MainActivity extends AppCompatActivity{
     Button day,date, month, fullview;
     int getDate, notificationId = 101;
     String getDay, getMonth;
-    LinearLayout linearLayout;
+    LinearLayout linearLayout, headingview, landscapeView;
     ScrollView scrollView;
     Calendar calendar;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        createNotification();
         setContentView(R.layout.activity_main);
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity{
         calendar = Calendar.getInstance(TimeZone.getDefault());
         linearLayout = findViewById(R.id.linearLayout);
         scrollView = findViewById(R.id.scrollView);
+        headingview = findViewById(R.id.period_view);
+        landscapeView = findViewById(R.id.mainLinearlayoutLandscape);
         noclass = findViewById(R.id.noclasstext);
         semestertxt = findViewById(R.id.sem_text);
 
@@ -101,32 +103,43 @@ public class MainActivity extends AppCompatActivity{
     public class updateTask extends AsyncTask<Void,Void,Void>{
         @Override
         protected Void doInBackground(Void... voids) {
-            checkHoliday();
             setSemester();
-            readDatabase(setWeekDay(calendar.get(Calendar.DAY_OF_WEEK)));
+            if(!checkHoliday()) {
+                readDatabase(setWeekDay(calendar.get(Calendar.DAY_OF_WEEK)));
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             highlightCurrentPeriod();
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    new updateTask().execute();
+                }
+            }, 5000);
             super.onPostExecute(aVoid);
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
-            new updateTask().execute();
             super.onProgressUpdate(values);
         }
     }
     
-    private void checkHoliday(){
+    private Boolean checkHoliday(){
         if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-            linearLayout.setVisibility(View.INVISIBLE);
+            //linearLayout.setVisibility(View.INVISIBLE);
             scrollView.setVisibility(View.INVISIBLE);
+            headingview.setVisibility(View.INVISIBLE);
+            fullview.setVisibility(View.VISIBLE);
             noclass.setVisibility(View.VISIBLE);
+            return true;
         } else {
             noclass.setVisibility(View.GONE);
+            return false;
         }
     }
     
@@ -208,34 +221,33 @@ public class MainActivity extends AppCompatActivity{
     }
     
     private void highlightCurrentPeriod(){
-        notifier("17:46:00");
         if(checkPeriod("08:30:00", "09:30:00")){
-            notifier("08:30:00");
+            notifier("08:30:00", c1.getText().toString());
             p1.setBackgroundResource(R.drawable.roundactivetimecontainer);
         } else if(checkPeriod("09:30:00", "10:30:00")){
-            notifier("09:30:00");
+            notifier("09:30:00", c1.getText().toString());
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("10:30:00", "11:30:00")){
-            notifier("10:30:00");
+            notifier("10:30:00", c1.getText().toString());
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("11:30:00","12:30:00")){
-            notifier("11:30:00");
+            notifier("11:30:00", c1.getText().toString());
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p4.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("12:30:00","13:30:00")){
-            notifier("12:30:00");
+            notifier("12:30:00", c1.getText().toString());
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p4.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p5.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("13:30:00","14:30:00")){
-            notifier("13:30:00");
+            notifier("13:30:00", c1.getText().toString());
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
@@ -243,7 +255,7 @@ public class MainActivity extends AppCompatActivity{
             p5.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p6.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("14:30:00","15:30:00")){
-            notifier("14:30:00");
+            notifier("14:30:00", c1.getText().toString());
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
@@ -252,7 +264,7 @@ public class MainActivity extends AppCompatActivity{
             p6.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p7.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("15:30:00","16:30:00")){
-            notifier("15:30:00");
+            notifier("15:30:00", c1.getText().toString());
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
@@ -262,7 +274,7 @@ public class MainActivity extends AppCompatActivity{
             p7.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p8.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("16:30:00","17:30:00")){
-            notifier("16:30:00");
+            notifier("16:30:00", c1.getText().toString());
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
@@ -342,7 +354,7 @@ public class MainActivity extends AppCompatActivity{
                     }
                 });
     }
-    private void notifier(String begin){
+    private void notifier(String begin, String classname){
         String currentTime = new SimpleDateFormat("HH:mm:ss").format(new Date());
         SimpleDateFormat parser = new SimpleDateFormat("HH:mm:ss");
         try {
@@ -350,21 +362,21 @@ public class MainActivity extends AppCompatActivity{
             Date userTime = parser.parse(currentTime);
             assert userTime != null;
             if (userTime.equals(start)) {
-                createNotification();
+                createNotification(classname);
             }
         } catch (ParseException e) {
             e.printStackTrace();
         }
     }
 
-    private void createNotification(){
+    private void createNotification(String className){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "NewPeriod")
-                .setSmallIcon(R.drawable.ic_schemestericon1)
-                .setContentTitle("My notification")
-                .setContentText("Much longer text that cannot fit one line...")
+                .setSmallIcon(R.drawable.ic_icon)
+                .setContentTitle(className+" class has started.")
+                .setContentText("It's time for the lessons in "+className+". Reach there before it gets too late.")
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("Much longer text that cannot fit one line..."))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                        .bigText("It's time for the lessons in "+className+". Reach there before it gets too late."))
+                .setPriority(NotificationCompat.PRIORITY_HIGH);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 // notificationId is a unique int for each notification that you must define
         notificationManager.notify(notificationId, builder.build());

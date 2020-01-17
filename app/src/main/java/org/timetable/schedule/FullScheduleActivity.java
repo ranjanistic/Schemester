@@ -111,7 +111,6 @@ public class FullScheduleActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
         int getDayCount = calendar.get(Calendar.DAY_OF_WEEK);
         switch (getDayCount){
-            case 1: readDatabase("sunday");break;
             case  2: readDatabase("monday");
                 m.setBackgroundResource(R.drawable.leftroundbtnselected);
                 m.setTextColor(getResources().getColor(R.color.black));
@@ -132,7 +131,9 @@ public class FullScheduleActivity extends AppCompatActivity {
                 f.setBackgroundResource(R.drawable.leftroundbtnselected);
                 f.setTextColor(getResources().getColor(R.color.black));
                 break;
-            case 7: readDatabase("saturday");break;
+            default:readDatabase("monday");
+                m.setBackgroundResource(R.drawable.leftroundbtnselected);
+                m.setTextColor(getResources().getColor(R.color.black));
         }
 
         m.setOnClickListener(new View.OnClickListener() {
