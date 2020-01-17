@@ -342,9 +342,10 @@ public class FullScheduleActivity extends AppCompatActivity {
     }
     private void logOut(){
         FirebaseAuth.getInstance().signOut();
+        storeLoginStatus(true);
         Toast.makeText(FullScheduleActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
-        Intent i=new Intent(FullScheduleActivity.this, Splash.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
+        Intent i=new Intent(FullScheduleActivity.this, LoginActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // To clean up all activities
         startActivity(i);
     }
     private void authenticate(String uid, String passphrase){
@@ -375,7 +376,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                             customLoadDialogClass.hide();
                             Toast.makeText(FullScheduleActivity.this, "Your account was deleted permanently.", Toast.LENGTH_SHORT).show();
                             Intent i=new Intent(FullScheduleActivity.this, LoginActivity.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // To clean up all activities
                             startActivity(i);
                         } else {
                             customLoadDialogClass.hide();

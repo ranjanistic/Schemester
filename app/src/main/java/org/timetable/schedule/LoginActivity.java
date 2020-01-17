@@ -24,9 +24,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     Button login;
-    EditText emailid, roll;
+    EditText emailid, roll, bdate, bmonth, byear;
     FirebaseAuth mAuth;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    String dob;
     CustomLoadDialogClass customLoadDialogClass;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +36,16 @@ public class LoginActivity extends AppCompatActivity {
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setStatusBarColor(this.getResources().getColor(R.color.dull_white));
-        window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
+        window.setStatusBarColor(this.getResources().getColor(R.color.blue));
+        window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
         mAuth = FirebaseAuth.getInstance();
         login = findViewById(R.id.registerbtn);
         emailid = findViewById(R.id.emailId);
         roll = findViewById(R.id.rollpass);
+        bdate = findViewById(R.id.birthdate);
+        bmonth = findViewById(R.id.birthmonth);
+        byear = findViewById(R.id.birthyear);
+        dob = bdate.getText().toString()+  bmonth.getText().toString() + byear.getText().toString();
         customLoadDialogClass = new CustomLoadDialogClass(this, new OnDialogLoadListener() {
             @Override
             public void onLoad() {
@@ -58,20 +63,37 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
     private void registerInit(){
-        String email, pass;
+        String email, rollnum, dd, mm, yyyy, dob;
         email = emailid.getText().toString();
-        pass = roll.getText().toString();
+        rollnum = roll.getText().toString();
+        dd = bdate.getText().toString();
+        mm = bmonth.getText().toString();
+        yyyy = byear.getText().toString();
+
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(getApplicationContext(), "Email ID required", Toast.LENGTH_LONG).show();
             return;
         }
-        if (TextUtils.isEmpty(pass)) {
+        if (TextUtils.isEmpty(rollnum)) {
             Toast.makeText(getApplicationContext(), "Your college roll number required.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (TextUtils.isEmpty(dd)) {
+            Toast.makeText(getApplicationContext(), "We need your birth date.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (TextUtils.isEmpty(mm)) {
+            Toast.makeText(getApplicationContext(), "We need your birth month.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (TextUtils.isEmpty(yyyy)) {
+            Toast.makeText(getApplicationContext(), "We need your birth year.", Toast.LENGTH_LONG).show();
             return;
         }
         else {
             customLoadDialogClass.show();
-            new regisTask().execute(email, pass);
+             dob = dd+mm+yyyy;
+            new regisTask().execute(email, dob);
         }
     }
 
@@ -121,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
                         user = FirebaseAuth.getInstance().getCurrentUser();
                         if (task.isSuccessful()) {
                             storeLoginStatus(true);
-                            storeCredentials(uid,passphrase);
+                            storeCredentials(uid,roll.getText().toString());
                             Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_LONG).show();
                             customLoadDialogClass.hide();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);

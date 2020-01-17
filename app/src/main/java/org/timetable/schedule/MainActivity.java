@@ -2,9 +2,17 @@ package org.timetable.schedule;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,7 +40,7 @@ import static android.content.ContentValues.TAG;
 public class MainActivity extends AppCompatActivity{
     TextView p1,p2,p3,p4,p5,p6,p7,p8,p9, c1,c2,c3,c4,c5,c6,c7,c8,c9, semestertxt, noclass;
     Button day,date, month, fullview;
-    int getDate;
+    int getDate, notificationId = 101;
     String getDay, getMonth;
     LinearLayout linearLayout;
     ScrollView scrollView;
@@ -41,6 +49,7 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createNotification();
         setContentView(R.layout.activity_main);
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -199,27 +208,34 @@ public class MainActivity extends AppCompatActivity{
     }
     
     private void highlightCurrentPeriod(){
+        notifier("17:46:00");
         if(checkPeriod("08:30:00", "09:30:00")){
+            notifier("08:30:00");
             p1.setBackgroundResource(R.drawable.roundactivetimecontainer);
         } else if(checkPeriod("09:30:00", "10:30:00")){
+            notifier("09:30:00");
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("10:30:00", "11:30:00")){
+            notifier("10:30:00");
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("11:30:00","12:30:00")){
+            notifier("11:30:00");
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p4.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("12:30:00","13:30:00")){
+            notifier("12:30:00");
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p4.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p5.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("13:30:00","14:30:00")){
+            notifier("13:30:00");
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
@@ -227,6 +243,7 @@ public class MainActivity extends AppCompatActivity{
             p5.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p6.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("14:30:00","15:30:00")){
+            notifier("14:30:00");
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
@@ -235,6 +252,7 @@ public class MainActivity extends AppCompatActivity{
             p6.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p7.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("15:30:00","16:30:00")){
+            notifier("15:30:00");
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
@@ -244,6 +262,7 @@ public class MainActivity extends AppCompatActivity{
             p7.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p8.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("16:30:00","17:30:00")){
+            notifier("16:30:00");
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
@@ -323,6 +342,31 @@ public class MainActivity extends AppCompatActivity{
                     }
                 });
     }
+    private void notifier(String begin){
+        String currentTime = new SimpleDateFormat("HH:mm:ss").format(new Date());
+        SimpleDateFormat parser = new SimpleDateFormat("HH:mm:ss");
+        try {
+            Date start = parser.parse(begin);
+            Date userTime = parser.parse(currentTime);
+            assert userTime != null;
+            if (userTime.equals(start)) {
+                createNotification();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 
-
+    private void createNotification(){
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "NewPeriod")
+                .setSmallIcon(R.drawable.ic_schemestericon1)
+                .setContentTitle("My notification")
+                .setContentText("Much longer text that cannot fit one line...")
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText("Much longer text that cannot fit one line..."))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+// notificationId is a unique int for each notification that you must define
+        notificationManager.notify(notificationId, builder.build());
+    }
 }
