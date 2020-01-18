@@ -250,6 +250,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         logoutbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                storeLoginStatus(false);
                 logOut();
             }
         });
@@ -297,7 +298,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                             }
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
-                            Toast.makeText(FullScheduleActivity.this, "fail exception", Toast.LENGTH_LONG).show();
+                            Toast.makeText(FullScheduleActivity.this, "fail exception sem", Toast.LENGTH_LONG).show();
                             semesterresult = "Connection error";
                         }
                     }
@@ -343,10 +344,9 @@ public class FullScheduleActivity extends AppCompatActivity {
     }
     private void logOut(){
         FirebaseAuth.getInstance().signOut();
-        storeLoginStatus(true);
-        Toast.makeText(FullScheduleActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
+        Toast.makeText(FullScheduleActivity.this, "Logged out", Toast.LENGTH_LONG).show();
         Intent i=new Intent(FullScheduleActivity.this, LoginActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // To clean up all activities
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); // To clean up all activities
         startActivity(i);
     }
     private void authenticate(String uid, String passphrase){

@@ -3,9 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.timetable.schedule">
 
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,6 +11,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <service android:name=".NotificationService"
+            android:enabled="true"/>
+        <receiver
+            android:name=".NotifierStartBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:label="RestartServiceWhenStopped" />
         <activity
             android:name=".FullScheduleActivity"
             android:screenOrientation="sensorLandscape" android:theme="@style/blueTheme"/>

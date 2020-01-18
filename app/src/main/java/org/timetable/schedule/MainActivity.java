@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +29,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -44,12 +48,21 @@ public class MainActivity extends AppCompatActivity{
     int getDate, notificationId = 101;
     String getDay, getMonth;
     LinearLayout linearLayout, headingview, landscapeView;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     ScrollView scrollView;
     Calendar calendar;
+    Intent notificationIntent;
+    Intent mServiceIntent;
+    private NotificationService mNotificationService;
+    Context ctx;
+    public Context getCtx() {
+        return ctx;
+    }
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ctx = this;
         setContentView(R.layout.activity_main);
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -84,11 +97,11 @@ public class MainActivity extends AppCompatActivity{
         c9 = findViewById(R.id.class9);
 
         date = findViewById(R.id.present_date);
-        date.setText(Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)));
+        date.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
         day = findViewById(R.id.weekday_text);
-        day.setText(setWeekDay(calendar.get(Calendar.DAY_OF_WEEK)));
+        day.setText(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
         month = findViewById(R.id.month_text);
-        month.setText(setMonthFromCode(calendar.get(Calendar.MONTH)));
+        month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
         fullview = findViewById(R.id.full_schedule);
         fullview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,35 +110,42 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(i);
             }
         });
+        if(!checkHoliday()) {
+            mNotificationService = new NotificationService(getCtx(), returnPeriodDetail(),returnClassBeginTime());
+            mServiceIntent = new Intent(getCtx(), mNotificationService.getClass());
+            if (!isMyServiceRunning(mNotificationService.getClass())) {
+                startService(mServiceIntent);
+            }
+        }
         new updateTask().execute();
     }
 
-    public class updateTask extends AsyncTask<Void,Void,Void>{
+    public class updateTask extends AsyncTask<Void,Void,Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
         @Override
         protected Void doInBackground(Void... voids) {
             setSemester();
-            if(!checkHoliday()) {
-                readDatabase(setWeekDay(calendar.get(Calendar.DAY_OF_WEEK)));
+            if (!checkHoliday()) {
+                readDatabase(getWeekdayFromCode(Calendar.DAY_OF_WEEK));
+                highlightCurrentPeriod();
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            highlightCurrentPeriod();
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     new updateTask().execute();
                 }
-            }, 5000);
+            }, Calendar.MILLISECOND);
             super.onPostExecute(aVoid);
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
         }
     }
     
@@ -143,7 +163,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
     
-    private String setWeekDay(int daycode){
+    private String getWeekdayFromCode(int daycode){
         switch (daycode) {
             case 1:
                 return "Sunday";
@@ -164,7 +184,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
     
-    private String setMonthFromCode(int getMonthCount){
+    private String getMonthFromCode(int getMonthCount){
         switch (getMonthCount) {
             case 0:
                 return "January";
@@ -196,28 +216,29 @@ public class MainActivity extends AppCompatActivity{
     }
     
     
-    private void setSemester(){
-        db.collection("semesterSchedule").document("semester")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                semestertxt.setText(document.get("semnum").toString());
+    private void setSemester() {
+        if (getLoginStatus()) {
+            db.collection("semesterSchedule").document("semester")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                    semestertxt.setText(document.get("semnum").toString());
+                                } else {
+                                    Log.d(TAG, "Server error in getting semester.");
+                                    Toast.makeText(MainActivity.this, "Unable to read", Toast.LENGTH_LONG).show();
+                                }
                             } else {
-                                Log.d(TAG, "No such document");
-                                Toast.makeText(MainActivity.this, "Unable to read", Toast.LENGTH_LONG).show();
+                                Log.d(TAG, "get failed with ", task.getException());
+                                Toast.makeText(MainActivity.this, "Connection problem?", Toast.LENGTH_LONG).show();
                             }
-                        } else {
-                            Log.d(TAG, "get failed with ", task.getException());
-                            Toast.makeText(MainActivity.this, "fail excepti" +
-                                    "on", Toast.LENGTH_LONG).show();
                         }
-                    }
-                });
+                    });
+        }
     }
     
     private void highlightCurrentPeriod(){
@@ -225,29 +246,29 @@ public class MainActivity extends AppCompatActivity{
             notifier("08:30:00", c1.getText().toString());
             p1.setBackgroundResource(R.drawable.roundactivetimecontainer);
         } else if(checkPeriod("09:30:00", "10:30:00")){
-            notifier("09:30:00", c1.getText().toString());
+            notifier("09:30:00", c2.getText().toString());
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("10:30:00", "11:30:00")){
-            notifier("10:30:00", c1.getText().toString());
+            notifier("10:30:00", c3.getText().toString());
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("11:30:00","12:30:00")){
-            notifier("11:30:00", c1.getText().toString());
+            notifier("11:30:00", c4.getText().toString());
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p4.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("12:30:00","13:30:00")){
-            notifier("12:30:00", c1.getText().toString());
+            notifier("12:30:00", c5.getText().toString());
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p4.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p5.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("13:30:00","14:30:00")){
-            notifier("13:30:00", c1.getText().toString());
+            notifier("13:30:00", c6.getText().toString());
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
@@ -255,7 +276,7 @@ public class MainActivity extends AppCompatActivity{
             p5.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p6.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("14:30:00","15:30:00")){
-            notifier("14:30:00", c1.getText().toString());
+            notifier("14:30:00", c7.getText().toString());
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
@@ -263,8 +284,8 @@ public class MainActivity extends AppCompatActivity{
             p5.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p6.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p7.setBackgroundResource(R.drawable.roundactivetimecontainer);
-        }else if(checkPeriod("15:30:00","16:30:00")){
-            notifier("15:30:00", c1.getText().toString());
+        }else if(checkPeriod("16:46:00","16:48:00")){
+            notifier("15:30:00", c8.getText().toString());
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
@@ -274,7 +295,7 @@ public class MainActivity extends AppCompatActivity{
             p7.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p8.setBackgroundResource(R.drawable.roundactivetimecontainer);
         }else if(checkPeriod("16:30:00","17:30:00")){
-            notifier("16:30:00", c1.getText().toString());
+            notifier("16:30:00", c9.getText().toString());
             p1.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p2.setBackgroundResource(R.drawable.roundtimeovercontainer);
             p3.setBackgroundResource(R.drawable.roundtimeovercontainer);
@@ -306,6 +327,55 @@ public class MainActivity extends AppCompatActivity{
             p9.setBackgroundResource(R.drawable.roundtimecontainer);
         }
     }
+    private String returnPeriodDetail(){
+        readDatabase(getWeekdayFromCode(Calendar.DAY_OF_WEEK));
+        if(checkPeriod("08:30:00", "09:30:00")){
+            return c1.getText().toString();
+        } else if(checkPeriod("09:30:00", "10:30:00")){
+            return c2.getText().toString();
+        }else if(checkPeriod("10:30:00", "11:30:00")){
+            return c3.getText().toString();
+        }else if(checkPeriod("11:30:00","12:30:00")){
+            return c4.getText().toString();
+        }else if(checkPeriod("12:30:00","13:30:00")){
+            return c5.getText().toString();
+        }else if(checkPeriod("13:30:00","14:30:00")){
+            return c6.getText().toString();
+        }else if(checkPeriod("14:30:00","15:30:00")){
+            return c7.getText().toString();
+        }else if(checkPeriod("16:46:00","16:48:00")){
+            return c8.getText().toString();
+        }else if(checkPeriod("16:30:00","17:30:00")){
+            return c9.getText().toString();
+        } else {
+            return "All classes over.";
+        }
+    }
+
+    private String returnClassBeginTime(){
+        String currently = new SimpleDateFormat("HH:mm:ss").format(new Date());
+        if(currently.equals(getResources().getString(R.string.time1))) {
+            return currently;
+        } else if(currently.equals(getResources().getString(R.string.time2))) {
+            return currently;
+        } else if(currently.equals(getResources().getString(R.string.time3))) {
+            return currently;
+        } else if(currently.equals(getResources().getString(R.string.time4))) {
+            return currently;
+        } else if(currently.equals(getResources().getString(R.string.time5))) {
+            return currently;
+        } else if(currently.equals(getResources().getString(R.string.time6))) {
+            return currently;
+        } else if(currently.equals(getResources().getString(R.string.time7))) {
+            return currently;
+        } else if(currently.equals(getResources().getString(R.string.time8))) {
+            return currently;
+        } else if(currently.equals(getResources().getString(R.string.time9))) {
+            return currently;
+        } else {
+            return "Not yet.";
+        }
+    }
 
     private Boolean checkPeriod(String begin, String end){
         String currentTime = new SimpleDateFormat("HH:mm:ss").format(new Date());
@@ -325,34 +395,36 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void readDatabase(String weekday){
-        db.collection("semesterSchedule").document(weekday.toLowerCase())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                c1.setText(document.get("p1").toString());
-                                c2.setText(document.get("p2").toString());
-                                c3.setText(document.get("p3").toString());
-                                c4.setText(document.get("p4").toString());
-                                c5.setText(document.get("p5").toString());
-                                c6.setText(document.get("p6").toString());
-                                c7.setText(document.get("p7").toString());
-                                c8.setText(document.get("p8").toString());
-                                c9.setText(document.get("p9").toString());
+        if(getLoginStatus()) {
+            db.collection("semesterSchedule").document(weekday.toLowerCase())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                    c1.setText(document.get("p1").toString());
+                                    c2.setText(document.get("p2").toString());
+                                    c3.setText(document.get("p3").toString());
+                                    c4.setText(document.get("p4").toString());
+                                    c5.setText(document.get("p5").toString());
+                                    c6.setText(document.get("p6").toString());
+                                    c7.setText(document.get("p7").toString());
+                                    c8.setText(document.get("p8").toString());
+                                    c9.setText(document.get("p9").toString());
+                                } else {
+                                    Log.d(TAG, "No such document");
+                                    Toast.makeText(MainActivity.this, "Server error.", Toast.LENGTH_LONG).show();
+                                }
                             } else {
-                                Log.d(TAG, "No such document");
-                                Toast.makeText(MainActivity.this, "Server error.", Toast.LENGTH_LONG).show();
+                                Log.d(TAG, "get failed with ", task.getException());
+                                Toast.makeText(MainActivity.this, "Try restarting the app.", Toast.LENGTH_LONG).show();
                             }
-                        } else {
-                            Log.d(TAG, "get failed with ", task.getException());
-                            Toast.makeText(MainActivity.this, "Try restarting the app.", Toast.LENGTH_LONG).show();
                         }
-                    }
-                });
+                    });
+        }
     }
     private void notifier(String begin, String classname){
         String currentTime = new SimpleDateFormat("HH:mm:ss").format(new Date());
@@ -369,6 +441,28 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    private Boolean getLoginStatus(){
+        SharedPreferences mSharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+        return mSharedPreferences.getBoolean("loginstatus", false);
+    }
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.i ("isMyServiceRunning?", true+"");
+                return true;
+            }
+        }
+        Log.i ("isMyServiceRunning?", false+"");
+        return false;
+    }
+/*
+    @Override
+    protected void onDestroy() {
+        stopService(mServiceIntent);
+        Log.i("MAINACT", "onDestroy!");
+        super.onDestroy();
+    }*/
     private void createNotification(String className){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "NewPeriod")
                 .setSmallIcon(R.drawable.ic_icon)

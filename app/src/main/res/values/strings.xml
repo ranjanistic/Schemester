@@ -18,4 +18,26 @@
     <string name="cancel">cancek</string>
     <string name="channel_name">New period notification</string>
     <string name="channel_description">To notify about next class.</string>
+    <string name="time1">08:30:00</string>
+    <string name="time2">09:30:00</string>
+    <string name="time3">10:30:00</string>
+    <string name="time4">11:30:00</string>
+    <string name="time5">12:30:00</string>
+    <string name="time6">13:30:00</string>
+    <string name="time7">14:30:00</string>
+    <string name="time8">15:30:00</string>
+    <string name="time9">16:30:00</string>
+    <string name="time10">17:30:00</string>
+
+    <string name="period1">08:30 to 09:30</string>
+    <string name="period2">09:30 to 10:30</string>
+    <string name="period3">10:30 to 11:30</string>
+    <string name="period4">11:30 to 12:30</string>
+    <string name="period5">12:30 to 13:30</string>
+    <string name="period6">13:30 to 14:30</string>
+    <string name="period7">14:30 to 15:30</string>
+    <string name="period8">15:30 to 16:30</string>
+    <string name="period9">16:30 to 17:30</string>
+    <string name="valid">Valid</string>
+    <string name="invalidtext">Invalid till now</string>
 </resources>
