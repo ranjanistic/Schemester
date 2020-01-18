@@ -73,8 +73,8 @@
             android:layout_height="80dp"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
-            android:inputType="textVisiblePassword"
-            android:hint="Roll Number"/>
+            android:inputType="numberPassword"
+            android:hint="Date of Birth"/>
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
