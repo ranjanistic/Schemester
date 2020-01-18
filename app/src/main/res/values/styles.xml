@@ -4,7 +4,7 @@
         <item name="android:background">@drawable/splash</item>
         <item name="android:navigationBarColor">@color/white</item>
         <item name="android:statusBarColor">@color/white</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="p">true</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="p">false</item>
     </style>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
