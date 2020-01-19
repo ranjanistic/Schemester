@@ -123,12 +123,12 @@ public class MainActivity extends AppCompatActivity{
     public class updateTask extends AsyncTask<Void,Void,Void> {
         @Override
         protected void onPreExecute() {
+            setSemester();
             super.onPreExecute();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            setSemester();
             if (!checkHoliday()) {
                 readDatabase(getWeekdayFromCode(Calendar.DAY_OF_WEEK));
                 highlightCurrentPeriod();
@@ -232,9 +232,6 @@ public class MainActivity extends AppCompatActivity{
                                     Log.d(TAG, "Server error in getting semester.");
                                     Toast.makeText(MainActivity.this, "Unable to read", Toast.LENGTH_LONG).show();
                                 }
-                            } else {
-                                Log.d(TAG, "get failed with ", task.getException());
-                                Toast.makeText(MainActivity.this, "Connection problem?", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
@@ -466,10 +463,10 @@ public class MainActivity extends AppCompatActivity{
     private void createNotification(String className){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "NewPeriod")
                 .setSmallIcon(R.drawable.ic_icon)
-                .setContentTitle(className+" class has started.")
-                .setContentText("It's time for the lessons in "+className+". Reach there before it gets too late.")
+                .setContentTitle("A class has started.")
+                .setContentText(className+" almost started. Reach there before it gets too late.")
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("It's time for the lessons in "+className+". Reach there before it gets too late."))
+                        .bigText(className+". Reach there before it gets too late."))
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 // notificationId is a unique int for each notification that you must define

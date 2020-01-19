@@ -20,10 +20,6 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         createNotificationChannel();
-        Intent ll24 = new Intent(Splash.this, NotificationBuilder.class);
-        PendingIntent recurringLl24 = PendingIntent.getBroadcast(this, 0, ll24, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager alarms = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarms.setRepeating(AlarmManager.RTC_WAKEUP, 5000, AlarmManager.INTERVAL_FIFTEEN_MINUTES, recurringLl24);
             if(user!=null) {
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
@@ -43,7 +39,7 @@ public class Splash extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.channel_name);
             String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel("NewPeriod", name, importance);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance

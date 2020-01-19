@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,7 +14,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +38,9 @@ public class FullScheduleActivity extends AppCompatActivity {
     TextView   c1,c2,c3,c4,c5,c6,c7,c8,c9, email, roll, semester;
     Button m,t,w,th,f, logoutbtn;
     View dayschedule, settingsview, aboutview;
-    ImageButton setting, about, git, tweet, insta;
+    ImageButton setting, about, git, tweet, insta, dml;
+    ScrollView dayschedulePortrait;
+    HorizontalScrollView dayscheduleLandscape;
     String semesterresult;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     CustomLoadDialogClass customLoadDialogClass;
@@ -67,8 +72,13 @@ public class FullScheduleActivity extends AppCompatActivity {
         about = findViewById(R.id.aboutbtn);
         settingsview = findViewById(R.id.settingview);
         aboutview = findViewById(R.id.aboutview);
-        dayschedule = findViewById(R.id.weekdayplanview);
-        dayschedule.setVisibility(View.VISIBLE);
+        if(isLandscape()) {
+            dayscheduleLandscape = findViewById(R.id.weekdayplanview);
+            dayscheduleLandscape.setVisibility(View.VISIBLE);
+        } else{
+            dayschedulePortrait= findViewById(R.id.weekdayplanview);
+            dayschedulePortrait.setVisibility(View.VISIBLE);
+        }
         settingsview.setVisibility(View.GONE);
         aboutview.setVisibility(View.GONE);
         git = findViewById(R.id.githubbtn);
@@ -94,6 +104,15 @@ public class FullScheduleActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Uri uri = Uri.parse("https://www.twitter.com/ranjanistic");
+                Intent web = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(web);
+            }
+        });
+        dml = findViewById(R.id.dmlabs);
+        dml.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("https://www.github.com/darkmodelabs");
                 Intent web = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(web);
             }
@@ -149,7 +168,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 th.setTextColor(getResources().getColor(R.color.white));
                 f.setBackgroundResource(R.drawable.leftroundbtn);
                 f.setTextColor(getResources().getColor(R.color.white));
-                dayschedule.setVisibility(View.VISIBLE);
+                checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
                 readDatabase("monday");
@@ -168,7 +187,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 th.setTextColor(getResources().getColor(R.color.white));
                 f.setBackgroundResource(R.drawable.leftroundbtn);
                 f.setTextColor(getResources().getColor(R.color.white));
-                dayschedule.setVisibility(View.VISIBLE);
+                checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
                 readDatabase("tuesday");
@@ -187,7 +206,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 th.setTextColor(getResources().getColor(R.color.white));
                 f.setBackgroundResource(R.drawable.leftroundbtn);
                 f.setTextColor(getResources().getColor(R.color.white));
-                dayschedule.setVisibility(View.VISIBLE);
+                checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
                 readDatabase("wednesday");
@@ -206,7 +225,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 th.setTextColor(getResources().getColor(R.color.black));
                 f.setBackgroundResource(R.drawable.leftroundbtn);
                 f.setTextColor(getResources().getColor(R.color.white));
-                dayschedule.setVisibility(View.VISIBLE);
+                checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
                 readDatabase("thursday");
@@ -225,7 +244,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 th.setTextColor(getResources().getColor(R.color.white));
                 f.setBackgroundResource(R.drawable.leftroundbtnselected);
                 f.setTextColor(getResources().getColor(R.color.black));
-                dayschedule.setVisibility(View.VISIBLE);
+                checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
                 readDatabase("friday");
@@ -241,7 +260,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 String[] creds = getCredentials();
                 email.setText(creds[0]);
                 roll.setText(creds[1]);
-                dayschedule.setVisibility(View.GONE);
+                checkOrientationSetVisibility(View.GONE);
                 settingsview.setVisibility(View.VISIBLE);
                 aboutview.setVisibility(View.GONE);
             }
@@ -273,7 +292,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dayschedule.setVisibility(View.GONE);
+                checkOrientationSetVisibility(View.GONE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.VISIBLE);
             }
@@ -392,5 +411,19 @@ public class FullScheduleActivity extends AppCompatActivity {
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
         mEditor.putBoolean("loginstatus", logged);
         mEditor.apply();
+    }
+
+    private void checkOrientationSetVisibility(int visible){
+        if(isLandscape()){
+            dayscheduleLandscape = findViewById(R.id.weekdayplanview);
+            dayscheduleLandscape.setVisibility(visible);
+        } else{
+            dayschedulePortrait= findViewById(R.id.weekdayplanview);
+            dayschedulePortrait.setVisibility(visible);
+        }
+    }
+    
+    private boolean isLandscape() {
+        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 }

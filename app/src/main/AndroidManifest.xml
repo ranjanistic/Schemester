@@ -8,6 +8,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <service android:name=".NotificationService"
@@ -19,7 +20,7 @@
             android:label="RestartServiceWhenStopped" />
         <activity
             android:name=".FullScheduleActivity"
-            android:screenOrientation="sensorLandscape" android:theme="@style/blueTheme"/>
+            android:screenOrientation="sensorPortrait" android:theme="@style/blueTheme"/>
         <activity
             android:name=".Splash"
             android:theme="@style/splashTheme">

@@ -48,7 +48,7 @@ public class NotificationService extends Service {
     int notificationId = 101;
     private void createNotification(String className){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "NewPeriod")
-                .setSmallIcon(R.drawable.ic_icon)
+                .setSmallIcon(R.drawable.splashico)
                 .setContentTitle(className+" class has started.")
                 .setContentText("It's time for the lessons in "+className+". Reach there before it gets too late.")
                 .setStyle(new NotificationCompat.BigTextStyle()
