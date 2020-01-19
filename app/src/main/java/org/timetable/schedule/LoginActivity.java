@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -24,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
@@ -32,7 +34,7 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 public class LoginActivity extends AppCompatActivity {
-    Button login;
+    Button login, forgot;
     EditText emailid, roll, bdate, bmonth, byear;
     TextView emailValid, rollValid;
     FirebaseAuth mAuth;
@@ -40,11 +42,21 @@ public class LoginActivity extends AppCompatActivity {
     String dob;
     CustomLoadDialogClass customLoadDialogClass;
     Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+    boolean isRollValid = false, isEmailValid = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
+        customLoadDialogClass = new CustomLoadDialogClass(this, new OnDialogLoadListener() {
+            @Override
+            public void onLoad() {
+            }
+            @Override
+            public String onLoadText() {
+                return "Need few moments...";
+            }
+        });
         login = findViewById(R.id.registerbtn);
         emailid = findViewById(R.id.emailId);
         emailValid = findViewById(R.id.emailValidityText);
@@ -55,6 +67,19 @@ public class LoginActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
             public void onTextChanged(CharSequence s, int start, int count, int after) {
+            }
+        });
+        forgot = findViewById(R.id.forgotBtn);
+        forgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isEmailValid) {
+                    customLoadDialogClass.show();
+                    resetLinkSender(emailid.getText().toString());
+                    customLoadDialogClass.hide();
+                } else {
+                    Toast.makeText(getApplicationContext(),"Please provide an email ID", Toast.LENGTH_LONG).show();
+                }
             }
         });
         roll = findViewById(R.id.rollpass);
@@ -72,15 +97,6 @@ public class LoginActivity extends AppCompatActivity {
         bmonth = findViewById(R.id.birthmonth);
         byear = findViewById(R.id.birthyear);
         dob = bdate.getText().toString()+  bmonth.getText().toString() + byear.getText().toString();
-        customLoadDialogClass = new CustomLoadDialogClass(this, new OnDialogLoadListener() {
-            @Override
-            public void onLoad() {
-            }
-            @Override
-            public String onLoadText() {
-                return "Need few moments...";
-            }
-        });
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,6 +144,10 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "You cannot born in future!", Toast.LENGTH_LONG).show();
             return;
         }
+        if(!isEmailValid || !isRollValid){
+            Toast.makeText(getApplicationContext(), "Invalid details", Toast.LENGTH_LONG).show();
+            return;
+        }
         else {
             customLoadDialogClass.show();
              dob = dd+mm+yyyy;
@@ -172,6 +192,7 @@ public class LoginActivity extends AppCompatActivity {
                         else {
                             storeLoginStatus(false);
                             Toast.makeText(getApplicationContext(), "Some of your credentials were incorrect.", Toast.LENGTH_LONG).show();
+                            forgot.setVisibility(View.VISIBLE);
                             customLoadDialogClass.dismiss();
                         }
                     }
@@ -185,13 +206,13 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         user = FirebaseAuth.getInstance().getCurrentUser();
                         if (task.isSuccessful()) {
-                            storeLoginStatus(true);
-                            storeCredentials(uid,roll.getText().toString());
-                            Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_LONG).show();
+                                storeLoginStatus(true);
+                                storeCredentials(uid,roll.getText().toString());
+                                Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                overridePendingTransition(R.anim.top_out,R.anim.bottom_in);
+                                startActivity(intent);
                             customLoadDialogClass.hide();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            overridePendingTransition(R.anim.top_out,R.anim.bottom_in);
-                            startActivity(intent);
                             finish();
                         } else {
                             storeLoginStatus(false);
@@ -237,11 +258,13 @@ public class LoginActivity extends AppCompatActivity {
             emailValid.setText(getResources().getString(R.string.valid));
             emailValid.setTextColor(getResources().getColor(R.color.white));
             emailValid.setBackgroundResource(R.drawable.roundcontainerboxgreen);
+            isEmailValid = true;
         }
         else {
             emailValid.setText(getResources().getString(R.string.invalidtext));
             emailValid.setTextColor(getResources().getColor(R.color.white));
             emailValid.setBackgroundResource(R.drawable.roundcontainerboxred);
+            isEmailValid = false;
         }
     }
 
@@ -251,11 +274,51 @@ public class LoginActivity extends AppCompatActivity {
             rollValid.setText(getResources().getString(R.string.valid));
             rollValid.setTextColor(getResources().getColor(R.color.white));
             rollValid.setBackgroundResource(R.drawable.roundcontainerboxgreen);
+            isRollValid = true;
         }
         else {
             rollValid.setText(getResources().getString(R.string.invalidtext));
             rollValid.setTextColor(getResources().getColor(R.color.white));
             rollValid.setBackgroundResource(R.drawable.roundcontainerboxred);
+            isRollValid = false;
         }
+    }
+
+    private void sendVerificationEmail()
+    {
+        Toast.makeText(getApplicationContext(),"Sending verification link...", Toast.LENGTH_LONG).show();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        user.sendEmailVerification()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(),"A link has been sent to verify your email address.", Toast.LENGTH_LONG).show();
+                        }
+                        else
+                        { Toast.makeText(getApplicationContext(),"Unable to generate verification link", Toast.LENGTH_LONG).show();
+                            sendVerificationEmail();
+                        }
+                    }
+                });
+    }
+
+    private void resetLinkSender(final String email){
+            FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getApplicationContext(),"A link has been sent at "+email, Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(),"Check your connection", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+    }
+    private Boolean checkIfEmailVerified()
+    {
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        return user.isEmailVerified();
     }
 }

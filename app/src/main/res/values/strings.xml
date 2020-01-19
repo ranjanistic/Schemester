@@ -40,4 +40,5 @@
     <string name="period9">16:30 to 17:30</string>
     <string name="valid">Valid</string>
     <string name="invalidtext">Invalid till now</string>
+    <string name="not_verified">Not verified</string>
 </resources>

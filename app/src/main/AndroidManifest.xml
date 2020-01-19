@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="org.timetable.schedule">
-    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -19,12 +18,19 @@
             android:exported="true"
             android:label="RestartServiceWhenStopped" />
         <activity
-            android:name=".FullScheduleActivity" android:theme="@style/blueTheme"/>
+<<<<<<< Updated upstream
+            android:name=".FullScheduleActivity"
+            android:screenOrientation="sensorLandscape" android:theme="@style/blueTheme"/>
+=======
+            android:name=".FullScheduleActivity" android:theme="@style/blueTheme"
+            android:screenOrientation="portrait"/>
+>>>>>>> Stashed changes
         <activity
             android:name=".Splash"
             android:theme="@style/splashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
