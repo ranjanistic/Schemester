@@ -35,7 +35,7 @@ public class FullScheduleActivity extends AppCompatActivity {
     TextView   c1,c2,c3,c4,c5,c6,c7,c8,c9, email, roll, semester;
     Button m,t,w,th,f, logoutbtn;
     View dayschedule, settingsview, aboutview;
-    ImageButton setting, about, git, tweet, insta;
+    ImageButton setting, about, git, tweet, insta, dml;
     String semesterresult;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     CustomLoadDialogClass customLoadDialogClass;
@@ -85,6 +85,15 @@ public class FullScheduleActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Uri uri = Uri.parse("https://www.instagram.com/ranjanistic");
+                Intent web = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(web);
+            }
+        });
+        dml = findViewById(R.id.dmlbtn);
+        dml.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("https://github.com/DarkModeLabs/");
                 Intent web = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(web);
             }
