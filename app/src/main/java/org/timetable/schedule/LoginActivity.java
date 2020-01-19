@@ -73,13 +73,13 @@ public class LoginActivity extends AppCompatActivity {
         forgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                customLoadDialogClass.show();
                 if(isEmailValid) {
-                    customLoadDialogClass.show();
                     resetLinkSender(emailid.getText().toString());
-                    customLoadDialogClass.hide();
                 } else {
                     Toast.makeText(getApplicationContext(),"Please provide an email ID", Toast.LENGTH_LONG).show();
                 }
+                customLoadDialogClass.hide();
             }
         });
         roll = findViewById(R.id.rollpass);

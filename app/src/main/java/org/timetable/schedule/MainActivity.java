@@ -232,9 +232,6 @@ public class MainActivity extends AppCompatActivity{
                                     Log.d(TAG, "Server error in getting semester.");
                                     Toast.makeText(MainActivity.this, "Unable to read", Toast.LENGTH_LONG).show();
                                 }
-                            } else {
-                                Log.d(TAG, "get failed with ", task.getException());
-                                Toast.makeText(MainActivity.this, "Connection problem?", Toast.LENGTH_LONG).show();
                             }
                         }
                     });

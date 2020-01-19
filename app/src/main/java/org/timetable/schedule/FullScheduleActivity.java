@@ -38,19 +38,9 @@ public class FullScheduleActivity extends AppCompatActivity {
     TextView   c1,c2,c3,c4,c5,c6,c7,c8,c9, email, roll, semester;
     Button m,t,w,th,f, logoutbtn;
     View dayschedule, settingsview, aboutview;
-<<<<<<< Updated upstream
-    ImageButton setting, about, git, tweet, insta;
-=======
     ImageButton setting, about, git, tweet, insta, dml;
     ScrollView dayschedulePortrait;
     HorizontalScrollView dayscheduleLandscape;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     String semesterresult;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     CustomLoadDialogClass customLoadDialogClass;
@@ -114,6 +104,15 @@ public class FullScheduleActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Uri uri = Uri.parse("https://www.twitter.com/ranjanistic");
+                Intent web = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(web);
+            }
+        });
+        dml = findViewById(R.id.dmlabs);
+        dml.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("https://www.github.com/darkmodelabs");
                 Intent web = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(web);
             }

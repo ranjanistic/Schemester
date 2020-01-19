@@ -41,4 +41,12 @@
     <string name="valid">Valid</string>
     <string name="invalidtext">Invalid till now</string>
     <string name="not_verified">Not verified</string>
+    <string name="loading">Loading</string>
+    <string name="semester">Semester</string>
+    <string name="weekday">WeekDay</string>
+    <string name="month">Month</string>
+    <string name="_0">0</string>
+    <string name="duration">Duration</string>
+    <string name="view_full_week_schedule">View full week schedule</string>
+    <string name="no_classes_today_enjoy">No classes \ntoday. \nEnjoy!</string>
 </resources>

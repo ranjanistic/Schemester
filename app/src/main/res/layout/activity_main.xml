@@ -34,7 +34,7 @@
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
                         android:fontFamily="@font/comfortaa_bold"
-                        android:text="Loading"
+                        android:text="@string/loading"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@color/black"
                         android:textSize="32dp"
@@ -47,7 +47,7 @@
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
                         android:fontFamily="@font/comfortaa_bold"
-                        android:text="Semester"
+                        android:text="@string/semester"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@color/black"
                         android:textSize="18sp"
@@ -77,7 +77,7 @@
                         android:gravity="bottom|end"
                         android:paddingStart="8dp"
                         android:paddingEnd="8dp"
-                        android:text="WeekDay"
+                        android:text="@string/weekday"
                         android:textAllCaps="false"
                         android:textColor="@color/linktextcolor"
                         android:textSize="20sp" />
@@ -92,7 +92,7 @@
                         android:gravity="top|end"
                         android:paddingStart="8dp"
                         android:paddingEnd="8dp"
-                        android:text="Month"
+                        android:text="@string/month"
                         android:textAllCaps="false"
                         android:textColor="@color/linktextcolor"
                         android:textSize="18sp" />
@@ -108,7 +108,7 @@
                     android:backgroundTint="@color/colorAccent"
                     android:fontFamily="@font/comfortaa_bold"
                     android:gravity="center"
-                    android:text="0"
+                    android:text="@string/_0"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="34sp"
@@ -138,7 +138,7 @@
             android:layout_marginStart="8dp"
             android:fontFamily="@font/reem_kufi"
             android:padding="12dp"
-            android:text="Duration"
+            android:text="@string/duration"
             android:textColor="@color/white"
             android:textSize="30sp"
             android:textStyle="bold" />
@@ -201,7 +201,7 @@
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
-                    android:text="8:30 to 9:30"
+                    android:text="@string/period1"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
                 <View
@@ -222,7 +222,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:textSize="20sp" />
                 <View
                     android:layout_width="0dp"
@@ -247,7 +247,7 @@
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
-                    android:text="9:30 to 10:30"
+                    android:text="@string/period2"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
                 <View
@@ -267,7 +267,7 @@
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:textColor="@color/white"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:textSize="20sp" />
                 <View
                     android:layout_width="0dp"
@@ -295,7 +295,7 @@
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
-                    android:text="10:30 to 11:30"
+                    android:text="@string/period3"
                     android:textSize="20sp" />
                 <View
                     android:layout_width="0dp"
@@ -314,7 +314,7 @@
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:textColor="@color/white"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:textSize="20sp" />
                 <View
                     android:layout_width="0dp"
@@ -342,7 +342,7 @@
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
-                    android:text="11:30 to 12:30"
+                    android:text="@string/period4"
                     android:textSize="20sp" />
                 <View
                     android:layout_width="0dp"
@@ -361,7 +361,7 @@
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:textColor="@color/white"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:textSize="20sp" />
                 <View
                     android:layout_width="0dp"
@@ -388,7 +388,7 @@
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
-                    android:text="12:30 to 13:30"
+                    android:text="@string/period5"
                     android:textSize="20sp" />
 
                 <View
@@ -407,7 +407,7 @@
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:textColor="@color/white"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:textSize="20sp" />
                 <View
                     android:layout_width="0dp"
@@ -435,7 +435,7 @@
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
-                    android:text="13:30 to 14:30"
+                    android:text="@string/period6"
                     android:textSize="20sp" />
 
                 <View
@@ -454,7 +454,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:textSize="20sp" />
                 <View
                     android:layout_width="0dp"
@@ -482,7 +482,7 @@
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
-                    android:text="14:30 to 15:30"
+                    android:text="@string/period7"
                     android:textSize="20sp" />
                 <View
                     android:layout_width="0dp"
@@ -501,7 +501,7 @@
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:textColor="@color/white"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:textSize="20sp" />
                 <View
                     android:layout_width="0dp"
@@ -530,7 +530,7 @@
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
-                    android:text="15:30 to 16:30"
+                    android:text="@string/period8"
                     android:textSize="20sp" />
                 <View
                     android:layout_width="0dp"
@@ -549,7 +549,7 @@
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:textColor="@color/white"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:textSize="20sp" />
                 <View
                     android:layout_width="0dp"
@@ -577,7 +577,7 @@
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
-                    android:text="16:30 to 17:30"
+                    android:text="@string/period9"
                     android:textSize="20sp" />
                 <View
                     android:layout_width="0dp"
@@ -596,7 +596,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:textSize="20sp" />
                 <View
                     android:layout_width="0dp"
@@ -612,7 +612,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat"
         android:gravity="center_horizontal|start"
-        android:text="No classes \ntoday. \nEnjoy!"
+        android:text="@string/no_classes_today_enjoy"
         android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="@color/blue"
@@ -634,7 +634,7 @@
         android:backgroundTint="@color/dark_blue"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
-        android:text="View full week schedule"
+        android:text="@string/view_full_week_schedule"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/white"

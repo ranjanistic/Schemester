@@ -47,7 +47,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="E:\myprojects\AndroidProject\Schedule\app\src\main\res\mipmap-anydpi-v26\ic_launcher.png" />
+                                      <entry key="imageAsset" value="E:\myprojects\Github\vector-assets\schemesterNotificationicon.svg" />
                                       <entry key="themeColor" value="ffffff" />
                                     </map>
                                   </option>
@@ -76,7 +76,6 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
-                                                <entry key="scalingPercent" value="97" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -87,10 +86,10 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="2d8ffc" />
-                                      <entry key="backgroundImage" value="E:\myprojects\AndroidProject\Schedule\app\src\main\res\mipmap-anydpi-v26\ic_launcher.png" />
-                                      <entry key="foregroundImage" value="E:\myprojects\AndroidProject\Schedule\app\src\main\res\mipmap-anydpi-v26\ic_launcher.png" />
+                                      <entry key="backgroundImage" value="E:\myprojects\AndroidProject\Schedule\app\src\main\res\drawable\ic_transparentbackgroundlayer.xml" />
+                                      <entry key="foregroundImage" value="E:\myprojects\Github\vector-assets\schemestericonupdated-jazz.svg" />
+                                      <entry key="legacyIconShape" value="CIRCLE" />
+                                      <entry key="webIconShape" value="CIRCLE" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -118,6 +117,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
+                                                <entry key="paddingPercent" value="-5" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -128,9 +128,9 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="backgroundColor" value="2d8ffc" />
+                                      <entry key="backgroundColor" value="d8d8dc" />
                                       <entry key="iconShape" value="CIRCLE" />
-                                      <entry key="imageAsset" value="E:\myprojects\AndroidProject\Schedule\app\src\main\res\mipmap-anydpi-v26\ic_launcher.png" />
+                                      <entry key="imageAsset" value="E:\myprojects\Github\vector-assets\schemestericonupdated-jazz.svg" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -169,7 +169,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="E:\myprojects\AndroidProject\Schedule\app\src\main\res\mipmap-anydpi-v26\ic_launcher.png" />
+                                      <entry key="imageAsset" value="E:\myprojects\Github\vector-assets\schemesterNotificationicon.svg" />
                                     </map>
                                   </option>
                                 </PersistentState>
