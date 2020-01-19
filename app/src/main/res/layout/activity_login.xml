@@ -102,7 +102,6 @@
             android:paddingTop="22dp"
             android:paddingEnd="12dp"
             android:paddingBottom="22dp"
-            android:layout_marginBottom="12dp"
             android:nextFocusDown="@id/birthdate"
             android:textColor="@color/white"
             android:textSize="22sp" />

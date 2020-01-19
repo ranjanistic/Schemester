@@ -12,12 +12,6 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
-.idea/workspace.xml
-.idea/workspace.xml
+workspace.xml
 local.properties
-.idea/workspace.xml
-.idea/workspace.xml
-.idea/workspace.xml
-app/src/main/res/layout-land/about_view.xml
-.idea/workspace.xml
-app/src/main/res/layout/about_view.xml
+
