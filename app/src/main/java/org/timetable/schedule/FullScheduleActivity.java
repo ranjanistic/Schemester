@@ -44,6 +44,12 @@ public class FullScheduleActivity extends AppCompatActivity {
     ImageButton setting, about, git, tweet, insta, dml;
     ScrollView dayschedulePortrait;
     HorizontalScrollView dayscheduleLandscape;
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     String semesterresult;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

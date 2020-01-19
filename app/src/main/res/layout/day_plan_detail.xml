@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <HorizontalScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,6 +10,10 @@
     android:backgroundTint="@color/white"
     android:layout_width="wrap_content"
 =======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 <ScrollView android:id="@+id/detailscrollview"
     android:layout_width="match_parent"
 >>>>>>> Stashed changes
@@ -16,6 +22,8 @@
     android:background="@drawable/leftroundcontainer"
     android:backgroundTint="@color/white"
     android:orientation="vertical"
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
     android:paddingStart="22dp"
     android:paddingEnd="0dp"
@@ -41,6 +49,10 @@
             android:layout_height="match_parent">
             <LinearLayout
 =======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
@@ -57,6 +69,12 @@
             android:paddingEnd="44dp">
 
             <androidx.cardview.widget.CardView
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -71,6 +89,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                     android:textColor="@color/white"
                     android:singleLine="false"
@@ -94,6 +114,10 @@
             android:layout_height="match_parent">
             <LinearLayout
 =======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
                     android:orientation="vertical"
                     android:padding="12dp">
 
@@ -123,6 +147,12 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -137,6 +167,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                     android:textColor="@color/white"
                     android:singleLine="false"
@@ -161,6 +193,10 @@
             android:layout_height="match_parent">
             <LinearLayout
 =======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
                     android:orientation="vertical"
                     android:padding="12dp">
 
@@ -189,6 +225,12 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -207,6 +249,8 @@
                     android:orientation="vertical"
                     android:padding="12dp">
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                     android:textColor="@color/white"
                     android:singleLine="false"
@@ -228,6 +272,10 @@
             android:layout_height="match_parent">
             <LinearLayout
 =======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
                     <TextView
                         android:id="@+id/period3"
                         android:layout_width="wrap_content"
@@ -254,6 +302,12 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -270,6 +324,8 @@
                     android:orientation="vertical"
                     android:padding="12dp">
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                     android:textColor="@color/white"
                     android:singleLine="false"
@@ -293,6 +349,10 @@
             android:layout_height="match_parent">
             <LinearLayout
 =======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
                     <TextView
                         android:id="@+id/period4"
                         android:layout_width="wrap_content"
@@ -320,6 +380,12 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -338,6 +404,8 @@
                     android:orientation="vertical"
                     android:padding="12dp">
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                     android:textColor="@color/white"
                     android:singleLine="false"
@@ -361,6 +429,10 @@
             android:layout_height="match_parent">
             <LinearLayout
 =======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
                     <TextView
                         android:id="@+id/period5"
                         android:layout_width="wrap_content"
@@ -388,6 +460,12 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -402,6 +480,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                     android:textColor="@color/white"
                     android:singleLine="false"
@@ -425,6 +505,10 @@
             android:layout_height="match_parent">
             <LinearLayout
 =======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="12dp">
@@ -455,6 +539,12 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -473,6 +563,8 @@
                     android:orientation="vertical"
                     android:padding="12dp">
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                     android:textColor="@color/white"
                     android:singleLine="false"
@@ -496,6 +588,10 @@
             android:layout_height="match_parent">
             <LinearLayout
 =======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
                     <TextView
                         android:id="@+id/period7"
                         android:layout_width="wrap_content"
@@ -523,6 +619,12 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -541,6 +643,8 @@
                     android:orientation="vertical"
                     android:padding="12dp">
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
                     android:textColor="@color/white"
                     android:singleLine="false"
@@ -564,6 +668,10 @@
             android:layout_height="match_parent">
             <LinearLayout
 =======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
                     <TextView
                         android:id="@+id/period8"
                         android:layout_width="wrap_content"
@@ -591,6 +699,12 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -626,6 +740,8 @@
                         android:layout_height="match_parent"
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
                     android:textColor="@color/white"
                     android:singleLine="false"
                     android:text="Loading..."
@@ -638,6 +754,10 @@
     </LinearLayout>
 </HorizontalScrollView>
 =======
+=======
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
                         android:gravity="center_vertical"
                         android:paddingTop="12dp"
                         android:paddingBottom="12dp"
@@ -648,5 +768,13 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </LinearLayout>
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+    </ScrollView>
+>>>>>>> Stashed changes
+=======
+    </ScrollView>
+>>>>>>> Stashed changes
+=======
     </ScrollView>
 >>>>>>> Stashed changes

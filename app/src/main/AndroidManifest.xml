@@ -19,8 +19,18 @@
             android:label="RestartServiceWhenStopped" />
         <activity
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
             android:name=".FullScheduleActivity"
             android:screenOrientation="sensorLandscape" android:theme="@style/blueTheme"/>
+=======
+            android:name=".FullScheduleActivity" android:theme="@style/blueTheme"
+            android:screenOrientation="portrait"/>
+>>>>>>> Stashed changes
+=======
+            android:name=".FullScheduleActivity" android:theme="@style/blueTheme"
+            android:screenOrientation="portrait"/>
+>>>>>>> Stashed changes
 =======
             android:name=".FullScheduleActivity" android:theme="@style/blueTheme"
             android:screenOrientation="portrait"/>

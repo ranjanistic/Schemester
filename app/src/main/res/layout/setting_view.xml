@@ -6,8 +6,16 @@
     android:layout_width="match_parent"
     android:backgroundTint="@color/dark_blue"
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
     android:background="@drawable/toproundview"
     android:padding="22dp"
+=======
+    android:background="@drawable/leftroundcontainer"
+>>>>>>> Stashed changes
+=======
+    android:background="@drawable/leftroundcontainer"
+>>>>>>> Stashed changes
 =======
     android:background="@drawable/leftroundcontainer"
 >>>>>>> Stashed changes
