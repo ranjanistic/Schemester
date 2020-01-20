@@ -34,10 +34,11 @@
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
                         android:fontFamily="@font/comfortaa_bold"
+                        android:gravity="bottom"
                         android:text="@string/loading"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@color/black"
-                        android:textSize="32dp"
+                        android:textSize="32sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -48,6 +49,7 @@
                         android:layout_marginEnd="12dp"
                         android:fontFamily="@font/comfortaa_bold"
                         android:text="@string/semester"
+                        android:gravity="top"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="@color/black"
                         android:textSize="18sp"
@@ -125,7 +127,7 @@
         android:paddingStart="22dp"
         android:paddingEnd="22dp"
         android:paddingBottom="8dp"
-        android:paddingTop="8dp"
+        android:paddingTop="22dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -137,11 +139,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:fontFamily="@font/reem_kufi"
-            android:padding="12dp"
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:text="@string/duration"
             android:textColor="@color/white"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+            android:textSize="30sp" />
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -150,13 +154,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            android:paddingStart="18dp"
+            android:paddingEnd="18dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:fontFamily="@font/reem_kufi"
-            android:padding="12dp"
-            android:text="Class"
+            android:text="@string/class_"
             android:textColor="@color/white"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+            android:textSize="30sp" />
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -179,8 +184,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -189,8 +192,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="22dp">
-
+                android:padding="8dp">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
                 <TextView
                     android:id="@+id/period1"
                     android:layout_width="wrap_content"
@@ -203,7 +209,7 @@
                     android:paddingBottom="18dp"
                     android:text="@string/period1"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -211,9 +217,8 @@
 
                 <TextView
                     android:id="@+id/class1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="@color/white"
                     android:fontFamily="@font/montserrat"
@@ -223,7 +228,7 @@
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:text="@string/loading"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -235,8 +240,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="22dp">
-
+                android:padding="8dp">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
                 <TextView
                     android:id="@+id/period2"
                     android:layout_width="wrap_content"
@@ -249,7 +257,7 @@
                     android:paddingBottom="18dp"
                     android:text="@string/period2"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -257,18 +265,18 @@
 
                 <TextView
                     android:id="@+id/class2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    
                     android:background="@drawable/roundcontainerbox"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/montserrat"
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
-                    android:textColor="@color/white"
                     android:text="@string/loading"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -281,8 +289,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="22dp">
-
+                android:padding="8dp">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
                 <TextView
                     android:id="@+id/period3"
                     android:layout_width="wrap_content"
@@ -296,7 +307,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:text="@string/period3"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -304,18 +315,18 @@
 
                 <TextView
                     android:id="@+id/class3"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    
                     android:background="@drawable/roundcontainerbox"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/montserrat"
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
-                    android:textColor="@color/white"
                     android:text="@string/loading"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -328,8 +339,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="22dp">
-
+                android:padding="8dp">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
                 <TextView
                     android:id="@+id/period4"
                     android:layout_width="wrap_content"
@@ -343,7 +357,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:text="@string/period4"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -351,18 +365,18 @@
 
                 <TextView
                     android:id="@+id/class4"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    
                     android:background="@drawable/roundcontainerbox"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/montserrat"
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
-                    android:textColor="@color/white"
                     android:text="@string/loading"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -374,8 +388,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="22dp">
-
+                android:padding="8dp">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
                 <TextView
                     android:id="@+id/period5"
                     android:layout_width="wrap_content"
@@ -389,7 +406,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:text="@string/period5"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <View
                     android:layout_width="0dp"
@@ -397,18 +414,18 @@
                     android:layout_weight="1" />
                 <TextView
                     android:id="@+id/class5"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    
                     android:background="@drawable/roundcontainerbox"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/montserrat"
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
-                    android:textColor="@color/white"
                     android:text="@string/loading"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -421,8 +438,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="22dp">
-
+                android:padding="8dp">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
                 <TextView
                     android:id="@+id/period6"
                     android:layout_width="wrap_content"
@@ -436,7 +456,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:text="@string/period6"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <View
                     android:layout_width="0dp"
@@ -444,18 +464,18 @@
                     android:layout_weight="1" />
                 <TextView
                     android:id="@+id/class6"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="@color/white"
+                    android:fontFamily="@font/montserrat"
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:text="@string/loading"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -468,8 +488,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="22dp">
-
+                android:padding="8dp">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
                 <TextView
                     android:id="@+id/period7"
                     android:layout_width="wrap_content"
@@ -483,7 +506,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:text="@string/period7"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -491,18 +514,18 @@
 
                 <TextView
                     android:id="@+id/class7"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    
                     android:background="@drawable/roundcontainerbox"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/montserrat"
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
-                    android:textColor="@color/white"
                     android:text="@string/loading"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -516,8 +539,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="22dp">
-
+                android:padding="8dp">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
                 <TextView
                     android:id="@+id/period8"
                     android:layout_width="wrap_content"
@@ -531,7 +557,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:text="@string/period8"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -539,18 +565,18 @@
 
                 <TextView
                     android:id="@+id/class8"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    
                     android:background="@drawable/roundcontainerbox"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/montserrat"
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
-                    android:textColor="@color/white"
                     android:text="@string/loading"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -564,8 +590,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="22dp">
-
+                android:padding="8dp">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
                 <TextView
                     android:id="@+id/period9"
                     android:layout_width="wrap_content"
@@ -578,7 +607,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:text="@string/period9"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -586,18 +615,18 @@
 
                 <TextView
                     android:id="@+id/class9"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="@color/white"
+                    android:fontFamily="@font/montserrat"
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:text="@string/loading"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -628,8 +657,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="12dp"
         android:background="@drawable/square_btn"
         android:backgroundTint="@color/dark_blue"
         android:paddingStart="12dp"
@@ -641,7 +670,7 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/noclasstext"
         app:layout_constraintVertical_bias="1.0" />

@@ -45,6 +45,9 @@ public class LoginActivity extends AppCompatActivity {
     boolean isRollValid = false, isEmailValid = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(MainActivity.isCreated) {
+            MainActivity.mainact.finish();
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
@@ -118,6 +121,9 @@ public class LoginActivity extends AppCompatActivity {
         }
         if (TextUtils.isEmpty(rollnum)) {
             Toast.makeText(getApplicationContext(), "Your college roll number required.", Toast.LENGTH_LONG).show();
+            return;
+        } else if(!rollnum.trim().contains("18")){
+            Toast.makeText(getApplicationContext(), "Only for 2018 batch 2nd year.", Toast.LENGTH_LONG).show();
             return;
         }
         if (TextUtils.isEmpty(dd)) {
@@ -255,12 +261,16 @@ public class LoginActivity extends AppCompatActivity {
     private void checkEmailValidity(String emailUnderInspection, Editable s){
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z.]+\\.+[a-z]+";
         if (emailUnderInspection.matches(emailPattern) && s.length() > 0){
+            emailValid.setVisibility(View.VISIBLE);
             emailValid.setText(getResources().getString(R.string.valid));
             emailValid.setTextColor(getResources().getColor(R.color.white));
             emailValid.setBackgroundResource(R.drawable.roundcontainerboxgreen);
             isEmailValid = true;
         }
-        else {
+        else if(s.length()==0){
+            emailValid.setVisibility(View.GONE);
+        } else {
+            emailValid.setVisibility(View.VISIBLE);
             emailValid.setText(getResources().getString(R.string.invalidtext));
             emailValid.setTextColor(getResources().getColor(R.color.white));
             emailValid.setBackgroundResource(R.drawable.roundcontainerboxred);
@@ -271,12 +281,16 @@ public class LoginActivity extends AppCompatActivity {
     private void checkRollNumValidity(String rollUnderInspection, Editable s){
         String rollPattern = "[0-9]+/[0-9]+";
         if (rollUnderInspection.matches(rollPattern) && s.length() > 0){
+            rollValid.setVisibility(View.VISIBLE);
             rollValid.setText(getResources().getString(R.string.valid));
             rollValid.setTextColor(getResources().getColor(R.color.white));
             rollValid.setBackgroundResource(R.drawable.roundcontainerboxgreen);
             isRollValid = true;
         }
-        else {
+        else if(s.length() == 0){
+            rollValid.setVisibility(View.GONE);
+        } else{
+            rollValid.setVisibility(View.VISIBLE);
             rollValid.setText(getResources().getString(R.string.invalidtext));
             rollValid.setTextColor(getResources().getColor(R.color.white));
             rollValid.setBackgroundResource(R.drawable.roundcontainerboxred);
