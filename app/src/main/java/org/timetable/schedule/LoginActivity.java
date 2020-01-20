@@ -147,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         if(Integer.parseInt(yyyy)>calendar.get(Calendar.YEAR)){
-            Toast.makeText(getApplicationContext(), "You cannot born in future!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "You cannot be born in future!", Toast.LENGTH_LONG).show();
             return;
         }
         if(!isEmailValid || !isRollValid){
