@@ -2,8 +2,8 @@
 
     <style name="splashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:background">@drawable/splash</item>
-        <item name="android:navigationBarColor">@color/white</item>
-        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:navigationBarColor">@color/blue</item>
+        <item name="android:statusBarColor">@color/blue</item>
         <item name="android:windowLightStatusBar" tools:targetApi="p">false</item>
     </style>
     <!-- Base application theme. -->

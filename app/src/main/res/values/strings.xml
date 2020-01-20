@@ -47,6 +47,7 @@
     <string name="month">Month</string>
     <string name="_0">0</string>
     <string name="duration">Duration</string>
-    <string name="view_full_week_schedule">View full week schedule</string>
+    <string name="view_full_week_schedule">Full week schedule</string>
     <string name="no_classes_today_enjoy">No classes \ntoday. \nEnjoy!</string>
+    <string name="class_">Class</string>
 </resources>
