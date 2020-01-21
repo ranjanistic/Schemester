@@ -88,7 +88,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/semtextsetting"
+                    android:id="@+id/associated"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat"

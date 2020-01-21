@@ -3,10 +3,12 @@ package org.timetable.schedule;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,6 +44,7 @@ public class FullScheduleActivity extends AppCompatActivity {
     ScrollView dayschedulePortrait;
     HorizontalScrollView dayscheduleLandscape;
     String semesterresult;
+    CustomVerificationDialog customVerificationDialog;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     CustomLoadDialogClass customLoadDialogClass;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -79,6 +82,8 @@ public class FullScheduleActivity extends AppCompatActivity {
             dayschedulePortrait= findViewById(R.id.weekdayplanview);
             dayschedulePortrait.setVisibility(View.VISIBLE);
         }
+        isInternetAvailable();
+        semester = findViewById(R.id.semtextsetting);
         settingsview.setVisibility(View.GONE);
         aboutview.setVisibility(View.GONE);
         git = findViewById(R.id.githubbtn);
@@ -117,6 +122,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 startActivity(web);
             }
         });
+
         customLoadDialogClass = new CustomLoadDialogClass(this, new OnDialogLoadListener() {
             @Override
             public void onLoad() {
@@ -158,6 +164,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         m.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isInternetAvailable();
                 m.setBackgroundResource(R.drawable.leftroundbtnselected);
                 m.setTextColor(getResources().getColor(R.color.black));
                 t.setBackgroundResource(R.drawable.leftroundbtn);
@@ -177,6 +184,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         t.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isInternetAvailable();
                 m.setBackgroundResource(R.drawable.leftroundbtn);
                 m.setTextColor(getResources().getColor(R.color.white));
                 t.setBackgroundResource(R.drawable.leftroundbtnselected);
@@ -196,6 +204,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         w.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isInternetAvailable();
                 m.setBackgroundResource(R.drawable.leftroundbtn);
                 m.setTextColor(getResources().getColor(R.color.white));
                 t.setBackgroundResource(R.drawable.leftroundbtn);
@@ -215,6 +224,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         th.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isInternetAvailable();
                 m.setBackgroundResource(R.drawable.leftroundbtn);
                 m.setTextColor(getResources().getColor(R.color.white));
                 t.setBackgroundResource(R.drawable.leftroundbtn);
@@ -234,6 +244,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         f.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isInternetAvailable();
                 m.setBackgroundResource(R.drawable.leftroundbtn);
                 m.setTextColor(getResources().getColor(R.color.white));
                 t.setBackgroundResource(R.drawable.leftroundbtn);
@@ -250,13 +261,12 @@ public class FullScheduleActivity extends AppCompatActivity {
                 readDatabase("friday");
             }
         });
-        semester = findViewById(R.id.semtextsetting);
         email = findViewById(R.id.emailtextsetting);
         roll = findViewById(R.id.rolltextsetting);
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                semester.setText(readSemester());
+                readSemester();
                 String[] creds = getCredentials();
                 email.setText(creds[0]);
                 roll.setText(creds[1]);
@@ -274,7 +284,7 @@ public class FullScheduleActivity extends AppCompatActivity {
             }
         });
 
-        final CustomVerificationDialog customVerificationDialog = new CustomVerificationDialog(FullScheduleActivity.this, new OnDialogApplyListener() {
+        customVerificationDialog = new CustomVerificationDialog(FullScheduleActivity.this, new OnDialogApplyListener() {
             @Override
             public void onApply(String email, String password) {
                 customLoadDialogClass.show();
@@ -299,7 +309,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         });
     }
 
-    private String readSemester(){
+    private void readSemester(){
         db.collection("semesterSchedule").document("semester")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -309,20 +319,17 @@ public class FullScheduleActivity extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                  semesterresult =  document.get("semnum").toString();
+                                  semester.setText(document.get("semnum").toString());
                             } else {
                                 Log.d(TAG, "No such document");
-                                Toast.makeText(FullScheduleActivity.this, "Unable to read", Toast.LENGTH_LONG).show();
-                                semesterresult = "Error";
+                                Toast.makeText(FullScheduleActivity.this, "Server error", Toast.LENGTH_LONG).show();
                             }
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
-                            Toast.makeText(FullScheduleActivity.this, "fail exception sem", Toast.LENGTH_LONG).show();
-                            semesterresult = "Connection error";
+                            Toast.makeText(FullScheduleActivity.this, "Please restart.", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
-        return semesterresult;
     }
     private String[] getCredentials(){
         String[] cred = {"",""};
@@ -367,9 +374,17 @@ public class FullScheduleActivity extends AppCompatActivity {
         Intent i=new Intent(FullScheduleActivity.this, LoginActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); // To clean up all activities
         startActivity(i);
+        overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
     }
     private void authenticate(String uid, String passphrase){
         customLoadDialogClass.show();
+        String[] creds;
+        creds = getCredentials();
+        if(!uid.equals(creds[0])){
+            Toast.makeText(FullScheduleActivity.this, "Wrong credentials.", Toast.LENGTH_SHORT).show();
+            customLoadDialogClass.hide();
+            return;
+        }
         AuthCredential credential = EmailAuthProvider
                 .getCredential(uid, passphrase);
         user.reauthenticate(credential)
@@ -380,7 +395,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                             Toast.makeText(FullScheduleActivity.this, "Authentication passed", Toast.LENGTH_SHORT).show();
                             deleteUser();
                         } else {
-                            Toast.makeText(FullScheduleActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FullScheduleActivity.this, "Wrong credentials or network problem.", Toast.LENGTH_SHORT).show();
                             customLoadDialogClass.hide();
                         }
                     }
@@ -398,9 +413,10 @@ public class FullScheduleActivity extends AppCompatActivity {
                             Intent i=new Intent(FullScheduleActivity.this, LoginActivity.class);
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // To clean up all activities
                             startActivity(i);
+                            overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
                         } else {
                             customLoadDialogClass.hide();
-                            Toast.makeText(FullScheduleActivity.this, "Network problem", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FullScheduleActivity.this, "Network problem maybe?", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -412,6 +428,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         mEditor.putBoolean("loginstatus", logged);
         mEditor.apply();
     }
+
 
     private void checkOrientationSetVisibility(int visible){
         if(isLandscape()){
@@ -425,5 +442,13 @@ public class FullScheduleActivity extends AppCompatActivity {
     
     private boolean isLandscape() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+    }
+    private void isInternetAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
+            Toast.makeText(getApplicationContext(),"Connect to internet for latest details",Toast.LENGTH_LONG).show();
+        }
     }
 }

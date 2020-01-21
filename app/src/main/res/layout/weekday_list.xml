@@ -8,7 +8,9 @@
     android:gravity="end"
     android:paddingBottom="28dp"
     android:background="@android:color/transparent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_gravity="bottom"
+    tools:showIn="@layout/activity_full_schedule">
 
     <Button
         android:id="@+id/mon"
@@ -110,6 +112,6 @@
         android:paddingStart="22dp"
         android:paddingEnd="22dp"
         android:background="@drawable/leftroundbtn"
-        android:backgroundTint="@color/blue_grey"
+        android:backgroundTint="@color/charcoal"
         app:srcCompat="@drawable/ic_infoico" />
 </LinearLayout>

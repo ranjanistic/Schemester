@@ -6,16 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,11 +20,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -162,8 +155,8 @@ public class LoginActivity extends AppCompatActivity {
              } else {
                  Toast.makeText(getApplicationContext(),"No internet",Toast.LENGTH_SHORT).show();
                  customLoadDialogClass.hide();
-                 return;
              }
+             return;
         }
     }
 
@@ -191,8 +184,8 @@ public class LoginActivity extends AppCompatActivity {
                             storeCredentials(emailIdFinalLogin,roll.getText().toString());
                             Toast.makeText(getApplicationContext(), "Logged in as "+emailIdFinalLogin, Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            overridePendingTransition(R.anim.top_out,R.anim.bottom_in);
                             startActivity(intent);
+                            overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_from_top);
                             finish();
                         }
                         else {
@@ -213,13 +206,14 @@ public class LoginActivity extends AppCompatActivity {
                         user = FirebaseAuth.getInstance().getCurrentUser();
                         if (task.isSuccessful()) {
                                 storeLoginStatus(true);
-                                storeCredentials(uid,roll.getText().toString());
-                                Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                overridePendingTransition(R.anim.top_out,R.anim.bottom_in);
-                                startActivity(intent);
+                            storeCredentials(uid,roll.getText().toString());
+                            Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
                             customLoadDialogClass.hide();
+                            overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_from_top);
                             finish();
+                            sendVerificationEmail();
                         } else {
                             storeLoginStatus(false);
                             loginUser(uid,passphrase);
@@ -298,20 +292,14 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void sendVerificationEmail()
-    {
-        Toast.makeText(getApplicationContext(),"Sending verification link...", Toast.LENGTH_LONG).show();
+    private void sendVerificationEmail() {
         user = FirebaseAuth.getInstance().getCurrentUser();
         user.sendEmailVerification()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(),"A link has been sent to verify your email address.", Toast.LENGTH_LONG).show();
-                        }
-                        else
-                        { Toast.makeText(getApplicationContext(),"Unable to generate verification link", Toast.LENGTH_LONG).show();
-                            sendVerificationEmail();
+                            Toast.makeText(getApplicationContext(),"A confirmation email is sent to your email address.", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -330,8 +318,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
     }
-    private Boolean checkIfEmailVerified()
-    {
+    private Boolean checkIfEmailVerified() {
         user = FirebaseAuth.getInstance().getCurrentUser();
         return user.isEmailVerified();
     }
