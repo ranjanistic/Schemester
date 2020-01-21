@@ -1,12 +1,8 @@
 package org.timetable.schedule;
 
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,12 +19,12 @@ public class Splash extends AppCompatActivity {
             if(user!=null) {
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
-                overridePendingTransition(R.anim.top_out,R.anim.bottom_in);
+                overridePendingTransition(R.anim.enter_from_top, R.anim.exit_from_bottom);
                 finish();
             } else {
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
-                overridePendingTransition(R.anim.top_out,R.anim.bottom_in);
+                overridePendingTransition(R.anim.enter_from_top, R.anim.exit_from_bottom);
                 finish();
             }
     }

@@ -14,6 +14,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.hardware.camera2.params.LensShadingMap;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -36,6 +37,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -130,6 +132,10 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(i);
             }
         });
+        if(!isInternetAvailable()){
+            Toast.makeText(getApplicationContext(),"Connect to internet for latest details",Toast.LENGTH_LONG).show();
+        }
+        setHolidayViewIfHoliday();
         mupdateTask.execute();
     }
 
@@ -140,12 +146,13 @@ public class MainActivity extends AppCompatActivity{
             day.setText(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
             month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
             setSemester();
+            setHolidayViewIfHoliday();
             super.onPreExecute();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            if (!checkHoliday()) {
+            if (!isHolidayToday()) {
                 readDatabase(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
                 highlightCurrentPeriod();
             }
@@ -171,19 +178,20 @@ public class MainActivity extends AppCompatActivity{
         mupdateTask.execute();
         super.onResume();
     }
-    
-    private Boolean checkHoliday(){
-        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-            //linearLayout.setVisibility(View.INVISIBLE);
+    private void setHolidayViewIfHoliday(){
+        if (isHolidayToday()) {
             scrollView.setVisibility(View.INVISIBLE);
             headingview.setVisibility(View.INVISIBLE);
             fullview.setVisibility(View.VISIBLE);
             noclass.setVisibility(View.VISIBLE);
-            return true;
         } else {
             noclass.setVisibility(View.GONE);
-            return false;
         }
+    }
+    
+    private Boolean isHolidayToday(){
+         return (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY);
+
     }
     
     private String getWeekdayFromCode(int daycode){
@@ -262,11 +270,12 @@ public class MainActivity extends AppCompatActivity{
     }
     
     private void highlightCurrentPeriod(){
-        int i = 0, s = 0, d=0;
-        boolean dayOver = false;
+        int i = 0, s = 0;
         if(checkPeriod("08:30:00", "09:30:00")){
             //notifier("08:30:00", c[0].getText().toString());
-            s=0;
+            p[i].setTextColor(getResources().getColor(R.color.white));
+            p[i].setBackgroundResource(R.drawable.roundactivetimecontainer);
+            return;
         } else if(checkPeriod("09:30:00", "10:30:00")){
             //notifier("09:30:00", c[1].getText().toString());
             s = 1;
@@ -285,35 +294,44 @@ public class MainActivity extends AppCompatActivity{
         }else if(checkPeriod("14:30:00","15:30:00")){
             //notifier("14:30:00", c[6].getText().toString());
             s = 6;
-        }else if(checkPeriod("16:46:00","16:48:00")){
+        }else if(checkPeriod("15:30:00","16:30:00")){
             //notifier("15:30:00", c[7].getText().toString());
             s = 7;
         }else if(checkPeriod("16:30:00","17:30:00")){
             //notifier("16:30:00", c[8].getText().toString());
             s = 8;
         } else if(checkPeriod("17:30:00","23:59:59")) {
-            dayOver =true;
-        } else if(checkPeriod("00:00:00","8:30:00")) {
-            dayOver = false;
-        }
-        while(i<=s){
-            if(s==0){
-                p[i].setBackgroundResource(R.drawable.roundtimeovercontainer);
-            } else {
-                p[i].setBackgroundResource(R.drawable.roundtimeovercontainer);
-                p[s].setBackgroundResource(R.drawable.roundactivetimecontainer);
-            }
-            i++;
-        }
-        while (d<9) {
-            if (dayOver) {
+            int d = 0;
+            while (d<9) {
+                p[d].setTextColor(getResources().getColor(R.color.white));
                 p[d].setBackgroundResource(R.drawable.roundtimeovercontainer);
-            } else if(!dayOver) {
-                p[d].setBackgroundResource(R.drawable.roundtimecontainer);
+                d++;
             }
-            d++;
+            return;
+        } else if(checkPeriod("00:00:00","8:30:00")) {
+            int d = 0;
+            while (d<9) {
+                p[d].setBackgroundResource(R.drawable.roundtimecontainer);
+                p[d].setTextColor(getResources().getColor(R.color.blue));
+                d++;
+            }
+            return;
+        }
+        while (i < s) {
+            p[i].setTextColor(getResources().getColor(R.color.white));
+            p[i].setBackgroundResource(R.drawable.roundtimeovercontainer);
+            p[s].setBackgroundResource(R.drawable.roundactivetimecontainer);
+            p[s].setTextColor(getResources().getColor(R.color.white));
+            ++i;
+        }
+        i=i+1;
+        while (i<9){
+            p[i].setTextColor(getResources().getColor(R.color.white));
+            p[i].setBackgroundResource(R.drawable.roundcontainerbox);
+            ++i;
         }
     }
+
     /*
     private String returnPeriodDetail(){
         readDatabase(getWeekdayFromCode(Calendar.DAY_OF_WEEK));
@@ -454,5 +472,16 @@ public class MainActivity extends AppCompatActivity{
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 // notificationId is a unique int for each notification that you must define
         notificationManager.notify(notificationId, builder.build());
+    }
+    public boolean isInternetAvailable() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        }
+        catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+        return false;
     }
 }

@@ -470,6 +470,7 @@
                     android:textColor="@color/white"
                     android:fontFamily="@font/montserrat"
                     android:paddingStart="8dp"
+                    android:gravity="bottom"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"

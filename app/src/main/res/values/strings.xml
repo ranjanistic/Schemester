@@ -50,4 +50,7 @@
     <string name="view_full_week_schedule">Full week schedule</string>
     <string name="no_classes_today_enjoy">No classes \ntoday. \nEnjoy!</string>
     <string name="class_">Class</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="logout">Logout</string>
+    <string name="setting_background">setting background</string>
 </resources>
