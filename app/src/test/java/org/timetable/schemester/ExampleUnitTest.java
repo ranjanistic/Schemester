@@ -1,4 +1,4 @@
-package org.timetable.schedule;
+package org.timetable.schemester;
 
 import org.junit.Test;
 

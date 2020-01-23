@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:id="@+id/detailscrollviewland"
+<androidx.core.widget.NestedScrollView android:id="@+id/detailscrollviewland"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/leftroundcontainer"
@@ -9,11 +9,8 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    android:scrollbarFadeDuration="1"
-    android:scrollbarStyle="outsideOverlay"
     android:fadeScrollbars="true"
     android:scrollbarSize="2dp"
-    android:scrollIndicators="bottom"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="@layout/activity_full_schedule"
@@ -418,4 +415,4 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>

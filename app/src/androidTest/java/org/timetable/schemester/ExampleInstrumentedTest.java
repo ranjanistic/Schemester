@@ -1,4 +1,4 @@
-package org.timetable.schedule;
+package org.timetable.schemester;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("org.timetable.schedule", appContext.getPackageName());
+        assertEquals("org.timetable.org.timetable.schemester", appContext.getPackageName());
     }
 }

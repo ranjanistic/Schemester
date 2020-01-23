@@ -53,4 +53,6 @@
     <string name="delete_account">Delete Account</string>
     <string name="logout">Logout</string>
     <string name="setting_background">setting background</string>
+    <string name="app_version">version-1.1-infant-stage1</string>
+    <string name="version">Version</string>
 </resources>

@@ -1,4 +1,4 @@
-package org.timetable.schedule;
+package org.timetable.schemester;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

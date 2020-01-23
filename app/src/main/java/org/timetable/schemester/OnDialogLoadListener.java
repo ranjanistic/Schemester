@@ -1,4 +1,4 @@
-package org.timetable.schedule;
+package org.timetable.schemester;
 
 public interface OnDialogLoadListener {
     void onLoad();
