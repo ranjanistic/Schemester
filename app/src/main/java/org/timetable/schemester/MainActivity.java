@@ -1,4 +1,4 @@
-package org.timetable.schedule;
+package org.timetable.schemester;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,17 +7,10 @@ import androidx.core.app.NotificationManagerCompat;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.AlarmManager;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
-import android.hardware.camera2.params.LensShadingMap;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -52,6 +45,7 @@ public class MainActivity extends AppCompatActivity{
     TextView[] c = {c1,c2,c3,c4,c5,c6,c7,c8,c9};
     TextView[] p = {p1,p2,p3,p4,p5,p6,p7,p8,p9 };
     String[] pkey = {"p1","p2","p3","p4","p5","p6","p7","p8","p9"};
+    String clg, course,year;
     Button day,date, month, fullview;
     int getDate, notificationId = 101;
     String getDay, getMonth;
@@ -71,6 +65,9 @@ public class MainActivity extends AppCompatActivity{
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        clg = "DBC";
+        course = "PHY-H";
+        year = "Y2";
         mainact = this;
         isCreated = true;
         super.onCreate(savedInstanceState);
@@ -145,7 +142,7 @@ public class MainActivity extends AppCompatActivity{
             date.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
             day.setText(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
             month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
-            setSemester();
+            setSemester(clg,course,year);
             setHolidayViewIfHoliday();
             super.onPreExecute();
         }
@@ -153,7 +150,7 @@ public class MainActivity extends AppCompatActivity{
         @Override
         protected Void doInBackground(Void... voids) {
             if (!isHolidayToday()) {
-                readDatabase(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
+                readDatabase(clg,course,year,getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
                 highlightCurrentPeriod();
             }
             return null;
@@ -247,9 +244,9 @@ public class MainActivity extends AppCompatActivity{
     }
     
     
-    private void setSemester() {
+    private void setSemester(String source, String course,String year) {
         if (getLoginStatus()) {
-            db.collection("semesterSchedule").document("semester")
+            db.collection(source).document(course).collection(year).document("semester")
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
@@ -401,8 +398,8 @@ public class MainActivity extends AppCompatActivity{
         return false;
     }
 
-    private void readDatabase(String weekday){
-            db.collection("semesterSchedule").document(weekday.toLowerCase())
+    private void readDatabase(String source, String course, String year, String weekday){
+            db.collection(source).document(course).collection(year).document(weekday.toLowerCase())
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override

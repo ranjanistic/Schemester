@@ -8,8 +8,9 @@
     android:layout_height="match_parent">
 
     <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -30,8 +31,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Built for"
                     android:fontFamily="@font/montserrat"
+                    android:text="Built for"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
@@ -39,8 +40,8 @@
                     android:id="@+id/emailtextsetting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DBC, DU Physics (H)"
                     android:fontFamily="@font/montserrat"
+                    android:text="DBC, DU Physics (H)"
                     android:textColor="@color/white"
                     android:textSize="22sp"
                     android:textStyle="bold" />
@@ -56,8 +57,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Built by"
                     android:fontFamily="@font/montserrat"
+                    android:text="Built by"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
@@ -65,8 +66,8 @@
                     android:id="@+id/rolltextsetting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Priyanshu Ranjan"
                     android:fontFamily="@font/montserrat"
+                    android:text="Priyanshu Ranjan"
                     android:textColor="@color/white"
                     android:textSize="22sp"
                     android:textStyle="bold" />
@@ -82,9 +83,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
                     android:text="In association with"
                     android:textColor="@color/white"
-                    android:fontFamily="@font/montserrat"
                     android:textSize="18sp" />
 
                 <TextView
@@ -99,10 +100,52 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="22dp"
+                android:paddingBottom="22dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:text="@string/version"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/versionCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:singleLine="false"
+                    android:text="@string/app_version"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/montserrat"
+        android:text="Stay tuned for exciting updates!"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/leftroundcontainer"
@@ -114,37 +157,50 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center"
-    android:orientation="horizontal">
-        <ImageButton
-            android:id="@+id/githubbtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="22dp"
-            android:background="@drawable/square_btn"
-            android:backgroundTint="@color/dull_white"
-            android:padding="4dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_github" />
 
-    <ImageButton
-        android:id="@+id/dmlabs"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_margin="22dp"
-        android:background="@drawable/square_btn"
-        android:backgroundTint="@color/black"
-        android:padding="4dp"
-        android:scaleType="fitCenter"
-        app:srcCompat="@drawable/ic_darkmodelabs" />
-</LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_height="wrap_content">
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/websiteBtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="22dp"
+                android:background="@drawable/square_btn"
+                android:backgroundTint="@android:color/transparent"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_schemestericonupdated_jazz" />
+
+            <ImageButton
+                android:id="@+id/githubbtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="22dp"
+                android:background="@drawable/square_btn"
+                android:backgroundTint="@color/dull_white"
+                android:padding="4dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_github" />
+
+            <ImageButton
+                android:id="@+id/dmlabs"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="22dp"
+                android:background="@drawable/square_btn"
+                android:backgroundTint="@color/black"
+                android:padding="4dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_darkmodelabs" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
 
             <ImageButton
                 android:id="@+id/tweetbtn"
@@ -157,17 +213,17 @@
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_twitter" />
 
-        <ImageButton
-            android:id="@+id/instabtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="22dp"
-            android:background="@drawable/square_btn"
-            android:backgroundTint="@color/pink"
-            android:padding="4dp"
-            android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_instagram" />
+            <ImageButton
+                android:id="@+id/instabtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_margin="22dp"
+                android:background="@drawable/square_btn"
+                android:backgroundTint="@color/pink"
+                android:padding="4dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_instagram" />
 
-    </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

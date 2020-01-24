@@ -591,6 +591,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
+                android:layout_marginBottom="44dp"
                 android:padding="8dp">
                 <View
                     android:layout_width="0dp"

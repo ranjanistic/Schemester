@@ -17,3 +17,5 @@ gradle-app.setting
 local.properties
 *.apk
 *.ser
+*.json
+app/google-services.json

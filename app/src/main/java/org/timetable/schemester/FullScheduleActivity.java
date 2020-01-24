@@ -1,7 +1,8 @@
-package org.timetable.schedule;
+package org.timetable.schemester;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +33,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import static android.content.ContentValues.TAG;
@@ -39,11 +41,11 @@ import static android.content.ContentValues.TAG;
 public class FullScheduleActivity extends AppCompatActivity {
     TextView   c1,c2,c3,c4,c5,c6,c7,c8,c9, email, roll, semester;
     Button m,t,w,th,f, logoutbtn;
-    View dayschedule, settingsview, aboutview;
-    ImageButton setting, about, git, tweet, insta, dml;
-    ScrollView dayschedulePortrait;
-    HorizontalScrollView dayscheduleLandscape;
-    String semesterresult;
+    View settingsview, aboutview;
+    ImageButton setting, about, git, tweet, insta, dml, webbtn;
+    String clg, course,year;
+    NestedScrollView dayschedulePortrait;
+
     CustomVerificationDialog customVerificationDialog;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     CustomLoadDialogClass customLoadDialogClass;
@@ -57,6 +59,9 @@ public class FullScheduleActivity extends AppCompatActivity {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setStatusBarColor(this.getResources().getColor(R.color.blue));
         window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
+        clg = "DBC";
+        course = "PHY-H";
+        year = "Y2";
         c1 = findViewById(R.id.class1);
         c2 = findViewById(R.id.class2);
         c3 = findViewById(R.id.class3);
@@ -75,13 +80,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         about = findViewById(R.id.aboutbtn);
         settingsview = findViewById(R.id.settingview);
         aboutview = findViewById(R.id.aboutview);
-        if(isLandscape()) {
-            dayscheduleLandscape = findViewById(R.id.weekdayplanview);
-            dayscheduleLandscape.setVisibility(View.VISIBLE);
-        } else{
-            dayschedulePortrait= findViewById(R.id.weekdayplanview);
-            dayschedulePortrait.setVisibility(View.VISIBLE);
-        }
+
         isInternetAvailable();
         semester = findViewById(R.id.semtextsetting);
         settingsview.setVisibility(View.GONE);
@@ -91,6 +90,15 @@ public class FullScheduleActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Uri uri = Uri.parse("https://www.github.com/ranjanistic");
+                Intent web = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(web);
+            }
+        });
+        webbtn = findViewById(R.id.websiteBtn);
+        webbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("https://darkmodelabs.github.io/SchemesterWeb/");
                 Intent web = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(web);
             }
@@ -136,27 +144,27 @@ public class FullScheduleActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
         int getDayCount = calendar.get(Calendar.DAY_OF_WEEK);
         switch (getDayCount){
-            case  2: readDatabase("monday");
+            case  2: readDatabase(clg,course,year,"monday");
                 m.setBackgroundResource(R.drawable.leftroundbtnselected);
                 m.setTextColor(getResources().getColor(R.color.black));
             break;
-            case 3: readDatabase("tuesday");
+            case 3: readDatabase(clg,course,year,"tuesday");
                 t.setBackgroundResource(R.drawable.leftroundbtnselected);
                 t.setTextColor(getResources().getColor(R.color.black));
                 break;
-            case 4: readDatabase("wednesday");
+            case 4: readDatabase(clg,course,year,"wednesday");
                 w.setBackgroundResource(R.drawable.leftroundbtnselected);
                 w.setTextColor(getResources().getColor(R.color.black));
                 break;
-            case 5: readDatabase("thursday");
+            case 5: readDatabase(clg,course,year,"thursday");
                 th.setBackgroundResource(R.drawable.leftroundbtnselected);
                 th.setTextColor(getResources().getColor(R.color.black));
                 break;
-            case 6: readDatabase("friday");
+            case 6: readDatabase(clg,course,year,"friday");
                 f.setBackgroundResource(R.drawable.leftroundbtnselected);
                 f.setTextColor(getResources().getColor(R.color.black));
                 break;
-            default:readDatabase("monday");
+            default:readDatabase(clg,course,year,"monday");
                 m.setBackgroundResource(R.drawable.leftroundbtnselected);
                 m.setTextColor(getResources().getColor(R.color.black));
         }
@@ -178,7 +186,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
-                readDatabase("monday");
+                readDatabase(clg,course,year,"monday");
             }
         });
         t.setOnClickListener(new View.OnClickListener() {
@@ -198,7 +206,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
-                readDatabase("tuesday");
+                readDatabase(clg,course,year,"tuesday");
             }
         });
         w.setOnClickListener(new View.OnClickListener() {
@@ -218,7 +226,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
-                readDatabase("wednesday");
+                readDatabase(clg,course,year,"wednesday");
             }
         });
         th.setOnClickListener(new View.OnClickListener() {
@@ -238,7 +246,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
-                readDatabase("thursday");
+                readDatabase(clg,course,year,"thursday");
             }
         });
         f.setOnClickListener(new View.OnClickListener() {
@@ -258,7 +266,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
-                readDatabase("friday");
+                readDatabase(clg,course,year,"friday");
             }
         });
         email = findViewById(R.id.emailtextsetting);
@@ -266,7 +274,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                readSemester();
+                readSemester(clg,course,year);
                 String[] creds = getCredentials();
                 email.setText(creds[0]);
                 roll.setText(creds[1]);
@@ -309,23 +317,23 @@ public class FullScheduleActivity extends AppCompatActivity {
         });
     }
 
-    private void readSemester(){
-        db.collection("semesterSchedule").document("semester")
+    private void readSemester(String source, String course,String year) {
+            db.collection(source).document(course).collection(year).document("semester")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
+                            if (Objects.requireNonNull(document).exists()) {
                                 Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                  semester.setText(document.get("semnum").toString());
+                                  semester.setText(Objects.requireNonNull(document.get("semnum")).toString());
                             } else {
-                                Log.d(TAG, "No such document");
+                                Log.d(TAG, "Server error");
                                 Toast.makeText(FullScheduleActivity.this, "Server error", Toast.LENGTH_LONG).show();
                             }
                         } else {
-                            Log.d(TAG, "get failed with ", task.getException());
+                            Log.d(TAG, "Failed to receive data", task.getException());
                             Toast.makeText(FullScheduleActivity.this, "Please restart.", Toast.LENGTH_LONG).show();
                         }
                     }
@@ -338,25 +346,25 @@ public class FullScheduleActivity extends AppCompatActivity {
         cred[1] =  mSharedPreferences.getString("roll", "");
         return cred;
     }
-    private void readDatabase(String weekday){
-        db.collection("semesterSchedule").document(weekday)
+    private void readDatabase(String source, String course, String year, String weekday){
+        db.collection(source).document(course).collection(year).document(weekday)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
+                            if (Objects.requireNonNull(document).exists()) {
                                 Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                c1.setText(document.get("p1").toString());
-                                c2.setText(document.get("p2").toString());
-                                c3.setText(document.get("p3").toString());
-                                c4.setText(document.get("p4").toString());
-                                c5.setText(document.get("p5").toString());
-                                c6.setText(document.get("p6").toString());
-                                c7.setText(document.get("p7").toString());
-                                c8.setText(document.get("p8").toString());
-                                c9.setText(document.get("p9").toString());
+                                c1.setText(Objects.requireNonNull(document.get("p1")).toString());
+                                c2.setText(Objects.requireNonNull(document.get("p2")).toString());
+                                c3.setText(Objects.requireNonNull(document.get("p3")).toString());
+                                c4.setText(Objects.requireNonNull(document.get("p4")).toString());
+                                c5.setText(Objects.requireNonNull(document.get("p5")).toString());
+                                c6.setText(Objects.requireNonNull(document.get("p6")).toString());
+                                c7.setText(Objects.requireNonNull(document.get("p7")).toString());
+                                c8.setText(Objects.requireNonNull(document.get("p8")).toString());
+                                c9.setText(Objects.requireNonNull(document.get("p9")).toString());
                             } else {
                                 Log.d(TAG, "No such document");
                                 Toast.makeText(FullScheduleActivity.this, "Server error. Try reinstalling.", Toast.LENGTH_LONG).show();
@@ -431,13 +439,8 @@ public class FullScheduleActivity extends AppCompatActivity {
 
 
     private void checkOrientationSetVisibility(int visible){
-        if(isLandscape()){
-            dayscheduleLandscape = findViewById(R.id.weekdayplanview);
-            dayscheduleLandscape.setVisibility(visible);
-        } else{
             dayschedulePortrait= findViewById(R.id.weekdayplanview);
             dayschedulePortrait.setVisibility(visible);
-        }
     }
     
     private boolean isLandscape() {
@@ -446,7 +449,7 @@ public class FullScheduleActivity extends AppCompatActivity {
     private void isInternetAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        NetworkInfo activeNetworkInfo = Objects.requireNonNull(connectivityManager).getActiveNetworkInfo();
         if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
             Toast.makeText(getApplicationContext(),"Connect to internet for latest details",Toast.LENGTH_LONG).show();
         }
