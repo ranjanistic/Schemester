@@ -42,10 +42,9 @@ public class FullScheduleActivity extends AppCompatActivity {
     TextView   c1,c2,c3,c4,c5,c6,c7,c8,c9, email, roll, semester;
     Button m,t,w,th,f, logoutbtn;
     View settingsview, aboutview;
-    ImageButton setting, about, git, tweet, insta, dml, webbtn;
+    ImageButton setting, about, git, tweet, insta, dml, webbtn, fullsetting, updatecheck;
     String clg, course,year;
     NestedScrollView dayschedulePortrait;
-
     CustomVerificationDialog customVerificationDialog;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     CustomLoadDialogClass customLoadDialogClass;
@@ -103,24 +102,6 @@ public class FullScheduleActivity extends AppCompatActivity {
                 startActivity(web);
             }
         });
-        insta = findViewById(R.id.instabtn);
-        insta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Uri uri = Uri.parse("https://www.instagram.com/ranjanistic");
-                Intent web = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(web);
-            }
-        });
-        tweet = findViewById(R.id.tweetbtn);
-        tweet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Uri uri = Uri.parse("https://www.twitter.com/ranjanistic");
-                Intent web = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(web);
-            }
-        });
         dml = findViewById(R.id.dmlabs);
         dml.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +109,23 @@ public class FullScheduleActivity extends AppCompatActivity {
                 Uri uri = Uri.parse("https://www.github.com/darkmodelabs");
                 Intent web = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(web);
+            }
+        });
+
+        fullsetting = findViewById(R.id.fullsettingsbtn);
+        fullsetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(FullScheduleActivity.this, Preferences.class);
+                startActivity(intent);
+            }
+        });
+
+        updatecheck = findViewById(R.id.checkupdateBtn);
+        updatecheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
 
@@ -292,21 +290,7 @@ public class FullScheduleActivity extends AppCompatActivity {
             }
         });
 
-        customVerificationDialog = new CustomVerificationDialog(FullScheduleActivity.this, new OnDialogApplyListener() {
-            @Override
-            public void onApply(String email, String password) {
-                customLoadDialogClass.show();
-                authenticate(email, password);
-            }
-        });
 
-        Button deleteacc = findViewById(R.id.deletebtn);
-        deleteacc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                customVerificationDialog.show();
-            }
-        });
         about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -383,51 +367,6 @@ public class FullScheduleActivity extends AppCompatActivity {
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); // To clean up all activities
         startActivity(i);
         overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
-    }
-    private void authenticate(String uid, String passphrase){
-        customLoadDialogClass.show();
-        String[] creds;
-        creds = getCredentials();
-        if(!uid.equals(creds[0])){
-            Toast.makeText(FullScheduleActivity.this, "Wrong credentials.", Toast.LENGTH_SHORT).show();
-            customLoadDialogClass.hide();
-            return;
-        }
-        AuthCredential credential = EmailAuthProvider
-                .getCredential(uid, passphrase);
-        user.reauthenticate(credential)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(FullScheduleActivity.this, "Authentication passed", Toast.LENGTH_SHORT).show();
-                            deleteUser();
-                        } else {
-                            Toast.makeText(FullScheduleActivity.this, "Wrong credentials or network problem.", Toast.LENGTH_SHORT).show();
-                            customLoadDialogClass.hide();
-                        }
-                    }
-                });
-    }
-    private void deleteUser(){
-        user.delete()
-                .addOnCompleteListener (new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            storeLoginStatus(false);
-                            customLoadDialogClass.hide();
-                            Toast.makeText(FullScheduleActivity.this, "Your account was deleted permanently.", Toast.LENGTH_SHORT).show();
-                            Intent i=new Intent(FullScheduleActivity.this, LoginActivity.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // To clean up all activities
-                            startActivity(i);
-                            overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
-                        } else {
-                            customLoadDialogClass.hide();
-                            Toast.makeText(FullScheduleActivity.this, "Network problem maybe?", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
     }
 
     private void storeLoginStatus(Boolean logged){

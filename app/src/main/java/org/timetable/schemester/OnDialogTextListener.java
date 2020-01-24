@@ -2,8 +2,7 @@ package org.timetable.schemester;
 
 import android.graphics.drawable.Drawable;
 
-public interface OnDialogConfirmListener {
-    void onApply(Boolean confirm);
+public interface OnDialogTextListener {
+    void onApply(String text);
     String onCallText();
-    String onCallSub();
 }

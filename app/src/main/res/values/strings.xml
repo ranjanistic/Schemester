@@ -14,7 +14,7 @@
         viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec
         tortor.
     </string>
-<string name="okay">okay</string>
+    <string name="okay">okay</string>
     <string name="cancel">cancek</string>
     <string name="channel_name">New period notification</string>
     <string name="channel_description">To notify about next class.</string>

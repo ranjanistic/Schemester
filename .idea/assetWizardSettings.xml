@@ -196,8 +196,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_icon" />
-                            <entry key="sourceFile" value="C:\Users\hp\Downloads\icon.svg" />
+                            <entry key="outputName" value="ic_clouddownload2" />
+                            <entry key="sourceFile" value="E:\myprojects\Github\vector-assets\cloudDownload2.svg" />
                           </map>
                         </option>
                       </PersistentState>
