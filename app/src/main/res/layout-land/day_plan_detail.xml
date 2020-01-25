@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView android:id="@+id/detailscrollviewland"
+<androidx.core.widget.NestedScrollView
+    android:id="@+id/detailscrollviewLand"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
 android:layout_width="match_parent"
@@ -9,6 +10,8 @@ android:layout_width="match_parent"
     tools:showIn="@layout/activity_full_schedule"
     xmlns:tools="http://schemas.android.com/tools">
 <HorizontalScrollView
+    android:id="@+id/horizontalScrollLand"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
@@ -19,15 +22,15 @@ android:layout_width="match_parent"
     app:layout_constraintTop_toTopOf="parent"
     android:layout_gravity="center_vertical">
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:layout_gravity="center_vertical"
             android:background="@drawable/toproundview"
             android:backgroundTint="@android:color/transparent"
             android:orientation="horizontal"
-            android:paddingStart="0dp"
-            android:paddingEnd="22dp">
+            android:paddingStart="22dp"
+            android:paddingEnd="0dp">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="200dp"
@@ -57,7 +60,6 @@ android:layout_width="match_parent"
                         android:text="8:30 to 9:30"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
-
                     <TextView
                         android:id="@+id/class1"
                         android:layout_width="match_parent"

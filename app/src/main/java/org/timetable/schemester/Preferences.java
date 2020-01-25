@@ -3,9 +3,13 @@ package org.timetable.schemester;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,21 +19,31 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
+import static android.content.ContentValues.TAG;
+
 public class Preferences extends AppCompatActivity {
     Switch notificationSwitch;
-    ImageButton dobUpdate, emailChange, rollChange, appUpdate, deleteAcc, returnbtn;
+    ImageButton dobUpdate, emailChange, rollChange, appUpdate, deleteAcc, returnbtn, restarter;
     CustomVerificationDialog customVerificationDialogDeleteAccount, customVerificationDialogEmailChange;
     CustomLoadDialogClass customLoadDialogClass;
     CustomTextDialog customTextDialog;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     int CODE_DELETE_ACCOUNT = 102, CODE_CHANGE_EMAIL = 101;
+    int versionCode = BuildConfig.VERSION_CODE;
+    String versionName = BuildConfig.VERSION_NAME;
+    boolean sent;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +52,7 @@ public class Preferences extends AppCompatActivity {
             @Override
             public void onLoad() {
             }
+
             @Override
             public String onLoadText() {
                 return "Hold up";
@@ -47,10 +62,8 @@ public class Preferences extends AppCompatActivity {
         returnbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Preferences.this, FullScheduleActivity.class);
-                startActivity(intent);
                 finish();
-                overridePendingTransition(R.anim.enter_from_left,R.anim.exit_from_right);
+                overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
             }
         });
 
@@ -73,6 +86,8 @@ public class Preferences extends AppCompatActivity {
         appUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                customLoadDialogClass.show();
+                readVersionCheckUpdate();
             }
         });
 
@@ -96,11 +111,7 @@ public class Preferences extends AppCompatActivity {
         rollChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String getroll = rollReturner("Enter previous roll number");
-                String[] readRoll = getCredentials();
-                if(getroll.equals(readRoll[1])){
-                    storeCredentials("",rollReturner("Set new roll number"));
-                }
+                rollUpdater();
             }
         });
 
@@ -108,13 +119,53 @@ public class Preferences extends AppCompatActivity {
         dobUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                sent = false;
+                final Snackbar snackbar = Snackbar.make(view, "Send a link to your email address for this?", 5000);
+                snackbar.setAction("Send", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String[] creds = getCredentials();
+                        snackbar.dismiss();
+                        Snackbar.make(view, "Sending...", Snackbar.LENGTH_INDEFINITE)
+                                .show();
+                        if(resetLinkSender(creds[0])){
+                            Snackbar.make(view, "Email has been sent. Check your mailbox.", Snackbar.LENGTH_LONG)
+                                    .show();
+                        } else{
+                            Snackbar.make(view, "A network error occurred.", Snackbar.LENGTH_LONG)
+                                    .show();
+                        }
+                    }
+                });
+                snackbar.setActionTextColor(getResources().getColor(R.color.green));
+                snackbar.show();
+            }
+        });
 
+        restarter = findViewById(R.id.restartBtn);
+        restarter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(Preferences.this, "Restarting", Toast.LENGTH_SHORT).show();
+                Intent splash = new Intent(Preferences.this, Splash.class);
+                splash.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // To clean up all activities
+                startActivity(splash);
+                overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
             }
         });
 
     }
 
-
+    private boolean resetLinkSender(final String email){
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        sent =  task.isSuccessful();
+                    }
+                });
+        return sent;
+    }
     private void authenticate(final String uid, String passphrase, final int taskCode){
         customLoadDialogClass.show();
         String[] creds;
@@ -148,7 +199,7 @@ public class Preferences extends AppCompatActivity {
                                     }
                                     @Override
                                     public String onCallSub() {
-                                        return "You cannot recover an account once it is deleted. You'll need to create a new one after that. Confirm to delete account \'"+uid+"\'?";
+                                        return "You cannot recover an account once it is deleted. You'll need to create a new one after that. \n\nConfirm to delete account \'"+uid+"\'?";
                                     }
                                 });
                                 customConfirmDialogClass.setCanceledOnTouchOutside(false);
@@ -158,13 +209,14 @@ public class Preferences extends AppCompatActivity {
                             }
                             customLoadDialogClass.hide();
                         } else {
-                            Toast.makeText(Preferences.this, "Wrong credentials or network problem.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Preferences.this, "Wrong credentials or network problem", Toast.LENGTH_SHORT).show();
                             customLoadDialogClass.hide();
                         }
                     }
                 });
     }
     private void deleteUser(){
+        customLoadDialogClass.show();
         user.delete()
                 .addOnCompleteListener (new OnCompleteListener<Void>() {
                     @Override
@@ -190,6 +242,7 @@ public class Preferences extends AppCompatActivity {
         customTextDialog = new CustomTextDialog(Preferences.this, new OnDialogTextListener() {
             @Override
             public void onApply(String text) {
+                customLoadDialogClass.show();
                 newMail = text;
                 setEmailIfConfirmed("Email to be verified", "A verification email will be sent to \'"+newMail+"\'. Confirm this is yours?", newMail);
                 customLoadDialogClass.hide();
@@ -198,25 +251,56 @@ public class Preferences extends AppCompatActivity {
             public String onCallText() {
                 return "Enter new email ID";
             }
+            @Override
+            public int textType() {
+                return 38411;
+            }
         });
+        customTextDialog.setCanceledOnTouchOutside(false);
         customTextDialog.show();
     }
 
-    String rollinput;
-    private String rollReturner(final String heading){
-
+    private void rollUpdater(){
         customTextDialog = new CustomTextDialog(Preferences.this, new OnDialogTextListener() {
             @Override
             public void onApply(String text) {
-                rollinput = text;
+                String[] readRoll = getCredentials();
+                if (text.equals(readRoll[1])) {
+                    final CustomTextDialog customTextDialog1 = new CustomTextDialog(Preferences.this, new OnDialogTextListener() {
+                        @Override
+                        public void onApply(String text) {
+                            if(text.matches("[0-9]+/[0-9]+")) {
+                                storeCredentials("", text);
+                                Toast.makeText(getApplicationContext(), "Roll number updated", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Invalid roll number.", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                        @Override
+                        public String onCallText() {
+                            return "Enter new roll number";
+                        }
+                        @Override
+                        public int textType() {
+                            return 7011;        //roll = 7011
+                        }
+                    });
+                    customTextDialog1.setCanceledOnTouchOutside(false);
+                    customTextDialog1.show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Incorrect roll number", Toast.LENGTH_LONG).show();
+                }
             }
             @Override
             public String onCallText() {
-                return heading;
+                return "Enter previous roll number";
+            }
+            @Override
+            public int textType() {
+                return 0;
             }
         });
         customTextDialog.show();
-        return rollinput;
     }
     private String[] getCredentials(){
         String[] cred = {"",""};
@@ -227,8 +311,7 @@ public class Preferences extends AppCompatActivity {
     }
 
     private void setEmailIfConfirmed(final String head, final String body, final String updatemail){
-        customLoadDialogClass.show();
-        CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(Preferences.this, new OnDialogConfirmListener() {
+        final CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(Preferences.this, new OnDialogConfirmListener() {
             @Override
             public void onApply(Boolean confirm) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -259,6 +342,7 @@ public class Preferences extends AppCompatActivity {
                 return body;
             }
         });
+        customConfirmDialogClass.setCanceledOnTouchOutside(false);
         customConfirmDialogClass.show();
     }
 
@@ -301,6 +385,63 @@ public class Preferences extends AppCompatActivity {
                 });
     }
 
+    private void readVersionCheckUpdate(){
+        if(isNetworkConnected()) {
+            db.collection("appConfig").document("verCurrent")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (Objects.requireNonNull(document).exists()) {
+                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                    int vcode = Integer.parseInt(document.get("verCode").toString());
+                                    final String vname = document.get("verName").toString();
+                                    final String link = document.get("downlink").toString();
+                                    if (vcode != versionCode || !vname.equals(versionName)) {
+                                        customLoadDialogClass.hide();
+                                        Toast.makeText(getApplicationContext(), "Update available", Toast.LENGTH_LONG).show();
+                                        CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(Preferences.this, new OnDialogConfirmListener() {
+                                            @Override
+                                            public void onApply(Boolean confirm) {
+                                                Uri uri = Uri.parse(link);
+                                                Intent web = new Intent(Intent.ACTION_VIEW, uri);
+                                                startActivity(web);
+                                            }
+
+                                            @Override
+                                            public String onCallText() {
+                                                return "An update is available";
+                                            }
+
+                                            @Override
+                                            public String onCallSub() {
+                                                return "Your app version : " + versionName + "\nNew Version : " + vname + "\n\nUpdate to get the latest features and bug fixes. Download will start automatically. \nConfirm to download from website?";
+                                            }
+                                        });
+                                        customConfirmDialogClass.setCanceledOnTouchOutside(false);
+                                        customConfirmDialogClass.show();
+                                    } else {
+                                        customLoadDialogClass.hide();
+                                        Toast.makeText(getApplicationContext(), "App is up to date. Check again later.", Toast.LENGTH_LONG).show();
+                                    }
+                                } else {
+                                    customLoadDialogClass.hide();
+                                    Toast.makeText(getApplicationContext(), "Server error", Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                customLoadDialogClass.hide();
+                                Toast.makeText(getApplicationContext(), "Network problem?", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+        } else {
+            customLoadDialogClass.hide();
+            Toast.makeText(getApplicationContext(), "Network problem?", Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void storeCredentials(String mail, String rollnum){
         SharedPreferences mSharedPreferences = getSharedPreferences("credentials", MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
@@ -320,5 +461,12 @@ public class Preferences extends AppCompatActivity {
         mEditor.putBoolean("loginstatus", logged);
         mEditor.apply();
     }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
+
 
 }

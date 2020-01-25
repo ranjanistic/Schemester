@@ -196,8 +196,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_clouddownload2" />
-                            <entry key="sourceFile" value="E:\myprojects\Github\vector-assets\cloudDownload2.svg" />
+                            <entry key="outputName" value="ic_restarticon" />
+                            <entry key="sourceFile" value="E:\myprojects\Github\vector-assets\restarticon.svg" />
                           </map>
                         </option>
                       </PersistentState>

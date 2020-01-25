@@ -2,13 +2,26 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:backgroundTint="@color/blue"
     android:background="@color/blue"
     tools:context=".Preferences">
-<LinearLayout
+
+    <ImageView
+        android:contentDescription="@string/setting_background"
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.4"
+        android:translationZ="-18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:srcCompat="@drawable/setting_large" />
+
+    <LinearLayout
     android:id="@+id/headingsetting"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -27,8 +40,10 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:backgroundTint="@color/blue"
+        android:padding="8dp"
+        android:scaleType="centerInside"
         android:background="@drawable/round_btn"
-        app:srcCompat="@drawable/ic_settingico_mini"/>
+        app:srcCompat="@drawable/ic_arrowleft"/>
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -47,22 +62,20 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1"/>
-    <ImageButton
-        android:visibility="invisible"
+    <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:clickable="false"
         android:focusable="false"
-        android:background="@drawable/round_btn"
-        app:srcCompat="@drawable/ic_settingico_mini"/>
+        android:background="@drawable/ic_settingico_mini"
+        android:backgroundTint="@color/blue" />
 </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:paddingTop="12dp"
+        android:paddingTop="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/headingsetting">
         <LinearLayout
@@ -112,11 +125,11 @@
                     android:id="@+id/dobupdatebtn"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:padding="8dp"
+                    android:padding="4dp"
                     android:background="@drawable/square_btn"
-                    android:backgroundTint="@color/blue"
-
-                    android:scaleType="fitCenter" />
+                    android:backgroundTint="@color/yellow"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/ic_cakeicon"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -157,13 +170,15 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
+
                 <Switch
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:gravity="center"
                     android:layout_gravity="center"
-                    android:foregroundGravity="center"
                     android:buttonTint="@color/blue"
+                    android:checked="false"
+                    android:foregroundGravity="center"
+                    android:gravity="center"
                     android:thumbTint="@color/blue"
                     android:trackTint="@color/spruce"
                     tools:targetApi="p" />
@@ -211,10 +226,10 @@
                     android:id="@+id/changeEmailIdBtn"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:padding="8dp"
                     android:background="@drawable/square_btn"
-                    android:backgroundTint="@color/blue"
-                    android:scaleType="fitCenter" />
+                    android:backgroundTint="@color/white"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/ic_attherate"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -261,8 +276,9 @@
                     android:layout_height="50dp"
                     android:padding="8dp"
                     android:background="@drawable/square_btn"
-                    android:backgroundTint="@color/blue"
-                    android:scaleType="fitCenter" />
+                    android:backgroundTint="@color/pale_yellow"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/ic_numbertag"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -359,8 +375,57 @@
                     android:padding="8dp"
                     app:srcCompat="@drawable/ic_trashico"
                     android:background="@drawable/square_btn"
-                    android:backgroundTint="@color/dark_red"
+                    android:backgroundTint="@color/light_red"
+                    android:scaleType="fitCenter" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/square_btn"
+                android:backgroundTint="@color/dull_white"
+                android:padding="12dp"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="0dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/black"
+                        android:layout_height="wrap_content"
+                        android:singleLine="false"
+                        android:text="Restart application"
+                        android:textSize="18sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:textColor="@color/black"
+                        android:layout_height="wrap_content"
+                        android:text="Try restarting  if there's any glitch."
+                        android:paddingTop="6dp"
+                        android:singleLine="false"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+                <ImageButton
+                    android:id="@+id/restartBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_restarticon"
+                    android:background="@drawable/square_btn"
+                    android:backgroundTint="@color/white"
                     android:scaleType="fitCenter" />
             </LinearLayout>
         </LinearLayout>

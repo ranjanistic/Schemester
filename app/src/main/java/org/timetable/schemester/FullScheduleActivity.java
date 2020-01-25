@@ -41,16 +41,24 @@ import static android.content.ContentValues.TAG;
 public class FullScheduleActivity extends AppCompatActivity {
     TextView   c1,c2,c3,c4,c5,c6,c7,c8,c9, email, roll, semester;
     Button m,t,w,th,f, logoutbtn;
+    Button[] dayBtn = {m,t,w,th,f};
+    String[] dayString = {"monday", "tuesday", "wednesday", "thursday", "friday"};
     View settingsview, aboutview;
     ImageButton setting, about, git, tweet, insta, dml, webbtn, fullsetting, updatecheck;
     String clg, course,year;
-    NestedScrollView dayschedulePortrait;
+    NestedScrollView dayschedulePortrait, nestedScrollViewPort, nestedScrollViewLand;
+    HorizontalScrollView horizontalScrollView;
+    ScrollView scrollView;
     CustomVerificationDialog customVerificationDialog;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     CustomLoadDialogClass customLoadDialogClass;
+    int versionCode = BuildConfig.VERSION_CODE;
+    int i,j;
+    String versionName = BuildConfig.VERSION_NAME;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_schedule);
         Window window = this.getWindow();
@@ -70,16 +78,17 @@ public class FullScheduleActivity extends AppCompatActivity {
         c7 = findViewById(R.id.class7);
         c8 = findViewById(R.id.class8);
         c9 = findViewById(R.id.class9);
-        m = findViewById(R.id.mon);
-        t = findViewById(R.id.tue);
-        w = findViewById(R.id.wed);
-        th = findViewById(R.id.thu);
-        f = findViewById(R.id.fri);
+
+        dayBtn[0] = findViewById(R.id.mon);
+        dayBtn[1] = findViewById(R.id.tue);
+        dayBtn[2] = findViewById(R.id.wed);
+        dayBtn[3] = findViewById(R.id.thu);
+        dayBtn[4] = findViewById(R.id.fri);
         setting = findViewById(R.id.settingbtn);
         about = findViewById(R.id.aboutbtn);
         settingsview = findViewById(R.id.settingview);
         aboutview = findViewById(R.id.aboutview);
-
+        
         isInternetAvailable();
         semester = findViewById(R.id.semtextsetting);
         settingsview.setVisibility(View.GONE);
@@ -125,7 +134,8 @@ public class FullScheduleActivity extends AppCompatActivity {
         updatecheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                customLoadDialogClass.show();
+                readVersionCheckUpdate();
             }
         });
 
@@ -136,137 +146,167 @@ public class FullScheduleActivity extends AppCompatActivity {
 
             @Override
             public String onLoadText() {
-                return "Deleting your account";
+                return "Checking...";
             }
         });
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
         int getDayCount = calendar.get(Calendar.DAY_OF_WEEK);
         switch (getDayCount){
-            case  2: readDatabase(clg,course,year,"monday");
-                m.setBackgroundResource(R.drawable.leftroundbtnselected);
-                m.setTextColor(getResources().getColor(R.color.black));
+            case  2: readDatabase(clg,course,year,dayString[0]);
+                dayBtn[0].setBackgroundResource(R.drawable.leftroundbtnselected);
+                dayBtn[0].setTextColor(getResources().getColor(R.color.black));
             break;
-            case 3: readDatabase(clg,course,year,"tuesday");
-                t.setBackgroundResource(R.drawable.leftroundbtnselected);
-                t.setTextColor(getResources().getColor(R.color.black));
+            case 3: readDatabase(clg,course,year,dayString[1]);
+                dayBtn[1].setBackgroundResource(R.drawable.leftroundbtnselected);
+                dayBtn[1].setTextColor(getResources().getColor(R.color.black));
                 break;
-            case 4: readDatabase(clg,course,year,"wednesday");
-                w.setBackgroundResource(R.drawable.leftroundbtnselected);
-                w.setTextColor(getResources().getColor(R.color.black));
+            case 4: readDatabase(clg,course,year,dayString[2]);
+                dayBtn[2].setBackgroundResource(R.drawable.leftroundbtnselected);
+                dayBtn[2].setTextColor(getResources().getColor(R.color.black));
                 break;
-            case 5: readDatabase(clg,course,year,"thursday");
-                th.setBackgroundResource(R.drawable.leftroundbtnselected);
-                th.setTextColor(getResources().getColor(R.color.black));
+            case 5: readDatabase(clg,course,year,dayString[3]);
+                dayBtn[3].setBackgroundResource(R.drawable.leftroundbtnselected);
+                dayBtn[3].setTextColor(getResources().getColor(R.color.black));
                 break;
-            case 6: readDatabase(clg,course,year,"friday");
-                f.setBackgroundResource(R.drawable.leftroundbtnselected);
-                f.setTextColor(getResources().getColor(R.color.black));
+            case 6: readDatabase(clg,course,year,dayString[4]);
+                dayBtn[4].setBackgroundResource(R.drawable.leftroundbtnselected);
+                dayBtn[4].setTextColor(getResources().getColor(R.color.black));
                 break;
             default:readDatabase(clg,course,year,"monday");
-                m.setBackgroundResource(R.drawable.leftroundbtnselected);
-                m.setTextColor(getResources().getColor(R.color.black));
+                dayBtn[0].setBackgroundResource(R.drawable.leftroundbtnselected);
+                dayBtn[0].setTextColor(getResources().getColor(R.color.black));
         }
-
-        m.setOnClickListener(new View.OnClickListener() {
+/*
+        for (i=0, j =0 ;i<5;i++){
+            dayBtn[i].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 isInternetAvailable();
-                m.setBackgroundResource(R.drawable.leftroundbtnselected);
-                m.setTextColor(getResources().getColor(R.color.black));
-                t.setBackgroundResource(R.drawable.leftroundbtn);
-                t.setTextColor(getResources().getColor(R.color.white));
-                w.setBackgroundResource(R.drawable.leftroundbtn);
-                w.setTextColor(getResources().getColor(R.color.white));
-                th.setBackgroundResource(R.drawable.leftroundbtn);
-                th.setTextColor(getResources().getColor(R.color.white));
-                f.setBackgroundResource(R.drawable.leftroundbtn);
-                f.setTextColor(getResources().getColor(R.color.white));
+                checkOrientationSetVisibility(View.VISIBLE);
+                settingsview.setVisibility(View.GONE);
+                aboutview.setVisibility(View.GONE);
+                readDatabase(clg,course,year,dayString[i]);
+                scrollTop();
+                dayBtn[i].setBackgroundResource(R.drawable.leftroundbtnselected);
+                dayBtn[i].setTextColor(getResources().getColor(R.color.black));
+                while(j<5) {
+                    if(j!=i) {
+                        dayBtn[j].setBackgroundResource(R.drawable.leftroundbtn);
+                        dayBtn[j].setTextColor(getResources().getColor(R.color.white));
+                    }
+                    j++;
+                }
+            }
+        });
+        }
+*/
+        dayBtn[0].setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isInternetAvailable();
+                scrollTop();
+                dayBtn[0].setBackgroundResource(R.drawable.leftroundbtnselected);
+                dayBtn[0].setTextColor(getResources().getColor(R.color.black));
+                dayBtn[1].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[1].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[2].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[2].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[3].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[3].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[4].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[4].setTextColor(getResources().getColor(R.color.white));
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
                 readDatabase(clg,course,year,"monday");
             }
         });
-        t.setOnClickListener(new View.OnClickListener() {
+        dayBtn[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 isInternetAvailable();
-                m.setBackgroundResource(R.drawable.leftroundbtn);
-                m.setTextColor(getResources().getColor(R.color.white));
-                t.setBackgroundResource(R.drawable.leftroundbtnselected);
-                t.setTextColor(getResources().getColor(R.color.black));
-                w.setBackgroundResource(R.drawable.leftroundbtn);
-                w.setTextColor(getResources().getColor(R.color.white));
-                th.setBackgroundResource(R.drawable.leftroundbtn);
-                th.setTextColor(getResources().getColor(R.color.white));
-                f.setBackgroundResource(R.drawable.leftroundbtn);
-                f.setTextColor(getResources().getColor(R.color.white));
+                scrollTop();
+                dayBtn[0].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[0].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[1].setBackgroundResource(R.drawable.leftroundbtnselected);
+                dayBtn[1].setTextColor(getResources().getColor(R.color.black));
+                dayBtn[2].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[2].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[3].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[3].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[4].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[4].setTextColor(getResources().getColor(R.color.white));
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
                 readDatabase(clg,course,year,"tuesday");
             }
         });
-        w.setOnClickListener(new View.OnClickListener() {
+        dayBtn[2].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 isInternetAvailable();
-                m.setBackgroundResource(R.drawable.leftroundbtn);
-                m.setTextColor(getResources().getColor(R.color.white));
-                t.setBackgroundResource(R.drawable.leftroundbtn);
-                t.setTextColor(getResources().getColor(R.color.white));
-                w.setBackgroundResource(R.drawable.leftroundbtnselected);
-                w.setTextColor(getResources().getColor(R.color.black));
-                th.setBackgroundResource(R.drawable.leftroundbtn);
-                th.setTextColor(getResources().getColor(R.color.white));
-                f.setBackgroundResource(R.drawable.leftroundbtn);
-                f.setTextColor(getResources().getColor(R.color.white));
+                scrollTop();
+                dayBtn[0].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[0].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[1].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[1].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[2].setBackgroundResource(R.drawable.leftroundbtnselected);
+                dayBtn[2].setTextColor(getResources().getColor(R.color.black));
+                dayBtn[3].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[3].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[4].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[4].setTextColor(getResources().getColor(R.color.white));
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
                 readDatabase(clg,course,year,"wednesday");
             }
         });
-        th.setOnClickListener(new View.OnClickListener() {
+        dayBtn[3].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 isInternetAvailable();
-                m.setBackgroundResource(R.drawable.leftroundbtn);
-                m.setTextColor(getResources().getColor(R.color.white));
-                t.setBackgroundResource(R.drawable.leftroundbtn);
-                t.setTextColor(getResources().getColor(R.color.white));
-                w.setBackgroundResource(R.drawable.leftroundbtn);
-                w.setTextColor(getResources().getColor(R.color.white));
-                th.setBackgroundResource(R.drawable.leftroundbtnselected);
-                th.setTextColor(getResources().getColor(R.color.black));
-                f.setBackgroundResource(R.drawable.leftroundbtn);
-                f.setTextColor(getResources().getColor(R.color.white));
+                scrollTop();
+                dayBtn[0].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[0].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[1].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[1].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[2].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[2].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[3].setBackgroundResource(R.drawable.leftroundbtnselected);
+                dayBtn[3].setTextColor(getResources().getColor(R.color.black));
+                dayBtn[4].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[4].setTextColor(getResources().getColor(R.color.white));
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
                 readDatabase(clg,course,year,"thursday");
             }
         });
-        f.setOnClickListener(new View.OnClickListener() {
+        dayBtn[4].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 isInternetAvailable();
-                m.setBackgroundResource(R.drawable.leftroundbtn);
-                m.setTextColor(getResources().getColor(R.color.white));
-                t.setBackgroundResource(R.drawable.leftroundbtn);
-                t.setTextColor(getResources().getColor(R.color.white));
-                w.setBackgroundResource(R.drawable.leftroundbtn);
-                w.setTextColor(getResources().getColor(R.color.white));
-                th.setBackgroundResource(R.drawable.leftroundbtn);
-                th.setTextColor(getResources().getColor(R.color.white));
-                f.setBackgroundResource(R.drawable.leftroundbtnselected);
-                f.setTextColor(getResources().getColor(R.color.black));
+                scrollTop();
+                dayBtn[0].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[0].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[1].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[1].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[2].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[2].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[3].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[3].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[4].setBackgroundResource(R.drawable.leftroundbtnselected);
+                dayBtn[4].setTextColor(getResources().getColor(R.color.black));
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
                 readDatabase(clg,course,year,"friday");
             }
         });
+
+
         email = findViewById(R.id.emailtextsetting);
         roll = findViewById(R.id.rolltextsetting);
         setting.setOnClickListener(new View.OnClickListener() {
@@ -375,8 +415,73 @@ public class FullScheduleActivity extends AppCompatActivity {
         mEditor.putBoolean("loginstatus", logged);
         mEditor.apply();
     }
+    
+    private void scrollTop(){
+        if(!isLandscape()) {
+            scrollView = findViewById(R.id.verticalScrollviewPort);
+            scrollView.smoothScrollTo(0,View.FOCUS_BACKWARD);
+        } else{
+            horizontalScrollView = findViewById(R.id.horizontalScrollLand);
+            horizontalScrollView.smoothScrollTo(View.FOCUS_LEFT,0);
+        }
+    }
 
+    private void readVersionCheckUpdate(){
+        if(isNetworkConnected()) {
+            db.collection("appConfig").document("verCurrent")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (Objects.requireNonNull(document).exists()) {
+                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                    int vcode = Integer.parseInt(document.get("verCode").toString());
+                                    final String vname = document.get("verName").toString();
+                                    final String link = document.get("downlink").toString();
+                                    if (vcode != versionCode || !vname.equals(versionName)) {
+                                        customLoadDialogClass.hide();
+                                        Toast.makeText(getApplicationContext(), "Update available", Toast.LENGTH_LONG).show();
+                                        CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(FullScheduleActivity.this, new OnDialogConfirmListener() {
+                                            @Override
+                                            public void onApply(Boolean confirm) {
+                                                Uri uri = Uri.parse(link);
+                                                Intent web = new Intent(Intent.ACTION_VIEW, uri);
+                                                startActivity(web);
+                                            }
 
+                                            @Override
+                                            public String onCallText() {
+                                                return "An update is available";
+                                            }
+
+                                            @Override
+                                            public String onCallSub() {
+                                                return "Your app version : " + versionName + "\nNew Version : " + vname + "\n\nUpdate to get the latest features and bug fixes. Download will start automatically. \nConfirm to download from website?";
+                                            }
+                                        });
+                                        customConfirmDialogClass.setCanceledOnTouchOutside(false);
+                                        customConfirmDialogClass.show();
+                                    } else {
+                                        customLoadDialogClass.hide();
+                                        Toast.makeText(getApplicationContext(), "App is up to date. Check again later.", Toast.LENGTH_LONG).show();
+                                    }
+                                } else {
+                                    customLoadDialogClass.hide();
+                                    Toast.makeText(getApplicationContext(), "Server error.", Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                customLoadDialogClass.hide();
+                                Toast.makeText(getApplicationContext(), "Network problem?", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+        } else {
+            customLoadDialogClass.hide();
+            Toast.makeText(getApplicationContext(), "Network problem?", Toast.LENGTH_LONG).show();
+        }
+    }
     private void checkOrientationSetVisibility(int visible){
             dayschedulePortrait= findViewById(R.id.weekdayplanview);
             dayschedulePortrait.setVisibility(visible);
@@ -385,6 +490,11 @@ public class FullScheduleActivity extends AppCompatActivity {
     private boolean isLandscape() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
+
     private void isInternetAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

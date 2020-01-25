@@ -3,6 +3,7 @@ package org.timetable.schemester;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -11,6 +12,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Objects;
 import java.util.TimeZone;
 
 public class LoginActivity extends AppCompatActivity {
@@ -35,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     String dob;
     CustomLoadDialogClass customLoadDialogClass;
     Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-    boolean isRollValid = false, isEmailValid = false;
+    boolean isRollValid = false, isEmailValid = false, isDateValid= false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if(MainActivity.isCreated) {
@@ -71,7 +74,29 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 customLoadDialogClass.show();
                 if(isEmailValid) {
-                    resetLinkSender(emailid.getText().toString());
+                    if(!(emailid.getText().toString().length() == 0)) {
+                        CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(LoginActivity.this, new OnDialogConfirmListener() {
+                            @Override
+                            public void onApply(Boolean confirm) {
+                                if(confirm) {
+                                    forgot.setVisibility(View.GONE);
+                                    customLoadDialogClass.show();
+                                    resetLinkSender(emailid.getText().toString());
+                                }
+                            }
+                            @Override
+                            public String onCallText() {
+                                return "Reset birthdate link";
+                            }
+                            @Override
+                            public String onCallSub() {
+                                return "A link will be sent to your provided email ID, if the account already exists and you have forgot your date of birth.\n\nYou can reset your date of birth with that link. Confirm?";
+                            }
+                        });
+                        customConfirmDialogClass.show();
+                    } else {
+                        Toast.makeText(getApplicationContext(),"Please provide an email ID", Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(),"Please provide an email ID", Toast.LENGTH_LONG).show();
                 }
@@ -92,6 +117,46 @@ public class LoginActivity extends AppCompatActivity {
         bdate = findViewById(R.id.birthdate);
         bmonth = findViewById(R.id.birthmonth);
         byear = findViewById(R.id.birthyear);
+        bdate.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                if(s.length()!=0) {
+                    if (Integer.parseInt(bdate.getText().toString()) >= 1 && Integer.parseInt(bdate.getText().toString()) <= 31 && s.length() == 2) {
+                        bdate.setTextColor(getResources().getColor(R.color.white));
+                        bmonth.requestFocus();
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        Objects.requireNonNull(imm).showSoftInput(bmonth, InputMethodManager.SHOW_IMPLICIT);
+                        isDateValid = true;
+                    }
+                }else{
+                    bdate.setTextColor(getResources().getColor(R.color.dark_red));
+                    isDateValid = false;
+                }
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            public void onTextChanged(CharSequence s, int start, int count, int after) {
+            }
+        });
+        bmonth.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                if(s.length()!=0){
+                    if(Integer.parseInt(bmonth.getText().toString())>=1 && Integer.parseInt(bmonth.getText().toString())<=12 && s.length() == 2 ){
+                        bmonth.setTextColor(getResources().getColor(R.color.white));
+                        byear.requestFocus();
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        Objects.requireNonNull(imm).showSoftInput(bmonth, InputMethodManager.SHOW_IMPLICIT);
+                        isDateValid = true;
+                    }
+                } else{
+                    bmonth.setTextColor(getResources().getColor(R.color.dark_red));
+                    isDateValid = false;
+                }
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            public void onTextChanged(CharSequence s, int start, int count, int after) {
+            }
+        });
         dob = bdate.getText().toString()+  bmonth.getText().toString() + byear.getText().toString();
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,6 +210,10 @@ public class LoginActivity extends AppCompatActivity {
         }
         if(!isEmailValid || !isRollValid){
             Toast.makeText(getApplicationContext(), "Invalid details", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(!isDateValid){
+            Toast.makeText(getApplicationContext(), "Invalid format (DD or MM or YYYY)", Toast.LENGTH_LONG).show();
             return;
         }
         else {
@@ -317,6 +386,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }
                     });
+            customLoadDialogClass.hide();
     }
     private Boolean checkIfEmailVerified() {
         user = FirebaseAuth.getInstance().getCurrentUser();
