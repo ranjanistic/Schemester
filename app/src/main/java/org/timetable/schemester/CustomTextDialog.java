@@ -1,6 +1,7 @@
 package org.timetable.schemester;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -105,4 +106,5 @@ public class CustomTextDialog extends AppCompatDialog {
             }
         }
     }
+
     }

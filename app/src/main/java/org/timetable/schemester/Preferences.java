@@ -13,6 +13,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -32,9 +34,10 @@ import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
 
+
 public class Preferences extends AppCompatActivity {
     Switch notificationSwitch;
-    ImageButton dobUpdate, emailChange, rollChange, appUpdate, deleteAcc, returnbtn, restarter;
+    ImageButton dobUpdate, emailChange, rollChange, appUpdate, deleteAcc, returnbtn, restarter, themebtn;
     CustomVerificationDialog customVerificationDialogDeleteAccount, customVerificationDialogEmailChange;
     CustomLoadDialogClass customLoadDialogClass;
     CustomTextDialog customTextDialog;
@@ -47,7 +50,18 @@ public class Preferences extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setAppTheme(getThemeStatus());
         setContentView(R.layout.activity_preferences);
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        if(getThemeStatus() == 101) {
+            window.setStatusBarColor(this.getResources().getColor(R.color.white));
+            window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
+        } else if(getThemeStatus() == 102){
+            window.setStatusBarColor(this.getResources().getColor(R.color.charcoal));
+            window.setNavigationBarColor(this.getResources().getColor(R.color.spruce));
+        }
         customLoadDialogClass = new CustomLoadDialogClass(Preferences.this, new OnDialogLoadListener() {
             @Override
             public void onLoad() {
@@ -88,6 +102,34 @@ public class Preferences extends AppCompatActivity {
             public void onClick(View view) {
                 customLoadDialogClass.show();
                 readVersionCheckUpdate();
+            }
+        });
+        themebtn = findViewById(R.id.themeChangeBtn);
+        themebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CustomOnOptListener customOnOptListener = new CustomOnOptListener(Preferences.this, new OnOptionChosenListener() {
+                    @Override
+                    public void onChoice(int choice) {
+                        storeThemeStatus(choice);
+                        CustomAlertDialog customAlertDialog = new CustomAlertDialog(Preferences.this, new OnDialogAlertListener() {
+                            @Override
+                            public void onDismiss() {
+                                restartApplication();
+                            }
+                            @Override
+                            public String onCallText() {
+                                return "Requires restart";
+                            }
+                            @Override
+                            public String onCallSub() {
+                                return "Changing theme requires app restart.";
+                            }
+                        });
+                        customAlertDialog.show();
+                    }
+                });
+                customOnOptListener.show();
             }
         });
 
@@ -147,13 +189,16 @@ public class Preferences extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(Preferences.this, "Restarting", Toast.LENGTH_SHORT).show();
-                Intent splash = new Intent(Preferences.this, Splash.class);
-                splash.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // To clean up all activities
-                startActivity(splash);
-                overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
+                restartApplication();
             }
         });
 
+    }
+    private void restartApplication(){
+        Intent splash = new Intent(Preferences.this, Splash.class);
+        splash.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // To clean up all activities
+        startActivity(splash);
+        overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
     }
 
     private boolean resetLinkSender(final String email){
@@ -464,8 +509,30 @@ public class Preferences extends AppCompatActivity {
 
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+    }
+
+    private void storeThemeStatus(int themechoice){
+        SharedPreferences mSharedPreferences = getSharedPreferences("schemeTheme", MODE_PRIVATE);
+        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+        mEditor.putInt("themeCode", themechoice);
+        mEditor.apply();
+    }
+
+    public void setAppTheme(int code) {
+        switch (code) {
+            case 101:
+                setTheme(R.style.AppTheme);
+                break;
+            case 102:
+                setTheme(R.style.DarkTheme);
+                break;
+            default:setTheme(R.style.AppTheme);
+        }
+    }
+    private int getThemeStatus() {
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
+        return mSharedPreferences.getInt("themeCode", 101);
     }
 
 

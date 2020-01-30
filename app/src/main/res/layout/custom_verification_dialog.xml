@@ -5,7 +5,7 @@
     android:layout_gravity="center"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/roundcontainerbox"
-    android:backgroundTint="@color/white"
+    android:backgroundTint="?attr/base_background"
     android:paddingBottom="12dp"
     android:layout_marginEnd="0dp"
     android:layout_marginStart="0dp"
@@ -28,7 +28,7 @@
             android:layout_marginEnd="30dp"
             android:layout_marginStart="30dp"
             android:text="Verification required"
-            android:textColor="@color/black"
+            android:textColor="?attr/base_text_color"
             android:padding="12dp"
             android:textSize="20sp"
             android:textStyle="bold"/>
@@ -50,7 +50,7 @@
             android:padding="4dp">
         <EditText
             android:id="@+id/cred_email"
-            android:textColor="@color/black"
+            android:textColor="?attr/foreground_text_color"
             android:layout_width="match_parent"
             android:layout_margin="4dp"
             android:layout_height="80dp"
@@ -72,7 +72,7 @@
             android:padding="4dp">
         <EditText
             android:id="@+id/cred_pass"
-            android:textColor="@color/black"
+            android:textColor="?attr/foreground_text_color"
             android:backgroundTint="@color/blue"
             android:layout_width="match_parent"
             android:layout_margin="4dp"
@@ -99,7 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
             android:background="@drawable/square_btn"
-            android:backgroundTint="@color/dark_red"
+            android:backgroundTint="?attr/warning_button_color"
             android:clickable="true"
             android:focusable="true"
             android:padding="12dp"
@@ -107,7 +107,7 @@
             android:text="Proceed"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/white" />
+            android:textColor="?attr/button_text_color" />
 
         <Button
             android:id="@+id/cred_no"
@@ -115,7 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:background="@drawable/square_btn"
-            android:backgroundTint="@color/spruce"
+            android:backgroundTint="?attr/neutral_button_color"
             android:clickable="true"
             android:focusable="true"
             android:padding="12dp"
@@ -123,7 +123,7 @@
             android:textStyle="bold"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/white" />
+            android:textColor="?attr/button_text_color" />
     </LinearLayout>
     </LinearLayout>
 </ScrollView>

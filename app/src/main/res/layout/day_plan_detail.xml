@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/leftroundcontainer"
-    android:backgroundTint="@color/white"
+    android:backgroundTint="?attr/base_background"
     android:orientation="vertical"
     android:layout_margin="0dp"
     app:layout_constraintBottom_toBottomOf="parent"
@@ -39,7 +39,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="18dp"
-                android:backgroundTint="@color/blue"
+                android:backgroundTint="?attr/display_foreground"
                 android:gravity="center"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="12dp">
@@ -58,7 +58,7 @@
                         android:layout_marginBottom="4dp"
                         android:fontFamily="@font/montserrat"
                         android:text="8:30 to 9:30"
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="18sp" />
 
                     <TextView
@@ -70,7 +70,7 @@
                         android:paddingBottom="12dp"
                         android:singleLine="false"
                         android:text="Loading..."
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="20sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -81,7 +81,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="18dp"
-                android:backgroundTint="@color/blue"
+                android:backgroundTint="?attr/display_foreground"
                 android:gravity="center"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="12dp">
@@ -99,7 +99,7 @@
                         android:layout_gravity="top|center_horizontal"
                         android:fontFamily="@font/montserrat"
                         android:text="9:30 to 10:30"
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="18sp" />
 
                     <TextView
@@ -111,7 +111,7 @@
                         android:paddingBottom="12dp"
                         android:singleLine="false"
                         android:text="Loading..."
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="20sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -122,7 +122,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="18dp"
-                android:backgroundTint="@color/blue"
+                android:backgroundTint="?attr/display_foreground"
                 android:gravity="center"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="12dp">
@@ -141,7 +141,7 @@
                         android:layout_gravity="top|center_horizontal"
                         android:fontFamily="@font/montserrat"
                         android:text="10:30 to 11:30"
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="18sp" />
 
                     <TextView
@@ -154,7 +154,7 @@
                         android:paddingBottom="12dp"
                         android:singleLine="false"
                         android:text="Loading..."
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="20sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -164,7 +164,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="18dp"
-                android:backgroundTint="@color/blue"
+                android:backgroundTint="?attr/display_foreground"
                 android:gravity="center"
                 app:cardCornerRadius="12dp">
 
@@ -183,7 +183,7 @@
                         android:fontFamily="@font/montserrat"
 
                         android:text="11:30 to 12:30"
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="18sp" />
 
                     <TextView
@@ -196,7 +196,7 @@
                         android:paddingBottom="12dp"
                         android:singleLine="false"
                         android:text="Loading..."
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="20sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -207,7 +207,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="18dp"
-                android:backgroundTint="@color/blue"
+                android:backgroundTint="?attr/display_foreground"
                 android:gravity="center"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="12dp">
@@ -227,7 +227,7 @@
                         android:layout_gravity="top|center_horizontal"
                         android:fontFamily="@font/montserrat"
                         android:text="12:30 to 13:30"
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="20sp" />
 
                     <TextView
@@ -240,7 +240,7 @@
                         android:paddingBottom="12dp"
                         android:singleLine="false"
                         android:text="Loading..."
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="18sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -251,7 +251,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="18dp"
-                android:backgroundTint="@color/blue"
+                android:backgroundTint="?attr/display_foreground"
                 android:gravity="center"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="12dp">
@@ -271,7 +271,7 @@
                         android:fontFamily="@font/montserrat"
 
                         android:text="13:30 to 14:30"
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="18sp" />
 
                     <TextView
@@ -283,7 +283,7 @@
                         android:paddingBottom="12dp"
                         android:singleLine="false"
                         android:text="Loading..."
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="20sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -294,7 +294,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="18dp"
-                android:backgroundTint="@color/blue"
+                android:backgroundTint="?attr/display_foreground"
                 android:gravity="center"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="12dp">
@@ -314,7 +314,7 @@
                         android:layout_gravity="top|center_horizontal"
                         android:fontFamily="@font/montserrat"
                         android:text="14:30 to 15:30"
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="18sp" />
 
                     <TextView
@@ -327,7 +327,7 @@
                         android:paddingBottom="12dp"
                         android:singleLine="false"
                         android:text="Loading..."
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="20sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -338,7 +338,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="18dp"
-                android:backgroundTint="@color/blue"
+                android:backgroundTint="?attr/display_foreground"
                 android:gravity="center"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="12dp">
@@ -358,7 +358,7 @@
                         android:layout_gravity="top|center_horizontal"
                         android:fontFamily="@font/montserrat"
                         android:text="15:30 to 16:30"
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="18sp" />
 
                     <TextView
@@ -371,7 +371,7 @@
                         android:paddingBottom="12dp"
                         android:singleLine="false"
                         android:text="Loading..."
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="20sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -382,7 +382,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="18dp"
-                android:backgroundTint="@color/blue"
+                android:backgroundTint="?attr/display_foreground"
                 android:gravity="center"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="12dp">
@@ -402,7 +402,7 @@
                         android:layout_gravity="top|center_horizontal"
                         android:fontFamily="@font/montserrat"
                         android:text="16:30 to 17:30"
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="18sp" />
 
                     <TextView
@@ -415,7 +415,7 @@
                         android:paddingBottom="12dp"
                         android:singleLine="false"
                         android:text="Loading..."
-                        android:textColor="@color/white"
+                        android:textColor="?attr/foreground_text_color"
                         android:textSize="20sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

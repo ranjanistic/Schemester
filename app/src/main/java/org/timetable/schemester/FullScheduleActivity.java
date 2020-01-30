@@ -58,14 +58,19 @@ public class FullScheduleActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+        setAppTheme(getThemeStatus());
         setContentView(R.layout.activity_full_schedule);
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setStatusBarColor(this.getResources().getColor(R.color.blue));
-        window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
+        if(getThemeStatus() == 101) {
+            window.setStatusBarColor(this.getResources().getColor(R.color.blue));
+            window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
+        } else if(getThemeStatus() == 102){
+            window.setStatusBarColor(this.getResources().getColor(R.color.spruce));
+            window.setNavigationBarColor(this.getResources().getColor(R.color.spruce));
+        }
         clg = "DBC";
         course = "PHY-H";
         year = "Y2";
@@ -154,27 +159,27 @@ public class FullScheduleActivity extends AppCompatActivity {
         switch (getDayCount){
             case  2: readDatabase(clg,course,year,dayString[0]);
                 dayBtn[0].setBackgroundResource(R.drawable.leftroundbtnselected);
-                dayBtn[0].setTextColor(getResources().getColor(R.color.black));
+                dayBtn[0].setTextColor(getResources().getColor(R.color.blue));
             break;
             case 3: readDatabase(clg,course,year,dayString[1]);
                 dayBtn[1].setBackgroundResource(R.drawable.leftroundbtnselected);
-                dayBtn[1].setTextColor(getResources().getColor(R.color.black));
+                dayBtn[1].setTextColor(getResources().getColor(R.color.blue));
                 break;
             case 4: readDatabase(clg,course,year,dayString[2]);
                 dayBtn[2].setBackgroundResource(R.drawable.leftroundbtnselected);
-                dayBtn[2].setTextColor(getResources().getColor(R.color.black));
+                dayBtn[2].setTextColor(getResources().getColor(R.color.blue));
                 break;
             case 5: readDatabase(clg,course,year,dayString[3]);
                 dayBtn[3].setBackgroundResource(R.drawable.leftroundbtnselected);
-                dayBtn[3].setTextColor(getResources().getColor(R.color.black));
+                dayBtn[3].setTextColor(getResources().getColor(R.color.blue));
                 break;
             case 6: readDatabase(clg,course,year,dayString[4]);
                 dayBtn[4].setBackgroundResource(R.drawable.leftroundbtnselected);
-                dayBtn[4].setTextColor(getResources().getColor(R.color.black));
+                dayBtn[4].setTextColor(getResources().getColor(R.color.blue));
                 break;
             default:readDatabase(clg,course,year,"monday");
                 dayBtn[0].setBackgroundResource(R.drawable.leftroundbtnselected);
-                dayBtn[0].setTextColor(getResources().getColor(R.color.black));
+                dayBtn[0].setTextColor(getResources().getColor(R.color.blue));
         }
 /*
         for (i=0, j =0 ;i<5;i++){
@@ -188,7 +193,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 readDatabase(clg,course,year,dayString[i]);
                 scrollTop();
                 dayBtn[i].setBackgroundResource(R.drawable.leftroundbtnselected);
-                dayBtn[i].setTextColor(getResources().getColor(R.color.black));
+                dayBtn[i].setTextColor(getResources().getColor(R.color.blue));
                 while(j<5) {
                     if(j!=i) {
                         dayBtn[j].setBackgroundResource(R.drawable.leftroundbtn);
@@ -206,7 +211,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 isInternetAvailable();
                 scrollTop();
                 dayBtn[0].setBackgroundResource(R.drawable.leftroundbtnselected);
-                dayBtn[0].setTextColor(getResources().getColor(R.color.black));
+                dayBtn[0].setTextColor(getResources().getColor(R.color.blue));
                 dayBtn[1].setBackgroundResource(R.drawable.leftroundbtn);
                 dayBtn[1].setTextColor(getResources().getColor(R.color.white));
                 dayBtn[2].setBackgroundResource(R.drawable.leftroundbtn);
@@ -229,7 +234,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 dayBtn[0].setBackgroundResource(R.drawable.leftroundbtn);
                 dayBtn[0].setTextColor(getResources().getColor(R.color.white));
                 dayBtn[1].setBackgroundResource(R.drawable.leftroundbtnselected);
-                dayBtn[1].setTextColor(getResources().getColor(R.color.black));
+                dayBtn[1].setTextColor(getResources().getColor(R.color.blue));
                 dayBtn[2].setBackgroundResource(R.drawable.leftroundbtn);
                 dayBtn[2].setTextColor(getResources().getColor(R.color.white));
                 dayBtn[3].setBackgroundResource(R.drawable.leftroundbtn);
@@ -252,7 +257,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 dayBtn[1].setBackgroundResource(R.drawable.leftroundbtn);
                 dayBtn[1].setTextColor(getResources().getColor(R.color.white));
                 dayBtn[2].setBackgroundResource(R.drawable.leftroundbtnselected);
-                dayBtn[2].setTextColor(getResources().getColor(R.color.black));
+                dayBtn[2].setTextColor(getResources().getColor(R.color.blue));
                 dayBtn[3].setBackgroundResource(R.drawable.leftroundbtn);
                 dayBtn[3].setTextColor(getResources().getColor(R.color.white));
                 dayBtn[4].setBackgroundResource(R.drawable.leftroundbtn);
@@ -275,7 +280,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 dayBtn[2].setBackgroundResource(R.drawable.leftroundbtn);
                 dayBtn[2].setTextColor(getResources().getColor(R.color.white));
                 dayBtn[3].setBackgroundResource(R.drawable.leftroundbtnselected);
-                dayBtn[3].setTextColor(getResources().getColor(R.color.black));
+                dayBtn[3].setTextColor(getResources().getColor(R.color.blue));
                 dayBtn[4].setBackgroundResource(R.drawable.leftroundbtn);
                 dayBtn[4].setTextColor(getResources().getColor(R.color.white));
                 checkOrientationSetVisibility(View.VISIBLE);
@@ -298,7 +303,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 dayBtn[3].setBackgroundResource(R.drawable.leftroundbtn);
                 dayBtn[3].setTextColor(getResources().getColor(R.color.white));
                 dayBtn[4].setBackgroundResource(R.drawable.leftroundbtnselected);
-                dayBtn[4].setTextColor(getResources().getColor(R.color.black));
+                dayBtn[4].setTextColor(getResources().getColor(R.color.blue));
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
@@ -486,7 +491,21 @@ public class FullScheduleActivity extends AppCompatActivity {
             dayschedulePortrait= findViewById(R.id.weekdayplanview);
             dayschedulePortrait.setVisibility(visible);
     }
-    
+    public void setAppTheme(int code) {
+        switch (code) {
+            case 101:
+                setTheme(R.style.AppTheme);
+                break;
+            case 102:
+                setTheme(R.style.DarkTheme);
+                break;
+            default:setTheme(R.style.AppTheme);
+        }
+    }
+    private int getThemeStatus() {
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
+        return mSharedPreferences.getInt("themeCode", 0);
+    }
     private boolean isLandscape() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
