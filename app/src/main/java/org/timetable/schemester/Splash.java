@@ -3,6 +3,7 @@ package org.timetable.schemester;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setAppTheme(getThemeStatus());
         createNotificationChannel();
             if(user!=null) {
                 Intent intent = new Intent(this, MainActivity.class);
@@ -28,7 +30,21 @@ public class Splash extends AppCompatActivity {
                 finish();
             }
     }
-
+    public void setAppTheme(int code) {
+        switch (code) {
+            case 101:
+                setTheme(R.style.splashTheme);
+                break;
+            case 102:
+                setTheme(R.style.splashThemeDark);
+                break;
+                default:setTheme(R.style.splashTheme);
+        }
+    }
+    private int getThemeStatus() {
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
+        return mSharedPreferences.getInt("themeCode", 0);
+    }
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library

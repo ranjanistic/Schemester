@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/roundcontainerbox"
+    android:backgroundTint="?attr/base_background"
+    android:paddingBottom="12dp"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/text_dialog_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:text=""
+            android:textColor="?attr/base_text_color"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dialog_text_hint"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="0dp"
+            android:layout_height="80dp"
+            android:paddingStart="12dp"
+            android:hint="@string/type_here"
+            android:paddingEnd="12dp"
+            android:layout_gravity="center"
+            android:textColorHint="?attr/display_foreground">
+            <EditText
+                android:id="@+id/dialog_text"
+                android:textColor="?attr/base_text_color"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:padding="8dp"
+                android:textColorHint="?attr/display_foreground"
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+        android:id="@+id/ValidityText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:visibility="gone"
+        android:layout_margin="12dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:layout_gravity="end"
+        android:textSize="12sp"
+        android:gravity="end"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="13dp"
+        android:layout_marginTop="18dp"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/text_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/square_btn"
+            android:backgroundTint="?attr/positive_button_color"
+            android:clickable="true"
+            android:focusable="true"
+            
+            android:padding="12dp"
+            android:textStyle="bold"
+            android:text="@string/submit"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="?attr/button_text_color" />
+
+        <Button
+            android:id="@+id/text_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/square_btn"
+            android:backgroundTint="?attr/neutral_button_color"
+            android:clickable="true"
+            android:focusable="true"
+            
+            android:padding="12dp"
+            android:text="@string/cancel"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="?attr/button_text_color" />
+    </LinearLayout>
+</LinearLayout>

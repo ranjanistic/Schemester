@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:backgroundTint="@color/dark_blue"
+    android:backgroundTint="@color/dull_blue"
     android:background="@drawable/leftroundcontainer"
     android:layout_height="match_parent">
 
@@ -12,8 +12,8 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout4"
-        app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
@@ -35,33 +35,30 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Logged in as"
+                    android:text="@string/logged_in_as"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/emailtextsetting"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:singleLine="false"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:textColor="@color/white"
                     android:textSize="22sp"
                     android:textStyle="bold" />
             </LinearLayout>
-
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="22dp"
                 android:paddingBottom="22dp">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="Roll number"
+                    android:text="@string/roll_number"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
@@ -69,11 +66,12 @@
                     android:id="@+id/rolltextsetting"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:textColor="@color/white"
                     android:textSize="22sp"
                     android:textStyle="bold" />
-            </LinearLayout>
+
+        </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -85,7 +83,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Semester"
+                    android:text="@string/semester"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
@@ -94,10 +92,69 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="false"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:textColor="@color/white"
                     android:textSize="22sp"
                     android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
+                <TextView
+                    android:id="@+id/checkUpdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="false"
+                    android:text="@string/check_for_updates"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+                <ImageButton
+                    android:id="@+id/checkupdateBtn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:padding="4dp"
+                    android:background="@drawable/square_btn"
+                    android:backgroundTint="@color/spruce"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/ic_clouddownload2"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="false"
+                    android:text="@string/major_settings"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+                <ImageButton
+                    android:id="@+id/fullsettingsbtn"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/round_btn"
+                    android:backgroundTint="@color/blue"
+                    android:scaleType="centerInside"
+                    app:srcCompat="@drawable/ic_settingico_mini"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
@@ -115,50 +172,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
-
-        <Button
-            android:id="@+id/logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/square_btn"
-            android:backgroundTint="@color/blue_grey"
-            android:text="@string/logout"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/deletebtn"
+            android:id="@+id/logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/square_btn"
-            android:backgroundTint="@color/dark_red"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:text="@string/delete_account"
+            android:backgroundTint="?attr/base_background"
+            android:text="@string/logout"
             android:textAllCaps="false"
-            android:textColor="@color/white"
+            android:textColor="@color/dull_blue"
             android:textSize="16sp"
             android:textStyle="bold" />
     </LinearLayout>
-
-    <ImageView
-        android:contentDescription="@string/setting_background"
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0.5"
-        android:translationZ="-12dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:srcCompat="@drawable/setting_large" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

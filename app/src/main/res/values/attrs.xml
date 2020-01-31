@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="themeattr">
+        <attr name="base_background" format="color"/>
+        <attr name="display_foreground" format="color"/>
+        <attr name="base_text_color" format="color"/>
+        <attr name="foreground_text_color" format="color"/>
+        <attr name="group_card_color" format="color"/>
+        <attr name="group_card_text_color" format="color"/>
+        <attr name="heading_text_color" format="color"/>
+        <attr name="action_button_color" format="color"/>
+        <attr name="button_text_color" format="color"/>
+        <attr name="action_text_color" format="color"/>
+        <attr name="neutral_button_color" format="color"/>
+        <attr name="positive_button_color" format="color"/>
+        <attr name="warning_button_color" format="color"/>
+    </declare-styleable>
+</resources>

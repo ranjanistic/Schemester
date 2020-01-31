@@ -5,7 +5,16 @@
         <item name="android:navigationBarColor">@color/blue</item>
         <item name="android:statusBarColor">@color/blue</item>
         <item name="android:windowLightStatusBar" tools:targetApi="p">false</item>
+        <item name="base_background">@color/blue</item>
     </style>
+    <style name="splashThemeDark" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:background">@drawable/splash</item>
+        <item name="android:navigationBarColor">@color/charcoal</item>
+        <item name="android:statusBarColor">@color/charcoal</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="p">true</item>
+        <item name="base_background">@color/charcoal</item>
+    </style>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -14,20 +23,44 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@color/white</item>
-        <item name="android:navigationBarColor">@color/white</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="p">true</item>
-    </style>
-
-    <style name="blueTheme" parent="AppTheme">
-        <item name="android:statusBarColor">@color/blue</item>
         <item name="android:navigationBarColor">@color/blue</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="p">false</item>
-    </style>
-
-    <style name="whiteTheme" parent="AppTheme">
-        <item name="android:statusBarColor">@color/white</item>
-        <item name="android:navigationBarColor">@color/white</item>
         <item name="android:windowLightStatusBar" tools:targetApi="p">true</item>
+        <item name="base_background">@color/white</item>
+        <item name="display_foreground">@color/blue</item>
+        <item name="base_text_color">@color/black</item>
+        <item name="foreground_text_color">@color/white</item>
+        <item name="group_card_color">@color/dull_white</item>
+        <item name="group_card_text_color">@color/black</item>
+        <item name="heading_text_color">@color/blue</item>
+        <item name="action_button_color">@color/deep_blue</item>
+        <item name="button_text_color">@color/white</item>
+        <item name="action_text_color">@color/blue</item>
+        <item name="neutral_button_color">@color/spruce</item>
+        <item name="positive_button_color">@color/blue</item>
+        <item name="warning_button_color">@color/dark_red</item>
+    </style>
+    
+    <style name="DarkTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/charcoal</item>
+        <item name="android:navigationBarColor">@color/charcoal</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="p">false</item>
+        <item name="base_background">@color/charcoal</item>
+        <item name="display_foreground">@color/spruce</item>
+        <item name="base_text_color">@color/dull_white</item>
+        <item name="foreground_text_color">@color/dull_white</item>
+        <item name="group_card_color">@color/grey</item>
+        <item name="group_card_text_color">@color/white</item>
+        <item name="heading_text_color">@color/blue</item>
+        <item name="action_button_color">@color/dull_blue</item>
+        <item name="button_text_color">@color/dull_white</item>
+        <item name="action_text_color">@color/blue</item>
+        <item name="neutral_button_color">@color/spruce</item>
+        <item name="positive_button_color">@color/dark_blue</item>
+        <item name="warning_button_color">@color/dark_red</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">

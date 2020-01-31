@@ -10,6 +10,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -56,15 +57,11 @@ public class MainActivity extends AppCompatActivity{
     updateTask mupdateTask;
     public static Activity mainact;
     public static boolean isCreated = false;
-    Intent notificationIntent;
-    Intent mServiceIntent;
     Context ctx;
-    public Context getCtx() {
-        return ctx;
-    }
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setAppTheme(getThemeStatus());
         clg = "DBC";
         course = "PHY-H";
         year = "Y2";
@@ -84,9 +81,22 @@ public class MainActivity extends AppCompatActivity{
         noclass = findViewById(R.id.noclasstext);
         semestertxt = findViewById(R.id.sem_text);
         if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
-            window.setNavigationBarColor(this.getResources().getColor(R.color.white));
+            if(getThemeStatus() == 101)
+                window.setNavigationBarColor(this.getResources().getColor(R.color.white));
+            else if(getThemeStatus() == 102)
+                window.setNavigationBarColor(this.getResources().getColor(R.color.charcoal));
         } else{
-                window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
+            if(isLandscape()){
+                if(getThemeStatus() == 101)
+                    window.setNavigationBarColor(this.getResources().getColor(R.color.white));
+                else if(getThemeStatus() == 102)
+                    window.setNavigationBarColor(this.getResources().getColor(R.color.charcoal));
+            } else {
+                if(getThemeStatus() == 101)
+                    window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
+                else if(getThemeStatus() == 102)
+                    window.setNavigationBarColor(this.getResources().getColor(R.color.spruce));
+            }
         }
         p[0] = findViewById(R.id.period1);
         p[1] = findViewById(R.id.period2);
@@ -469,6 +479,25 @@ public class MainActivity extends AppCompatActivity{
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 // notificationId is a unique int for each notification that you must define
         notificationManager.notify(notificationId, builder.build());
+    }
+
+    public void setAppTheme(int code) {
+        switch (code) {
+            case 101:
+                setTheme(R.style.AppTheme);
+                break;
+            case 102:
+                setTheme(R.style.DarkTheme);
+                break;
+            default:setTheme(R.style.AppTheme);
+        }
+    }
+    private int getThemeStatus() {
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
+        return mSharedPreferences.getInt("themeCode", 0);
+    }
+    private boolean isLandscape() {
+        return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
     public boolean isInternetAvailable() {
         Runtime runtime = Runtime.getRuntime();

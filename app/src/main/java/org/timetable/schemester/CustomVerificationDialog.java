@@ -51,14 +51,13 @@ public class CustomVerificationDialog extends AppCompatDialog {
      //               return;
                 }
                 else if (TextUtils.isEmpty(pass)) {
-                    Toast.makeText(getContext(), "Password is necessary.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Date of birth is necessary.", Toast.LENGTH_LONG).show();
 //                    return;
                 }
                 else{
                     onDialogApplyListener.onApply(email,pass);
                     dismiss();
                 }
-
             }
         });
     }

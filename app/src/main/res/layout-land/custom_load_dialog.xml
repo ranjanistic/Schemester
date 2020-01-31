@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/roundcontainerbox"
+    android:backgroundTint="?attr/display_foreground"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="12dp">
+
+    <ProgressBar
+        android:id="@+id/globalprogressBar"
+        style="@android:style/Widget.DeviceDefault.ProgressBar.Large"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:secondaryProgressTint="?attr/foreground_text_color"
+        android:progressBackgroundTint="?attr/foreground_text_color"
+        android:indeterminateTint="@color/white"
+        android:progressTint="@color/white" />
+
+    <TextView
+        android:id="@+id/loadingcaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:text="Just a moment"
+        android:textColor="?attr/foreground_text_color"
+        android:textSize="18sp" />
+</LinearLayout>

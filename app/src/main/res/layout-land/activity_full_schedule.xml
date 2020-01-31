@@ -10,7 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/blue"
+        android:background="?attr/display_foreground"
+        android:backgroundTint="?attr/display_foreground"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,8 +28,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:backgroundTint="@color/blue"
-            android:background="@color/white">
+            android:backgroundTint="?attr/display_foreground"
+            android:background="?attr/display_foreground">
                 <include
                     android:id="@+id/weekdayplanview"
                     layout="@layout/day_plan_detail"

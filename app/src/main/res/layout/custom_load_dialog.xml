@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:background="@drawable/roundcontainerbox"
-    android:backgroundTint="@color/blue"
+    android:backgroundTint="?attr/display_foreground"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="12dp">
@@ -17,15 +17,15 @@
         android:layout_height="match_parent"
         android:secondaryProgressTint="@color/white"
         android:progressBackgroundTint="@color/white"
-        android:indeterminateTint="@color/white"
-        android:progressTint="@color/white" />
+        android:indeterminateTint="?attr/foreground_text_color"
+        android:progressTint="?attr/foreground_text_color" />
 
     <TextView
         android:id="@+id/loadingcaption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp"
-        android:text="Have patience"
-        android:textColor="@color/white"
+        android:text="Just a moment"
+        android:textColor="?attr/foreground_text_color"
         android:textSize="18sp" />
 </LinearLayout>
