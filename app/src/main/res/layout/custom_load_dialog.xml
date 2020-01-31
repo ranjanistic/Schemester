@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp"
-        android:text="Have patience"
+        android:text="Just a moment"
         android:textColor="?attr/foreground_text_color"
         android:textSize="18sp" />
 </LinearLayout>

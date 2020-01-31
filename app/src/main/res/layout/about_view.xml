@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:background="@drawable/leftroundcontainer"
-    android:backgroundTint="@color/spruce"
+    android:backgroundTint="@color/charcoal"
     android:layout_height="match_parent">
 
     <ScrollView

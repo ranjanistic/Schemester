@@ -8,7 +8,8 @@
     android:gravity="end"
     android:paddingBottom="28dp"
     android:background="@android:color/transparent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:showIn="@layout/activity_full_schedule">
 
     <Button
         android:id="@+id/mon"
@@ -23,7 +24,7 @@
         android:paddingBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="22dp"
-        android:textColor="@color/white"
+        android:textColor="?attr/button_text_color"
         android:textAllCaps="false"
         android:text="Monday"/>
 
@@ -40,7 +41,7 @@
         android:paddingBottom="8dp"
         android:text="Tuesday"
         android:textAllCaps="false"
-        android:textColor="@color/white"
+        android:textColor="?attr/button_text_color"
         android:textSize="18sp" />
     <Button
         android:id="@+id/wed"
@@ -56,7 +57,7 @@
         android:paddingBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="22dp"
-        android:textColor="@color/white"
+        android:textColor="?attr/button_text_color"
         android:text="Wednesday"/>
     <Button
         android:id="@+id/thu"
@@ -71,7 +72,7 @@
         android:paddingBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="22dp"
-        android:textColor="@color/white"
+        android:textColor="?attr/button_text_color"
         android:textAllCaps="false"
         android:text="Thursday"/>
     <Button
@@ -87,7 +88,7 @@
         android:paddingBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="22dp"
-        android:textColor="@color/white"
+        android:textColor="?attr/button_text_color"
         android:textAllCaps="false"
         android:text="Friday"/>
     <ImageButton
@@ -100,7 +101,7 @@
         android:paddingEnd="22dp"
         android:layout_marginBottom="22dp"
         android:background="@drawable/leftroundbtn"
-        android:backgroundTint="@color/dark_blue"
+        android:backgroundTint="@color/dull_blue"
         app:srcCompat="@drawable/ic_settingico_mini" />
     <ImageButton
         android:id="@+id/aboutbtn"
@@ -111,6 +112,6 @@
         android:paddingStart="22dp"
         android:paddingEnd="22dp"
         android:background="@drawable/leftroundbtn"
-        android:backgroundTint="@color/blue_grey"
+        android:backgroundTint="@color/charcoal"
         app:srcCompat="@drawable/ic_infoico" />
 </LinearLayout>

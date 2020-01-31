@@ -561,7 +561,7 @@ public class Preferences extends AppCompatActivity {
             }
             @Override
             public String onCallSub() {
-                return "Latest version is downloaded. \n\nGo to File manager > Internal Storage > Schemester\n\nHere you'll find the latest package.";
+                return "Latest version is downloaded. \n\nGo to File manager > Internal Storage > Schemester\n\nHere you'll find the latest package to install.\n\n(Delete that file if it is causing problems)";
             }
         });
         downloadFinishAlert.show();

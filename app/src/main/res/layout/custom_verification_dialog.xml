@@ -46,11 +46,12 @@
             android:layout_height="80dp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
+            android:textColorHint="?attr/display_foreground"
             android:layout_gravity="center"
             android:padding="4dp">
         <EditText
             android:id="@+id/cred_email"
-            android:textColor="?attr/foreground_text_color"
+            android:textColor="?attr/base_text_color"
             android:layout_width="match_parent"
             android:layout_margin="4dp"
             android:layout_height="80dp"
@@ -67,12 +68,13 @@
             android:layout_margin="12dp"
             android:layout_height="80dp"
             android:paddingStart="8dp"
+            android:textColorHint="?attr/display_foreground"
             android:paddingEnd="8dp"
             android:layout_gravity="center"
             android:padding="4dp">
         <EditText
             android:id="@+id/cred_pass"
-            android:textColor="?attr/foreground_text_color"
+            android:textColor="?attr/base_text_color"
             android:backgroundTint="@color/blue"
             android:layout_width="match_parent"
             android:layout_margin="4dp"

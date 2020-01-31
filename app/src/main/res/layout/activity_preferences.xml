@@ -93,6 +93,8 @@
                 android:layout_marginBottom="12dp"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="wrap_content"
@@ -117,14 +119,14 @@
                         android:paddingStart="0dp"
                         android:orientation="vertical">
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="250dp"
                             android:textColor="?attr/group_card_text_color"
                             android:layout_height="wrap_content"
                             android:singleLine="false"
                             android:text="Change email ID"
                             android:textSize="18sp"/>
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="250dp"
                             android:textColor="?attr/group_card_text_color"
                             android:layout_height="wrap_content"
                             android:text="Get a link to change email ID."
@@ -159,14 +161,14 @@
                         android:paddingStart="0dp"
                         android:orientation="vertical">
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="250dp"
                             android:textColor="?attr/group_card_text_color"
                             android:layout_height="wrap_content"
                             android:singleLine="false"
                             android:text="Change roll number"
                             android:textSize="18sp"/>
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="250dp"
                             android:textColor="?attr/group_card_text_color"
                             android:layout_height="wrap_content"
                             android:text="Change roll number here."
@@ -202,16 +204,16 @@
                     android:paddingStart="0dp"
                     android:orientation="vertical">
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:textColor="?attr/group_card_text_color"
-                        android:layout_height="wrap_content"
+                            android:layout_width="250dp"
+                            android:textColor="?attr/group_card_text_color"
+                            android:layout_height="wrap_content"
                         android:singleLine="false"
                         android:text="Date of birth update"
                         android:textSize="18sp"/>
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:textColor="?attr/group_card_text_color"
-                        android:layout_height="wrap_content"
+                            android:layout_width="250dp"
+                            android:textColor="?attr/group_card_text_color"
+                            android:layout_height="wrap_content"
                         android:text="Request date of birth update."
                         android:paddingTop="6dp"
                         android:singleLine="false"
@@ -245,14 +247,14 @@
                         android:paddingStart="0dp"
                         android:orientation="vertical">
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="250dp"
                             android:textColor="?attr/group_card_text_color"
                             android:layout_height="wrap_content"
                             android:singleLine="false"
                             android:text="Delete account"
                             android:textSize="18sp"/>
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="250dp"
                             android:textColor="?attr/group_card_text_color"
                             android:layout_height="wrap_content"
                             android:text="Delete your account permanently."
@@ -286,6 +288,8 @@
             android:layout_marginBottom="12dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
             android:orientation="vertical">
             <TextView
                 android:layout_width="wrap_content"
@@ -296,7 +300,7 @@
                 android:textColor="@color/blue"
                 android:textStyle="bold"
                 android:textSize="20sp"/>
-            <LinearLayout
+            <!--LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
@@ -310,16 +314,16 @@
                     android:paddingStart="0dp"
                     android:orientation="vertical">
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:textColor="?attr/group_card_text_color"
-                        android:layout_height="wrap_content"
+                            android:layout_width="250dp"
+                            android:textColor="?attr/group_card_text_color"
+                            android:layout_height="wrap_content"
                         android:singleLine="false"
                         android:text="Show notifications"
                         android:textSize="18sp"/>
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:textColor="?attr/group_card_text_color"
-                        android:layout_height="wrap_content"
+                            android:layout_width="250dp"
+                            android:textColor="?attr/group_card_text_color"
+                            android:layout_height="wrap_content"
                         android:text="Notify about upcoming class"
                         android:paddingTop="6dp"
                         android:singleLine="false"
@@ -341,7 +345,7 @@
                     android:thumbTint="@color/blue"
                     android:trackTint="@color/spruce"
                     tools:targetApi="p" />
-            </LinearLayout>
+            </LinearLayout-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -357,14 +361,14 @@
                     android:paddingStart="0dp"
                     android:orientation="vertical">
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="250dp"
                         android:textColor="?attr/group_card_text_color"
                         android:layout_height="wrap_content"
                         android:singleLine="false"
                         android:text="Theme setup"
                         android:textSize="18sp"/>
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="250dp"
                         android:textColor="?attr/group_card_text_color"
                         android:layout_height="wrap_content"
                         android:text="Try new themes, including dark theme!"
@@ -401,16 +405,16 @@
                     android:paddingStart="0dp"
                     android:orientation="vertical">
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:textColor="?attr/group_card_text_color"
-                        android:layout_height="wrap_content"
+                            android:layout_width="250dp"
+                            android:textColor="?attr/group_card_text_color"
+                            android:layout_height="wrap_content"
                         android:singleLine="false"
                         android:text="App update"
                         android:textSize="18sp"/>
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:textColor="?attr/group_card_text_color"
-                        android:layout_height="wrap_content"
+                            android:layout_width="250dp"
+                            android:textColor="?attr/group_card_text_color"
+                            android:layout_height="wrap_content"
                         android:text="Check for app updates."
                         android:paddingTop="6dp"
                         android:singleLine="false"
@@ -446,16 +450,16 @@
                     android:paddingStart="0dp"
                     android:orientation="vertical">
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:textColor="?attr/group_card_text_color"
-                        android:layout_height="wrap_content"
+                            android:layout_width="250dp"
+                            android:textColor="?attr/group_card_text_color"
+                            android:layout_height="wrap_content"
                         android:singleLine="false"
                         android:text="Restart application"
                         android:textSize="18sp"/>
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:textColor="?attr/group_card_text_color"
-                        android:layout_height="wrap_content"
+                            android:layout_width="250dp"
+                            android:textColor="?attr/group_card_text_color"
+                            android:layout_height="wrap_content"
                         android:text="Try restarting  if there's any glitch."
                         android:paddingTop="6dp"
                         android:singleLine="false"

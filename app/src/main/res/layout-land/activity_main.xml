@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="@color/white"
-    android:background="@color/white"
+    android:backgroundTint="?attr/base_background"
+    android:background="?attr/base_background"
     tools:context=".MainActivity">
     <LinearLayout
         android:id="@+id/mainLinearlayoutLandscape"
@@ -16,7 +16,7 @@
                 android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="right"
+                android:gravity="end"
                 android:orientation="vertical"
                 android:padding="18dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -40,7 +40,7 @@
                         android:fontFamily="@font/comfortaa_bold"
                         android:text="@string/loading"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/base_text_color"
                         android:textSize="30sp"
                         android:textStyle="bold" />
 
@@ -53,7 +53,7 @@
                         android:fontFamily="@font/comfortaa_bold"
                         android:text="@string/semester"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/base_text_color"
                         android:textSize="16sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -73,7 +73,7 @@
                     android:gravity="center"
                     android:text="@string/_0"
                     android:textAlignment="center"
-                    android:textColor="@color/white"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="36sp"
                     android:textStyle="bold" />
 
@@ -126,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center"
                     android:background="@drawable/square_btn"
-                    android:backgroundTint="@color/dark_blue"
+                    android:backgroundTint="?attr/action_button_color"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
                     android:layout_marginStart="4dp"
@@ -134,7 +134,7 @@
                     android:text="@string/view_full_week_schedule"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/white"
+                    android:textColor="?attr/button_text_color"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -149,7 +149,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/toproundview"
-                android:backgroundTint="@color/blue"
+                android:backgroundTint="?attr/display_foreground"
                 android:gravity="center_horizontal"
                 android:elevation="12dp"
                 android:orientation="horizontal"
@@ -174,7 +174,7 @@
                     android:fontFamily="@font/reem_kufi"
                     android:padding="12dp"
                     android:text="@string/duration"
-                    android:textColor="@color/white"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="30sp"
                     android:textStyle="bold" />
 
@@ -189,7 +189,7 @@
                     android:fontFamily="@font/reem_kufi"
                     android:padding="12dp"
                     android:text="@string/class_"
-                    android:textColor="@color/white"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="30sp"
                     android:textStyle="bold" />
 
@@ -212,8 +212,8 @@
                 android:id="@+id/scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="@color/blue"
-                android:background="@color/blue"
+                android:backgroundTint="?attr/display_foreground"
+                android:background="?attr/display_foreground"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -248,7 +248,7 @@
                             android:paddingEnd="8dp"
                             android:paddingBottom="18dp"
                             android:text="@string/period1"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:textSize="18sp" />
                         <View
                             android:layout_width="0dp"
@@ -260,7 +260,7 @@
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:fontFamily="@font/montserrat"
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
@@ -296,7 +296,7 @@
                             android:paddingEnd="8dp"
                             android:paddingBottom="18dp"
                             android:text="@string/period2"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:textSize="18sp" />
                         <View
                             android:layout_width="0dp"
@@ -308,7 +308,7 @@
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:fontFamily="@font/montserrat"
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
@@ -340,7 +340,7 @@
                             android:layout_height="wrap_content"
 
                             android:background="@drawable/roundcontainerbox"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:fontFamily="@font/montserrat"
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
@@ -358,7 +358,7 @@
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:fontFamily="@font/montserrat"
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
@@ -390,7 +390,7 @@
                             android:layout_height="wrap_content"
 
                             android:background="@drawable/roundcontainerbox"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:fontFamily="@font/montserrat"
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
@@ -408,7 +408,7 @@
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:fontFamily="@font/montserrat"
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
@@ -439,7 +439,7 @@
                             android:layout_height="wrap_content"
 
                             android:background="@drawable/roundcontainerbox"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:fontFamily="@font/montserrat"
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
@@ -457,7 +457,7 @@
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:fontFamily="@font/montserrat"
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
@@ -489,7 +489,7 @@
                             android:layout_height="wrap_content"
 
                             android:background="@drawable/roundcontainerbox"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:fontFamily="@font/montserrat"
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
@@ -507,7 +507,7 @@
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:fontFamily="@font/montserrat"
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
@@ -539,7 +539,7 @@
                             android:layout_height="wrap_content"
 
                             android:background="@drawable/roundcontainerbox"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:fontFamily="@font/montserrat"
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
@@ -557,7 +557,7 @@
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:fontFamily="@font/montserrat"
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
@@ -590,7 +590,7 @@
                             android:layout_height="wrap_content"
 
                             android:background="@drawable/roundcontainerbox"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:fontFamily="@font/montserrat"
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
@@ -608,7 +608,7 @@
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:fontFamily="@font/montserrat"
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
@@ -640,7 +640,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:fontFamily="@font/montserrat"
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
@@ -658,7 +658,7 @@
                             android:layout_width="200dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
-                            android:textColor="@color/white"
+                            android:textColor="?attr/foreground_text_color"
                             android:fontFamily="@font/montserrat"
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
@@ -688,7 +688,7 @@
         android:text="@string/no_classes_today_enjoy"
         android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-        android:textColor="@color/blue"
+        android:textColor="?attr/heading_text_color"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

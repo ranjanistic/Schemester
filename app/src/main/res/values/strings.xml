@@ -45,4 +45,10 @@
     <string name="setting_background">setting background</string>
     <string name="app_version">version-1.2-infant-stage2</string>
     <string name="version">Version</string>
+    <string name="roll_number">Roll number</string>
+    <string name="logged_in_as">Logged in as</string>
+    <string name="check_for_updates">Check for updates</string>
+    <string name="major_settings">Major settings</string>
+    <string name="type_here">Type here</string>
+    <string name="submit">Submit</string>
 </resources>
