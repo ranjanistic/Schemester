@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dull_white"
-    android:backgroundTint="@color/blue"
+    android:background="?attr/display_foreground"
+    android:backgroundTint="?attr/display_foreground"
     tools:context=".LoginActivity">
 
     <TextView
@@ -233,7 +233,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/square_btn"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="?attr/base_background"
         android:gravity="bottom"
         android:paddingStart="22dp"
         android:paddingTop="20dp"

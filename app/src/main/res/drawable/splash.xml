@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
-        <color android:color="?attr/display_foreground"/>
+    <item
+        android:id="@+id/colorSplash">
+        <color android:color="?attr/base_background" />
     </item>
     <item>
         <bitmap

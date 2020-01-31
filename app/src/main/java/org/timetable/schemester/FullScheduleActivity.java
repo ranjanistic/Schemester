@@ -2,16 +2,22 @@ package org.timetable.schemester;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -31,7 +37,20 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.j2objc.annotations.ObjectiveCName;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.Objects;
 import java.util.TimeZone;
@@ -48,12 +67,18 @@ public class FullScheduleActivity extends AppCompatActivity {
     String clg, course,year;
     NestedScrollView dayschedulePortrait, nestedScrollViewPort, nestedScrollViewLand;
     HorizontalScrollView horizontalScrollView;
+    Boolean isAllowedToDownload = false;
+    int progressValue;
     ScrollView scrollView;
     CustomVerificationDialog customVerificationDialog;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     CustomLoadDialogClass customLoadDialogClass;
+    CustomDownloadLoadDialog customDownloadLoadDialog;
     int versionCode = BuildConfig.VERSION_CODE;
     int i,j;
+    private int getProgress(int progress){
+        return progress;
+    };
     String versionName = BuildConfig.VERSION_NAME;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
@@ -70,6 +95,9 @@ public class FullScheduleActivity extends AppCompatActivity {
         } else if(getThemeStatus() == 102){
             window.setStatusBarColor(this.getResources().getColor(R.color.spruce));
             window.setNavigationBarColor(this.getResources().getColor(R.color.spruce));
+        } else {
+            window.setStatusBarColor(this.getResources().getColor(R.color.blue));
+            window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
         }
         clg = "DBC";
         course = "PHY-H";
@@ -148,10 +176,9 @@ public class FullScheduleActivity extends AppCompatActivity {
             @Override
             public void onLoad() {
             }
-
             @Override
             public String onLoadText() {
-                return "Checking...";
+                return "Checking";
             }
         });
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
@@ -420,7 +447,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         mEditor.putBoolean("loginstatus", logged);
         mEditor.apply();
     }
-    
+
     private void scrollTop(){
         if(!isLandscape()) {
             scrollView = findViewById(R.id.verticalScrollviewPort);
@@ -445,22 +472,56 @@ public class FullScheduleActivity extends AppCompatActivity {
                                     int vcode = Integer.parseInt(document.get("verCode").toString());
                                     final String vname = document.get("verName").toString();
                                     final String link = document.get("downlink").toString();
+                                    customLoadDialogClass.hide();
                                     if (vcode != versionCode || !vname.equals(versionName)) {
-                                        customLoadDialogClass.hide();
                                         Toast.makeText(getApplicationContext(), "Update available", Toast.LENGTH_LONG).show();
-                                        CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(FullScheduleActivity.this, new OnDialogConfirmListener() {
+                                        final CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(FullScheduleActivity.this, new OnDialogConfirmListener() {
                                             @Override
                                             public void onApply(Boolean confirm) {
-                                                Uri uri = Uri.parse(link);
-                                                Intent web = new Intent(Intent.ACTION_VIEW, uri);
-                                                startActivity(web);
+                                                if (!storagePermissionGranted()) {
+                                                    CustomConfirmDialogClass permissionDialog = new CustomConfirmDialogClass(FullScheduleActivity.this, new OnDialogConfirmListener() {
+                                                        @Override
+                                                        public void onApply(Boolean confirm) {
+                                                            customLoadDialogClass.dismiss();
+                                                            requestStoragePermission();
+                                                            if (storagePermissionGranted()){
+                                                                if(isNetworkConnected()) {
+                                                                    File file = new File(Environment.getExternalStorageDirectory() +"/Schemester/org.timetable.schemester-"+vname+".apk");
+                                                                    if(file.exists()){
+                                                                        showPackageAlert();
+                                                                    } else {
+                                                                        downloader(link, vname);
+                                                                    }
+                                                                } else {
+                                                                    Toast.makeText(getApplicationContext(), "Internet problem", Toast.LENGTH_LONG).show();
+                                                                }
+                                                            } else {
+                                                                customLoadDialogClass.dismiss();
+                                                            }
+                                                        }
+                                                        @Override
+                                                        public String onCallText() {
+                                                            return "Storage permission required";
+                                                        }
+                                                        @Override
+                                                        public String onCallSub() {
+                                                            return "To download and save the latest version on your device, we need your storage permission. Confirm?";
+                                                        }
+                                                    });
+                                                    permissionDialog.show();
+                                                } else {
+                                                    File file = new File(Environment.getExternalStorageDirectory() +"/Schemester/org.timetable.schemester-"+vname+".apk");
+                                                    if(file.exists()){
+                                                        showPackageAlert();
+                                                    } else {
+                                                        downloader(link,vname);
+                                                    }
+                                                }
                                             }
-
                                             @Override
                                             public String onCallText() {
                                                 return "An update is available";
                                             }
-
                                             @Override
                                             public String onCallSub() {
                                                 return "Your app version : " + versionName + "\nNew Version : " + vname + "\n\nUpdate to get the latest features and bug fixes. Download will start automatically. \nConfirm to download from website?";
@@ -469,7 +530,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                                         customConfirmDialogClass.setCanceledOnTouchOutside(false);
                                         customConfirmDialogClass.show();
                                     } else {
-                                        customLoadDialogClass.hide();
+     //                                   customLoadDialogClass.hide();
                                         Toast.makeText(getApplicationContext(), "App is up to date. Check again later.", Toast.LENGTH_LONG).show();
                                     }
                                 } else {
@@ -487,6 +548,55 @@ public class FullScheduleActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Network problem?", Toast.LENGTH_LONG).show();
         }
     }
+
+ private void downloader(final String link,final  String version){
+     customDownloadLoadDialog = new CustomDownloadLoadDialog(FullScheduleActivity.this, new OnDialogDownloadLoadListener() {
+         @Override
+         public String getLink() {
+             return link;
+         }
+         @Override
+         public String getVersion() {
+             return version;
+         }
+         @Override
+         public void afterFinish(Boolean isCompleted) {
+             if (isCompleted) {
+                 showPackageAlert();
+             } else {
+                 customLoadDialogClass.hide();
+                 Toast.makeText(getApplicationContext(), "Download Interrupted", Toast.LENGTH_SHORT).show();
+             }
+         }
+     });
+     customDownloadLoadDialog.show();
+ }
+
+ private void showPackageAlert(){
+     CustomAlertDialog downloadFinishAlert = new CustomAlertDialog(FullScheduleActivity.this, new OnDialogAlertListener() {
+         @Override
+         public void onDismiss() {
+         }
+         @Override
+         public String onCallText() {
+             return "Download completed";
+         }
+         @Override
+         public String onCallSub() {
+             return "Latest version is downloaded. \n\nGo to File manager > Internal Storage > Schemester\n\nHere you'll find the latest package.";
+         }
+     });
+     downloadFinishAlert.show();
+ }
+private boolean storagePermissionGranted(){
+    return (ContextCompat.checkSelfPermission(FullScheduleActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED));
+}
+private void requestStoragePermission(){
+    ActivityCompat.requestPermissions(FullScheduleActivity.this,
+            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+            1);
+    customLoadDialogClass.hide();
+}
     private void checkOrientationSetVisibility(int visible){
             dayschedulePortrait= findViewById(R.id.weekdayplanview);
             dayschedulePortrait.setVisibility(visible);

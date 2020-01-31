@@ -12,6 +12,8 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,6 +47,20 @@ public class LoginActivity extends AppCompatActivity {
             MainActivity.mainact.finish();
         }
         super.onCreate(savedInstanceState);
+        Window window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        setAppTheme(getThemeStatus());
+        if(getThemeStatus() == 101) {
+            window.setNavigationBarColor(getResources().getColor(R.color.blue));
+            window.setStatusBarColor(getResources().getColor(R.color.blue));
+        } else if(getThemeStatus() == 102){
+            window.setNavigationBarColor(getResources().getColor(R.color.spruce));
+            window.setStatusBarColor(getResources().getColor(R.color.spruce));
+        } else {
+            window.setNavigationBarColor(getResources().getColor(R.color.blue));
+            window.setStatusBarColor(getResources().getColor(R.color.blue));
+        }
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
         customLoadDialogClass = new CustomLoadDialogClass(this, new OnDialogLoadListener() {
@@ -391,5 +407,21 @@ public class LoginActivity extends AppCompatActivity {
     private Boolean checkIfEmailVerified() {
         user = FirebaseAuth.getInstance().getCurrentUser();
         return user.isEmailVerified();
+    }
+
+    public void setAppTheme(int code) {
+        switch (code) {
+            case 101:
+                setTheme(R.style.AppTheme);
+                break;
+            case 102:
+                setTheme(R.style.DarkTheme);
+                break;
+            default:setTheme(R.style.AppTheme);
+        }
+    }
+    private int getThemeStatus() {
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
+        return mSharedPreferences.getInt("themeCode", 0);
     }
 }

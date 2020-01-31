@@ -48,15 +48,15 @@ public class CustomOnOptListener extends AppCompatDialog {
         assert r102!=null;
         if(getThemeStatus()==101) {
             r101.setChecked(true);
-            choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_looksico));
+            choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterlightmockup));
         }
         else if(getThemeStatus()==102){
             r102.setChecked(true);
-            choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_restarticon));
+            choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterdarkmockup));
         }
         else{
             r101.setChecked(true);
-            choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_looksico));
+            choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterlightmockup));
         }
 
         Objects.requireNonNull(cancel).setOnClickListener(new View.OnClickListener() {
@@ -72,12 +72,12 @@ public class CustomOnOptListener extends AppCompatDialog {
                 public void onCheckedChanged(RadioGroup rGroup, final int radioid) {
                     switch (radioid) {
                         case R.id.radio1:
-                            choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_looksico));
+                            choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterlightmockup));
                             break;
                         case R.id.radio2:
-                            choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_restarticon));
+                            choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterdarkmockup));
                             break;
-                            default:choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_looksico));
+                            default:choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterlightmockup));
                     }
                     set.setOnClickListener(new View.OnClickListener() {
                         @Override

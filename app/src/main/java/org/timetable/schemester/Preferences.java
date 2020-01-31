@@ -2,15 +2,20 @@ package org.timetable.schemester;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -30,6 +35,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.File;
 import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
@@ -444,22 +450,56 @@ public class Preferences extends AppCompatActivity {
                                     int vcode = Integer.parseInt(document.get("verCode").toString());
                                     final String vname = document.get("verName").toString();
                                     final String link = document.get("downlink").toString();
+                                    customLoadDialogClass.hide();
                                     if (vcode != versionCode || !vname.equals(versionName)) {
-                                        customLoadDialogClass.hide();
                                         Toast.makeText(getApplicationContext(), "Update available", Toast.LENGTH_LONG).show();
-                                        CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(Preferences.this, new OnDialogConfirmListener() {
+                                        final CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(Preferences.this, new OnDialogConfirmListener() {
                                             @Override
                                             public void onApply(Boolean confirm) {
-                                                Uri uri = Uri.parse(link);
-                                                Intent web = new Intent(Intent.ACTION_VIEW, uri);
-                                                startActivity(web);
+                                                if (!storagePermissionGranted()) {
+                                                    CustomConfirmDialogClass permissionDialog = new CustomConfirmDialogClass(Preferences.this, new OnDialogConfirmListener() {
+                                                        @Override
+                                                        public void onApply(Boolean confirm) {
+                                                            customLoadDialogClass.dismiss();
+                                                            requestStoragePermission();
+                                                            if (storagePermissionGranted()){
+                                                                if(isNetworkConnected()) {
+                                                                    File file = new File(Environment.getExternalStorageDirectory() +"/Schemester/org.timetable.schemester-"+vname+".apk");
+                                                                    if(file.exists()){
+                                                                        showPackageAlert();
+                                                                    } else {
+                                                                        downloader(link, vname);
+                                                                    }
+                                                                } else {
+                                                                    Toast.makeText(getApplicationContext(), "Internet problem", Toast.LENGTH_LONG).show();
+                                                                }
+                                                            } else {
+                                                                customLoadDialogClass.dismiss();
+                                                            }
+                                                        }
+                                                        @Override
+                                                        public String onCallText() {
+                                                            return "Storage permission required";
+                                                        }
+                                                        @Override
+                                                        public String onCallSub() {
+                                                            return "To download and save the latest version on your device, we need your storage permission. Confirm?";
+                                                        }
+                                                    });
+                                                    permissionDialog.show();
+                                                } else {
+                                                    File file = new File(Environment.getExternalStorageDirectory() +"/Schemester/org.timetable.schemester-"+vname+".apk");
+                                                    if(file.exists()){
+                                                        showPackageAlert();
+                                                    } else {
+                                                        downloader(link,vname);
+                                                    }
+                                                }
                                             }
-
                                             @Override
                                             public String onCallText() {
                                                 return "An update is available";
                                             }
-
                                             @Override
                                             public String onCallSub() {
                                                 return "Your app version : " + versionName + "\nNew Version : " + vname + "\n\nUpdate to get the latest features and bug fixes. Download will start automatically. \nConfirm to download from website?";
@@ -468,12 +508,12 @@ public class Preferences extends AppCompatActivity {
                                         customConfirmDialogClass.setCanceledOnTouchOutside(false);
                                         customConfirmDialogClass.show();
                                     } else {
-                                        customLoadDialogClass.hide();
+                                        //                                   customLoadDialogClass.hide();
                                         Toast.makeText(getApplicationContext(), "App is up to date. Check again later.", Toast.LENGTH_LONG).show();
                                     }
                                 } else {
                                     customLoadDialogClass.hide();
-                                    Toast.makeText(getApplicationContext(), "Server error", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(getApplicationContext(), "Server error.", Toast.LENGTH_LONG).show();
                                 }
                             } else {
                                 customLoadDialogClass.hide();
@@ -485,6 +525,54 @@ public class Preferences extends AppCompatActivity {
             customLoadDialogClass.hide();
             Toast.makeText(getApplicationContext(), "Network problem?", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void downloader(final String link,final  String version){
+        CustomDownloadLoadDialog customDownloadLoadDialog = new CustomDownloadLoadDialog(Preferences.this, new OnDialogDownloadLoadListener() {
+            @Override
+            public String getLink() {
+                return link;
+            }
+            @Override
+            public String getVersion() {
+                return version;
+            }
+            @Override
+            public void afterFinish(Boolean isCompleted) {
+                if (isCompleted) {
+                    showPackageAlert();
+                } else {
+                    customLoadDialogClass.hide();
+                    Toast.makeText(getApplicationContext(), "Download Interrupted", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        customDownloadLoadDialog.show();
+    }
+
+    private void showPackageAlert(){
+        CustomAlertDialog downloadFinishAlert = new CustomAlertDialog(Preferences.this, new OnDialogAlertListener() {
+            @Override
+            public void onDismiss() {
+            }
+            @Override
+            public String onCallText() {
+                return "Download completed";
+            }
+            @Override
+            public String onCallSub() {
+                return "Latest version is downloaded. \n\nGo to File manager > Internal Storage > Schemester\n\nHere you'll find the latest package.";
+            }
+        });
+        downloadFinishAlert.show();
+    }
+    private boolean storagePermissionGranted(){
+        return (ContextCompat.checkSelfPermission(Preferences.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED));
+    }
+    private void requestStoragePermission(){
+        ActivityCompat.requestPermissions(Preferences.this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                1);
     }
 
     private void storeCredentials(String mail, String rollnum){

@@ -3,18 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.timetable.schemester">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"   />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/DarkTheme"
+        android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".Preferences">
         </activity>
         <activity
-            android:name=".FullScheduleActivity"
-            android:theme="@style/blueTheme" />
+            android:name=".FullScheduleActivity" />
         <activity
             android:name=".Splash"
             android:theme="@style/splashTheme">
@@ -25,8 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
-            android:theme="@style/blueTheme" />
+            android:name=".LoginActivity" />
         <activity
             android:name=".MainActivity" />
 

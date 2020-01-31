@@ -33,12 +33,12 @@ public class Splash extends AppCompatActivity {
     public void setAppTheme(int code) {
         switch (code) {
             case 101:
-                setTheme(R.style.AppTheme);
+                setTheme(R.style.splashTheme);
                 break;
             case 102:
-                setTheme(R.style.DarkTheme);
+                setTheme(R.style.splashThemeDark);
                 break;
-                default:setTheme(R.style.AppTheme);
+                default:setTheme(R.style.splashTheme);
         }
     }
     private int getThemeStatus() {
