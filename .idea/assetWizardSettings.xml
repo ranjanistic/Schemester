@@ -196,8 +196,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_schemesterdarkmockup" />
-                            <entry key="sourceFile" value="E:\myprojects\AndroidProject\Schedule\app\src\main\res\drawable\schemesterdarkmockup.xml" />
+                            <entry key="outputName" value="ic_mailopen" />
+                            <entry key="sourceFile" value="E:\myprojects\Github\vector-assets\mailOpen.svg" />
                           </map>
                         </option>
                       </PersistentState>

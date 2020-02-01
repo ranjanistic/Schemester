@@ -5,7 +5,7 @@
 
     <string name="new_period_notification_title_template">New period: %1$s</string>
     <string name="okay">okay</string>
-    <string name="cancel">cancek</string>
+    <string name="cancel">Cancel</string>
     <string name="channel_name">New period notification</string>
     <string name="channel_description">To notify about next class.</string>
     <string name="time1">08:30:00</string>
@@ -28,6 +28,17 @@
     <string name="period7">14:30 to 15:30</string>
     <string name="period8">15:30 to 16:30</string>
     <string name="period9">16:30 to 17:30</string>
+
+
+    <string name="period112">8:30 am to 9:30 am</string>
+    <string name="period212">9:30 am to 10:30 am</string>
+    <string name="period312">10:30 am to 11:30 am</string>
+    <string name="period412">11:30 am to 12:30 pm</string>
+    <string name="period512">12:30 pm to 1:30 pm</string>
+    <string name="period612">1:30 pm to 2:30 pm</string>
+    <string name="period712">2:30 pm to 3:30 pm</string>
+    <string name="period812">3:30 pm to 4:30 pm</string>
+    <string name="period912">4:30 pm to 5:30 pm</string>
     <string name="valid">Valid</string>
     <string name="invalidtext">Invalid till now</string>
     <string name="not_verified">Not verified</string>

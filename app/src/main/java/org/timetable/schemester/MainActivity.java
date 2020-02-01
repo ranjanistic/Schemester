@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -107,6 +108,18 @@ public class MainActivity extends AppCompatActivity{
         p[6] = findViewById(R.id.period7);
         p[7] = findViewById(R.id.period8);
         p[8] = findViewById(R.id.period9);
+
+        if(getTimeFormat() == 12){
+            p[0].setText(getResources().getString(R.string.period112));
+            p[1].setText(getResources().getString(R.string.period212));
+            p[2].setText(getResources().getString(R.string.period312));
+            p[3].setText(getResources().getString(R.string.period412));
+            p[4].setText(getResources().getString(R.string.period512));
+            p[5].setText(getResources().getString(R.string.period612));
+            p[6].setText(getResources().getString(R.string.period712));
+            p[7].setText(getResources().getString(R.string.period812));
+            p[8].setText(getResources().getString(R.string.period912));
+        }
 /*
         c1 = findViewById(R.id.class1);
         c2 = findViewById(R.id.class2);
@@ -134,7 +147,9 @@ public class MainActivity extends AppCompatActivity{
         fullview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mupdateTask.cancel(true);
+                if(!mupdateTask.isCancelled()){
+                    mupdateTask.cancel(true);
+                }
                 Intent i = new Intent(MainActivity.this, FullScheduleActivity.class);
                 startActivity(i);
             }
@@ -145,6 +160,7 @@ public class MainActivity extends AppCompatActivity{
         setHolidayViewIfHoliday();
         mupdateTask.execute();
     }
+
 
     public class updateTask extends AsyncTask<Void,Void,Void> {
         @Override
@@ -179,12 +195,7 @@ public class MainActivity extends AppCompatActivity{
             super.onPostExecute(aVoid);
         }
     }
-    @Override
-    protected void onResume(){
-        mupdateTask = new updateTask();
-        mupdateTask.execute();
-        super.onResume();
-    }
+
     private void setHolidayViewIfHoliday(){
         if (isHolidayToday()) {
             scrollView.setVisibility(View.INVISIBLE);
@@ -492,6 +503,12 @@ public class MainActivity extends AppCompatActivity{
             default:setTheme(R.style.AppTheme);
         }
     }
+
+    private int getTimeFormat() {
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTime", MODE_PRIVATE);
+        return mSharedPreferences.getInt("format", 24);
+    }
+
     private int getThemeStatus() {
         SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
         return mSharedPreferences.getInt("themeCode", 0);

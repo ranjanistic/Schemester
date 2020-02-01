@@ -130,7 +130,7 @@
                             android:textColor="?attr/group_card_text_color"
                             android:layout_height="wrap_content"
                             android:text="Get a link to change email ID."
-                            android:paddingTop="6dp"
+                            android:paddingTop="4dp"
                             android:singleLine="false"
                             android:textSize="14sp"/>
                     </LinearLayout>
@@ -172,7 +172,7 @@
                             android:textColor="?attr/group_card_text_color"
                             android:layout_height="wrap_content"
                             android:text="Change roll number here."
-                            android:paddingTop="6dp"
+                            android:paddingTop="4dp"
                             android:singleLine="false"
                             android:textSize="14sp"/>
                     </LinearLayout>
@@ -215,7 +215,7 @@
                             android:textColor="?attr/group_card_text_color"
                             android:layout_height="wrap_content"
                         android:text="Request date of birth update."
-                        android:paddingTop="6dp"
+                        android:paddingTop="4dp"
                         android:singleLine="false"
                         android:textSize="14sp"/>
                 </LinearLayout>
@@ -258,7 +258,7 @@
                             android:textColor="?attr/group_card_text_color"
                             android:layout_height="wrap_content"
                             android:text="Delete your account permanently."
-                            android:paddingTop="6dp"
+                            android:paddingTop="4dp"
                             android:singleLine="false"
                             android:textSize="14sp"/>
                     </LinearLayout>
@@ -325,7 +325,7 @@
                             android:textColor="?attr/group_card_text_color"
                             android:layout_height="wrap_content"
                         android:text="Notify about upcoming class"
-                        android:paddingTop="6dp"
+                        android:paddingTop="4dp"
                         android:singleLine="false"
                         android:textSize="14sp"/>
                 </LinearLayout>
@@ -372,7 +372,7 @@
                         android:textColor="?attr/group_card_text_color"
                         android:layout_height="wrap_content"
                         android:text="Try new themes, including dark theme!"
-                        android:paddingTop="6dp"
+                        android:paddingTop="4dp"
                         android:singleLine="false"
                         android:textSize="14sp"/>
                 </LinearLayout>
@@ -390,7 +390,62 @@
                     android:backgroundTint="@color/dull_white"
                     android:scaleType="fitCenter" />
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="0dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/timeformattext"
+                        android:layout_width="250dp"
+                        android:textColor="?attr/group_card_text_color"
+                        android:layout_height="wrap_content"
+                        android:singleLine="false"
+                        android:text="Time format : 24 hours"
+                        android:textSize="18sp"/>
+                    <TextView
+                        android:layout_width="250dp"
+                        android:textColor="?attr/group_card_text_color"
+                        android:layout_height="wrap_content"
+                        android:text="Switch time format in the app."
+                        android:paddingTop="4dp"
+                        android:singleLine="false"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
 
+                <Switch
+                    android:id="@+id/clockTypeSwitch"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:fontFamily="@font/montserrat"
+                    android:padding="0dp"
+                    android:switchTextAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:scaleType="fitCenter"
+                    android:thumbTextPadding="4dp"
+                    android:showText="true"
+                    android:splitTrack="false"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textOff="24"
+                    android:textOn="12"
+                    android:thumbTint="@color/white"
+                    android:trackTint="@color/blue_grey"
+                    android:track="@drawable/square_btn"
+                    app:srcCompat="@drawable/ic_mailopen"
+                    tools:targetApi="q" />
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -416,7 +471,7 @@
                             android:textColor="?attr/group_card_text_color"
                             android:layout_height="wrap_content"
                         android:text="Check for app updates."
-                        android:paddingTop="6dp"
+                        android:paddingTop="4dp"
                         android:singleLine="false"
                         android:textSize="14sp"/>
                 </LinearLayout>
@@ -461,7 +516,7 @@
                             android:textColor="?attr/group_card_text_color"
                             android:layout_height="wrap_content"
                         android:text="Try restarting  if there's any glitch."
-                        android:paddingTop="6dp"
+                        android:paddingTop="4dp"
                         android:singleLine="false"
                         android:textSize="14sp"/>
                 </LinearLayout>
@@ -480,6 +535,73 @@
                     android:scaleType="fitCenter" />
             </LinearLayout>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/square_btn"
+            android:backgroundTint="?attr/base_background"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:layout_gravity="center_horizontal"
+                android:text="Developer options"
+                android:textColor="@color/blue"
+                android:textStyle="bold"
+                android:textSize="20sp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="8dp"
+                    android:paddingStart="0dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="250dp"
+                        android:textColor="?attr/group_card_text_color"
+                        android:layout_height="wrap_content"
+                        android:singleLine="false"
+                        android:text="Contact developers"
+                        android:textSize="18sp"/>
+                    <TextView
+                        android:layout_width="250dp"
+                        android:textColor="?attr/group_card_text_color"
+                        android:layout_height="wrap_content"
+                        android:text="Feedback? Query? Problems? Need new features? Tell us."
+                        android:paddingTop="4dp"
+                        android:singleLine="false"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+                <ImageButton
+                    android:id="@+id/feedbackmailbtn"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:padding="4dp"
+                    android:background="@drawable/square_btn"
+                    android:backgroundTint="@color/dull_blue"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/ic_mailopen"/>
+            </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

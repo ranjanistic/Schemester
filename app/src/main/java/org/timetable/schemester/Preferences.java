@@ -20,8 +20,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -42,8 +44,8 @@ import static android.content.ContentValues.TAG;
 
 
 public class Preferences extends AppCompatActivity {
-    Switch notificationSwitch;
-    ImageButton dobUpdate, emailChange, rollChange, appUpdate, deleteAcc, returnbtn, restarter, themebtn;
+    Switch timeFormatSwitch;
+    ImageButton dobUpdate, emailChange, rollChange, appUpdate, deleteAcc, returnbtn, restarter, themebtn, feedback;
     CustomVerificationDialog customVerificationDialogDeleteAccount, customVerificationDialogEmailChange;
     CustomLoadDialogClass customLoadDialogClass;
     CustomTextDialog customTextDialog;
@@ -198,7 +200,36 @@ public class Preferences extends AppCompatActivity {
                 restartApplication();
             }
         });
+        final TextView timetext = findViewById(R.id.timeformattext);
+        timeFormatSwitch = findViewById(R.id.clockTypeSwitch);
+        timeFormatSwitch.setChecked(getTimeFormat() == 12);
+        if(timeFormatSwitch.isChecked()) {
+            timetext.setText("Time format : 12 hours");
+        } else {
+            timetext.setText("Time format : 24 hours");
+        }
+        timeFormatSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    timetext.setText("Time format : 12 hours");
+                        storeTimeFormat(12);
+                } else {
+                    timetext.setText("Time format : 24 hours");
+                    storeTimeFormat(24);
+                }
+            }
+        });
 
+        feedback = findViewById(R.id.feedbackmailbtn);
+        feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("mailto:darkmodelabs@gmail.com?cc=priyanshuranjan88@gmail.com&subject=Schemester%20User%20Feedback&body=Dear%20developers,%20");
+                Intent web = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(web);
+            }
+        });
     }
     private void restartApplication(){
         Intent splash = new Intent(Preferences.this, Splash.class);
@@ -605,6 +636,17 @@ public class Preferences extends AppCompatActivity {
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
         mEditor.putInt("themeCode", themechoice);
         mEditor.apply();
+    }
+
+    private void storeTimeFormat(int format){
+        SharedPreferences mSharedPreferences = getSharedPreferences("schemeTime", MODE_PRIVATE);
+        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+        mEditor.putInt("format", format);
+        mEditor.apply();
+    }
+    private int getTimeFormat() {
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTime", MODE_PRIVATE);
+        return mSharedPreferences.getInt("format", 24);
     }
 
     public void setAppTheme(int code) {

@@ -63,22 +63,15 @@ public class FullScheduleActivity extends AppCompatActivity {
     Button[] dayBtn = {m,t,w,th,f};
     String[] dayString = {"monday", "tuesday", "wednesday", "thursday", "friday"};
     View settingsview, aboutview;
-    ImageButton setting, about, git, tweet, insta, dml, webbtn, fullsetting, updatecheck;
+    ImageButton setting, about, git, dml, webbtn, fullsetting, updatecheck;
     String clg, course,year;
-    NestedScrollView dayschedulePortrait, nestedScrollViewPort, nestedScrollViewLand;
+    NestedScrollView dayschedulePortrait;
     HorizontalScrollView horizontalScrollView;
-    Boolean isAllowedToDownload = false;
-    int progressValue;
     ScrollView scrollView;
-    CustomVerificationDialog customVerificationDialog;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     CustomLoadDialogClass customLoadDialogClass;
     CustomDownloadLoadDialog customDownloadLoadDialog;
     int versionCode = BuildConfig.VERSION_CODE;
-    int i,j;
-    private int getProgress(int progress){
-        return progress;
-    };
     String versionName = BuildConfig.VERSION_NAME;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
