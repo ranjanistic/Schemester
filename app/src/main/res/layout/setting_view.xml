@@ -123,7 +123,7 @@
                     android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:padding="4dp"
-                    android:background="@drawable/square_btn"
+                    android:background="@drawable/square_round_btn"
                     android:backgroundTint="@color/spruce"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/ic_clouddownload2"/>
@@ -181,7 +181,7 @@
             android:id="@+id/logout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/square_btn"
+            android:background="@drawable/square_round_btn"
             android:backgroundTint="?attr/base_background"
             android:text="@string/logout"
             android:textAllCaps="false"

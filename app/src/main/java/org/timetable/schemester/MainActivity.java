@@ -16,10 +16,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,6 +40,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import static android.content.ContentValues.TAG;
@@ -48,10 +52,11 @@ public class MainActivity extends AppCompatActivity{
     TextView[] p = {p1,p2,p3,p4,p5,p6,p7,p8,p9 };
     String[] pkey = {"p1","p2","p3","p4","p5","p6","p7","p8","p9"};
     String clg, course,year;
-    Button day,date, month, fullview;
+    Button day,date, month;
+    ImageButton fullview, drawerArrow;
     int getDate, notificationId = 101;
     String getDay, getMonth;
-    LinearLayout linearLayout, headingview, landscapeView;
+    LinearLayout linearLayout, headingview, landscapeView, settingtab, scheduletab;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     ScrollView scrollView;
     Calendar calendar;
@@ -59,7 +64,9 @@ public class MainActivity extends AppCompatActivity{
     public static Activity mainact;
     public static boolean isCreated = false;
     Context ctx;
+    Boolean isHoliday = false;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAppTheme(getThemeStatus());
@@ -71,22 +78,20 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         ctx = this;
         setContentView(R.layout.activity_main);
-        Window window = this.getWindow();
+        final Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
         calendar = Calendar.getInstance(TimeZone.getDefault());
         linearLayout = findViewById(R.id.linearLayout);
         scrollView = findViewById(R.id.scrollView);
         headingview = findViewById(R.id.period_view);
         landscapeView = findViewById(R.id.mainLinearlayoutLandscape);
         noclass = findViewById(R.id.noclasstext);
+        settingtab = findViewById(R.id.settingTab);
+        scheduletab = findViewById(R.id.fullScheduleTab);
         semestertxt = findViewById(R.id.sem_text);
-        if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
-            if(getThemeStatus() == 101)
-                window.setNavigationBarColor(this.getResources().getColor(R.color.white));
-            else if(getThemeStatus() == 102)
-                window.setNavigationBarColor(this.getResources().getColor(R.color.charcoal));
-        } else{
+        drawerArrow = findViewById(R.id.drawerarrow);
             if(isLandscape()){
                 if(getThemeStatus() == 101)
                     window.setNavigationBarColor(this.getResources().getColor(R.color.white));
@@ -94,11 +99,33 @@ public class MainActivity extends AppCompatActivity{
                     window.setNavigationBarColor(this.getResources().getColor(R.color.charcoal));
             } else {
                 if(getThemeStatus() == 101)
-                    window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
+                    window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
                 else if(getThemeStatus() == 102)
-                    window.setNavigationBarColor(this.getResources().getColor(R.color.spruce));
+                    window.setNavigationBarColor(this.getResources().getColor(R.color.black_overlay));
             }
-        }
+
+        LinearLayout bottomDrawer = findViewById(R.id.bottom_drawer);
+        final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomDrawer);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        bottomSheetBehavior.setHideable(false);
+        LinearLayout drawerPeek = findViewById(R.id.drawerarrowHolder);
+        drawerPeek.measure(View.MeasureSpec.UNSPECIFIED,View.MeasureSpec.UNSPECIFIED);
+        bottomSheetBehavior.setPeekHeight(drawerPeek.getMeasuredHeight());
+        //bottomSheetBehavior.setPeekHeight();
+        //fullview = findViewById(R.id.full_schedule);
+        drawerArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    drawerArrow.setRotation(-90);
+                } else if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    drawerArrow.setRotation(90);
+                }
+            }
+        });
+
         p[0] = findViewById(R.id.period1);
         p[1] = findViewById(R.id.period2);
         p[2] = findViewById(R.id.period3);
@@ -109,17 +136,6 @@ public class MainActivity extends AppCompatActivity{
         p[7] = findViewById(R.id.period8);
         p[8] = findViewById(R.id.period9);
 
-        if(getTimeFormat() == 12){
-            p[0].setText(getResources().getString(R.string.period112));
-            p[1].setText(getResources().getString(R.string.period212));
-            p[2].setText(getResources().getString(R.string.period312));
-            p[3].setText(getResources().getString(R.string.period412));
-            p[4].setText(getResources().getString(R.string.period512));
-            p[5].setText(getResources().getString(R.string.period612));
-            p[6].setText(getResources().getString(R.string.period712));
-            p[7].setText(getResources().getString(R.string.period812));
-            p[8].setText(getResources().getString(R.string.period912));
-        }
 /*
         c1 = findViewById(R.id.class1);
         c2 = findViewById(R.id.class2);
@@ -142,9 +158,9 @@ public class MainActivity extends AppCompatActivity{
         date = findViewById(R.id.present_date);
         day = findViewById(R.id.weekday_text);
         month = findViewById(R.id.month_text);
-        fullview = findViewById(R.id.full_schedule);
         mupdateTask = new updateTask();
-        fullview.setOnClickListener(new View.OnClickListener() {
+
+        scheduletab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!mupdateTask.isCancelled()){
@@ -154,21 +170,77 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(i);
             }
         });
+
+        settingtab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this, Preferences.class);
+                startActivity(i);
+            }
+        });
+
         if(!isInternetAvailable()){
             Toast.makeText(getApplicationContext(),"Connect to internet for latest details",Toast.LENGTH_LONG).show();
         }
         setHolidayViewIfHoliday();
-        mupdateTask.execute();
     }
 
+    @Override
+    protected void onStart() {
+          setHolidayViewIfHoliday();
+        setSemester("global_info","semester",year);
+        date.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
+        day.setText(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
+        month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
+          if(!isHolidayToday()) {
+              setTimeFormat(getTimeFormat());
+              if(mupdateTask.isCancelled()) {
+                  new updateTask().execute();
+              } else {
+                  mupdateTask.cancel(true);
+                  new updateTask().execute();
+              }
+          }
+        super.onStart();
+    }
 
+    @Override
+    protected void onPause() {
+        mupdateTask.cancel(true);
+        super.onPause();
+    }
+
+    private void setTimeFormat(int tFormat){
+        if(tFormat == 12){
+            p[0].setText(getResources().getString(R.string.period112));
+            p[1].setText(getResources().getString(R.string.period212));
+            p[2].setText(getResources().getString(R.string.period312));
+            p[3].setText(getResources().getString(R.string.period412));
+            p[4].setText(getResources().getString(R.string.period512));
+            p[5].setText(getResources().getString(R.string.period612));
+            p[6].setText(getResources().getString(R.string.period712));
+            p[7].setText(getResources().getString(R.string.period812));
+            p[8].setText(getResources().getString(R.string.period912));
+        } else {
+            p[0].setText(getResources().getString(R.string.period1));
+            p[1].setText(getResources().getString(R.string.period2));
+            p[2].setText(getResources().getString(R.string.period3));
+            p[3].setText(getResources().getString(R.string.period4));
+            p[4].setText(getResources().getString(R.string.period5));
+            p[5].setText(getResources().getString(R.string.period6));
+            p[6].setText(getResources().getString(R.string.period7));
+            p[7].setText(getResources().getString(R.string.period8));
+            p[8].setText(getResources().getString(R.string.period9));
+        }
+    }
     public class updateTask extends AsyncTask<Void,Void,Void> {
+
         @Override
         protected void onPreExecute() {
             date.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
             day.setText(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
             month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
-            setSemester(clg,course,year);
+            setSemester("global_info","semester",year);
             setHolidayViewIfHoliday();
             super.onPreExecute();
         }
@@ -177,13 +249,12 @@ public class MainActivity extends AppCompatActivity{
         protected Void doInBackground(Void... voids) {
             if (!isHolidayToday()) {
                 readDatabase(clg,course,year,getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
-                highlightCurrentPeriod();
             }
             return null;
         }
-
         @Override
         protected void onPostExecute(Void aVoid) {
+            highlightCurrentPeriod();
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -194,22 +265,49 @@ public class MainActivity extends AppCompatActivity{
             }, 10);
             super.onPostExecute(aVoid);
         }
+
     }
 
     private void setHolidayViewIfHoliday(){
         if (isHolidayToday()) {
             scrollView.setVisibility(View.INVISIBLE);
             headingview.setVisibility(View.INVISIBLE);
-            fullview.setVisibility(View.VISIBLE);
             noclass.setVisibility(View.VISIBLE);
         } else {
             noclass.setVisibility(View.GONE);
         }
     }
-    
     private Boolean isHolidayToday(){
-         return (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY);
-
+        if(islocalHoliday("global_info","holiday_info")){
+            isHoliday = true;
+        } else if(islocalHoliday(clg,"local_info")){
+            isHoliday = true;
+        } else if(islocalHoliday(clg,course)){
+            isHoliday = true;
+        } else isHoliday = calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
+        return isHoliday;
+    }
+    private Boolean islocalHoliday(String collector, String doc){
+        if (getLoginStatus()) {
+            db.collection(collector).document(doc)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                     isHoliday = Boolean.parseBoolean(Objects.requireNonNull(document.get("holiday")).toString());
+                                } else {
+                                    Log.d(TAG, "Server error in getting semester.");
+                                    Toast.makeText(MainActivity.this, "Unable to read", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        }
+                    });
+        }
+        return isHoliday;
     }
     
     private String getWeekdayFromCode(int daycode){
@@ -265,9 +363,9 @@ public class MainActivity extends AppCompatActivity{
     }
     
     
-    private void setSemester(String source, String course,String year) {
+    private void setSemester(String source, String doc,final String year) {
         if (getLoginStatus()) {
-            db.collection(source).document(course).collection(year).document("semester")
+            db.collection(source).document(doc)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
@@ -276,7 +374,7 @@ public class MainActivity extends AppCompatActivity{
                                 DocumentSnapshot document = task.getResult();
                                 if (document.exists()) {
                                     Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                    semestertxt.setText(document.get("semnum").toString());
+                                    semestertxt.setText(Objects.requireNonNull(document.get(year)).toString());
                                 } else {
                                     Log.d(TAG, "Server error in getting semester.");
                                     Toast.makeText(MainActivity.this, "Unable to read", Toast.LENGTH_LONG).show();
@@ -329,8 +427,8 @@ public class MainActivity extends AppCompatActivity{
         } else if(checkPeriod("00:00:00","8:30:00")) {
             int d = 0;
             while (d<9) {
-                p[d].setBackgroundResource(R.drawable.roundtimecontainer);
-                p[d].setTextColor(getResources().getColor(R.color.blue));
+                p[d].setBackgroundResource(R.drawable.roundcontainerbox);
+                p[d].setTextColor(getResources().getColor(R.color.white));
                 d++;
             }
             return;
@@ -504,17 +602,17 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    private int getTimeFormat() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTime", MODE_PRIVATE);
-        return mSharedPreferences.getInt("format", 24);
-    }
-
     private int getThemeStatus() {
         SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
         return mSharedPreferences.getInt("themeCode", 0);
     }
+
     private boolean isLandscape() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+    }
+    private int getTimeFormat() {
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTime", MODE_PRIVATE);
+        return mSharedPreferences.getInt("format", 24);
     }
     public boolean isInternetAvailable() {
         Runtime runtime = Runtime.getRuntime();

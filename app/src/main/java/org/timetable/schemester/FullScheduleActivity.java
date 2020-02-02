@@ -1,12 +1,14 @@
 package org.timetable.schemester;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +18,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -58,12 +61,13 @@ import java.util.TimeZone;
 import static android.content.ContentValues.TAG;
 
 public class FullScheduleActivity extends AppCompatActivity {
-    TextView   c1,c2,c3,c4,c5,c6,c7,c8,c9, email, roll, semester;
+    TextView   c1,c2,c3,c4,c5,c6,c7,c8,c9, p1,p2,p3,p4,p5,p6,p7,p8,p9,email, roll, semester;
     Button m,t,w,th,f, logoutbtn;
+    TextView[] p = {p1,p2,p3,p4,p5,p6,p7,p8,p9 };
     Button[] dayBtn = {m,t,w,th,f};
     String[] dayString = {"monday", "tuesday", "wednesday", "thursday", "friday"};
     View settingsview, aboutview;
-    ImageButton setting, about, git, dml, webbtn, fullsetting, updatecheck;
+    ImageButton setting, about, git, dml, webbtn, fullsetting, updatecheck, noticebtn;
     String clg, course,year;
     NestedScrollView dayschedulePortrait;
     HorizontalScrollView horizontalScrollView;
@@ -95,6 +99,18 @@ public class FullScheduleActivity extends AppCompatActivity {
         clg = "DBC";
         course = "PHY-H";
         year = "Y2";
+
+
+        p[0] = findViewById(R.id.period1);
+        p[1] = findViewById(R.id.period2);
+        p[2] = findViewById(R.id.period3);
+        p[3] = findViewById(R.id.period4);
+        p[4] = findViewById(R.id.period5);
+        p[5] = findViewById(R.id.period6);
+        p[6] = findViewById(R.id.period7);
+        p[7] = findViewById(R.id.period8);
+        p[8] = findViewById(R.id.period9);
+
         c1 = findViewById(R.id.class1);
         c2 = findViewById(R.id.class2);
         c3 = findViewById(R.id.class3);
@@ -114,7 +130,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         about = findViewById(R.id.aboutbtn);
         settingsview = findViewById(R.id.settingview);
         aboutview = findViewById(R.id.aboutview);
-        
+        noticebtn = findViewById(R.id.noticebutton);
         isInternetAvailable();
         semester = findViewById(R.id.semtextsetting);
         settingsview.setVisibility(View.GONE);
@@ -164,7 +180,13 @@ public class FullScheduleActivity extends AppCompatActivity {
                 readVersionCheckUpdate();
             }
         });
-
+        noticebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent nIntent = new Intent(FullScheduleActivity.this, NoticeBoard.class);
+                startActivity(nIntent);
+            }
+        });
         customLoadDialogClass = new CustomLoadDialogClass(this, new OnDialogLoadListener() {
             @Override
             public void onLoad() {
@@ -331,9 +353,9 @@ public class FullScheduleActivity extends AppCompatActivity {
             }
         });
 
-
         email = findViewById(R.id.emailtextsetting);
         roll = findViewById(R.id.rolltextsetting);
+
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -344,6 +366,16 @@ public class FullScheduleActivity extends AppCompatActivity {
                 checkOrientationSetVisibility(View.GONE);
                 settingsview.setVisibility(View.VISIBLE);
                 aboutview.setVisibility(View.GONE);
+                dayBtn[0].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[0].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[1].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[1].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[2].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[2].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[3].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[3].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[4].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[4].setTextColor(getResources().getColor(R.color.white));
             }
         });
         logoutbtn = findViewById(R.id.logout);
@@ -362,10 +394,54 @@ public class FullScheduleActivity extends AppCompatActivity {
                 checkOrientationSetVisibility(View.GONE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.VISIBLE);
+                dayBtn[0].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[0].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[1].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[1].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[2].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[2].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[3].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[3].setTextColor(getResources().getColor(R.color.white));
+                dayBtn[4].setBackgroundResource(R.drawable.leftroundbtn);
+                dayBtn[4].setTextColor(getResources().getColor(R.color.white));
             }
         });
     }
 
+    @Override
+    protected void onStart() {
+        setTimeFormat(getTimeFormat());
+        super.onStart();
+    }
+
+    private void setTimeFormat(int tFormat){
+        if(tFormat == 12){
+            p[0].setText(getResources().getString(R.string.period112));
+            p[1].setText(getResources().getString(R.string.period212));
+            p[2].setText(getResources().getString(R.string.period312));
+            p[3].setText(getResources().getString(R.string.period412));
+            p[4].setText(getResources().getString(R.string.period512));
+            p[5].setText(getResources().getString(R.string.period612));
+            p[6].setText(getResources().getString(R.string.period712));
+            p[7].setText(getResources().getString(R.string.period812));
+            p[8].setText(getResources().getString(R.string.period912));
+        } else {
+            p[0].setText(getResources().getString(R.string.period1));
+            p[1].setText(getResources().getString(R.string.period2));
+            p[2].setText(getResources().getString(R.string.period3));
+            p[3].setText(getResources().getString(R.string.period4));
+            p[4].setText(getResources().getString(R.string.period5));
+            p[5].setText(getResources().getString(R.string.period6));
+            p[6].setText(getResources().getString(R.string.period7));
+            p[7].setText(getResources().getString(R.string.period8));
+            p[8].setText(getResources().getString(R.string.period9));
+        }
+    }
+
+    private int getTimeFormat() {
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTime", MODE_PRIVATE);
+        return mSharedPreferences.getInt("format", 24);
+    }
     private void readSemester(String source, String course,String year) {
             db.collection(source).document(course).collection(year).document("semester")
                 .get()

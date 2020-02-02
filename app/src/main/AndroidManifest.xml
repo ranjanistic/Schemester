@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.timetable.schemester">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"   />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -15,10 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Preferences">
-        </activity>
-        <activity
-            android:name=".FullScheduleActivity" />
+        <activity android:name=".NoticeBoard"></activity>
+        <activity android:name=".Preferences"></activity>
+        <activity android:name=".FullScheduleActivity" />
         <activity
             android:name=".Splash"
             android:theme="@style/splashTheme">
@@ -28,10 +27,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".LoginActivity" />
-        <activity
-            android:name=".MainActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".MainActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

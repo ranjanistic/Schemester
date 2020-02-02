@@ -3,7 +3,7 @@
     <color name="colorPrimary">#28B463</color>
     <color name="colorPrimaryDark">#186A3B</color>
     <color name="colorAccent">#3498DB</color>
-    <color name="black_overlay">#66000000</color>
+    <color name="black_overlay">#111111</color>
     <color name="parrot">#8be74a</color>
     <color name="amber">#FFC107</color>
     <color name="aqua">#00ffff</color>

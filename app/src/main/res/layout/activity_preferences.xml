@@ -85,7 +85,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/square_btn"
+                android:background="@drawable/square_round_btn"
                 android:backgroundTint="?attr/base_background"
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="12dp"
@@ -120,14 +120,14 @@
                         android:orientation="vertical">
                         <TextView
                             android:layout_width="250dp"
-                            android:textColor="?attr/group_card_text_color"
+                            android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                             android:singleLine="false"
                             android:text="Change email ID"
                             android:textSize="18sp"/>
                         <TextView
                             android:layout_width="250dp"
-                            android:textColor="?attr/group_card_text_color"
+                            android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                             android:text="Get a link to change email ID."
                             android:paddingTop="4dp"
@@ -142,7 +142,7 @@
                         android:id="@+id/changeEmailIdBtn"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:background="@drawable/square_btn"
+                        android:background="@drawable/square_round_btn"
                         android:backgroundTint="@color/white"
                         android:scaleType="fitCenter"
                         app:srcCompat="@drawable/ic_attherate"/>
@@ -162,14 +162,14 @@
                         android:orientation="vertical">
                         <TextView
                             android:layout_width="250dp"
-                            android:textColor="?attr/group_card_text_color"
+                            android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                             android:singleLine="false"
                             android:text="Change roll number"
                             android:textSize="18sp"/>
                         <TextView
                             android:layout_width="250dp"
-                            android:textColor="?attr/group_card_text_color"
+                            android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                             android:text="Change roll number here."
                             android:paddingTop="4dp"
@@ -185,7 +185,7 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:padding="8dp"
-                        android:background="@drawable/square_btn"
+                        android:background="@drawable/square_round_btn"
                         android:backgroundTint="@color/pale_yellow"
                         android:scaleType="fitCenter"
                         app:srcCompat="@drawable/ic_numbertag"/>
@@ -205,14 +205,14 @@
                     android:orientation="vertical">
                     <TextView
                             android:layout_width="250dp"
-                            android:textColor="?attr/group_card_text_color"
+                            android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                         android:singleLine="false"
                         android:text="Date of birth update"
                         android:textSize="18sp"/>
                     <TextView
                             android:layout_width="250dp"
-                            android:textColor="?attr/group_card_text_color"
+                            android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                         android:text="Request date of birth update."
                         android:paddingTop="4dp"
@@ -228,7 +228,7 @@
                     android:layout_width="60dp"
                         android:layout_height="60dp"
                     android:padding="4dp"
-                    android:background="@drawable/square_btn"
+                    android:background="@drawable/square_round_btn"
                     android:backgroundTint="@color/yellow"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/ic_cakeicon"/>
@@ -248,14 +248,14 @@
                         android:orientation="vertical">
                         <TextView
                             android:layout_width="250dp"
-                            android:textColor="?attr/group_card_text_color"
+                            android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                             android:singleLine="false"
                             android:text="Delete account"
                             android:textSize="18sp"/>
                         <TextView
                             android:layout_width="250dp"
-                            android:textColor="?attr/group_card_text_color"
+                            android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                             android:text="Delete your account permanently."
                             android:paddingTop="4dp"
@@ -272,7 +272,7 @@
                         android:layout_height="60dp"
                         android:padding="8dp"
                         app:srcCompat="@drawable/ic_trashico"
-                        android:background="@drawable/square_btn"
+                        android:background="@drawable/square_round_btn"
                         android:backgroundTint="@color/light_red"
                         android:scaleType="fitCenter" />
                 </LinearLayout>
@@ -280,7 +280,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/square_btn"
+            android:background="@drawable/square_round_btn"
             android:backgroundTint="?attr/base_background"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
@@ -315,14 +315,14 @@
                     android:orientation="vertical">
                     <TextView
                             android:layout_width="250dp"
-                            android:textColor="?attr/group_card_text_color"
+                            android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                         android:singleLine="false"
                         android:text="Show notifications"
                         android:textSize="18sp"/>
                     <TextView
                             android:layout_width="250dp"
-                            android:textColor="?attr/group_card_text_color"
+                            android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                         android:text="Notify about upcoming class"
                         android:paddingTop="4dp"
@@ -362,14 +362,14 @@
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="250dp"
-                        android:textColor="?attr/group_card_text_color"
+                        android:textColor="?attr/base_text_color"
                         android:layout_height="wrap_content"
                         android:singleLine="false"
                         android:text="Theme setup"
                         android:textSize="18sp"/>
                     <TextView
                         android:layout_width="250dp"
-                        android:textColor="?attr/group_card_text_color"
+                        android:textColor="?attr/base_text_color"
                         android:layout_height="wrap_content"
                         android:text="Try new themes, including dark theme!"
                         android:paddingTop="4dp"
@@ -385,7 +385,7 @@
                     android:layout_width="60dp"
                         android:layout_height="60dp"
                     android:padding="8dp"
-                    android:background="@drawable/square_btn"
+                    android:background="@drawable/square_round_btn"
                     app:srcCompat="@drawable/ic_looksico"
                     android:backgroundTint="@color/dull_white"
                     android:scaleType="fitCenter" />
@@ -406,14 +406,14 @@
                     <TextView
                         android:id="@+id/timeformattext"
                         android:layout_width="250dp"
-                        android:textColor="?attr/group_card_text_color"
+                        android:textColor="?attr/base_text_color"
                         android:layout_height="wrap_content"
                         android:singleLine="false"
                         android:text="Time format : 24 hours"
                         android:textSize="18sp"/>
                     <TextView
                         android:layout_width="250dp"
-                        android:textColor="?attr/group_card_text_color"
+                        android:textColor="?attr/base_text_color"
                         android:layout_height="wrap_content"
                         android:text="Switch time format in the app."
                         android:paddingTop="4dp"
@@ -442,7 +442,7 @@
                     android:textOn="12"
                     android:thumbTint="@color/white"
                     android:trackTint="@color/blue_grey"
-                    android:track="@drawable/square_btn"
+                    android:track="@drawable/square_round_btn"
                     app:srcCompat="@drawable/ic_mailopen"
                     tools:targetApi="q" />
             </LinearLayout>
@@ -461,14 +461,14 @@
                     android:orientation="vertical">
                     <TextView
                             android:layout_width="250dp"
-                            android:textColor="?attr/group_card_text_color"
+                            android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                         android:singleLine="false"
                         android:text="App update"
                         android:textSize="18sp"/>
                     <TextView
                             android:layout_width="250dp"
-                            android:textColor="?attr/group_card_text_color"
+                            android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                         android:text="Check for app updates."
                         android:paddingTop="4dp"
@@ -484,7 +484,7 @@
                     android:layout_width="60dp"
                         android:layout_height="60dp"
                     android:padding="8dp"
-                    android:background="@drawable/square_btn"
+                    android:background="@drawable/square_round_btn"
                     app:srcCompat="@drawable/ic_clouddownload2"
                     android:backgroundTint="@color/spruce"
                     android:scaleType="fitCenter" />
@@ -506,14 +506,14 @@
                     android:orientation="vertical">
                     <TextView
                             android:layout_width="250dp"
-                            android:textColor="?attr/group_card_text_color"
+                            android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                         android:singleLine="false"
                         android:text="Restart application"
                         android:textSize="18sp"/>
                     <TextView
                             android:layout_width="250dp"
-                            android:textColor="?attr/group_card_text_color"
+                            android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                         android:text="Try restarting  if there's any glitch."
                         android:paddingTop="4dp"
@@ -530,7 +530,7 @@
                         android:layout_height="60dp"
                     android:padding="8dp"
                     app:srcCompat="@drawable/ic_restarticon"
-                    android:background="@drawable/square_btn"
+                    android:background="@drawable/square_round_btn"
                     android:backgroundTint="@color/white"
                     android:scaleType="fitCenter" />
             </LinearLayout>
@@ -538,7 +538,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/square_btn"
+            android:background="@drawable/square_round_btn"
             android:backgroundTint="?attr/base_background"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
@@ -573,14 +573,14 @@
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="250dp"
-                        android:textColor="?attr/group_card_text_color"
+                        android:textColor="?attr/base_text_color"
                         android:layout_height="wrap_content"
                         android:singleLine="false"
                         android:text="Contact developers"
                         android:textSize="18sp"/>
                     <TextView
                         android:layout_width="250dp"
-                        android:textColor="?attr/group_card_text_color"
+                        android:textColor="?attr/base_text_color"
                         android:layout_height="wrap_content"
                         android:text="Feedback? Query? Problems? Need new features? Tell us."
                         android:paddingTop="4dp"
@@ -596,7 +596,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:padding="4dp"
-                    android:background="@drawable/square_btn"
+                    android:background="@drawable/square_round_btn"
                     android:backgroundTint="@color/dull_blue"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/ic_mailopen"/>

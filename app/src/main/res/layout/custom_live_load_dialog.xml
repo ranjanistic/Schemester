@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="12dp"
-        android:background="@drawable/square_btn"
+        android:background="@drawable/square_round_btn"
         android:backgroundTint="?attr/neutral_button_color"
         android:text="Cancel"
         android:textAllCaps="false"

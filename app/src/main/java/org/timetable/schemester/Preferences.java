@@ -214,9 +214,13 @@ public class Preferences extends AppCompatActivity {
                 if (isChecked) {
                     timetext.setText("Time format : 12 hours");
                         storeTimeFormat(12);
+                    Snackbar.make(buttonView,"Time format set to AM/PM.",Snackbar.LENGTH_LONG)
+                            .show();
                 } else {
                     timetext.setText("Time format : 24 hours");
                     storeTimeFormat(24);
+                    Snackbar.make(buttonView,"Time format set to 24 hours.",Snackbar.LENGTH_LONG)
+                            .show();
                 }
             }
         });

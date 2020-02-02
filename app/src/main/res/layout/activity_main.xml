@@ -209,7 +209,7 @@
                     android:paddingBottom="18dp"
                     android:text="@string/period1"
                     android:textColor="?attr/foreground_text_color"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -257,7 +257,7 @@
                     android:paddingBottom="18dp"
                     android:text="@string/period2"
                     android:textColor="?attr/foreground_text_color"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -307,7 +307,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:text="@string/period3"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -357,7 +357,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:text="@string/period4"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -406,7 +406,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:text="@string/period5"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <View
                     android:layout_width="0dp"
@@ -456,7 +456,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:text="@string/period6"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <View
                     android:layout_width="0dp"
@@ -507,7 +507,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:text="@string/period7"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -558,7 +558,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:text="@string/period8"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -609,7 +609,7 @@
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:text="@string/period9"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -654,26 +654,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/full_schedule"
-        android:layout_width="wrap_content"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/square_btn"
-        android:backgroundTint="?attr/action_button_color"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:text="@string/view_full_week_schedule"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="?attr/button_text_color"
-        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintVertical_bias="1"
+        android:translationZ="12dp"
+        android:elevation="12dp"
+        android:outlineAmbientShadowColor="@color/black"
+        android:outlineSpotShadowColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/noclasstext"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <include
+            layout="@layout/bottom_drawer"
+        />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

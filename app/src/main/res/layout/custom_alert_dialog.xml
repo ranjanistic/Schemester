@@ -49,7 +49,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
-        android:background="@drawable/square_btn"
+        android:background="@drawable/square_round_btn"
         android:backgroundTint="?attr/positive_button_color"
         android:gravity="center"
         android:text="Okay"
