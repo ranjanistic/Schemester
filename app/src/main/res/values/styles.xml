@@ -41,6 +41,7 @@
         <item name="neutral_button_color">@color/spruce</item>
         <item name="positive_button_color">@color/blue</item>
         <item name="warning_button_color">@color/dark_red</item>
+        <item name="secondary_background">@color/dull_blue</item>
     </style>
     
     <style name="DarkTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -64,6 +65,7 @@
         <item name="neutral_button_color">@color/spruce</item>
         <item name="positive_button_color">@color/dark_blue</item>
         <item name="warning_button_color">@color/dark_red</item>
+        <item name="secondary_background">@color/dead_blue</item>
     </style>
 
     <style name="BlueLightTheme" parent="AppTheme">

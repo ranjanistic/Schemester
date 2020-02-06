@@ -22,7 +22,7 @@ android:layout_width="match_parent"
     app:layout_constraintTop_toTopOf="parent"
     android:layout_gravity="center_vertical">
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:layout_gravity="center_vertical"
@@ -57,7 +57,7 @@ android:layout_width="match_parent"
                         android:layout_gravity="top|center_horizontal"
                         android:layout_marginBottom="4dp"
                         android:fontFamily="@font/montserrat"
-                        android:text="8:30 to 9:30"
+                        android:text="@string/period1"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
                     <TextView
@@ -68,7 +68,7 @@ android:layout_width="match_parent"
                         android:paddingTop="12dp"
                         android:paddingBottom="12dp"
                         android:singleLine="false"
-                        android:text="Loading..."
+                        android:text="@string/loading"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
                 </LinearLayout>
@@ -98,7 +98,7 @@ android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|center_horizontal"
                         android:fontFamily="@font/montserrat"
-                        android:text="9:30 to 10:30"
+                        android:text="@string/period2"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -110,7 +110,7 @@ android:layout_width="match_parent"
                         android:paddingTop="12dp"
                         android:paddingBottom="12dp"
                         android:singleLine="false"
-                        android:text="Loading..."
+                        android:text="@string/loading"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
                 </LinearLayout>
@@ -141,7 +141,7 @@ android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|center_horizontal"
                         android:fontFamily="@font/montserrat"
-                        android:text="10:30 to 11:30"
+                        android:text="@string/period3"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -154,7 +154,7 @@ android:layout_width="match_parent"
                         android:paddingTop="12dp"
                         android:paddingBottom="12dp"
                         android:singleLine="false"
-                        android:text="Loading..."
+                        android:text="@string/loading"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
                 </LinearLayout>
@@ -184,7 +184,7 @@ android:layout_width="match_parent"
                         android:layout_gravity="top|center_horizontal"
                         android:fontFamily="@font/montserrat"
 
-                        android:text="11:30 to 12:30"
+                        android:text="@string/period4"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -197,7 +197,7 @@ android:layout_width="match_parent"
                         android:paddingTop="12dp"
                         android:paddingBottom="12dp"
                         android:singleLine="false"
-                        android:text="Loading..."
+                        android:text="@string/loading"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
                 </LinearLayout>
@@ -229,7 +229,7 @@ android:layout_width="match_parent"
 
                         android:layout_gravity="top|center_horizontal"
                         android:fontFamily="@font/montserrat"
-                        android:text="12:30 to 13:30"
+                        android:text="@string/period5"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
 
@@ -242,7 +242,7 @@ android:layout_width="match_parent"
                         android:paddingTop="12dp"
                         android:paddingBottom="12dp"
                         android:singleLine="false"
-                        android:text="Loading..."
+                        android:text="@string/loading"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
                 </LinearLayout>
@@ -274,7 +274,7 @@ android:layout_width="match_parent"
                         android:layout_gravity="top|center_horizontal"
                         android:fontFamily="@font/montserrat"
 
-                        android:text="13:30 to 14:30"
+                        android:text="@string/period6"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -286,7 +286,7 @@ android:layout_width="match_parent"
                         android:paddingTop="12dp"
                         android:paddingBottom="12dp"
                         android:singleLine="false"
-                        android:text="Loading..."
+                        android:text="@string/loading"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
                 </LinearLayout>
@@ -318,7 +318,7 @@ android:layout_width="match_parent"
 
                         android:layout_gravity="top|center_horizontal"
                         android:fontFamily="@font/montserrat"
-                        android:text="14:30 to 15:30"
+                        android:text="@string/period7"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -331,7 +331,7 @@ android:layout_width="match_parent"
                         android:paddingTop="12dp"
                         android:paddingBottom="12dp"
                         android:singleLine="false"
-                        android:text="Loading..."
+                        android:text="@string/loading"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
                 </LinearLayout>
@@ -363,7 +363,7 @@ android:layout_width="match_parent"
 
                         android:layout_gravity="top|center_horizontal"
                         android:fontFamily="@font/montserrat"
-                        android:text="15:30 to 16:30"
+                        android:text="@string/period8"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -376,7 +376,7 @@ android:layout_width="match_parent"
                         android:paddingTop="12dp"
                         android:paddingBottom="12dp"
                         android:singleLine="false"
-                        android:text="Loading..."
+                        android:text="@string/loading"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
                 </LinearLayout>
@@ -408,7 +408,7 @@ android:layout_width="match_parent"
 
                         android:layout_gravity="top|center_horizontal"
                         android:fontFamily="@font/montserrat"
-                        android:text="16:30 to 17:30"
+                        android:text="@string/period9"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -421,7 +421,7 @@ android:layout_width="match_parent"
                         android:paddingTop="12dp"
                         android:paddingBottom="12dp"
                         android:singleLine="false"
-                        android:text="Loading..."
+                        android:text="@string/loading"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
                 </LinearLayout>

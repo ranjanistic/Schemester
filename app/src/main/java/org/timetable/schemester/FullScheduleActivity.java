@@ -67,6 +67,8 @@ public class FullScheduleActivity extends AppCompatActivity {
     TextView   c1,c2,c3,c4,c5,c6,c7,c8,c9, p1,p2,p3,p4,p5,p6,p7,p8,p9,email, roll, semester;
     Button m,t,w,th,f, logoutbtn;
     TextView[] p = {p1,p2,p3,p4,p5,p6,p7,p8,p9 };
+    TextView[] c = {c1,c2,c3,c4,c5,c6,c7,c8,c9};
+    String[] pkey = {"p1","p2","p3","p4","p5","p6","p7","p8","p9"};
     Button[] dayBtn = {m,t,w,th,f};
     String[] dayString = {"monday", "tuesday", "wednesday", "thursday", "friday"};
     View settingsview, aboutview;
@@ -114,16 +116,16 @@ public class FullScheduleActivity extends AppCompatActivity {
         p[6] = findViewById(R.id.period7);
         p[7] = findViewById(R.id.period8);
         p[8] = findViewById(R.id.period9);
-
-        c1 = findViewById(R.id.class1);
-        c2 = findViewById(R.id.class2);
-        c3 = findViewById(R.id.class3);
-        c4 = findViewById(R.id.class4);
-        c5 = findViewById(R.id.class5);
-        c6 = findViewById(R.id.class6);
-        c7 = findViewById(R.id.class7);
-        c8 = findViewById(R.id.class8);
-        c9 = findViewById(R.id.class9);
+        
+        c[0] = findViewById(R.id.class1);
+        c[1] = findViewById(R.id.class2);
+        c[2] = findViewById(R.id.class3);
+        c[3] = findViewById(R.id.class4);
+        c[4] = findViewById(R.id.class5);
+        c[5] = findViewById(R.id.class6);
+        c[6] = findViewById(R.id.class7);
+        c[7] = findViewById(R.id.class8);
+        c[8] = findViewById(R.id.class9);
 
         dayBtn[0] = findViewById(R.id.mon);
         dayBtn[1] = findViewById(R.id.tue);
@@ -187,8 +189,10 @@ public class FullScheduleActivity extends AppCompatActivity {
         noticebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent nIntent = new Intent(FullScheduleActivity.this, NoticeBoard.class);
+                Toast.makeText(FullScheduleActivity.this, "Under Construction, will be available soon!", Toast.LENGTH_LONG).show();
+/*                Intent nIntent = new Intent(FullScheduleActivity.this, NoticeBoard.class);
                 startActivity(nIntent);
+ */
             }
         });
 
@@ -196,8 +200,10 @@ public class FullScheduleActivity extends AppCompatActivity {
         chatbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent room = new Intent(FullScheduleActivity.this, ChatRoomActivity.class);
+                Toast.makeText(FullScheduleActivity.this, "Under Construction, will be available soon!", Toast.LENGTH_LONG).show();
+        /*        Intent room = new Intent(FullScheduleActivity.this, ChatRoomActivity.class);
                 startActivity(room);
+         */
             }
         });
 
@@ -248,6 +254,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 aboutview.setVisibility(View.GONE);
                 readDatabase(clg,course,year,dayString[i]);
                 scrollTop();
+                setLoadingTextView();
                 dayBtn[i].setBackgroundResource(R.drawable.leftroundbtnselected);
                 dayBtn[i].setTextColor(getResources().getColor(R.color.blue));
                 while(j<5) {
@@ -266,6 +273,7 @@ public class FullScheduleActivity extends AppCompatActivity {
             public void onClick(View view) {
                 isInternetAvailable();
                 scrollTop();
+                setLoadingTextView();
                 dayBtn[0].setBackgroundResource(R.drawable.leftroundbtnselected);
                 dayBtn[0].setTextColor(getResources().getColor(R.color.blue));
                 dayBtn[1].setBackgroundResource(R.drawable.leftroundbtn);
@@ -287,6 +295,7 @@ public class FullScheduleActivity extends AppCompatActivity {
             public void onClick(View view) {
                 isInternetAvailable();
                 scrollTop();
+                setLoadingTextView();
                 dayBtn[0].setBackgroundResource(R.drawable.leftroundbtn);
                 dayBtn[0].setTextColor(getResources().getColor(R.color.white));
                 dayBtn[1].setBackgroundResource(R.drawable.leftroundbtnselected);
@@ -308,6 +317,7 @@ public class FullScheduleActivity extends AppCompatActivity {
             public void onClick(View view) {
                 isInternetAvailable();
                 scrollTop();
+                setLoadingTextView();
                 dayBtn[0].setBackgroundResource(R.drawable.leftroundbtn);
                 dayBtn[0].setTextColor(getResources().getColor(R.color.white));
                 dayBtn[1].setBackgroundResource(R.drawable.leftroundbtn);
@@ -329,6 +339,7 @@ public class FullScheduleActivity extends AppCompatActivity {
             public void onClick(View view) {
                 isInternetAvailable();
                 scrollTop();
+                setLoadingTextView();
                 dayBtn[0].setBackgroundResource(R.drawable.leftroundbtn);
                 dayBtn[0].setTextColor(getResources().getColor(R.color.white));
                 dayBtn[1].setBackgroundResource(R.drawable.leftroundbtn);
@@ -350,6 +361,7 @@ public class FullScheduleActivity extends AppCompatActivity {
             public void onClick(View view) {
                 isInternetAvailable();
                 scrollTop();
+                setLoadingTextView();
                 dayBtn[0].setBackgroundResource(R.drawable.leftroundbtn);
                 dayBtn[0].setTextColor(getResources().getColor(R.color.white));
                 dayBtn[1].setBackgroundResource(R.drawable.leftroundbtn);
@@ -495,15 +507,11 @@ public class FullScheduleActivity extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult();
                             if (Objects.requireNonNull(document).exists()) {
                                 Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                c1.setText(Objects.requireNonNull(document.get("p1")).toString());
-                                c2.setText(Objects.requireNonNull(document.get("p2")).toString());
-                                c3.setText(Objects.requireNonNull(document.get("p3")).toString());
-                                c4.setText(Objects.requireNonNull(document.get("p4")).toString());
-                                c5.setText(Objects.requireNonNull(document.get("p5")).toString());
-                                c6.setText(Objects.requireNonNull(document.get("p6")).toString());
-                                c7.setText(Objects.requireNonNull(document.get("p7")).toString());
-                                c8.setText(Objects.requireNonNull(document.get("p8")).toString());
-                                c9.setText(Objects.requireNonNull(document.get("p9")).toString());
+                                int i = 0;
+                                while(i<9) {
+                                    c[i].setText(document.getString(pkey[i]));
+                                    i++;
+                                }
                             } else {
                                 Log.d(TAG, "No such document");
                                 Toast.makeText(FullScheduleActivity.this, "Server error. Try reinstalling.", Toast.LENGTH_LONG).show();
@@ -520,10 +528,11 @@ public class FullScheduleActivity extends AppCompatActivity {
             setOnline(false);
             FirebaseAuth.getInstance().signOut();
             Toast.makeText(FullScheduleActivity.this, "Logged out", Toast.LENGTH_LONG).show();
-            Intent i = new Intent(FullScheduleActivity.this, LoginActivity.class);
+            Intent i = new Intent(FullScheduleActivity.this, PositionActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
             startActivity(i);
             overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
+            finish();
         } else {
             Toast.makeText(FullScheduleActivity.this, "Connect to internet", Toast.LENGTH_SHORT).show();
         }
@@ -665,6 +674,13 @@ public class FullScheduleActivity extends AppCompatActivity {
          }
      });
      customDownloadLoadDialog.show();
+ }
+ private void setLoadingTextView() {
+     int i = 0;
+     while (i < 9) {
+         c[i].setText(getResources().getString(R.string.loading));
+         i++;
+     }
  }
 
  private void showPackageAlert(){

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:backgroundTint="?attr/group_card_color"
     android:background="@drawable/toproundview"
@@ -19,6 +18,7 @@
         android:layout_height="wrap_content">
     <ImageButton
         android:id="@+id/drawerarrow"
+        android:contentDescription="@string/drawer_indicator"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:rotation="90"
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/blue"
             android:textSize="18sp"
-            android:text="Full week schedule"/>
+            android:text="@string/full_week_schedule"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/settingTab"
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/blue"
             android:textSize="18sp"
-            android:text="Settings"/>
+            android:text="@string/settings"/>
     </LinearLayout>
     <!--LinearLayout
         android:id="@+id/logoutTab"

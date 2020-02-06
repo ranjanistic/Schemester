@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.content.Context;
@@ -22,6 +23,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +50,8 @@ import static android.content.ContentValues.TAG;
 
 public class Preferences extends AppCompatActivity {
     Switch timeFormatSwitch;
-    ImageButton dobUpdate, emailChange, rollChange, appUpdate, deleteAcc, returnbtn, restarter, themebtn, feedback;
+    LinearLayout dobUpdate, emailChange, rollChange, appUpdate, deleteAcc, restarter, themebtn, feedback;
+    ImageButton returnbtn;
     CustomVerificationDialog customVerificationDialogDeleteAccount, customVerificationDialogEmailChange;
     CustomLoadDialogClass customLoadDialogClass;
     CustomTextDialog customTextDialog;
@@ -172,27 +175,24 @@ public class Preferences extends AppCompatActivity {
         dobUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sent = false;
-                final Snackbar snackbar = Snackbar.make(view, "Send a link to your email address for this?", 5000);
-                snackbar.setAction("Send", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String[] creds = getCredentials();
-                        snackbar.dismiss();
-                        Snackbar.make(view, "Sending...", Snackbar.LENGTH_INDEFINITE)
-                                .show();
-                        if(resetLinkSender(creds[0])){
-                            Snackbar.make(view, "Email has been sent. Check your mailbox.", Snackbar.LENGTH_LONG)
-                                    .show();
-                        } else{
-                            Snackbar.make(view, "A network error occurred.", Snackbar.LENGTH_LONG)
-                                    .show();
+                        if (isNetworkConnected()) {
+                            Snackbar snackbar = Snackbar.make(view, "Send a link to your email address for this?", 5000);
+                            snackbar.setActionTextColor(getResources().getColor(R.color.green));
+                            snackbar.setAction("Send", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Snackbar.make(view, "Sending...", Snackbar.LENGTH_INDEFINITE)
+                                            .show();
+                                    String[] creds = getCredentials();
+                                    resetLinkSender(creds[0]);
+                                }
+                            });
+                            snackbar.show();
+                        } else {
+                                Snackbar.make(view, "A network error occurred.", Snackbar.LENGTH_LONG)
+                                        .show();
                         }
                     }
-                });
-                snackbar.setActionTextColor(getResources().getColor(R.color.green));
-                snackbar.show();
-            }
         });
 
         restarter = findViewById(R.id.restartBtn);
@@ -207,20 +207,20 @@ public class Preferences extends AppCompatActivity {
         timeFormatSwitch = findViewById(R.id.clockTypeSwitch);
         timeFormatSwitch.setChecked(getTimeFormat() == 12);
         if(timeFormatSwitch.isChecked()) {
-            timetext.setText("Time format : 12 hours");
+            timetext.setText(getResources().getString(R.string.time_format_12_hours));
         } else {
-            timetext.setText("Time format : 24 hours");
+            timetext.setText(getResources().getString(R.string.time_format_24_hours));
         }
         timeFormatSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    timetext.setText("Time format : 12 hours");
+                    timetext.setText(getResources().getString(R.string.time_format_12_hours));
                         storeTimeFormat(12);
                     Snackbar.make(buttonView,"Time format set to AM/PM.",Snackbar.LENGTH_LONG)
                             .show();
                 } else {
-                    timetext.setText("Time format : 24 hours");
+                    timetext.setText(getResources().getString(R.string.time_format_24_hours));
                     storeTimeFormat(24);
                     Snackbar.make(buttonView,"Time format set to 24 hours.",Snackbar.LENGTH_LONG)
                             .show();
@@ -245,15 +245,15 @@ public class Preferences extends AppCompatActivity {
         overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
     }
 
-    private boolean resetLinkSender(final String email){
+    private void resetLinkSender(final String email){
         FirebaseAuth.getInstance().sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        sent =  task.isSuccessful();
+                        Snackbar.make(findViewById(R.id.preferencesID), "Email has been sent. Check your mailbox.", Snackbar.LENGTH_LONG)
+                                .show();
                     }
                 });
-        return sent;
     }
     private void authenticate(final String uid, String passphrase, final int taskCode){
         customLoadDialogClass.show();
@@ -530,10 +530,10 @@ public class Preferences extends AppCompatActivity {
                                 if (Objects.requireNonNull(document).exists()) {
                                     Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                     int vcode = Integer.parseInt(document.get("verCode").toString());
-                                    final String vname = document.get("verName").toString();
-                                    final String link = document.get("downlink").toString();
+                                    final String vname = document.getString("verName");
+                                    final String link = document.getString("downlink");
                                     customLoadDialogClass.hide();
-                                    if (vcode != versionCode || !vname.equals(versionName)) {
+                                    if (vcode != versionCode || !Objects.equals(vname, versionName)) {
                                         Toast.makeText(getApplicationContext(), "Update available", Toast.LENGTH_LONG).show();
                                         final CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(Preferences.this, new OnDialogConfirmListener() {
                                             @Override
@@ -548,7 +548,7 @@ public class Preferences extends AppCompatActivity {
                                                                 if(isNetworkConnected()) {
                                                                     File file = new File(Environment.getExternalStorageDirectory() +"/Schemester/org.timetable.schemester-"+vname+".apk");
                                                                     if(file.exists()){
-                                                                        showPackageAlert();
+                                                                        showPackageAlert(vname);
                                                                     } else {
                                                                         downloader(link, vname);
                                                                     }
@@ -572,7 +572,7 @@ public class Preferences extends AppCompatActivity {
                                                 } else {
                                                     File file = new File(Environment.getExternalStorageDirectory() +"/Schemester/org.timetable.schemester-"+vname+".apk");
                                                     if(file.exists()){
-                                                        showPackageAlert();
+                                                        showPackageAlert(vname);
                                                     } else {
                                                         downloader(link,vname);
                                                     }
@@ -622,7 +622,7 @@ public class Preferences extends AppCompatActivity {
             @Override
             public void afterFinish(Boolean isCompleted) {
                 if (isCompleted) {
-                    showPackageAlert();
+                    showPackageAlert(version);
                 } else {
                     customLoadDialogClass.hide();
                     Toast.makeText(getApplicationContext(), "Download Interrupted", Toast.LENGTH_SHORT).show();
@@ -632,10 +632,15 @@ public class Preferences extends AppCompatActivity {
         customDownloadLoadDialog.show();
     }
 
-    private void showPackageAlert(){
+    private void showPackageAlert(final String newVname){
         CustomAlertDialog downloadFinishAlert = new CustomAlertDialog(Preferences.this, new OnDialogAlertListener() {
             @Override
-            public void onDismiss() {
+            public void onDismiss() {/*
+                File apkFile = new File(Environment.getExternalStorageDirectory() +"/Schemester/org.timetable.schemester-"+newVname+".apk");
+                Uri uri = FileProvider.getUriForFile(Preferences.this,BuildConfig.APPLICATION_ID + ".provider",apkFile);
+                Intent web = new Intent(Intent.ACTION_VIEW).setDataAndType(uri, "application/vnd.android.package-archive");
+                web.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(web);*/
             }
             @Override
             public String onCallText() {
@@ -643,7 +648,7 @@ public class Preferences extends AppCompatActivity {
             }
             @Override
             public String onCallSub() {
-                return "Latest version is downloaded. \n\nGo to File manager > Internal Storage > Schemester\n\nHere you'll find the latest package to install.\n\n(Delete that file if it is causing problems)";
+                return "Latest version is downloaded. \n\nGo to File manager > Internal Storage > Schemester >\n\nHere you'll find the latest package to install.\n\n(Delete that file if it is causing problems)";
             }
         });
         downloadFinishAlert.show();

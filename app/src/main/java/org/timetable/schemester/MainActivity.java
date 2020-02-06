@@ -148,17 +148,7 @@ public class MainActivity extends AppCompatActivity{
         p[7] = findViewById(R.id.period8);
         p[8] = findViewById(R.id.period9);
 
-/*
-        c1 = findViewById(R.id.class1);
-        c2 = findViewById(R.id.class2);
-        c3 = findViewById(R.id.class3);
-        c4 = findViewById(R.id.class4);
-        c5 = findViewById(R.id.class5);
-        c6 = findViewById(R.id.class6);
-        c7 = findViewById(R.id.class7);
-        c8 = findViewById(R.id.class8);
-        c9 = findViewById(R.id.class9);
-*/   c[0] = findViewById(R.id.class1);
+       c[0] = findViewById(R.id.class1);
         c[1] = findViewById(R.id.class2);
         c[2] = findViewById(R.id.class3);
         c[3] = findViewById(R.id.class4);
@@ -562,7 +552,7 @@ public class MainActivity extends AppCompatActivity{
                                     Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                     int i = 0;
                                     while(i<9) {
-                                        c[i].setText(document.get(pkey[i]).toString());
+                                        c[i].setText(document.getString(pkey[i]));
                                         i++;
                                     }
                                 } else {
@@ -623,13 +613,6 @@ public class MainActivity extends AppCompatActivity{
         Log.i ("isMyServiceRunning?", false+"");
         return false;
     }
-/*
-    @Override
-    protected void onDestroy() {
-        stopService(mServiceIntent);
-        Log.i("MAINACT", "onDestroy!");
-        super.onDestroy();
-    }*/
     private void createNotification(String className){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "NewPeriod")
                 .setSmallIcon(R.drawable.ic_icon)

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/preferencesID"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -27,7 +28,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center"
-    android:padding="18dp"
+    android:padding="14dp"
     android:background="@drawable/bottomroundview"
     android:backgroundTint="?attr/base_background"
     app:layout_constraintBottom_toBottomOf="parent"
@@ -57,7 +58,7 @@
         android:textSize="28sp"
         android:textStyle="bold"
         android:layout_gravity="center"
-        android:text="Settings" />
+        android:text="@string/settings" />
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -85,7 +86,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/square_round_btn"
+                android:background="@drawable/roundcontainerbox"
                 android:backgroundTint="?attr/base_background"
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="12dp"
@@ -101,15 +102,18 @@
                     android:layout_height="wrap_content"
                     android:padding="12dp"
                     android:layout_gravity="center_horizontal"
-                    android:text="Account Options"
+                    android:text="@string/account_options"
                     android:textColor="@color/blue"
                     android:textStyle="bold"
                     android:textSize="20sp"/>
                 <LinearLayout
+                    android:id="@+id/changeEmailIdBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
                     android:gravity="center"
+                    android:background="@drawable/square_edgy_btn"
+                    android:backgroundTint="@android:color/transparent"
                     android:layout_gravity="center_horizontal"
                     android:orientation="horizontal">
                     <LinearLayout
@@ -123,13 +127,13 @@
                             android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                             android:singleLine="false"
-                            android:text="Change email ID"
+                            android:text="@string/change_email_id"
                             android:textSize="18sp"/>
                         <TextView
                             android:layout_width="250dp"
                             android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
-                            android:text="Get a link to change email ID."
+                            android:text="@string/get_a_link_to_change_email_id"
                             android:paddingTop="4dp"
                             android:singleLine="false"
                             android:textSize="14sp"/>
@@ -138,18 +142,18 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_weight="1" />
-                    <ImageButton
-                        android:id="@+id/changeEmailIdBtn"
+                    <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:background="@drawable/square_round_btn"
-                        android:backgroundTint="@color/white"
                         android:scaleType="fitCenter"
                         app:srcCompat="@drawable/ic_attherate"/>
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/rollChangebtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/square_edgy_btn"
+                    android:backgroundTint="@android:color/transparent"
                     android:padding="12dp"
                     android:gravity="center"
                     android:layout_gravity="center_horizontal"
@@ -165,13 +169,13 @@
                             android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                             android:singleLine="false"
-                            android:text="Change roll number"
+                            android:text="@string/change_roll_number"
                             android:textSize="18sp"/>
                         <TextView
                             android:layout_width="250dp"
                             android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
-                            android:text="Change roll number here."
+                            android:text="@string/change_roll_number_here"
                             android:paddingTop="4dp"
                             android:singleLine="false"
                             android:textSize="14sp"/>
@@ -180,21 +184,21 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_weight="1" />
-                    <ImageButton
-                        android:id="@+id/rollChangebtn"
+                    <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:padding="8dp"
-                        android:background="@drawable/square_round_btn"
-                        android:backgroundTint="@color/pale_yellow"
                         android:scaleType="fitCenter"
                         app:srcCompat="@drawable/ic_numbertag"/>
                 </LinearLayout>
             <LinearLayout
+                android:id="@+id/dobupdatebtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:gravity="center"
+                android:background="@drawable/square_edgy_btn"
+                android:backgroundTint="@android:color/transparent"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal">
                 <LinearLayout
@@ -208,13 +212,13 @@
                             android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                         android:singleLine="false"
-                        android:text="Date of birth update"
+                        android:text="@string/date_of_birth_update"
                         android:textSize="18sp"/>
                     <TextView
                             android:layout_width="250dp"
                             android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
-                        android:text="Request date of birth update."
+                        android:text="@string/request_date_of_birth_update"
                         android:paddingTop="4dp"
                         android:singleLine="false"
                         android:textSize="14sp"/>
@@ -223,21 +227,22 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
-                <ImageButton
-                    android:id="@+id/dobupdatebtn"
+                <ImageView
                     android:layout_width="60dp"
                         android:layout_height="60dp"
                     android:padding="4dp"
-                    android:background="@drawable/square_round_btn"
                     android:backgroundTint="@color/yellow"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/ic_cakeicon"/>
             </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/accountDelete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
                     android:gravity="center"
+                    android:background="@drawable/square_edgy_btn"
+                    android:backgroundTint="@android:color/transparent"
                     android:layout_gravity="center_horizontal"
                     android:orientation="horizontal">
                     <LinearLayout
@@ -251,13 +256,13 @@
                             android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                             android:singleLine="false"
-                            android:text="Delete account"
+                            android:text="@string/delete_account"
                             android:textSize="18sp"/>
                         <TextView
                             android:layout_width="250dp"
                             android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
-                            android:text="Delete your account permanently."
+                            android:text="@string/delete_your_account_permanently"
                             android:paddingTop="4dp"
                             android:singleLine="false"
                             android:textSize="14sp"/>
@@ -266,21 +271,19 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_weight="1" />
-                    <ImageButton
-                        android:id="@+id/accountDelete"
+                    <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:padding="8dp"
                         app:srcCompat="@drawable/ic_trashico"
-                        android:background="@drawable/square_round_btn"
-                        android:backgroundTint="@color/light_red"
+                        
                         android:scaleType="fitCenter" />
                 </LinearLayout>
             </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/square_round_btn"
+            android:background="@drawable/roundcontainerbox"
             android:backgroundTint="?attr/base_background"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
@@ -295,63 +298,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
-                android:text="App Options"
+                android:text="@string/app_options"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/blue"
                 android:textStyle="bold"
                 android:textSize="20sp"/>
-            <!--LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingEnd="8dp"
-                    android:paddingStart="0dp"
-                    android:orientation="vertical">
-                    <TextView
-                            android:layout_width="250dp"
-                            android:textColor="?attr/base_text_color"
-                            android:layout_height="wrap_content"
-                        android:singleLine="false"
-                        android:text="Show notifications"
-                        android:textSize="18sp"/>
-                    <TextView
-                            android:layout_width="250dp"
-                            android:textColor="?attr/base_text_color"
-                            android:layout_height="wrap_content"
-                        android:text="Notify about upcoming class"
-                        android:paddingTop="4dp"
-                        android:singleLine="false"
-                        android:textSize="14sp"/>
-                </LinearLayout>
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-                <Switch
-                    android:layout_width="60dp"
-                        android:layout_height="60dp"
-                    android:layout_gravity="center"
-                    android:buttonTint="@color/blue"
-                    android:checked="false"
-                    android:foregroundGravity="center"
-                    android:gravity="center"
-                    android:thumbTint="@color/blue"
-                    android:trackTint="@color/spruce"
-                    tools:targetApi="p" />
-            </LinearLayout-->
-
             <LinearLayout
+                android:id="@+id/themeChangeBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:gravity="center"
+                android:background="@drawable/square_edgy_btn"
+                android:backgroundTint="@android:color/transparent"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal">
                 <LinearLayout
@@ -365,13 +324,13 @@
                         android:textColor="?attr/base_text_color"
                         android:layout_height="wrap_content"
                         android:singleLine="false"
-                        android:text="Theme setup"
+                        android:text="@string/theme_setup"
                         android:textSize="18sp"/>
                     <TextView
                         android:layout_width="250dp"
                         android:textColor="?attr/base_text_color"
                         android:layout_height="wrap_content"
-                        android:text="Try new themes, including dark theme!"
+                        android:text="@string/try_new_themes_including_dark_theme"
                         android:paddingTop="4dp"
                         android:singleLine="false"
                         android:textSize="14sp"/>
@@ -380,14 +339,11 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
-                <ImageButton
-                    android:id="@+id/themeChangeBtn"
+                <ImageView
                     android:layout_width="60dp"
                         android:layout_height="60dp"
                     android:padding="8dp"
-                    android:background="@drawable/square_round_btn"
                     app:srcCompat="@drawable/ic_looksico"
-                    android:backgroundTint="@color/dull_white"
                     android:scaleType="fitCenter" />
             </LinearLayout>
             <LinearLayout
@@ -409,13 +365,13 @@
                         android:textColor="?attr/base_text_color"
                         android:layout_height="wrap_content"
                         android:singleLine="false"
-                        android:text="Time format : 24 hours"
+                        android:text="@string/time_format_24_hours"
                         android:textSize="18sp"/>
                     <TextView
                         android:layout_width="250dp"
                         android:textColor="?attr/base_text_color"
                         android:layout_height="wrap_content"
-                        android:text="Switch time format in the app."
+                        android:text="@string/switch_time_format_in_the_app"
                         android:paddingTop="4dp"
                         android:singleLine="false"
                         android:textSize="14sp"/>
@@ -438,19 +394,21 @@
                     android:splitTrack="false"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textOff="24"
-                    android:textOn="12"
+                    android:textOff="@string/_24"
+                    android:textOn="@string/_12"
                     android:thumbTint="@color/white"
                     android:trackTint="@color/blue_grey"
                     android:track="@drawable/square_round_btn"
-                    app:srcCompat="@drawable/ic_mailopen"
                     tools:targetApi="q" />
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/appUpdateBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:gravity="center"
+                android:background="@drawable/square_edgy_btn"
+                android:backgroundTint="@android:color/transparent"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal">
                 <LinearLayout
@@ -464,13 +422,13 @@
                             android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                         android:singleLine="false"
-                        android:text="App update"
+                        android:text="@string/app_update"
                         android:textSize="18sp"/>
                     <TextView
                             android:layout_width="250dp"
                             android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
-                        android:text="Check for app updates."
+                        android:text="@string/check_for_app_updates"
                         android:paddingTop="4dp"
                         android:singleLine="false"
                         android:textSize="14sp"/>
@@ -479,23 +437,24 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
-                <ImageButton
-                    android:id="@+id/appUpdateBtn"
+                <ImageView
                     android:layout_width="60dp"
                         android:layout_height="60dp"
                     android:padding="8dp"
-                    android:background="@drawable/square_round_btn"
+                    
                     app:srcCompat="@drawable/ic_clouddownload2"
-                    android:backgroundTint="@color/spruce"
                     android:scaleType="fitCenter" />
             </LinearLayout>
             
 
             <LinearLayout
+                android:id="@+id/restartBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:gravity="center"
+                android:background="@drawable/square_edgy_btn"
+                android:backgroundTint="@android:color/transparent"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal">
                 <LinearLayout
@@ -509,13 +468,13 @@
                             android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                         android:singleLine="false"
-                        android:text="Restart application"
+                        android:text="@string/restart_application"
                         android:textSize="18sp"/>
                     <TextView
                             android:layout_width="250dp"
                             android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
-                        android:text="Try restarting  if there's any glitch."
+                        android:text="@string/try_restarting_if_there_s_any_glitch"
                         android:paddingTop="4dp"
                         android:singleLine="false"
                         android:textSize="14sp"/>
@@ -524,21 +483,18 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
-                <ImageButton
-                    android:id="@+id/restartBtn"
+                <ImageView
                     android:layout_width="60dp"
                         android:layout_height="60dp"
                     android:padding="8dp"
                     app:srcCompat="@drawable/ic_restarticon"
-                    android:background="@drawable/square_round_btn"
-                    android:backgroundTint="@color/white"
                     android:scaleType="fitCenter" />
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/square_round_btn"
+            android:background="@drawable/roundcontainerbox"
             android:backgroundTint="?attr/base_background"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
@@ -554,15 +510,18 @@
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:layout_gravity="center_horizontal"
-                android:text="Developer options"
+                android:text="@string/developer_options"
                 android:textColor="@color/blue"
                 android:textStyle="bold"
                 android:textSize="20sp"/>
             <LinearLayout
+                android:id="@+id/feedbackmailbtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:gravity="center"
+                android:background="@drawable/square_edgy_btn"
+                android:backgroundTint="@android:color/transparent"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal">
                 <LinearLayout
@@ -576,13 +535,13 @@
                         android:textColor="?attr/base_text_color"
                         android:layout_height="wrap_content"
                         android:singleLine="false"
-                        android:text="Contact developers"
+                        android:text="@string/contact_developers"
                         android:textSize="18sp"/>
                     <TextView
                         android:layout_width="250dp"
                         android:textColor="?attr/base_text_color"
                         android:layout_height="wrap_content"
-                        android:text="Feedback? Query? Problems? Need new features? Tell us."
+                        android:text="@string/feedback_query_problems_need_new_features_tell_us"
                         android:paddingTop="4dp"
                         android:singleLine="false"
                         android:textSize="14sp"/>
@@ -591,12 +550,11 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
-                <ImageButton
-                    android:id="@+id/feedbackmailbtn"
+                <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:padding="4dp"
-                    android:background="@drawable/square_round_btn"
+                    
                     android:backgroundTint="@color/dull_blue"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/ic_mailopen"/>

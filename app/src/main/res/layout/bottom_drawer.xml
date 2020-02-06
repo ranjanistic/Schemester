@@ -14,12 +14,13 @@
         android:id="@+id/drawerarrowHolder"
         android:layout_width="match_parent"
         android:gravity="center"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:layout_height="wrap_content">
     <ImageButton
         android:id="@+id/drawerarrow"
         android:layout_width="30dp"
+        android:contentDescription="@string/drawer_indicator"
         android:layout_height="30dp"
         android:rotation="90"
         android:background="@drawable/ic_halfarrow"
@@ -43,7 +44,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/blue"
             android:textSize="18sp"
-            android:text="View full week schedule"/>
+            android:text="@string/view_full_week_schedule"/>
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -51,6 +52,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/full_schedule_image"
             android:backgroundTint="?attr/group_card_text_color"
             android:foregroundTint="?attr/group_card_text_color"
             android:background="@drawable/ic_menuactionicon"/>
@@ -71,7 +73,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/blue"
             android:textSize="18sp"
-            android:text="Settings"/>
+            android:text="@string/settings"/>
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -79,6 +81,7 @@
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:contentDescription="@string/open_settings_button"
             app:srcCompat="@drawable/setting_large"/>
     </LinearLayout>
     <!--LinearLayout

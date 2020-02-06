@@ -16,7 +16,7 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        createNotificationChannel();
+        //createNotificationChannel();
             if(user!=null) {
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);

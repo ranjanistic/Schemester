@@ -9,7 +9,7 @@
       android:strokeLineJoin="miter"
       android:strokeWidth="0"
       android:fillColor="#4d4d4d"
-      android:fillAlpha="0.13793102"
+      android:fillAlpha="0"
       android:strokeColor="#2a2aff"
       android:fillType="nonZero"
       android:strokeLineCap="round"/>

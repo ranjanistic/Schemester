@@ -6,6 +6,7 @@
         <attr name="base_text_color" format="color"/>
         <attr name="foreground_text_color" format="color"/>
         <attr name="group_card_color" format="color"/>
+        <attr name="secondary_background" format="color"/>
         <attr name="group_card_text_color" format="color"/>
         <attr name="heading_text_color" format="color"/>
         <attr name="action_button_color" format="color"/>

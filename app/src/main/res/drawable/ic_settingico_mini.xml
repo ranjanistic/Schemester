@@ -16,7 +16,7 @@
         android:pathData="M75.242,75.862m-50.518,0a50.518,50.518 0,1 1,101.037 0a50.518,50.518 0,1 1,-101.037 0"
         android:strokeAlpha="0" android:strokeColor="#666666"
         android:strokeLineCap="round" android:strokeLineJoin="miter" android:strokeWidth="0"/>
-    <path android:fillAlpha="1" android:fillColor="#4444dd"
+    <path android:fillAlpha="1" android:fillColor="#1f618d"
         android:fillType="nonZero"
         android:pathData="M75.038,76.863m-35.025,0a35.025,35.025 0,1 1,70.05 0a35.025,35.025 0,1 1,-70.05 0"
         android:strokeAlpha="0" android:strokeColor="#fff"

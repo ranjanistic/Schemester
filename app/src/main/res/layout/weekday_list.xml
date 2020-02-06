@@ -26,7 +26,7 @@
         android:layout_marginBottom="22dp"
         android:textColor="?attr/button_text_color"
         android:textAllCaps="false"
-        android:text="Mon"/>
+        android:text="@string/mon"/>
 
     <Button
         android:id="@+id/tue"
@@ -39,7 +39,7 @@
         android:paddingTop="8dp"
         android:paddingEnd="4dp"
         android:paddingBottom="8dp"
-        android:text="Tue"
+        android:text="@string/tue"
         android:textAllCaps="false"
         android:textColor="?attr/button_text_color"
         android:textSize="16sp" />
@@ -58,7 +58,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginBottom="22dp"
         android:textColor="?attr/button_text_color"
-        android:text="Wed"/>
+        android:text="@string/wed"/>
     <Button
         android:id="@+id/thu"
         android:layout_width="wrap_content"
@@ -74,7 +74,7 @@
         android:layout_marginBottom="22dp"
         android:textColor="?attr/button_text_color"
         android:textAllCaps="false"
-        android:text="Thu"/>
+        android:text="@string/thu"/>
     <Button
         android:id="@+id/fri"
         android:layout_width="wrap_content"
@@ -90,21 +90,23 @@
         android:layout_marginBottom="22dp"
         android:textColor="?attr/button_text_color"
         android:textAllCaps="false"
-        android:text="Fri"/>
+        android:text="@string/fri"/>
     <ImageButton
         android:id="@+id/settingbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/setting_button"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
         android:paddingStart="22dp"
         android:paddingEnd="22dp"
         android:layout_marginBottom="22dp"
         android:background="@drawable/leftroundbtn"
-        android:backgroundTint="@color/dull_blue"
+        android:backgroundTint="?attr/secondary_background"
         app:srcCompat="@drawable/ic_settingico_mini" />
     <ImageButton
         android:id="@+id/aboutbtn"
+        android:contentDescription="@string/info_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="12dp"

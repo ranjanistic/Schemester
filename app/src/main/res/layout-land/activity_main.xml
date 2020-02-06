@@ -11,6 +11,10 @@
         android:id="@+id/mainLinearlayoutLandscape"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:orientation="horizontal">
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/linearLayout"
@@ -31,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_gravity="start|center_vertical"
-                    android:gravity="center_horizontal"
+                    android:gravity="center"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/linearLayout"
@@ -68,6 +72,8 @@
                         android:id="@+id/present_date"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginBottom="18dp"
                         android:layout_gravity="center"
                         android:background="@drawable/round_btn"
                         android:backgroundTint="@color/colorAccent"

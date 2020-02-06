@@ -3,7 +3,6 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/roundcontainerbox"
     android:backgroundTint="?attr/base_background"
     android:paddingBottom="12dp"
@@ -27,7 +26,7 @@
             android:layout_marginTop="40dp"
             android:layout_marginEnd="30dp"
             android:layout_marginStart="30dp"
-            android:text="Verification required"
+            android:text="@string/verification_required"
             android:textColor="?attr/base_text_color"
             android:padding="12dp"
             android:textSize="20sp"
@@ -60,7 +59,7 @@
             android:paddingEnd="12dp"
             android:backgroundTint="@color/blue"
             android:inputType="textEmailAddress"
-            android:hint="Email ID"/>
+            android:hint="@string/email_id"/>
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:gravity="center"
@@ -83,7 +82,7 @@
             android:paddingEnd="12dp"
             android:textSize="18sp"
             android:inputType="number"
-            android:hint="DDMMYYYY"/>
+            android:hint="@string/ddmmyyyy"/>
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
@@ -102,11 +101,12 @@
             android:layout_marginEnd="12dp"
             android:background="@drawable/square_round_btn"
             android:backgroundTint="?attr/warning_button_color"
+            style="?attr/buttonBarStyle"
             android:clickable="true"
             android:focusable="true"
             android:padding="12dp"
             android:textStyle="bold"
-            android:text="Proceed"
+            android:text="@string/proceed"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="?attr/button_text_color" />
@@ -117,11 +117,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:background="@drawable/square_round_btn"
+            style="?attr/buttonBarStyle"
             android:backgroundTint="?attr/neutral_button_color"
             android:clickable="true"
             android:focusable="true"
             android:padding="12dp"
-            android:text="Cancel"
+            android:text="@string/cancel"
             android:textStyle="bold"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
