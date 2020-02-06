@@ -669,6 +669,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <include
+
             layout="@layout/bottom_drawer"
         />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

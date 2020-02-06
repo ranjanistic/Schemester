@@ -36,8 +36,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
@@ -274,6 +277,7 @@ public class Preferences extends AppCompatActivity {
                                     @Override
                                     public void onApply(Boolean confirm) {
                                       if(confirm){
+                                          db.collection("userbase").document(getStoredEmail()).delete();
                                           deleteUser();
                                       } else {
                                           customLoadDialogClass.hide();
@@ -285,7 +289,7 @@ public class Preferences extends AppCompatActivity {
                                     }
                                     @Override
                                     public String onCallSub() {
-                                        return "You cannot recover an account once it is deleted. You'll need to create a new one after that. \n\nConfirm to delete account \'"+uid+"\'?";
+                                        return "You cannot recover an account once it is deleted. All of your personal data will be deleted. You'll need to create a new one after that. \n\nConfirm to delete account \'"+uid+"\'?";
                                     }
                                 });
                                 customConfirmDialogClass.setCanceledOnTouchOutside(false);
@@ -303,25 +307,38 @@ public class Preferences extends AppCompatActivity {
     }
     private void deleteUser(){
         customLoadDialogClass.show();
-        user.delete()
-                .addOnCompleteListener (new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            storeLoginStatus(false);
-                            customLoadDialogClass.hide();
-                            Toast.makeText(Preferences.this, "Your account was deleted permanently.", Toast.LENGTH_SHORT).show();
-                            Intent i=new Intent(Preferences.this, LoginActivity.class);
-                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // To clean up all activities
-                            startActivity(i);
-                            overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
-                        } else {
-                            customLoadDialogClass.hide();
-                            Toast.makeText(Preferences.this, "Network problem maybe?", Toast.LENGTH_SHORT).show();
+        if(isNetworkConnected()) {
+            user.delete()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                storeLoginStatus(false);
+                                customLoadDialogClass.hide();
+                                Toast.makeText(Preferences.this, "Your account was deleted permanently.", Toast.LENGTH_SHORT).show();
+                                Intent i = new Intent(Preferences.this, LoginActivity.class);
+                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // To clean up all activities
+                                startActivity(i);
+                                overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
+                            } else {
+                                customLoadDialogClass.hide();
+                                Toast.makeText(Preferences.this, "Network problem maybe?", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+        } else {
+            customLoadDialogClass.hide();
+            Toast.makeText(getApplicationContext(), "Network problem?", Toast.LENGTH_LONG).show();
+        }
     }
+
+    private String getStoredEmail(){
+        String cred;
+        SharedPreferences mSharedPreferences = getSharedPreferences("credentials", MODE_PRIVATE);
+        cred =  mSharedPreferences.getString("email", "");
+        return cred;
+    }
+
     String newMail;
     private void updateEmail(){
         customLoadDialogClass.hide();
@@ -406,6 +423,7 @@ public class Preferences extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
+                                    migrateDataAtEmailChange(getStoredEmail(), newMail);
                                     customLoadDialogClass.hide();
                                     storeCredentials(newMail,"");
                                     setAlert("Email successfully changed","Your new login ID aka email ID is \'"+updatemail+"\'. You'll need to login again with new email ID.");
@@ -430,6 +448,35 @@ public class Preferences extends AppCompatActivity {
         });
         customConfirmDialogClass.setCanceledOnTouchOutside(false);
         customConfirmDialogClass.show();
+    }
+
+    private void migrateDataAtEmailChange(final String migrateFrom, final String migrateTo) {
+        db.collection("userbase").document(migrateFrom)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            String def = document.getString("definition");
+                            Map<String, Object> statusData = new HashMap<>();
+                            statusData.put("definition", readUserPosition());
+                            db.collection("userbase").document(migrateTo)
+                                    .set(statusData, SetOptions.merge());
+                            db.collection("userbase").document(migrateFrom).delete();
+                            return;
+                        } else {
+                            setEmailIfConfirmed("Failed to migrate", "Existing data failed to migrate, hence email ID was not updated. \nCheck your connection and try again.",migrateFrom);
+                            return;
+                        }
+                    }
+                });
+
+    }
+
+    private String readUserPosition(){
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("userDefinition", MODE_PRIVATE);
+        return mSharedPreferences.getString("position", "");
     }
 
     private void setAlert(final String head, final String body){
@@ -656,12 +703,12 @@ public class Preferences extends AppCompatActivity {
     public void setAppTheme(int code) {
         switch (code) {
             case 101:
-                setTheme(R.style.AppTheme);
+                setTheme(R.style.BlueWhiteThemeLight);
                 break;
             case 102:
-                setTheme(R.style.DarkTheme);
+                setTheme(R.style.BlueWhiteThemeDark);
                 break;
-            default:setTheme(R.style.AppTheme);
+            default:setTheme(R.style.BlueWhiteThemeLight);
         }
     }
     private int getThemeStatus() {

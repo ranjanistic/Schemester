@@ -15,9 +15,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".NoticeBoard"></activity>
-        <activity android:name=".Preferences"></activity>
-        <activity android:name=".FullScheduleActivity" />
+        <activity android:name=".ChatRoomActivity"
+            android:theme="@style/BlueLightTheme"/>
+        <activity
+            android:name=".PositionActivity"
+            android:theme="@style/BlueLightTheme" />
+        <activity android:name=".NoticeBoard"
+            android:theme="@style/BlueWhiteThemeLight"/>
+        <activity
+            android:name=".Preferences"
+            android:theme="@style/BlueWhiteThemeLight" />
+        <activity
+            android:name=".FullScheduleActivity"
+            android:theme="@style/BlueLightTheme" />
         <activity
             android:name=".Splash"
             android:theme="@style/splashTheme">
@@ -27,7 +37,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/BlueLightTheme" />
         <activity android:name=".MainActivity" />
 
         <meta-data

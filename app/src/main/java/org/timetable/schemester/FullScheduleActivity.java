@@ -40,6 +40,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 import com.google.j2objc.annotations.ObjectiveCName;
 
 import java.io.BufferedInputStream;
@@ -55,6 +56,8 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -72,6 +75,7 @@ public class FullScheduleActivity extends AppCompatActivity {
     NestedScrollView dayschedulePortrait;
     HorizontalScrollView horizontalScrollView;
     ScrollView scrollView;
+    ImageButton chatbtn;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     CustomLoadDialogClass customLoadDialogClass;
     CustomDownloadLoadDialog customDownloadLoadDialog;
@@ -187,6 +191,16 @@ public class FullScheduleActivity extends AppCompatActivity {
                 startActivity(nIntent);
             }
         });
+
+        chatbtn = findViewById(R.id.chatButton);
+        chatbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent room = new Intent(FullScheduleActivity.this, ChatRoomActivity.class);
+                startActivity(room);
+            }
+        });
+
         customLoadDialogClass = new CustomLoadDialogClass(this, new OnDialogLoadListener() {
             @Override
             public void onLoad() {
@@ -459,7 +473,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                             }
                         } else {
                             Log.d(TAG, "Failed to receive data", task.getException());
-                            Toast.makeText(FullScheduleActivity.this, "Please restart.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(FullScheduleActivity.this, "Connect to internet for latest details.", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -502,12 +516,24 @@ public class FullScheduleActivity extends AppCompatActivity {
                 });
     }
     private void logOut(){
-        FirebaseAuth.getInstance().signOut();
-        Toast.makeText(FullScheduleActivity.this, "Logged out", Toast.LENGTH_LONG).show();
-        Intent i=new Intent(FullScheduleActivity.this, LoginActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); // To clean up all activities
-        startActivity(i);
-        overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
+        if(isNetworkConnected()) {
+            setOnline(false);
+            FirebaseAuth.getInstance().signOut();
+            Toast.makeText(FullScheduleActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+            Intent i = new Intent(FullScheduleActivity.this, LoginActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
+            startActivity(i);
+            overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
+        } else {
+            Toast.makeText(FullScheduleActivity.this, "Connect to internet", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void setOnline(Boolean status){
+        Map<String, Object> data = new HashMap<>();
+        data.put("active", status);
+        db.collection("userbase").document(email.getText().toString())
+                .set(data, SetOptions.merge());
     }
 
     private void storeLoginStatus(Boolean logged){
@@ -673,12 +699,12 @@ private void requestStoragePermission(){
     public void setAppTheme(int code) {
         switch (code) {
             case 101:
-                setTheme(R.style.AppTheme);
+                setTheme(R.style.BlueLightTheme);
                 break;
             case 102:
-                setTheme(R.style.DarkTheme);
+                setTheme(R.style.BlueDarkTheme);
                 break;
-            default:setTheme(R.style.AppTheme);
+            default:setTheme(R.style.BlueLightTheme);
         }
     }
     private int getThemeStatus() {

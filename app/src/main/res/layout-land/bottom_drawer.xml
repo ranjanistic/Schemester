@@ -5,14 +5,14 @@
     android:orientation="vertical"
     android:backgroundTint="?attr/group_card_color"
     android:background="@drawable/toproundview"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
+    android:gravity="center"
     app:layout_behavior="@string/bottom_sheet_behavior"
     android:layout_height="wrap_content"
-    android:id="@+id/bottom_drawer"
-    >
+    android:id="@+id/bottom_drawer">
     <LinearLayout
         android:id="@+id/drawerarrowHolder"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:gravity="center"
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
@@ -28,7 +28,7 @@
     </LinearLayout>
     <LinearLayout
         android:id="@+id/fullScheduleTab"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
         android:gravity="center_vertical"
@@ -43,17 +43,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/blue"
             android:textSize="18sp"
-            android:text="View full week schedule"/>
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="?attr/group_card_text_color"
-            android:foregroundTint="?attr/group_card_text_color"
-            android:background="@drawable/ic_menuactionicon"/>
+            android:text="Full week schedule"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/settingTab"
@@ -61,7 +51,7 @@
         android:clickable="true"
         android:focusable="true"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:background="@drawable/square_edgy_btn"
         android:padding="16dp"
         android:backgroundTint="@android:color/transparent"
@@ -72,18 +62,10 @@
             android:textColor="@color/blue"
             android:textSize="18sp"
             android:text="Settings"/>
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:srcCompat="@drawable/setting_large"/>
     </LinearLayout>
     <!--LinearLayout
         android:id="@+id/logoutTab"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:background="@drawable/square_edgy_btn"
@@ -99,10 +81,13 @@
             android:textSize="18sp"
             android:text="Log Out"/>
         <View
+android:visibility="gone"
+
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1"/>
         <ImageView
+android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="?attr/group_card_text_color"

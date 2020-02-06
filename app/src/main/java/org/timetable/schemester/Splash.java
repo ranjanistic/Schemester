@@ -16,7 +16,6 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setAppTheme(getThemeStatus());
         createNotificationChannel();
             if(user!=null) {
                 Intent intent = new Intent(this, MainActivity.class);
@@ -24,12 +23,24 @@ public class Splash extends AppCompatActivity {
                 overridePendingTransition(R.anim.enter_from_top, R.anim.exit_from_bottom);
                 finish();
             } else {
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.enter_from_top, R.anim.exit_from_bottom);
-                finish();
+                if(getLoginStatus()){
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.enter_from_top, R.anim.exit_from_bottom);
+                    finish();
+                } else {
+                    Intent intent = new Intent(this, PositionActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.enter_from_top, R.anim.exit_from_bottom);
+                    finish();
+                }
             }
     }
+    private Boolean getLoginStatus(){
+        SharedPreferences mSharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+        return mSharedPreferences.getBoolean("loginstatus", false);
+    }
+/*
     public void setAppTheme(int code) {
         switch (code) {
             case 101:
@@ -45,6 +56,8 @@ public class Splash extends AppCompatActivity {
         SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
         return mSharedPreferences.getInt("themeCode", 0);
     }
+    */
+
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library

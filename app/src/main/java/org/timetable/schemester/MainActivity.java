@@ -27,19 +27,28 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Api;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firestore.v1.WriteResult;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -56,7 +65,7 @@ public class MainActivity extends AppCompatActivity{
     ImageButton fullview, drawerArrow;
     int getDate, notificationId = 101;
     String getDay, getMonth;
-    LinearLayout linearLayout, headingview, landscapeView, settingtab, scheduletab;
+    LinearLayout linearLayout, headingview, landscapeView, settingtab, scheduletab, logoutTab;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     ScrollView scrollView;
     Calendar calendar;
@@ -82,14 +91,17 @@ public class MainActivity extends AppCompatActivity{
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
+        setOnline(true);
+        storeUserDefinition(readUserPosition(),getStoredEmail());
         calendar = Calendar.getInstance(TimeZone.getDefault());
-        linearLayout = findViewById(R.id.linearLayout);
+        //linearLayout = findViewById(R.id.linearLayout);
         scrollView = findViewById(R.id.scrollView);
         headingview = findViewById(R.id.period_view);
         landscapeView = findViewById(R.id.mainLinearlayoutLandscape);
         noclass = findViewById(R.id.noclasstext);
         settingtab = findViewById(R.id.settingTab);
         scheduletab = findViewById(R.id.fullScheduleTab);
+        //logoutTab.findViewById(R.id.logoutTab);
         semestertxt = findViewById(R.id.sem_text);
         drawerArrow = findViewById(R.id.drawerarrow);
             if(isLandscape()){
@@ -178,16 +190,20 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(i);
             }
         });
-
+        /*logoutTab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logOut();
+            }
+        });*/
+        setHolidayViewIfHoliday();
         if(!isInternetAvailable()){
             Toast.makeText(getApplicationContext(),"Connect to internet for latest details",Toast.LENGTH_LONG).show();
         }
-        setHolidayViewIfHoliday();
     }
 
     @Override
     protected void onStart() {
-          setHolidayViewIfHoliday();
         setSemester("global_info","semester",year);
         date.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
         day.setText(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
@@ -202,6 +218,13 @@ public class MainActivity extends AppCompatActivity{
               }
           }
         super.onStart();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        setOnline(false);
+        super.onDestroy();
     }
 
     @Override
@@ -241,7 +264,6 @@ public class MainActivity extends AppCompatActivity{
             day.setText(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
             month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
             setSemester("global_info","semester",year);
-            setHolidayViewIfHoliday();
             super.onPreExecute();
         }
 
@@ -265,7 +287,18 @@ public class MainActivity extends AppCompatActivity{
             }, 10);
             super.onPostExecute(aVoid);
         }
+    }
 
+    private void setOnline(Boolean status){
+        Map<String, Object> data = new HashMap<>();
+        data.put("active", status);
+        DocumentReference coll  =  db.collection("userbase").document(getStoredEmail());
+            coll.set(data, SetOptions.merge());
+    }
+
+    private String readUserPosition(){
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("userDefinition", MODE_PRIVATE);
+        return mSharedPreferences.getString("position", "");
     }
 
     private void setHolidayViewIfHoliday(){
@@ -554,10 +587,30 @@ public class MainActivity extends AppCompatActivity{
             e.printStackTrace();
         }
     }
+    private void storeUserDefinition(String pos, String uid){
+        Map<String, Object> data = new HashMap<>();
+        data.put("definition", pos);
+        db.collection("userbase").document(uid)
+                .set(data, SetOptions.merge());
+    }
+    private String getStoredEmail(){
+        String cred;
+        SharedPreferences mSharedPreferences = getSharedPreferences("credentials", MODE_PRIVATE);
+        cred =  mSharedPreferences.getString("email", "");
+        return cred;
+    }
 
     private Boolean getLoginStatus(){
         SharedPreferences mSharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
         return mSharedPreferences.getBoolean("loginstatus", false);
+    }
+    private void logOut(){
+        FirebaseAuth.getInstance().signOut();
+        Toast.makeText(MainActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+        Intent i=new Intent(MainActivity.this, LoginActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); // To clean up all activities
+        startActivity(i);
+        overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
     }
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);

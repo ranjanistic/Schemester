@@ -17,7 +17,36 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/noticebutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:padding="8dp"
+            android:backgroundTint="?attr/display_foreground"
+            android:background="@drawable/round_btn"
+            app:srcCompat="@drawable/ic_noticeicon"/>
+        <ImageButton
+            android:id="@+id/chatButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:padding="8dp"
+            android:backgroundTint="?attr/display_foreground"
+            android:background="@drawable/round_btn"
+            app:srcCompat="@drawable/ic_peoplegossip"/>
+        </LinearLayout>
         <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -25,6 +54,7 @@
 
             <include layout="@layout/weekday_list" />
         </ScrollView>
+    </LinearLayout>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

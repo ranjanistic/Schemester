@@ -196,8 +196,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_noticeicon" />
-                            <entry key="sourceFile" value="E:\myprojects\Github\vector-assets\noticeicon.svg" />
+                            <entry key="outputName" value="ic_exitdoor" />
+                            <entry key="sourceFile" value="E:\myprojects\Github\vector-assets\exitDoor.svg" />
                           </map>
                         </option>
                       </PersistentState>

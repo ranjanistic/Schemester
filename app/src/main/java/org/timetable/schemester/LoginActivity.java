@@ -22,12 +22,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -38,38 +42,32 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String dob;
+    TextInputLayout collegeRollInputLayout;
     CustomLoadDialogClass customLoadDialogClass;
     Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-    boolean isRollValid = false, isEmailValid = false, isDateValid= false;
+    boolean isRollValid = false, isEmailValid = false, isDateValid= false, isTeacher = false;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(MainActivity.isCreated) {
-            MainActivity.mainact.finish();
-        }
         super.onCreate(savedInstanceState);
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setAppTheme(getThemeStatus());
-        if(getThemeStatus() == 101) {
-            window.setNavigationBarColor(getResources().getColor(R.color.blue));
-            window.setStatusBarColor(getResources().getColor(R.color.blue));
-        } else if(getThemeStatus() == 102){
-            window.setNavigationBarColor(getResources().getColor(R.color.spruce));
-            window.setStatusBarColor(getResources().getColor(R.color.spruce));
-        } else {
-            window.setNavigationBarColor(getResources().getColor(R.color.blue));
-            window.setStatusBarColor(getResources().getColor(R.color.blue));
-        }
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
+        collegeRollInputLayout = findViewById(R.id.collegeRollLayout);
+        if(readUserPosition().equals("teacher")){
+            isTeacher = true;
+            collegeRollInputLayout.setVisibility(View.GONE);
+        }
         customLoadDialogClass = new CustomLoadDialogClass(this, new OnDialogLoadListener() {
             @Override
             public void onLoad() {
             }
             @Override
             public String onLoadText() {
-                return "Need few moments...";
+                return "Need few moments";
             }
         });
         login = findViewById(R.id.registerbtn);
@@ -119,17 +117,23 @@ public class LoginActivity extends AppCompatActivity {
                 customLoadDialogClass.hide();
             }
         });
-        roll = findViewById(R.id.rollpass);
-        rollValid = findViewById(R.id.rollValidityText);
-        roll.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-                checkRollNumValidity(roll.getText().toString().trim(),s);
-            }
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-            public void onTextChanged(CharSequence s, int start, int count, int after) {
-            }
-        });
+        if(!isTeacher) {
+            roll = findViewById(R.id.rollpass);
+            rollValid = findViewById(R.id.rollValidityText);
+            roll.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {
+                    checkRollNumValidity(roll.getText().toString().trim(), s);
+                }
+
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start, int count, int after) {
+                }
+            });
+        } else {
+            isRollValid = true;
+        }
         bdate = findViewById(R.id.birthdate);
         bmonth = findViewById(R.id.birthmonth);
         byear = findViewById(R.id.birthyear);
@@ -184,7 +188,8 @@ public class LoginActivity extends AppCompatActivity {
     private void registerInit(){
         String email, rollnum, dd, mm, yyyy, dob;
         email = emailid.getText().toString();
-        rollnum = roll.getText().toString();
+        rollnum = "";
+        if(!isTeacher) rollnum = roll.getText().toString();
         dd = bdate.getText().toString();
         mm = bmonth.getText().toString();
         yyyy = byear.getText().toString();
@@ -193,10 +198,10 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Email ID required", Toast.LENGTH_LONG).show();
             return;
         }
-        if (TextUtils.isEmpty(rollnum)) {
+        if (!isTeacher&&TextUtils.isEmpty(rollnum)) {
             Toast.makeText(getApplicationContext(), "Your college roll number required.", Toast.LENGTH_LONG).show();
             return;
-        } else if(!rollnum.trim().contains("18")){
+        } else if(!isTeacher && !rollnum.trim().contains("18")){
             Toast.makeText(getApplicationContext(), "Only for 2018 batch 2nd year.", Toast.LENGTH_LONG).show();
             return;
         }
@@ -224,7 +229,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "You cannot be born in future!", Toast.LENGTH_LONG).show();
             return;
         }
-        if(!isEmailValid || !isRollValid){
+        if(!isEmailValid || !isRollValid &&!isTeacher){
             Toast.makeText(getApplicationContext(), "Invalid details", Toast.LENGTH_LONG).show();
             return;
         }
@@ -266,7 +271,12 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             storeLoginStatus(true);
-                            storeCredentials(emailIdFinalLogin,roll.getText().toString());
+                            //storeUserDefinition(readUserPosition(), emailIdFinalLogin);
+                            if(!isTeacher) {
+                                storeCredentials(emailIdFinalLogin, roll.getText().toString());
+                            } else {
+                                storeCredentials(emailIdFinalLogin, "");
+                            }
                             Toast.makeText(getApplicationContext(), "Logged in as "+emailIdFinalLogin, Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -290,10 +300,16 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         user = FirebaseAuth.getInstance().getCurrentUser();
                         if (task.isSuccessful()) {
-                                storeLoginStatus(true);
-                            storeCredentials(uid,roll.getText().toString());
+                            storeLoginStatus(true);
+                            //storeUserDefinition(readUserPosition(), uid);
+                            if(!isTeacher) {
+                                storeCredentials(uid, roll.getText().toString());
+                            } else {
+                                storeCredentials(uid, "");
+                            }
                             Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY);
                             startActivity(intent);
                             customLoadDialogClass.hide();
                             overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_from_top);
@@ -306,10 +322,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
-    private Boolean getLoginStatus(){
-        SharedPreferences mSharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
-        return mSharedPreferences.getBoolean("loginstatus", false);
-    }
+
 
     private void storeLoginStatus(Boolean logged){
         SharedPreferences mSharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
@@ -332,8 +345,7 @@ public class LoginActivity extends AppCompatActivity {
             int     exitValue = ipProcess.waitFor();
             return (exitValue == 0);
         }
-        catch (IOException e)          { e.printStackTrace(); }
-        catch (InterruptedException e) { e.printStackTrace(); }
+        catch (IOException | InterruptedException e){ e.printStackTrace(); }
         return false;
     }
 
@@ -390,6 +402,11 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    private String readUserPosition(){
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("userDefinition", MODE_PRIVATE);
+        return mSharedPreferences.getString("position", "");
+    }
+
     private void resetLinkSender(final String email){
             FirebaseAuth.getInstance().sendPasswordResetEmail(email)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -412,12 +429,12 @@ public class LoginActivity extends AppCompatActivity {
     public void setAppTheme(int code) {
         switch (code) {
             case 101:
-                setTheme(R.style.AppTheme);
+                setTheme(R.style.BlueLightTheme);
                 break;
             case 102:
-                setTheme(R.style.DarkTheme);
+                setTheme(R.style.BlueDarkTheme);
                 break;
-            default:setTheme(R.style.AppTheme);
+            default:setTheme(R.style.BlueLightTheme);
         }
     }
     private int getThemeStatus() {
