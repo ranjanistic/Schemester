@@ -347,9 +347,12 @@
                     android:scaleType="fitCenter" />
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/clockTypeSwitchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
+                android:background="@drawable/square_edgy_btn"
+                android:backgroundTint="@android:color/transparent"
                 android:gravity="center"
                 android:layout_gravity="center_horizontal"
                 android:orientation="horizontal">

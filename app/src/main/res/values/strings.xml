@@ -124,4 +124,6 @@
     <string name="i_m_a_student">I\'m a student</string>
     <string name="fill_up_your_credentials">Fill up  \nyour \ncredentials.</string>
     <string name="done">Done</string>
+    <string name="today">Today</string>
+    <string name="theme_changer">theme changer</string>
 </resources>

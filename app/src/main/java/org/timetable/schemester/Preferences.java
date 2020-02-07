@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -50,7 +52,7 @@ import static android.content.ContentValues.TAG;
 
 public class Preferences extends AppCompatActivity {
     Switch timeFormatSwitch;
-    LinearLayout dobUpdate, emailChange, rollChange, appUpdate, deleteAcc, restarter, themebtn, feedback;
+    LinearLayout dobUpdate, emailChange, rollChange, appUpdate, deleteAcc, restarter, themebtn, feedback, clockTypeSwitch;
     ImageButton returnbtn;
     CustomVerificationDialog customVerificationDialogDeleteAccount, customVerificationDialogEmailChange;
     CustomLoadDialogClass customLoadDialogClass;
@@ -59,7 +61,6 @@ public class Preferences extends AppCompatActivity {
     int CODE_DELETE_ACCOUNT = 102, CODE_CHANGE_EMAIL = 101;
     int versionCode = BuildConfig.VERSION_CODE;
     String versionName = BuildConfig.VERSION_NAME;
-    boolean sent;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,6 +207,17 @@ public class Preferences extends AppCompatActivity {
         final TextView timetext = findViewById(R.id.timeformattext);
         timeFormatSwitch = findViewById(R.id.clockTypeSwitch);
         timeFormatSwitch.setChecked(getTimeFormat() == 12);
+        clockTypeSwitch = findViewById(R.id.clockTypeSwitchView);
+        clockTypeSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (timeFormatSwitch.isChecked()){
+                    timeFormatSwitch.setChecked(false);
+                 } else {
+                    timeFormatSwitch.setChecked(true);
+                }
+            }
+        });
         if(timeFormatSwitch.isChecked()) {
             timetext.setText(getResources().getString(R.string.time_format_12_hours));
         } else {
@@ -238,6 +250,10 @@ public class Preferences extends AppCompatActivity {
             }
         });
     }
+    private void changeDobResetState(Boolean state, Float alpha){
+        dobUpdate.setAlpha(alpha);
+        dobUpdate.setClickable(state);
+    }
     private void restartApplication(){
         Intent splash = new Intent(Preferences.this, Splash.class);
         splash.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // To clean up all activities
@@ -251,6 +267,13 @@ public class Preferences extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         Snackbar.make(findViewById(R.id.preferencesID), "Email has been sent. Check your mailbox.", Snackbar.LENGTH_LONG)
+                                .show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Snackbar.make(findViewById(R.id.preferencesID), "An error occurred. Try again later.", Snackbar.LENGTH_LONG)
                                 .show();
                     }
                 });
@@ -316,7 +339,7 @@ public class Preferences extends AppCompatActivity {
                                 storeLoginStatus(false);
                                 customLoadDialogClass.hide();
                                 Toast.makeText(Preferences.this, "Your account was deleted permanently.", Toast.LENGTH_SHORT).show();
-                                Intent i = new Intent(Preferences.this, LoginActivity.class);
+                                Intent i = new Intent(Preferences.this, PositionActivity.class);
                                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // To clean up all activities
                                 startActivity(i);
                                 overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
@@ -590,7 +613,6 @@ public class Preferences extends AppCompatActivity {
                                         customConfirmDialogClass.setCanceledOnTouchOutside(false);
                                         customConfirmDialogClass.show();
                                     } else {
-                                        //                                   customLoadDialogClass.hide();
                                         Toast.makeText(getApplicationContext(), "App is up to date. Check again later.", Toast.LENGTH_LONG).show();
                                     }
                                 } else {
@@ -635,12 +657,7 @@ public class Preferences extends AppCompatActivity {
     private void showPackageAlert(final String newVname){
         CustomAlertDialog downloadFinishAlert = new CustomAlertDialog(Preferences.this, new OnDialogAlertListener() {
             @Override
-            public void onDismiss() {/*
-                File apkFile = new File(Environment.getExternalStorageDirectory() +"/Schemester/org.timetable.schemester-"+newVname+".apk");
-                Uri uri = FileProvider.getUriForFile(Preferences.this,BuildConfig.APPLICATION_ID + ".provider",apkFile);
-                Intent web = new Intent(Intent.ACTION_VIEW).setDataAndType(uri, "application/vnd.android.package-archive");
-                web.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(web);*/
+            public void onDismiss() {
             }
             @Override
             public String onCallText() {

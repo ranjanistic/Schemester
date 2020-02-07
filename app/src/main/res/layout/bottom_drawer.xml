@@ -13,19 +13,49 @@
     <LinearLayout
         android:id="@+id/drawerarrowHolder"
         android:layout_width="match_parent"
-        android:gravity="center"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:layout_height="wrap_content">
-    <ImageButton
-        android:id="@+id/drawerarrow"
-        android:layout_width="30dp"
-        android:contentDescription="@string/drawer_indicator"
-        android:layout_height="30dp"
-        android:rotation="90"
-        android:background="@drawable/ic_halfarrow"
-        android:backgroundTint="@color/blue"
-        />
+        <ImageButton
+            android:id="@+id/switchThemeMain"
+            android:layout_width="30dp"
+            android:contentDescription="@string/choose_a_theme"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_suniconsmall"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/present_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="top|end"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="@string/today"
+            android:textAllCaps="false"
+            android:textColor="?attr/base_text_color"
+            android:textSize="16sp" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <ImageButton
+            android:id="@+id/drawerarrow"
+            android:layout_width="30dp"
+            android:contentDescription="@string/drawer_indicator"
+            android:layout_height="30dp"
+            android:rotation="90"
+            android:background="@drawable/ic_halfarrow"
+            android:backgroundTint="@color/blue"
+            />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/fullScheduleTab"

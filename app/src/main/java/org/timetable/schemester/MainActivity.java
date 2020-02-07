@@ -2,8 +2,10 @@ package org.timetable.schemester;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Activity;
@@ -11,15 +13,20 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -41,6 +48,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firestore.v1.WriteResult;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,6 +56,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
@@ -55,27 +64,51 @@ import java.util.TimeZone;
 import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity{
+    int versionCode = BuildConfig.VERSION_CODE;
+    String versionName = BuildConfig.VERSION_NAME;
     TextView semestertxt, noclass;
     TextView c1,c2,c3,c4,c5,c6,c7,c8,c9,p1,p2,p3,p4,p5,p6,p7,p8,p9 ;
     TextView[] c = {c1,c2,c3,c4,c5,c6,c7,c8,c9};
     TextView[] p = {p1,p2,p3,p4,p5,p6,p7,p8,p9 };
     String[] pkey = {"p1","p2","p3","p4","p5","p6","p7","p8","p9"};
     String clg, course,year;
-    Button day,date, month;
-    ImageButton fullview, drawerArrow;
+    TextView day, month, time;
+    Button date;
+    ImageButton fullview, drawerArrow, switchThemeBtn;
     int getDate, notificationId = 101;
     String getDay, getMonth;
     LinearLayout linearLayout, headingview, landscapeView, settingtab, scheduletab, logoutTab;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     ScrollView scrollView;
     Calendar calendar;
+    Animation hide, show, fadeon, fadeoff;
     updateTask mupdateTask;
     public static Activity mainact;
     public static boolean isCreated = false;
-    Context ctx;
-    Boolean isHoliday = false;
+    private Boolean isHoliday;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    int[] periodStringResource12 = {
+                    R.string.period112,
+                    R.string.period212,
+                    R.string.period312,
+                    R.string.period412,
+                    R.string.period512,
+                    R.string.period612,
+                    R.string.period712,
+                    R.string.period812,
+                    R.string.period912},
+            periodStringResource24 = {
+                    R.string.period1,
+                    R.string.period2,
+                    R.string.period3,
+                    R.string.period4,
+                    R.string.period5,
+                    R.string.period6,
+                    R.string.period7,
+                    R.string.period8,
+                    R.string.period9
+            };
+    checkUpdate update;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAppTheme(getThemeStatus());
@@ -85,37 +118,102 @@ public class MainActivity extends AppCompatActivity{
         mainact = this;
         isCreated = true;
         super.onCreate(savedInstanceState);
-        ctx = this;
         setContentView(R.layout.activity_main);
+        isHoliday = false;
         final Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
         setOnline(true);
         storeUserDefinition(readUserPosition(),getStoredEmail());
+
+        int[] periodView = { R.id.period1, R.id.period2, R.id.period3, R.id.period4, R.id.period5, R.id.period6, R.id.period7, R.id.period8, R.id.period9,
+        }, classView = { R.id.class1, R.id.class2, R.id.class3, R.id.class4, R.id.class5, R.id.class6, R.id.class7, R.id.class8, R.id.class9,
+        };
+
         calendar = Calendar.getInstance(TimeZone.getDefault());
-        //linearLayout = findViewById(R.id.linearLayout);
         scrollView = findViewById(R.id.scrollView);
         headingview = findViewById(R.id.period_view);
         landscapeView = findViewById(R.id.mainLinearlayoutLandscape);
         noclass = findViewById(R.id.noclasstext);
         settingtab = findViewById(R.id.settingTab);
         scheduletab = findViewById(R.id.fullScheduleTab);
-        //logoutTab.findViewById(R.id.logoutTab);
         semestertxt = findViewById(R.id.sem_text);
-        drawerArrow = findViewById(R.id.drawerarrow);
-            if(isLandscape()){
-                if(getThemeStatus() == 101)
-                    window.setNavigationBarColor(this.getResources().getColor(R.color.white));
-                else if(getThemeStatus() == 102)
-                    window.setNavigationBarColor(this.getResources().getColor(R.color.charcoal));
-            } else {
-                if(getThemeStatus() == 101)
-                    window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
-                else if(getThemeStatus() == 102)
-                    window.setNavigationBarColor(this.getResources().getColor(R.color.black_overlay));
+        switchThemeBtn = findViewById(R.id.switchThemeMain);
+        time = findViewById(R.id.present_time);
+        final Handler timeHandler = new Handler(getMainLooper());
+        timeHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(getTimeFormat() == 12) {
+                    time.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
+                } else{
+                    time.setText(new SimpleDateFormat("HH:mm").format(new Date()));
+                }
+                timeHandler.postDelayed(this, 1000);
             }
-
+        }, 10);
+        drawerArrow = findViewById(R.id.drawerarrow);
+        if(isLandscape()){
+            if(getThemeStatus() == 101)
+                window.setNavigationBarColor(this.getResources().getColor(R.color.white));
+            else if(getThemeStatus() == 102)
+                window.setNavigationBarColor(this.getResources().getColor(R.color.charcoal));
+        } else {
+            if(getThemeStatus() == 101)
+                window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
+            else if(getThemeStatus() == 102)
+                window.setNavigationBarColor(this.getResources().getColor(R.color.black_overlay));
+        }
+        int k = 0;
+        while(k<9) {
+            p[k] = findViewById(periodView[k]);
+            c[k] = findViewById(classView[k]);
+            ++k;
+        }
+        hide = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.gone_centrally);
+        show = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.emerge_centrally);
+        fadeon = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fadeliton);
+        fadeoff= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fadelitoff);
+        final Intent restart = new Intent(MainActivity.this, MainActivity.class);
+        if(getThemeStatus() == 102){
+            switchThemeBtn.setBackgroundResource(R.drawable.ic_moonsmallicon);
+        } else {
+            switchThemeBtn.setBackgroundResource(R.drawable.ic_suniconsmall);
+            storeThemeStatus(101);
+        }
+        switchThemeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchThemeBtn.startAnimation(hide);
+                switchThemeBtn.startAnimation(fadeoff);
+                if(getThemeStatus() == 101){
+                    switchThemeBtn.setBackgroundResource(R.drawable.ic_moonsmallicon);
+                    storeThemeStatus(102);
+                    startActivity(restart);
+                    finish();
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    switchThemeBtn.startAnimation(show);
+                    switchThemeBtn.startAnimation(fadeon);
+                } else if(getThemeStatus() == 102){
+                    switchThemeBtn.setBackgroundResource(R.drawable.ic_suniconsmall);
+                    storeThemeStatus(101);
+                    startActivity(restart);
+                    finish();
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    switchThemeBtn.startAnimation(show);
+                    switchThemeBtn.startAnimation(fadeon);
+                } else {
+                    switchThemeBtn.setBackgroundResource(R.drawable.ic_moonsmallicon);
+                    storeThemeStatus(102);
+                    startActivity(restart);
+                    finish();
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    switchThemeBtn.startAnimation(show);
+                    switchThemeBtn.startAnimation(fadeon);
+                }
+            }
+        });
         LinearLayout bottomDrawer = findViewById(R.id.bottom_drawer);
         final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomDrawer);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -123,8 +221,6 @@ public class MainActivity extends AppCompatActivity{
         LinearLayout drawerPeek = findViewById(R.id.drawerarrowHolder);
         drawerPeek.measure(View.MeasureSpec.UNSPECIFIED,View.MeasureSpec.UNSPECIFIED);
         bottomSheetBehavior.setPeekHeight(drawerPeek.getMeasuredHeight());
-        //bottomSheetBehavior.setPeekHeight();
-        //fullview = findViewById(R.id.full_schedule);
         drawerArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,26 +233,6 @@ public class MainActivity extends AppCompatActivity{
                 }
             }
         });
-
-        p[0] = findViewById(R.id.period1);
-        p[1] = findViewById(R.id.period2);
-        p[2] = findViewById(R.id.period3);
-        p[3] = findViewById(R.id.period4);
-        p[4] = findViewById(R.id.period5);
-        p[5] = findViewById(R.id.period6);
-        p[6] = findViewById(R.id.period7);
-        p[7] = findViewById(R.id.period8);
-        p[8] = findViewById(R.id.period9);
-
-       c[0] = findViewById(R.id.class1);
-        c[1] = findViewById(R.id.class2);
-        c[2] = findViewById(R.id.class3);
-        c[3] = findViewById(R.id.class4);
-        c[4] = findViewById(R.id.class5);
-        c[5] = findViewById(R.id.class6);
-        c[6] = findViewById(R.id.class7);
-        c[7] = findViewById(R.id.class8);
-        c[8] = findViewById(R.id.class9);
         date = findViewById(R.id.present_date);
         day = findViewById(R.id.weekday_text);
         month = findViewById(R.id.month_text);
@@ -180,20 +256,151 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(i);
             }
         });
-        /*logoutTab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logOut();
-            }
-        });*/
-        setHolidayViewIfHoliday();
+
         if(!isInternetAvailable()){
             Toast.makeText(getApplicationContext(),"Connect to internet for latest details",Toast.LENGTH_LONG).show();
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    bottomSheetBehavior.setHideable(false);
+                    if(scrollY > oldScrollY){
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    }
+                    if(scrollY<oldScrollY){
+                        bottomSheetBehavior.setHideable(true);
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                    }
+                }
+            });
+        }
+        setHolidayViewIfHoliday();
+        update = new checkUpdate();
+        update.execute();
+    }
+    private class checkUpdate extends AsyncTask<Void,Void,Void>{
+        @Override
+        protected Void doInBackground(Void... voids) {
+            checkUpdateThenNotify();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+    } 
+    private void checkUpdateThenNotify(){
+        if(isInternetAvailable()) {
+            db.collection("appConfig").document("verCurrent")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (Objects.requireNonNull(document).exists()) {
+                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                    int vcode = Integer.parseInt(document.get("verCode").toString());
+                                    final String vname = document.getString("verName");
+                                    final String link = document.getString("downlink");
+                                    if (vcode != versionCode || !Objects.equals(vname, versionName)) {
+                                        Toast.makeText(getApplicationContext(), "Update available", Toast.LENGTH_LONG).show();
+                                        final CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(MainActivity.this, new OnDialogConfirmListener() {
+                                            @Override
+                                            public void onApply(Boolean confirm) {
+                                                if (storagePermissionGranted()){
+                                                    if(isInternetAvailable()) {
+                                                        File file = new File(Environment.getExternalStorageDirectory() +"/Schemester/org.timetable.schemester-"+vname+".apk");
+                                                        if(file.exists()){
+                                                            showPackageAlert(vname);
+                                                        } else {
+                                                            downloader(link, vname);
+                                                        }
+                                                    }
+                                                } else {
+                                                    CustomConfirmDialogClass permissionDialog = new CustomConfirmDialogClass(MainActivity.this, new OnDialogConfirmListener() {
+                                                        @Override
+                                                        public void onApply(Boolean confirm) {
+                                                            requestStoragePermission();
+                                                            update.cancel(true);
+                                                            new checkUpdate().execute();
+                                                        }
+                                                        @Override
+                                                        public String onCallText() {
+                                                            return "Storage permission required";
+                                                        }
+                                                        @Override
+                                                        public String onCallSub() {
+                                                            return "To download and save the latest version on your device, we need your storage permission. Confirm?";
+                                                        }
+                                                    });
+                                                    permissionDialog.show();
+                                                }
+                                            }
+                                            @Override
+                                            public String onCallText() {
+                                                return "An update is available";
+                                            }
+                                            @Override
+                                            public String onCallSub() {
+                                                return "Your app version : " + versionName + "\nNew Version : " + vname + "\n\nUpdate to get the latest features and bug fixes. Download will start automatically. \nConfirm to download?";
+                                            }
+                                        });
+                                        customConfirmDialogClass.setCanceledOnTouchOutside(false);
+                                        customConfirmDialogClass.show();
+                                    }
+                                }
+                            }
+                        }
+                    });
+        }
+    }
+
+    private void downloader(final String link,final  String version){
+        CustomDownloadLoadDialog customDownloadLoadDialog = new CustomDownloadLoadDialog(MainActivity.this, new OnDialogDownloadLoadListener() {
+            @Override
+            public String getLink() {
+                return link;
+            }
+            @Override
+            public String getVersion() {
+                return version;
+            }
+            @Override
+            public void afterFinish(Boolean isCompleted) {
+                if (isCompleted) {
+                    showPackageAlert(version);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Download Interrupted", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        customDownloadLoadDialog.show();
+    }
+
+    private void showPackageAlert(final String newVname){
+        CustomAlertDialog downloadFinishAlert = new CustomAlertDialog(MainActivity.this, new OnDialogAlertListener() {
+            @Override
+            public void onDismiss() {
+            }
+            @Override
+            public String onCallText() {
+                return "Download completed";
+            }
+            @Override
+            public String onCallSub() {
+                return "Latest version is downloaded. \n\nGo to File manager > Internal Storage > Schemester >\n\nHere you'll find the latest package to install.\n\n(If it is causing problems, delete that file and try again.)";
+            }
+        });
+        downloadFinishAlert.show();
     }
 
     @Override
     protected void onStart() {
+        setOnline(true);
         setSemester("global_info","semester",year);
         date.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
         day.setText(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
@@ -201,19 +408,21 @@ public class MainActivity extends AppCompatActivity{
           if(!isHolidayToday()) {
               setTimeFormat(getTimeFormat());
               if(mupdateTask.isCancelled()) {
-                  new updateTask().execute();
+                  mupdateTask = new updateTask();
+                  mupdateTask.execute();
               } else {
                   mupdateTask.cancel(true);
-                  new updateTask().execute();
+                  mupdateTask = new updateTask();
+                  mupdateTask.execute();
               }
           }
         super.onStart();
     }
 
-
     @Override
     protected void onDestroy() {
         setOnline(false);
+        mupdateTask.cancel(true);
         super.onDestroy();
     }
 
@@ -223,31 +432,37 @@ public class MainActivity extends AppCompatActivity{
         super.onPause();
     }
 
+    @Override
+    protected void onStop() {
+        mupdateTask.cancel(true);
+        super.onStop();
+    }
+
+    private void storeThemeStatus(int themechoice){
+        SharedPreferences mSharedPreferences = getSharedPreferences("schemeTheme", MODE_PRIVATE);
+        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+        mEditor.putInt("themeCode", themechoice);
+        mEditor.apply();
+    }
     private void setTimeFormat(int tFormat){
-        if(tFormat == 12){
-            p[0].setText(getResources().getString(R.string.period112));
-            p[1].setText(getResources().getString(R.string.period212));
-            p[2].setText(getResources().getString(R.string.period312));
-            p[3].setText(getResources().getString(R.string.period412));
-            p[4].setText(getResources().getString(R.string.period512));
-            p[5].setText(getResources().getString(R.string.period612));
-            p[6].setText(getResources().getString(R.string.period712));
-            p[7].setText(getResources().getString(R.string.period812));
-            p[8].setText(getResources().getString(R.string.period912));
+        int i = 0;
+        if(tFormat == 12) {
+            while (i < 9) {
+                p[i].setText(getStringResource(periodStringResource12[i]));
+                ++i;
+            }
         } else {
-            p[0].setText(getResources().getString(R.string.period1));
-            p[1].setText(getResources().getString(R.string.period2));
-            p[2].setText(getResources().getString(R.string.period3));
-            p[3].setText(getResources().getString(R.string.period4));
-            p[4].setText(getResources().getString(R.string.period5));
-            p[5].setText(getResources().getString(R.string.period6));
-            p[6].setText(getResources().getString(R.string.period7));
-            p[7].setText(getResources().getString(R.string.period8));
-            p[8].setText(getResources().getString(R.string.period9));
+            while (i < 9) {
+                p[i].setText(getStringResource(periodStringResource24[i]));
+                ++i;
+            }
         }
     }
-    public class updateTask extends AsyncTask<Void,Void,Void> {
 
+    private String getStringResource(int res){
+        return getResources().getString(res);
+    }
+    public class updateTask extends AsyncTask<Void,Void,Void> {
         @Override
         protected void onPreExecute() {
             date.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
@@ -297,40 +512,41 @@ public class MainActivity extends AppCompatActivity{
             headingview.setVisibility(View.INVISIBLE);
             noclass.setVisibility(View.VISIBLE);
         } else {
-            noclass.setVisibility(View.GONE);
+            scrollView.setVisibility(View.VISIBLE);
+            headingview.setVisibility(View.VISIBLE);
+            noclass.setVisibility(View.INVISIBLE);
         }
     }
     private Boolean isHolidayToday(){
-        if(islocalHoliday("global_info","holiday_info")){
-            isHoliday = true;
-        } else if(islocalHoliday(clg,"local_info")){
-            isHoliday = true;
-        } else if(islocalHoliday(clg,course)){
-            isHoliday = true;
-        } else isHoliday = calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY || calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY;
-        return isHoliday;
+        return (readSavedHolidayFromCloud()||
+                calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ||
+                calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY);
     }
-    private Boolean islocalHoliday(String collector, String doc){
-        if (getLoginStatus()) {
-            db.collection(collector).document(doc)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                     isHoliday = Boolean.parseBoolean(Objects.requireNonNull(document.get("holiday")).toString());
-                                } else {
-                                    Log.d(TAG, "Server error in getting semester.");
-                                    Toast.makeText(MainActivity.this, "Unable to read", Toast.LENGTH_LONG).show();
-                                }
+    private void isHolidayOtherThanWeekend(String collector, String doc){
+        db.collection(collector).document(doc)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (Objects.requireNonNull(document).exists()) {
+                                Log.d(TAG, "Document Holiday data: " + document.getData());
+                                saveHolidayStatus(document.getBoolean("holiday"));
                             }
                         }
-                    });
-        }
-        return isHoliday;
+                    }
+                });
+    }
+    private void saveHolidayStatus(Boolean isHoliday){
+        SharedPreferences mSharedPreferences = getSharedPreferences("otherHoliday", MODE_PRIVATE);
+        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+        mEditor.putBoolean("holiday", isHoliday);
+        mEditor.apply();
+    }
+    private Boolean readSavedHolidayFromCloud(){
+        SharedPreferences mSharedPreferences = getSharedPreferences("otherHoliday", MODE_PRIVATE);
+        return mSharedPreferences.getBoolean("holiday", false);
     }
     
     private String getWeekdayFromCode(int daycode){
@@ -590,6 +806,14 @@ public class MainActivity extends AppCompatActivity{
         return cred;
     }
 
+    private void requestStoragePermission(){
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                1);
+    }
+    private boolean storagePermissionGranted(){
+        return (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED));
+    }
     private Boolean getLoginStatus(){
         SharedPreferences mSharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
         return mSharedPreferences.getBoolean("loginstatus", false);

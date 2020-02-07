@@ -196,8 +196,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_moonsmallicon" />
-                            <entry key="sourceFile" value="E:\myprojects\Github\vector-assets\moonSmallIcon.svg" />
+                            <entry key="outputName" value="ic_suniconsmall" />
+                            <entry key="sourceFile" value="E:\myprojects\Github\vector-assets\sunIconSmall.svg" />
                           </map>
                         </option>
                       </PersistentState>

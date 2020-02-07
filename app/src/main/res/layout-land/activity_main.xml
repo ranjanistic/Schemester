@@ -67,7 +67,63 @@
                         android:textColor="?attr/base_text_color"
                         android:textSize="16sp"
                         android:textStyle="bold" />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
 
+                        <TextView
+                            android:id="@+id/weekday_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@android:color/transparent"
+                            android:fontFamily="@font/montserrat"
+                            android:foregroundGravity="right"
+                            android:gravity="bottom"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:text="@string/weekday"
+                            android:textAllCaps="false"
+                            android:textColor="@color/linktextcolor"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/month_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@android:color/transparent"
+                            android:fontFamily="@font/montserrat"
+                            android:gravity="top|end"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:text="@string/month"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:textColor="@color/linktextcolor"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/present_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:fontFamily="@font/montserrat"
+                            android:gravity="center"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:text="@string/today"
+                            android:textAllCaps="false"
+                            android:textColor="@color/linktextcolor"
+                            android:textSize="16sp" />
+                    </LinearLayout>
                     <Button
                         android:id="@+id/present_date"
                         android:layout_width="70dp"
@@ -85,46 +141,11 @@
                         android:textColor="?attr/foreground_text_color"
                         android:textSize="36sp"
                         android:textStyle="bold" />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical">
-
-                        <Button
-                            android:id="@+id/weekday_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:background="@android:color/transparent"
-                            android:fontFamily="@font/montserrat"
-                            android:foregroundGravity="right"
-                            android:gravity="bottom"
-                            android:paddingStart="8dp"
-                            android:paddingEnd="8dp"
-                            android:text="@string/weekday"
-                            android:textAllCaps="false"
-                            android:textColor="@color/linktextcolor"
-                            android:textSize="18sp" />
-
-                        <Button
-                            android:id="@+id/month_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:background="@android:color/transparent"
-                            android:fontFamily="@font/montserrat"
-                            android:gravity="top|end"
-                            android:paddingStart="8dp"
-                            android:paddingEnd="8dp"
-                            android:text="@string/month"
-                            android:textAlignment="center"
-                            android:textAllCaps="false"
-                            android:textColor="@color/linktextcolor"
-                            android:textSize="16sp" />
-                    </LinearLayout>
                 </LinearLayout>
 
                 <androidx.coordinatorlayout.widget.CoordinatorLayout

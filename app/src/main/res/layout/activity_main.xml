@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <Button
+                    <TextView
                         android:id="@+id/weekday_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
                         android:textColor="@color/linktextcolor"
                         android:textSize="20sp" />
 
-                    <Button
+                    <TextView
                         android:id="@+id/month_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -98,6 +98,7 @@
                         android:textAllCaps="false"
                         android:textColor="@color/linktextcolor"
                         android:textSize="18sp" />
+
 
                 </LinearLayout>
 
@@ -670,7 +671,6 @@
         tools:targetApi="q">
 
         <include
-
             layout="@layout/bottom_drawer"
         />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

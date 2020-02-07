@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -44,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     String dob;
     TextInputLayout collegeRollInputLayout;
     CustomLoadDialogClass customLoadDialogClass;
+    CustomConfirmDialogClass confirmEmailDialog;
     Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
     boolean isRollValid = false, isEmailValid = false, isDateValid= false, isTeacher = false;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -177,6 +179,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int count, int after) {
             }
         });
+
         dob = bdate.getText().toString()+  bmonth.getText().toString() + byear.getText().toString();
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,11 +188,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     private void registerInit(){
-        String email, rollnum, dd, mm, yyyy, dob;
+        final String email, rollnum, dd, mm, yyyy;
         email = emailid.getText().toString();
-        rollnum = "";
-        if(!isTeacher) rollnum = roll.getText().toString();
+        if(Objects.equals(readUserPosition(),"student")) rollnum = roll.getText().toString();
+        else rollnum = "0";
         dd = bdate.getText().toString();
         mm = bmonth.getText().toString();
         yyyy = byear.getText().toString();
@@ -238,15 +242,30 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         else {
-            customLoadDialogClass.show();
-             dob = dd+mm+yyyy;
-             if(isInternetAvailable()) {
-                 new regisTask().execute(email, dob);
-             } else {
-                 Toast.makeText(getApplicationContext(),"No internet",Toast.LENGTH_SHORT).show();
-                 customLoadDialogClass.hide();
-             }
-             return;
+            confirmEmailDialog = new CustomConfirmDialogClass(LoginActivity.this, new OnDialogConfirmListener() {
+                @Override
+                public void onApply(Boolean confirm) {
+                    customLoadDialogClass.show();
+                    dob = dd+mm+yyyy;
+                    if(isInternetAvailable()) {
+                        new regisTask().execute(email, dob);
+                    } else {
+                        Toast.makeText(getApplicationContext(),"No internet",Toast.LENGTH_SHORT).show();
+                        customLoadDialogClass.hide();
+                    }
+                }
+                @Override
+                public String onCallText() {
+                    return "Important";
+                }
+
+                @Override
+                public String onCallSub() {
+                    return "You should proceed only if your details are correct, and you take full responsibility of providing your email ID. \n\nAn email will be sent to your provided email ID to confirm your authenticity, so it should be  really yours.\n\nBe assured that your credentials are safe with us.\n\nConfirm?";
+                }
+            });
+            confirmEmailDialog.show();
+            confirmEmailDialog.setCanceledOnTouchOutside(false);
         }
     }
 

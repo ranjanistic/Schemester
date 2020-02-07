@@ -13,7 +13,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@drawable/round_btn"
-        android:backgroundTint="?attr/base_background"
+        android:backgroundTint="?attr/display_foreground"
         app:srcCompat="@drawable/ic_suniconsmall"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
