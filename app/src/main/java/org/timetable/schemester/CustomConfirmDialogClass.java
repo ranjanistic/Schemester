@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class CustomConfirmDialogClass extends AppCompatDialog {
     private OnDialogConfirmListener onDialogConfirmListener;
-    public CustomConfirmDialogClass(Context context, OnDialogConfirmListener onDialogConfirmListener){
+    CustomConfirmDialogClass(Context context, OnDialogConfirmListener onDialogConfirmListener){
         super(context);
         this.onDialogConfirmListener = onDialogConfirmListener;
     }

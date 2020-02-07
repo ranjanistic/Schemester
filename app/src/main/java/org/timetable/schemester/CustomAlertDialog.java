@@ -18,7 +18,7 @@ import java.util.Objects;
 public class CustomAlertDialog extends AppCompatDialog {
     private OnDialogAlertListener onDialogAlertListener;
 
-    public CustomAlertDialog(Context context, OnDialogAlertListener onDialogAlertListener) {
+    CustomAlertDialog(Context context, OnDialogAlertListener onDialogAlertListener) {
         super(context);
         this.onDialogAlertListener = onDialogAlertListener;
     }

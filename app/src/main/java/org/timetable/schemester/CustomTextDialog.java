@@ -25,13 +25,14 @@ import java.util.Objects;
 
 public class CustomTextDialog extends AppCompatDialog {
     private OnDialogTextListener onDialogTextListener;
-    public CustomTextDialog(Context context, OnDialogTextListener onDialogTextListener){
+    CustomTextDialog(Context context, OnDialogTextListener onDialogTextListener){
         super(context);
         this.onDialogTextListener = onDialogTextListener;
     }
     public boolean isValid;
     private TextView validity;
-    int textCode = 0;
+    private int textCode = 0;
+    private EditText text;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -49,7 +50,8 @@ public class CustomTextDialog extends AppCompatDialog {
         String head = onDialogTextListener.onCallText();
         textDiaHead.setText(head);
          textCode = onDialogTextListener.textType();
-        final EditText text = findViewById(R.id.dialog_text);
+        text = findViewById(R.id.dialog_text);
+        Objects.requireNonNull(text).requestFocus();
         text.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 checkTextValidity(text.getText().toString().trim(),s, textCode);

@@ -47,10 +47,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:padding="8dp"
+                android:focusedByDefault="true"
                 android:textColorHint="?attr/display_foreground"
                 android:inputType="textEmailAddress"
                 android:importantForAutofill="no"
-                tools:ignore="LabelFor" />
+                tools:ignore="LabelFor"
+                tools:targetApi="q" />
         </com.google.android.material.textfield.TextInputLayout>
     <TextView
         android:id="@+id/ValidityText"

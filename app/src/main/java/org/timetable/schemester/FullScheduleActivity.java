@@ -25,6 +25,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
@@ -64,26 +66,61 @@ import java.util.TimeZone;
 import static android.content.ContentValues.TAG;
 
 public class FullScheduleActivity extends AppCompatActivity {
-    TextView   c1,c2,c3,c4,c5,c6,c7,c8,c9, p1,p2,p3,p4,p5,p6,p7,p8,p9,email, roll, semester;
+    TextView c1,c2,c3,c4,c5,c6,c7,c8,c9, p1,p2,p3,p4,p5,p6,p7,p8,p9,email, roll, semester;
     Button m,t,w,th,f, logoutbtn;
-    TextView[] p = {p1,p2,p3,p4,p5,p6,p7,p8,p9 };
-    TextView[] c = {c1,c2,c3,c4,c5,c6,c7,c8,c9};
-    String[] pkey = {"p1","p2","p3","p4","p5","p6","p7","p8","p9"};
+    TextView[] p = {p1,p2,p3,p4,p5,p6,p7,p8,p9};       //period objects
+    TextView[] c = {c1,c2,c3,c4,c5,c6,c7,c8,c9};        //class name textview objects
+    String[] pkey = {"p1","p2","p3","p4","p5","p6","p7","p8","p9"};     //keys to access database values
     Button[] dayBtn = {m,t,w,th,f};
     String[] dayString = {"monday", "tuesday", "wednesday", "thursday", "friday"};
     View settingsview, aboutview;
     ImageButton setting, about, git, dml, webbtn, fullsetting, updatecheck, noticebtn;
-    String clg, course,year;
-    NestedScrollView dayschedulePortrait;
+    String clg, course,year;        //TODO :To be assigned by user.
+    NestedScrollView dayschedulePortrait;       //common view for both orientations
     HorizontalScrollView horizontalScrollView;
     ScrollView scrollView;
     ImageButton chatbtn;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     CustomLoadDialogClass customLoadDialogClass;
     CustomDownloadLoadDialog customDownloadLoadDialog;
+
+    int[] workDayHalfStringResource = {
+            R.string.mon,
+            R.string.tue,
+            R.string.wed,
+            R.string.thu,
+            R.string.fri,
+    };
+    //For time period string resources - 12 and 24 hours separately
+    int[] periodStringResource12 = {
+            R.string.period112,
+            R.string.period212,
+            R.string.period312,
+            R.string.period412,
+            R.string.period512,
+            R.string.period612,
+            R.string.period712,
+            R.string.period812,
+            R.string.period912},
+            periodStringResource24 = {
+                    R.string.period1,
+                    R.string.period2,
+                    R.string.period3,
+                    R.string.period4,
+                    R.string.period5,
+                    R.string.period6,
+                    R.string.period7,
+                    R.string.period8,
+                    R.string.period9
+            };
+
+    //Following assignments for version check and app update feature.
     int versionCode = BuildConfig.VERSION_CODE;
     String versionName = BuildConfig.VERSION_NAME;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    //Theme codes
+     final static int CODE_DARK_THEME = 102, CODE_LIGHT_THEME = 101;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,55 +129,53 @@ public class FullScheduleActivity extends AppCompatActivity {
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        if(getThemeStatus() == 101) {
+        
+        //Setting navigation and status bar color according to theme
+        if(getThemeStatus() == CODE_LIGHT_THEME) {
             window.setStatusBarColor(this.getResources().getColor(R.color.blue));
             window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
-        } else if(getThemeStatus() == 102){
+        } else if(getThemeStatus() == CODE_DARK_THEME){
             window.setStatusBarColor(this.getResources().getColor(R.color.spruce));
             window.setNavigationBarColor(this.getResources().getColor(R.color.spruce));
         } else {
             window.setStatusBarColor(this.getResources().getColor(R.color.blue));
             window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
         }
+        //TODO - Accept these values from user.
         clg = "DBC";
         course = "PHY-H";
         year = "Y2";
-
-
-        p[0] = findViewById(R.id.period1);
-        p[1] = findViewById(R.id.period2);
-        p[2] = findViewById(R.id.period3);
-        p[3] = findViewById(R.id.period4);
-        p[4] = findViewById(R.id.period5);
-        p[5] = findViewById(R.id.period6);
-        p[6] = findViewById(R.id.period7);
-        p[7] = findViewById(R.id.period8);
-        p[8] = findViewById(R.id.period9);
         
-        c[0] = findViewById(R.id.class1);
-        c[1] = findViewById(R.id.class2);
-        c[2] = findViewById(R.id.class3);
-        c[3] = findViewById(R.id.class4);
-        c[4] = findViewById(R.id.class5);
-        c[5] = findViewById(R.id.class6);
-        c[6] = findViewById(R.id.class7);
-        c[7] = findViewById(R.id.class8);
-        c[8] = findViewById(R.id.class9);
-
-        dayBtn[0] = findViewById(R.id.mon);
-        dayBtn[1] = findViewById(R.id.tue);
-        dayBtn[2] = findViewById(R.id.wed);
-        dayBtn[3] = findViewById(R.id.thu);
-        dayBtn[4] = findViewById(R.id.fri);
+        int[] periodView = { R.id.period1, R.id.period2, R.id.period3, R.id.period4, R.id.period5, R.id.period6, R.id.period7, R.id.period8, R.id.period9,
+        }, classView = { R.id.class1, R.id.class2, R.id.class3, R.id.class4, R.id.class5, R.id.class6, R.id.class7, R.id.class8, R.id.class9,
+        };
+        int k = 0;
+        while(k<9) {
+            p[k] = findViewById(periodView[k]);
+            c[k] = findViewById(classView[k]);
+            ++k;
+        }
+        int[] workDayID = {R.id.mon, R.id.tue, R.id.wed, R.id.thu, R.id.fri};
+        int w = 0;
+        while(w<5) {
+            dayBtn[w] = findViewById(workDayID[w]);
+            ++w;
+        }
+        
         setting = findViewById(R.id.settingbtn);
         about = findViewById(R.id.aboutbtn);
         settingsview = findViewById(R.id.settingview);
         aboutview = findViewById(R.id.aboutview);
         noticebtn = findViewById(R.id.noticebutton);
-        isInternetAvailable();
+
+        isInternetAvailable();              //remind user to connect to internet
+
         semester = findViewById(R.id.semtextsetting);
+
+        //by default, settings and about pages not shown
         settingsview.setVisibility(View.GONE);
         aboutview.setVisibility(View.GONE);
+
         git = findViewById(R.id.githubbtn);
         git.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,6 +221,8 @@ public class FullScheduleActivity extends AppCompatActivity {
                 readVersionCheckUpdate();
             }
         });
+
+        //TODO: Notice board  and chatroom feature
         noticebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -216,6 +253,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 return "Checking";
             }
         });
+
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
         int getDayCount = calendar.get(Calendar.DAY_OF_WEEK);
         switch (getDayCount){
@@ -239,35 +277,11 @@ public class FullScheduleActivity extends AppCompatActivity {
                 dayBtn[4].setBackgroundResource(R.drawable.leftroundbtnselected);
                 dayBtn[4].setTextColor(getResources().getColor(R.color.blue));
                 break;
-            default:readDatabase(clg,course,year,"monday");
+            default:readDatabase(clg,course,year,dayString[0]);
                 dayBtn[0].setBackgroundResource(R.drawable.leftroundbtnselected);
                 dayBtn[0].setTextColor(getResources().getColor(R.color.blue));
         }
-/*
-        for (i=0, j =0 ;i<5;i++){
-            dayBtn[i].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isInternetAvailable();
-                checkOrientationSetVisibility(View.VISIBLE);
-                settingsview.setVisibility(View.GONE);
-                aboutview.setVisibility(View.GONE);
-                readDatabase(clg,course,year,dayString[i]);
-                scrollTop();
-                setLoadingTextView();
-                dayBtn[i].setBackgroundResource(R.drawable.leftroundbtnselected);
-                dayBtn[i].setTextColor(getResources().getColor(R.color.blue));
-                while(j<5) {
-                    if(j!=i) {
-                        dayBtn[j].setBackgroundResource(R.drawable.leftroundbtn);
-                        dayBtn[j].setTextColor(getResources().getColor(R.color.white));
-                    }
-                    j++;
-                }
-            }
-        });
-        }
-*/
+
         dayBtn[0].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -287,7 +301,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
-                readDatabase(clg,course,year,"monday");
+                readDatabase(clg,course,year,dayString[0]);
             }
         });
         dayBtn[1].setOnClickListener(new View.OnClickListener() {
@@ -309,7 +323,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
-                readDatabase(clg,course,year,"tuesday");
+                readDatabase(clg,course,year,dayString[1]);
             }
         });
         dayBtn[2].setOnClickListener(new View.OnClickListener() {
@@ -331,7 +345,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
-                readDatabase(clg,course,year,"wednesday");
+                readDatabase(clg,course,year,dayString[2]);
             }
         });
         dayBtn[3].setOnClickListener(new View.OnClickListener() {
@@ -353,7 +367,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
-                readDatabase(clg,course,year,"thursday");
+                readDatabase(clg,course,year,dayString[3]);
             }
         });
         dayBtn[4].setOnClickListener(new View.OnClickListener() {
@@ -375,7 +389,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
-                readDatabase(clg,course,year,"friday");
+                readDatabase(clg,course,year,dayString[4]);
             }
         });
 
@@ -404,15 +418,6 @@ public class FullScheduleActivity extends AppCompatActivity {
                 dayBtn[4].setTextColor(getResources().getColor(R.color.white));
             }
         });
-        logoutbtn = findViewById(R.id.logout);
-        logoutbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                storeLoginStatus(false);
-                logOut();
-            }
-        });
-
 
         about.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -432,6 +437,15 @@ public class FullScheduleActivity extends AppCompatActivity {
                 dayBtn[4].setTextColor(getResources().getColor(R.color.white));
             }
         });
+
+        logoutbtn = findViewById(R.id.logout);
+        logoutbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                storeLoginStatus(false);
+                logOut();
+            }
+        });
     }
 
     @Override
@@ -440,34 +454,33 @@ public class FullScheduleActivity extends AppCompatActivity {
         super.onStart();
     }
 
+    //to set time display of period according to chosen format
     private void setTimeFormat(int tFormat){
-        if(tFormat == 12){
-            p[0].setText(getResources().getString(R.string.period112));
-            p[1].setText(getResources().getString(R.string.period212));
-            p[2].setText(getResources().getString(R.string.period312));
-            p[3].setText(getResources().getString(R.string.period412));
-            p[4].setText(getResources().getString(R.string.period512));
-            p[5].setText(getResources().getString(R.string.period612));
-            p[6].setText(getResources().getString(R.string.period712));
-            p[7].setText(getResources().getString(R.string.period812));
-            p[8].setText(getResources().getString(R.string.period912));
+        int i = 0;
+        if(tFormat == 12) {
+            while (i < 9) {
+                p[i].setText(getStringResource(periodStringResource12[i]));
+                ++i;
+            }
         } else {
-            p[0].setText(getResources().getString(R.string.period1));
-            p[1].setText(getResources().getString(R.string.period2));
-            p[2].setText(getResources().getString(R.string.period3));
-            p[3].setText(getResources().getString(R.string.period4));
-            p[4].setText(getResources().getString(R.string.period5));
-            p[5].setText(getResources().getString(R.string.period6));
-            p[6].setText(getResources().getString(R.string.period7));
-            p[7].setText(getResources().getString(R.string.period8));
-            p[8].setText(getResources().getString(R.string.period9));
+            while (i < 9) {
+                p[i].setText(getStringResource(periodStringResource24[i]));
+                ++i;
+            }
         }
+    }
+
+    //string resource extractor
+    private String getStringResource(int res){
+        return getResources().getString(res);
     }
 
     private int getTimeFormat() {
         SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTime", MODE_PRIVATE);
         return mSharedPreferences.getInt("format", 24);
     }
+
+    //this reads semester name from database and sets in semester textview
     private void readSemester(String source, String course,String year) {
             db.collection(source).document(course).collection(year).document("semester")
                 .get()
@@ -490,6 +503,8 @@ public class FullScheduleActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    //gets locally stored credentials during login/register
     private String[] getCredentials(){
         String[] cred = {"",""};
         SharedPreferences mSharedPreferences = getSharedPreferences("credentials", MODE_PRIVATE);
@@ -497,6 +512,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         cred[1] =  mSharedPreferences.getString("roll", "");
         return cred;
     }
+    //reads period details from database and sets to their resp. textviews
     private void readDatabase(String source, String course, String year, String weekday){
         db.collection(source).document(course).collection(year).document(weekday)
                 .get()
@@ -523,6 +539,8 @@ public class FullScheduleActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    //logs out the user
     private void logOut(){
         if(isNetworkConnected()) {
             setOnline(false);
@@ -538,6 +556,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         }
     }
 
+    //sets active status of user to database (to be used for chatroom feature)
     private void setOnline(Boolean status){
         Map<String, Object> data = new HashMap<>();
         data.put("active", status);
@@ -554,14 +573,15 @@ public class FullScheduleActivity extends AppCompatActivity {
 
     private void scrollTop(){
         if(!isLandscape()) {
-            scrollView = findViewById(R.id.verticalScrollviewPort);
-            scrollView.smoothScrollTo(0,View.FOCUS_BACKWARD);
+            dayschedulePortrait= findViewById(R.id.weekdayplanview);
+            dayschedulePortrait.smoothScrollTo(0,View.FOCUS_UP);
         } else{
             horizontalScrollView = findViewById(R.id.horizontalScrollLand);
             horizontalScrollView.smoothScrollTo(View.FOCUS_LEFT,0);
         }
     }
 
+    //app updater function
     private void readVersionCheckUpdate(){
         if(isNetworkConnected()) {
             db.collection("appConfig").document("verCurrent")
@@ -714,10 +734,10 @@ private void requestStoragePermission(){
     }
     public void setAppTheme(int code) {
         switch (code) {
-            case 101:
+            case CODE_LIGHT_THEME:
                 setTheme(R.style.BlueLightTheme);
                 break;
-            case 102:
+            case CODE_DARK_THEME:
                 setTheme(R.style.BlueDarkTheme);
                 break;
             default:setTheme(R.style.BlueLightTheme);

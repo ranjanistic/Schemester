@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -57,9 +58,12 @@
             android:textSize="18sp"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
+            android:focusedByDefault="true"
             android:backgroundTint="@color/blue"
             android:inputType="textEmailAddress"
-            android:hint="@string/email_id"/>
+            android:nextFocusDown="@id/cred_pass"
+            android:hint="@string/email_id"
+            tools:targetApi="q" />
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:gravity="center"

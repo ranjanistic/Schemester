@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class CustomVerificationDialog extends AppCompatDialog {
     OnDialogApplyListener onDialogApplyListener;
-    public CustomVerificationDialog(Context context, OnDialogApplyListener onDialogApplyListener){
+    CustomVerificationDialog(Context context, OnDialogApplyListener onDialogApplyListener){
         super(context);
         this.onDialogApplyListener = onDialogApplyListener;
     }

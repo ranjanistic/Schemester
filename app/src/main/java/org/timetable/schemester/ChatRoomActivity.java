@@ -25,7 +25,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_room);
         if(!checkIfEmailVerified()){
             Toast.makeText(ChatRoomActivity.this, "Please verify your email first.", Toast.LENGTH_LONG).show();
-          //  finish();
+            finish();
         }
         pullDown = findViewById(R.id.pulldownbtn);
         final CoordinatorLayout coordinatorLayout = findViewById(R.id.coordinatorLayout);

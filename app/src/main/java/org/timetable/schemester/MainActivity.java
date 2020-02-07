@@ -83,9 +83,8 @@ public class MainActivity extends AppCompatActivity{
     Calendar calendar;
     Animation hide, show, fadeon, fadeoff;
     updateTask mupdateTask;
-    public static Activity mainact;
+    public Activity mainact;
     public static boolean isCreated = false;
-    private Boolean isHoliday;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     int[] periodStringResource12 = {
                     R.string.period112,
@@ -108,7 +107,7 @@ public class MainActivity extends AppCompatActivity{
                     R.string.period8,
                     R.string.period9
             };
-    checkUpdate update;
+    private checkUpdate update;     //update checker asyncTask class
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAppTheme(getThemeStatus());
@@ -119,7 +118,6 @@ public class MainActivity extends AppCompatActivity{
         isCreated = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        isHoliday = false;
         final Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -266,10 +264,10 @@ public class MainActivity extends AppCompatActivity{
                 @Override
                 public void onScrollChange(View view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                     bottomSheetBehavior.setHideable(false);
-                    if(scrollY > oldScrollY){
+                    if(scrollY < oldScrollY){
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                     }
-                    if(scrollY<oldScrollY){
+                    if(scrollY> oldScrollY){
                         bottomSheetBehavior.setHideable(true);
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                     }

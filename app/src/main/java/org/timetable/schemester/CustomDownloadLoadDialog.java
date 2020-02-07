@@ -38,7 +38,7 @@ import java.util.Objects;
 
 public class CustomDownloadLoadDialog extends AppCompatDialog {
     OnDialogDownloadLoadListener onDialogDownloadLoadListener;
-    public CustomDownloadLoadDialog(Context context, OnDialogDownloadLoadListener onDialogDownloadLoadListener){
+    CustomDownloadLoadDialog(Context context, OnDialogDownloadLoadListener onDialogDownloadLoadListener){
         super(context);
         this.onDialogDownloadLoadListener = onDialogDownloadLoadListener;
     }

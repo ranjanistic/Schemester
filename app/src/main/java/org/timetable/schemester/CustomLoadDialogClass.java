@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class CustomLoadDialogClass extends AppCompatDialog {
     private OnDialogLoadListener onDialogLoadListener;
-    public CustomLoadDialogClass(Context context, OnDialogLoadListener onDialogLoadListener){
+    CustomLoadDialogClass(Context context, OnDialogLoadListener onDialogLoadListener){
         super(context);
         this.onDialogLoadListener = onDialogLoadListener;
     }
