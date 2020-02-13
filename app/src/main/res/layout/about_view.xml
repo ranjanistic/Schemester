@@ -116,12 +116,11 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/versionCode"
+                    android:id="@+id/versionCodeName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat"
                     android:singleLine="false"
-                    android:text="@string/app_version"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="bold" />

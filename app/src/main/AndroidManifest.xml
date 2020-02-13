@@ -14,13 +14,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ChatRoomActivity"
-            android:theme="@style/BlueLightTheme"/>
+        <activity android:name=".AdditionalLoginInfo"></activity>
+        <activity
+            android:name=".ChatRoomActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/BlueLightTheme" />
         <activity
             android:name=".PositionActivity"
             android:theme="@style/BlueLightTheme" />
-        <activity android:name=".NoticeBoard"
-            android:theme="@style/BlueWhiteThemeLight"/>
+        <activity
+            android:name=".NoticeBoard"
+            android:theme="@style/BlueWhiteThemeLight" />
         <activity
             android:name=".Preferences"
             android:theme="@style/BlueWhiteThemeLight" />
@@ -32,6 +36,7 @@
             android:theme="@style/splashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

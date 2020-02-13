@@ -327,7 +327,7 @@ public class LoginActivity extends AppCompatActivity {
                                 storeCredentials(uid, "");
                             }
                             Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, AdditionalLoginInfo.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY);
                             startActivity(intent);
                             customLoadDialogClass.hide();
@@ -357,7 +357,7 @@ public class LoginActivity extends AppCompatActivity {
         mEditor.putString("roll", rollnum);
         mEditor.apply();
     }
-    public boolean isInternetAvailable() {
+    private boolean isInternetAvailable() {
         Runtime runtime = Runtime.getRuntime();
         try {
             Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");

@@ -29,7 +29,74 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout">
+       <ScrollView
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_gravity="bottom"
+               android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/incoming_message_back"
+            android:backgroundTint="?attr/display_foreground"
+            android:paddingTop="8dp"
+            android:layout_gravity="start"
+            android:paddingBottom="8dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:layout_margin="8dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/senderID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/foreground_text_color"
+                android:text="sender"
+                android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/receivedMsg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/foreground_text_color"
+                android:singleLine="false"
+                android:text="message is this what i call sad "
+                android:textSize="18sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/outgoing_message_back"
+            android:backgroundTint="@color/green"
+            android:paddingTop="8dp"
+            android:layout_gravity="end"
+            android:paddingBottom="8dp"
+            android:paddingStart="12dp"
+
+            android:paddingEnd="12dp"
+            android:layout_margin="8dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/myID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/foreground_text_color"
+                android:text="myname"
+                android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/myMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/foreground_text_color"
+                android:singleLine="false"
+                android:text="message is this what i"
+                android:textSize="18sp"/>
+        </LinearLayout>
+           </LinearLayout>
+       </ScrollView>
     </com.google.android.material.circularreveal.coordinatorlayout.CircularRevealCoordinatorLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -38,44 +105,55 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/toproundview"
         android:backgroundTint="?attr/display_foreground"
         app:layout_constraintVertical_bias="1">
 
-        <LinearLayout
-            android:id="@+id/linearLayout6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:padding="8dp">
-
-            <EditText
-                android:id="@+id/messageTextTyping"
-                android:layout_width="200dp"
-                android:layout_height="match_parent"
-                android:backgroundTint="?attr/foreground_text_color"
-                android:hint="@string/type_here"
-                android:textColor="?attr/foreground_text_color"
-                android:textColorHint="@color/dull_white" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <ImageButton
-                android:id="@+id/sendTextMessage"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:padding="8dp"
-                android:scaleType="fitCenter"
-                android:background="@drawable/round_btn"
-                android:backgroundTint="?attr/base_background"
-                android:rotation="180"
-                app:srcCompat="@drawable/ic_halfarrow" />
-        </LinearLayout>
+        <include
+            layout="@layout/chat_menu"
+            />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <LinearLayout
+        android:id="@+id/linearLayout6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/toproundview"
+        android:backgroundTint="?attr/display_foreground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="1"
+        android:padding="8dp">
+
+        <EditText
+            android:id="@+id/messageTextTyping"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:backgroundTint="?attr/foreground_text_color"
+            android:hint="@string/type_here"
+            android:textColor="?attr/foreground_text_color"
+            android:textColorHint="@color/dull_white" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/sendTextMessage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:background="@drawable/round_btn"
+            android:backgroundTint="?attr/base_background"
+            android:rotation="180"
+            app:srcCompat="@drawable/ic_halfarrow" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

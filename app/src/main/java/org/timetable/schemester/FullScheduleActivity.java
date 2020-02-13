@@ -72,6 +72,7 @@ public class FullScheduleActivity extends AppCompatActivity {
     TextView[] c = {c1,c2,c3,c4,c5,c6,c7,c8,c9};        //class name textview objects
     String[] pkey = {"p1","p2","p3","p4","p5","p6","p7","p8","p9"};     //keys to access database values
     Button[] dayBtn = {m,t,w,th,f};
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String[] dayString = {"monday", "tuesday", "wednesday", "thursday", "friday"};
     View settingsview, aboutview;
     ImageButton setting, about, git, dml, webbtn, fullsetting, updatecheck, noticebtn;
@@ -79,6 +80,7 @@ public class FullScheduleActivity extends AppCompatActivity {
     NestedScrollView dayschedulePortrait;       //common view for both orientations
     HorizontalScrollView horizontalScrollView;
     ScrollView scrollView;
+    TextView versionNameView;
     ImageButton chatbtn;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     CustomLoadDialogClass customLoadDialogClass;
@@ -161,8 +163,9 @@ public class FullScheduleActivity extends AppCompatActivity {
             dayBtn[w] = findViewById(workDayID[w]);
             ++w;
         }
-        
-        setting = findViewById(R.id.settingbtn);
+
+        versionNameView = findViewById(R.id.versionCodeName);
+        versionNameView.setText(versionName);
         about = findViewById(R.id.aboutbtn);
         settingsview = findViewById(R.id.settingview);
         aboutview = findViewById(R.id.aboutview);
@@ -232,15 +235,34 @@ public class FullScheduleActivity extends AppCompatActivity {
  */
             }
         });
+        final CustomConfirmDialogClass customConfirmDialogClassVerfication = new CustomConfirmDialogClass(FullScheduleActivity.this, new OnDialogConfirmListener() {
+            @Override
+            public void onApply(Boolean confirm) {
+                sendVerificationEmail();
+                finish();
+            }
 
+            @Override
+            public String onCallText() {
+                return "Email not verified";
+            }
+
+            @Override
+            public String onCallSub() {
+                return "You need to verify your email ID to enter the chat room, because authenticity is important while interaction with others.\n\nConfirm to receive a verification link to your provided email ID and verify yourself there?\n\n(You can also change your email ID in settings, if you don't have access to your current email ID..)";
+            }
+        });
         chatbtn = findViewById(R.id.chatButton);
         chatbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(FullScheduleActivity.this, "Under Construction, will be available soon!", Toast.LENGTH_LONG).show();
-        /*        Intent room = new Intent(FullScheduleActivity.this, ChatRoomActivity.class);
-                startActivity(room);
-         */
+                if(!checkIfEmailVerified()) {
+                    customConfirmDialogClassVerfication.show();
+                } else {
+                    Intent room = new Intent(FullScheduleActivity.this, ChatRoomActivity.class);
+                    startActivity(room);
+                }
             }
         });
 
@@ -395,7 +417,7 @@ public class FullScheduleActivity extends AppCompatActivity {
 
         email = findViewById(R.id.emailtextsetting);
         roll = findViewById(R.id.rolltextsetting);
-
+        setting = findViewById(R.id.settingbtn);
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -454,6 +476,23 @@ public class FullScheduleActivity extends AppCompatActivity {
         super.onStart();
     }
 
+
+    private void sendVerificationEmail() {
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        user.sendEmailVerification()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getApplicationContext(),"A confirmation email is sent to your email address.", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+    }
+    private Boolean checkIfEmailVerified() {
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        return user.isEmailVerified();
+    }
     //to set time display of period according to chosen format
     private void setTimeFormat(int tFormat){
         int i = 0;

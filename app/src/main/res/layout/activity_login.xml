@@ -239,7 +239,7 @@
         android:paddingTop="10dp"
         android:paddingEnd="12dp"
         android:paddingBottom="10dp"
-        android:text="@string/done"
+        android:text="@string/proceed"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/blue"
         android:textSize="20sp"

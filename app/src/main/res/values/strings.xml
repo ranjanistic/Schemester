@@ -7,6 +7,7 @@
     <string name="okay">okay</string>
     <string name="channel_name">New period notification</string>
     <string name="channel_description">To notify about next class.</string>
+
     <string name="time1">08:30:00</string>
     <string name="time2">09:30:00</string>
     <string name="time3">10:30:00</string>
@@ -28,7 +29,6 @@
     <string name="period8">15:30 to 16:30</string>
     <string name="period9">16:30 to 17:30</string>
 
-
     <string name="period112">8:30 am to 9:30 am</string>
     <string name="period212">9:30 am to 10:30 am</string>
     <string name="period312">10:30 am to 11:30 am</string>
@@ -38,6 +38,36 @@
     <string name="period712">2:30 pm to 3:30 pm</string>
     <string name="period812">3:30 pm to 4:30 pm</string>
     <string name="period912">4:30 pm to 5:30 pm</string>
+
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+
+    <string name="mon">Mon</string>
+    <string name="tue">Tue</string>
+    <string name="wed">Wed</string>
+    <string name="thu">Thu</string>
+    <string name="fri">Fri</string>
+    <string name="sat">Sat</string>
+    <string name="sun">Sun</string>
+
+    <string name="jan">January</string>
+    <string name="feb">February</string>
+    <string name="mar">March</string>
+    <string name="apr">April</string>
+    <string name="may">May</string>
+    <string name="jun">June</string>
+    <string name="jul">July</string>
+    <string name="aug">August</string>
+    <string name="sept">September</string>
+    <string name="oct">October</string>
+    <string name="nov">November</string>
+    <string name="dec">December</string>
+
     <string name="valid">Valid</string>
     <string name="invalidtext">Invalid till now</string>
     <string name="not_verified">Not verified</string>
@@ -61,18 +91,10 @@
     <string name="major_settings">Major settings</string>
     <string name="type_here">Type here</string>
     <string name="submit">Submit</string>
-    <string name="fri">Fri</string>
-    <string name="thu">Thu</string>
-    <string name="wed">Wed</string>
-    <string name="tue">Tue</string>
-    <string name="mon">Mon</string>
+
     <string name="info_button">info button</string>
     <string name="setting_button">setting button</string>
-    <string name="friday">Friday</string>
-    <string name="thursday">Thursday</string>
-    <string name="wednesday">Wednesday</string>
-    <string name="tuesday">Tuesday</string>
-    <string name="monday">Monday</string>
+
     <string name="update_check_button">update check button</string>
     <string name="open_settings_button">Open settings button</string>
     <string name="verification_required">Verification required</string>
@@ -126,4 +148,14 @@
     <string name="done">Done</string>
     <string name="today">Today</string>
     <string name="theme_changer">theme changer</string>
+
+    <string-array name="college_array">
+        <item>Deshbandhu College</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="course_array">
+        <item>Physics Hons.</item>
+        <item>Other</item>
+    </string-array>
 </resources>

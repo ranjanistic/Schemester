@@ -8,45 +8,11 @@
     android:paddingStart="8dp"
     android:paddingEnd="8dp"
     android:paddingBottom="8dp"
-    android:paddingTop="0dp"
+    android:paddingTop="8dp"
     tools:showIn="@layout/activity_chat_room"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <LinearLayout
-        android:id="@+id/roomDetails"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Students in this room"
-        android:textColor="?attr/foreground_text_color"
-        android:textSize="14sp" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="My Name"
-            android:textColor="?attr/foreground_text_color"
-            android:textSize="18sp" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="My emailid"
-            android:textColor="?attr/foreground_text_color"
-            android:textSize="16sp" />
-    </LinearLayout>
-    </LinearLayout>
     <LinearLayout
         android:id="@+id/chatroomHeader"
         android:layout_width="match_parent"
@@ -80,7 +46,7 @@
         android:layout_weight="1" />
 
     <ImageButton
-        android:id="@+id/pulldownbtn"
+        android:id="@+id/pullUpbtn"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@drawable/round_btn"
