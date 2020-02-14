@@ -17,7 +17,6 @@
         <activity android:name=".AdditionalLoginInfo"></activity>
         <activity
             android:name=".ChatRoomActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/BlueLightTheme" />
         <activity
             android:name=".PositionActivity"

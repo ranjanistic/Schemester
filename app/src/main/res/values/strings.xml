@@ -148,6 +148,12 @@
     <string name="done">Done</string>
     <string name="today">Today</string>
     <string name="theme_changer">theme changer</string>
+    <string name="course">Course</string>
+    <string name="college">College</string>
+    <string name="year">Year</string>
+    <string name="dbc_du">Deshbandhu College</string>
+    <string name="phy_h">Physics Honours</string>
+    <string name="second">Second</string>
 
     <string-array name="college_array">
         <item>Deshbandhu College</item>

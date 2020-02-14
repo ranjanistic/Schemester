@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -150,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
                         isDateValid = true;
                     }
                 }else{
-                    bdate.setTextColor(getResources().getColor(R.color.dark_red));
+                    bdate.setTextColor(getResources().getColor(R.color.light_red));
                     isDateValid = false;
                 }
             }
@@ -248,7 +249,7 @@ public class LoginActivity extends AppCompatActivity {
                     customLoadDialogClass.show();
                     dob = dd+mm+yyyy;
                     if(isInternetAvailable()) {
-                        new regisTask().execute(email, dob);
+                        new registerLoginTask().execute(email, dob);
                     } else {
                         Toast.makeText(getApplicationContext(),"No internet",Toast.LENGTH_SHORT).show();
                         customLoadDialogClass.hide();
@@ -269,13 +270,13 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public class regisTask extends AsyncTask<String,String,String> {
+    public class registerLoginTask extends AsyncTask<String,String,String> {
         @Override
         protected String doInBackground(String... creds){
-            String emailcred = creds[0];
-            String passcred = creds[1];
-            register(emailcred, passcred);
-            return emailcred;
+            String emailCred = creds[0];
+            String passCred = creds[1];
+            register(emailCred, passCred);
+            return emailCred;
         }
         @Override
         protected void onPostExecute(String result){
@@ -283,6 +284,18 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    private String[] getAdditionalInfo() {
+        String[] CCY = {null, null, null};
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("additionalInfo", MODE_PRIVATE);
+        CCY[0] = mSharedPreferences.getString("college", "");
+        CCY[1] = mSharedPreferences.getString("course", "");
+        CCY[2] = mSharedPreferences.getString("year", "");
+        return CCY;
+    }
+    private Boolean userHasProvidedAdditionalInfo(){
+        String[] addInfo = getAdditionalInfo(), nullArray = {"","",""};
+        return !Arrays.equals(addInfo, nullArray);
+    }
     private void loginUser(final String emailIdFinalLogin, final String passwordFinalLogin){
         mAuth.signInWithEmailAndPassword(emailIdFinalLogin, passwordFinalLogin)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -296,11 +309,18 @@ public class LoginActivity extends AppCompatActivity {
                             } else {
                                 storeCredentials(emailIdFinalLogin, "");
                             }
-                            Toast.makeText(getApplicationContext(), "Logged in as "+emailIdFinalLogin, Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_from_top);
-                            finish();
+                            if(userHasProvidedAdditionalInfo()) {
+                                Toast.makeText(getApplicationContext(), "Logged in as " + emailIdFinalLogin, Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_from_top);
+                                finish();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Complete your profile", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(LoginActivity.this, AdditionalLoginInfo.class);
+                                startActivity(intent);
+                                finish();
+                            }
                         }
                         else {
                             storeLoginStatus(false);
@@ -326,12 +346,10 @@ public class LoginActivity extends AppCompatActivity {
                             } else {
                                 storeCredentials(uid, "");
                             }
-                            Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(LoginActivity.this, AdditionalLoginInfo.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY);
                             startActivity(intent);
                             customLoadDialogClass.hide();
-                            overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_from_top);
                             finish();
                             sendVerificationEmail();
                         } else {

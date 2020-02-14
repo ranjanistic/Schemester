@@ -21,7 +21,7 @@
         android:paddingTop="8dp"
         android:paddingEnd="8dp"
         android:paddingBottom="0dp"
-        android:text="Final \ncrucial\ndetails."
+        android:text="Final \ncrucial\ninformation."
         android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/white"
@@ -51,6 +51,9 @@
         android:id="@+id/spinnerCollege"
         android:layout_width="match_parent"
         android:textAlignment="textStart"
+        android:padding="22dp"
+        android:backgroundTint="@color/white"
+        android:background="@drawable/roundcontainerbox"
         android:layout_height="wrap_content"
          />
     </LinearLayout>
@@ -75,6 +78,30 @@
             android:layout_height="wrap_content"
             />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/reloginBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/square_round_btn"
+        android:backgroundTint="?attr/display_foreground"
+        android:paddingStart="12dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="10dp"
+        android:text="Re-login"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="?attr/foreground_text_color"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/additionalConfirmed"

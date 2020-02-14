@@ -52,74 +52,57 @@ import static android.content.ContentValues.TAG;
 public class MainActivity extends AppCompatActivity{
     int versionCode = BuildConfig.VERSION_CODE;
     String versionName = BuildConfig.VERSION_NAME;
-    TextView semestertxt, noclass;
-    TextView c1,c2,c3,c4,c5,c6,c7,c8,c9,p1,p2,p3,p4,p5,p6,p7,p8,p9 ;
-    TextView[] c = {c1,c2,c3,c4,c5,c6,c7,c8,c9};
-    TextView[] p = {p1,p2,p3,p4,p5,p6,p7,p8,p9 };
-    String[] pKey = {"p1","p2","p3","p4","p5","p6","p7","p8","p9"};
-    String clg, course,year;
-    private static String COLLECTION_GLOBAL_INFO = "global_info";
-    private static String DOCUMENT_GLOBAL_SEMESTER = "semester";
-    TextView day, month, time;
-    Button date;
-    ImageButton drawerArrow, switchThemeBtn;
-    LinearLayout headingView, landscapeView, settingTab, scheduleTab;
-    ScrollView scrollView;
-    Calendar calendar;
-    Animation hide, show, fadeOn, fadeOff;
-    HighlightUpdatedClassTask mHighlightClassTask;
+    private TextView semestertxt, noclass,
+            c1,c2,c3,c4,c5,c6,c7,c8,c9,p1,p2,p3,p4,p5,p6,p7,p8,p9,
+            day, month, time;
+    private TextView[] c = {c1,c2,c3,c4,c5,c6,c7,c8,c9},
+    p = {p1,p2,p3,p4,p5,p6,p7,p8,p9};
+    static String[] pKey = {"p1","p2","p3","p4","p5","p6","p7","p8","p9"};
+    String COLLECTION_GLOBAL_INFO = "global_info",
+            DOCUMENT_GLOBAL_SEMESTER = "semester",
+            COLLECTION_COLLEGE_CODE , DOCUMENT_COURSE_NAME , COLLECTION_YEAR_CODE;
+
+    private Button date;
+    private ImageButton drawerArrow, switchThemeBtn;
+    private LinearLayout headingView, settingTab, scheduleTab;
+    private ScrollView scrollView;
+    private Calendar calendar;
+    private Animation hide, show, fadeOn, fadeOff;
+    private HighlightUpdatedClassTask mHighlightClassTask;
     public Activity mainact;
     public static boolean isCreated = false;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    int[] periodStringResource12 = {
-                    R.string.period112,
-                    R.string.period212,
-                    R.string.period312,
-                    R.string.period412,
-                    R.string.period512,
-                    R.string.period612,
-                    R.string.period712,
-                    R.string.period812,
-                    R.string.period912},
-            periodStringResource24 = {
-                    R.string.period1,
-                    R.string.period2,
-                    R.string.period3,
-                    R.string.period4,
-                    R.string.period5,
-                    R.string.period6,
-                    R.string.period7,
-                    R.string.period8,
-                    R.string.period9
-            }, timeStringResource = {
-            R.string.time1,
-            R.string.time2,
-            R.string.time3,
-            R.string.time4,
-            R.string.time5,
-            R.string.time6,
-            R.string.time7,
-            R.string.time8,
-            R.string.time9,
-            R.string.time10,
+    private int[] periodStringResource12 = {
+            R.string.period112, R.string.period212, R.string.period312, R.string.period412, R.string.period512,
+            R.string.period612, R.string.period712, R.string.period812, R.string.period912
+    }, periodStringResource24 = {
+            R.string.period1, R.string.period2, R.string.period3, R.string.period4,
+            R.string.period5, R.string.period6, R.string.period7, R.string.period8, R.string.period9
+    }, timeStringResource = {
+            R.string.time1, R.string.time2, R.string.time3, R.string.time4, R.string.time5,
+            R.string.time6, R.string.time7, R.string.time8, R.string.time9, R.string.time10,
+    }, periodView = {
+            R.id.periodMain1, R.id.periodMain2, R.id.periodMain3, R.id.periodMain4, R.id.periodMain5,
+            R.id.periodMain6, R.id.periodMain7, R.id.periodMain8, R.id.periodMain9,
+    }, classView = {
+            R.id.classMain1, R.id.classMain2, R.id.classMain3, R.id.classMain4, R.id.classMain5,
+            R.id.classMain6, R.id.classMain7, R.id.classMain8, R.id.classMain9,
     };
-    int[] periodView = { R.id.periodMain1, R.id.periodMain2, R.id.periodMain3, R.id.periodMain4, R.id.periodMain5, R.id.periodMain6, R.id.periodMain7, R.id.periodMain8, R.id.periodMain9,
-    }, classView = { R.id.classMain1, R.id.classMain2, R.id.classMain3, R.id.classMain4, R.id.classMain5, R.id.classMain6, R.id.classMain7, R.id.classMain8, R.id.classMain9,
-    };
-    LinearLayout bottomDrawer;
+    private LinearLayout bottomDrawer;
     private checkUpdate update;     //update checker asyncTask class
-    Window window;
+    private Window window;
+
     @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setAppTheme(getThemeStatus());
-        clg = "DBC";
-        course = "PHY-H";
-        year = "Y2";
         mainact = this;
         isCreated = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        COLLECTION_COLLEGE_CODE = getAdditionalInfo()[0];
+        DOCUMENT_COURSE_NAME = getAdditionalInfo()[1];
+        COLLECTION_YEAR_CODE = getAdditionalInfo()[2];
         window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -147,12 +130,12 @@ public class MainActivity extends AppCompatActivity{
         //check for updates task
         update = new checkUpdate();
         update.execute();
+
     }
 
     private void setViews(){
         scrollView = findViewById(R.id.scrollView);
         headingView = findViewById(R.id.period_view);
-        landscapeView = findViewById(R.id.mainLinearlayoutLandscape);
         noclass = findViewById(R.id.noclasstext);
         settingTab = findViewById(R.id.settingTab);
         scheduleTab = findViewById(R.id.fullScheduleTab);
@@ -422,7 +405,7 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onStart() {
-        setSemester(COLLECTION_GLOBAL_INFO,DOCUMENT_GLOBAL_SEMESTER,year);
+        setSemester(COLLECTION_GLOBAL_INFO,DOCUMENT_GLOBAL_SEMESTER,COLLECTION_YEAR_CODE);
         date.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
         day.setText(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
         month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
@@ -497,14 +480,14 @@ public class MainActivity extends AppCompatActivity{
             date.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
             day.setText(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
             month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
-            setSemester(COLLECTION_GLOBAL_INFO,DOCUMENT_GLOBAL_SEMESTER,year);
+            setSemester(COLLECTION_GLOBAL_INFO,DOCUMENT_GLOBAL_SEMESTER,COLLECTION_YEAR_CODE);
             super.onPreExecute();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             if (!isHolidayToday()) {
-                readDatabase(clg,course,year,getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
+                readDatabase(COLLECTION_COLLEGE_CODE,DOCUMENT_COURSE_NAME,COLLECTION_YEAR_CODE,getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
             }
             return null;
         }
@@ -716,6 +699,14 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 */
+    String[] getAdditionalInfo() {
+        String[] CCY = {null, null, null};
+        SharedPreferences mSharedPreferences = getSharedPreferences("additionalInfo", MODE_PRIVATE);
+        CCY[0] = mSharedPreferences.getString("college", "");
+        CCY[1] = mSharedPreferences.getString("course", "");
+        CCY[2] = mSharedPreferences.getString("year", "");
+        return CCY;
+    }
 
     /**
      * checks current time between provided time slot and returns true/false accordingly
@@ -817,6 +808,7 @@ public class MainActivity extends AppCompatActivity{
         SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
         return mSharedPreferences.getInt("themeCode", 0);
     }
+
 
     private boolean isLandscape() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;

@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
     <ImageButton
+        android:id="@+id/exitBtn"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@drawable/round_btn"

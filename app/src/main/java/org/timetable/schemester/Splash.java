@@ -29,22 +29,33 @@ public class Splash extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //createNotificationChannel();
-        String clg = "DBC", course = "PHY-H";
-            if(user!=null) {
-                isHolidayOtherThanWeekend(clg, course);
-                isHolidayOtherThanWeekend(clg, "local_info");
+        String[] addInfo = getAdditionalInfo();
+        if(user!=null) {
+            if(Objects.equals(addInfo[0],"")||Objects.equals(addInfo[1],"")||Objects.equals(addInfo[2],"")){
+                Intent intent = new Intent(this, AdditionalLoginInfo.class);
+                startActivity(intent);
+                finish();
+            } else {
+                isHolidayOtherThanWeekend(addInfo[0], addInfo[1]);
+                isHolidayOtherThanWeekend(addInfo[0], "local_info");
                 isHolidayOtherThanWeekend("global_info", "holiday_info");
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
-                overridePendingTransition(R.anim.enter_from_top, R.anim.exit_from_bottom);
-                finish();
-            } else {
-                Intent intent = new Intent(this, PositionActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.enter_from_top, R.anim.exit_from_bottom);
                 finish();
             }
+        } else {
+            Intent intent = new Intent(this, PositionActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+    private String[] getAdditionalInfo() {
+        String[] CCY = {null, null, null};
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("additionalInfo", MODE_PRIVATE);
+        CCY[0] = mSharedPreferences.getString("college", "");
+        CCY[1] = mSharedPreferences.getString("course", "");
+        CCY[2] = mSharedPreferences.getString("year", "");
+        return CCY;
     }
     private void isHolidayOtherThanWeekend(String collector, String doc){
         db.collection(collector).document(doc)

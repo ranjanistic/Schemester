@@ -66,7 +66,7 @@ import java.util.TimeZone;
 import static android.content.ContentValues.TAG;
 
 public class FullScheduleActivity extends AppCompatActivity {
-    TextView c1,c2,c3,c4,c5,c6,c7,c8,c9, p1,p2,p3,p4,p5,p6,p7,p8,p9,email, roll, semester;
+    TextView c1,c2,c3,c4,c5,c6,c7,c8,c9, p1,p2,p3,p4,p5,p6,p7,p8,p9,email, roll, semester, courseText, collegeText, yearText;
     Button m,t,w,th,f, logoutbtn;
     TextView[] p = {p1,p2,p3,p4,p5,p6,p7,p8,p9};       //period objects
     TextView[] c = {c1,c2,c3,c4,c5,c6,c7,c8,c9};        //class name textview objects
@@ -86,13 +86,6 @@ public class FullScheduleActivity extends AppCompatActivity {
     CustomLoadDialogClass customLoadDialogClass;
     CustomDownloadLoadDialog customDownloadLoadDialog;
 
-    int[] workDayHalfStringResource = {
-            R.string.mon,
-            R.string.tue,
-            R.string.wed,
-            R.string.thu,
-            R.string.fri,
-    };
     //For time period string resources - 12 and 24 hours separately
     int[] periodStringResource12 = {
             R.string.period112,
@@ -122,7 +115,7 @@ public class FullScheduleActivity extends AppCompatActivity {
 
     //Theme codes
      final static int CODE_DARK_THEME = 102, CODE_LIGHT_THEME = 101;
-
+     String websiteLink;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,11 +167,23 @@ public class FullScheduleActivity extends AppCompatActivity {
         isInternetAvailable();              //remind user to connect to internet
 
         semester = findViewById(R.id.semtextsetting);
+        courseText = findViewById(R.id.courseTextSetting);
+        collegeText = findViewById(R.id.collegeTextSetting);
+        yearText = findViewById(R.id.yearTextSetting);
+        if(Objects.equals(getAdditionalInfo()[0],"DBC")){
+            collegeText.setText(getStringResource(R.string.dbc_du));
+        }
+        if(Objects.equals(getAdditionalInfo()[1],"PHY-H")) {
+            courseText.setText(getStringResource(R.string.phy_h));
+        }
+        if(Objects.equals(getAdditionalInfo()[2],"Y2")) {
+            yearText.setText(getStringResource(R.string.second));
+        }
 
         //by default, settings and about pages not shown
         settingsview.setVisibility(View.GONE);
         aboutview.setVisibility(View.GONE);
-
+        getWebsiteLinkFromDatabase();
         git = findViewById(R.id.githubbtn);
         git.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,7 +197,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         webbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri uri = Uri.parse("https://darkmodelabs.github.io/SchemesterWeb/");
+                Uri uri = Uri.parse(websiteLink);
                 Intent web = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(web);
             }
@@ -239,7 +244,6 @@ public class FullScheduleActivity extends AppCompatActivity {
             @Override
             public void onApply(Boolean confirm) {
                 sendVerificationEmail();
-                finish();
             }
 
             @Override
@@ -256,7 +260,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         chatbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(FullScheduleActivity.this, "Under Construction, will be available soon!", Toast.LENGTH_LONG).show();
+//                Toast.makeText(FullScheduleActivity.this, "Under Construction, will be available soon!", Toast.LENGTH_LONG).show();
                 if(!checkIfEmailVerified()) {
                     customConfirmDialogClassVerfication.show();
                 } else {
@@ -279,10 +283,6 @@ public class FullScheduleActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
         int getDayCount = calendar.get(Calendar.DAY_OF_WEEK);
         switch (getDayCount){
-            case  2: readDatabase(clg,course,year,dayString[0]);
-                dayBtn[0].setBackgroundResource(R.drawable.leftroundbtnselected);
-                dayBtn[0].setTextColor(getResources().getColor(R.color.blue));
-            break;
             case 3: readDatabase(clg,course,year,dayString[1]);
                 dayBtn[1].setBackgroundResource(R.drawable.leftroundbtnselected);
                 dayBtn[1].setTextColor(getResources().getColor(R.color.blue));
@@ -299,6 +299,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 dayBtn[4].setBackgroundResource(R.drawable.leftroundbtnselected);
                 dayBtn[4].setTextColor(getResources().getColor(R.color.blue));
                 break;
+            case  2:
             default:readDatabase(clg,course,year,dayString[0]);
                 dayBtn[0].setBackgroundResource(R.drawable.leftroundbtnselected);
                 dayBtn[0].setTextColor(getResources().getColor(R.color.blue));
@@ -465,10 +466,26 @@ public class FullScheduleActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 storeLoginStatus(false);
-                logOut();
+                logoutCurrentUser();
             }
         });
     }
+    private void getWebsiteLinkFromDatabase(){
+        db.collection("appConfig").document("links")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (Objects.requireNonNull(document).exists()) {
+                                websiteLink = document.getString("website");
+                            }
+                        }
+                    }
+                });
+    }
+
 
     @Override
     protected void onStart() {
@@ -476,15 +493,24 @@ public class FullScheduleActivity extends AppCompatActivity {
         super.onStart();
     }
 
+    String[] getAdditionalInfo() {
+        String[] CCY = {null, null, null};
+        SharedPreferences mSharedPreferences = getSharedPreferences("additionalInfo", MODE_PRIVATE);
+        CCY[0] = mSharedPreferences.getString("college", "");
+        CCY[1] = mSharedPreferences.getString("course", "");
+        CCY[2] = mSharedPreferences.getString("year", "");
+        return CCY;
+    }
 
     private void sendVerificationEmail() {
         user = FirebaseAuth.getInstance().getCurrentUser();
-        user.sendEmailVerification()
+        Objects.requireNonNull(user).sendEmailVerification()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getApplicationContext(),"A confirmation email is sent to your email address.", Toast.LENGTH_LONG).show();
+                            logoutCurrentUser();
                         }
                     }
                 });
@@ -580,7 +606,7 @@ public class FullScheduleActivity extends AppCompatActivity {
     }
 
     //logs out the user
-    private void logOut(){
+    private void logoutCurrentUser(){
         if(isNetworkConnected()) {
             setOnline(false);
             FirebaseAuth.getInstance().signOut();

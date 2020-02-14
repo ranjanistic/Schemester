@@ -12,6 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.util.LongSparseArray;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -30,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,83 +39,93 @@ import static android.content.ContentValues.TAG;
 
 public class ChatRoomActivity extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    ImageButton pullUp, pullDown;
+    ImageButton pullUp, pullDown, exit;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    Boolean isCollapsed = true;
     ReadMessage readMessage;
     String newMessage;
+    LinearLayout chatView;
+    MainActivity mainActivity;
     TextView receivedmsg, sendmsg, senderName, myName;
     ImageButton sendMsgBtn;
+    LinearLayout sendlayout, receiveLayout;
     EditText mymsg;
     Boolean thereIsANewMessage = false;
-    CustomConfirmDialogClass customConfirmDialogClassVerfication;
+    String COLLECTION_COLLEGE_CODE , DOCUMENT_COURSE_NAME , COLLECTION_YEAR_CODE;
+    checkNetSendMyMessageTask netCheckMessageSendTask;
+    long msgsequence = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setAppTheme(getThemeStatus());
         setContentView(R.layout.activity_chat_room);
-
+        COLLECTION_COLLEGE_CODE = getAdditionalInfo()[0];
+        DOCUMENT_COURSE_NAME = getAdditionalInfo()[1];
+        COLLECTION_YEAR_CODE = getAdditionalInfo()[2];
         if (!checkIfEmailVerified()) {
             Toast.makeText(ChatRoomActivity.this, "Please verify your email first.", Toast.LENGTH_LONG).show();
             finish();
         } else {
+            sendlayout = findViewById(R.id.sendMsgLayout);
+            receiveLayout = findViewById(R.id.receiveMsgLayout);
             mymsg = findViewById(R.id.messageTextTyping);
-            senderName = findViewById(R.id.senderID);
             sendmsg = findViewById(R.id.myMessage);
+            senderName = findViewById(R.id.senderID);
             myName = findViewById(R.id.myID);
             receivedmsg = findViewById(R.id.receivedMsg);
             sendMsgBtn = findViewById(R.id.sendTextMessage);
             pullUp = findViewById(R.id.pullUpbtn);
             pullDown = findViewById(R.id.pullDownbtn);
-/*
-            LinearLayout bottomDrawer = findViewById(R.id.chatMenu);
-            final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomDrawer);
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-            bottomSheetBehavior.setHideable(true);
-            bottomSheetBehavior.setPeekHeight(0);
-            pullUp.setOnClickListener(new View.OnClickListener() {
+            chatView = findViewById(R.id.chatWindowLinear);
+            exit = findViewById(R.id.exitBtn);
+            exit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    finish();
                 }
             });
-            pullDown.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                }
-            });
-
- */
             sendMsgBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(!isInternetAvailable()){
-                        Toast.makeText(getApplicationContext(),"Connection error", Toast.LENGTH_SHORT).show();
-                    } else {
-                        newMessage = mymsg.getText().toString();
-                        sendmsg.setText(newMessage);
-                        saveMessage(getPreviousMessageNumber()+1,newMessage);
-                        setMessageToDatabase("DBC-DU","PHY-H","Y2", newMessage,
-                                getPreviousMessageNumber()+1);
-                    }
+                    netCheckMessageSendTask = new checkNetSendMyMessageTask();
+                    netCheckMessageSendTask.execute();
                 }
             });
             readMessage = new ReadMessage();
-
+            readMessage.execute();
         }
     }
 
-    private boolean isInternetAvailable() {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
-            return (exitValue == 0);
+
+    private class checkNetSendMyMessageTask extends AsyncTask<Void,Void,Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            return isInternetAvailable();
         }
-        catch (IOException | InterruptedException e){ e.printStackTrace(); }
-        return false;
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if(result) {
+                Calendar calendar = Calendar.getInstance();
+                newMessage = mymsg.getText().toString();
+                if(!(newMessage.equals(" ")||newMessage.equals(""))){
+                    chatView.removeAllViews();
+                    chatView.addView(sendlayout);
+                    long t = calendar.getTimeInMillis();
+                    saveMessageToDevice(t,newMessage,getUserEmailIDFromLocalStorage());
+                    updateMessageInDatabase(COLLECTION_COLLEGE_CODE, DOCUMENT_COURSE_NAME, COLLECTION_YEAR_CODE, newMessage, getUserEmailIDFromLocalStorage(), t);
+                    sendmsg.setText(newMessage);
+                    myName.setText(getUserEmailIDFromLocalStorage());
+                    mymsg.setText("");
+                }
+            } else{
+                Toast.makeText(getApplicationContext(),"Connection error", Toast.LENGTH_SHORT).show();
+            }
+            netCheckMessageSendTask.cancel(true);
+            super.onPostExecute(result);
+        }
     }
+
     @Override
     protected void onStart() {
         setOnline(true);
@@ -127,33 +139,32 @@ public class ChatRoomActivity extends AppCompatActivity {
         }
         super.onStart();
     }
-
     @Override
     protected void onStop() {
+        setOnline(false);
         readMessage.cancel(true);
         super.onStop();
     }
 
-    public class ReadMessage extends AsyncTask<Void,Void,String>{
-        @Override
-        protected String doInBackground(Void... voids) {
-            setMessageFromDatabase("DBC-DU","PHY-H","Y2");
-            if(thereIsANewMessage){
-                return getPreviousMessageText();
-            } else {
-                return null;
-            }
-        }
+    public class ReadMessage extends AsyncTask<Void,Void,Boolean>{
 
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            getMessageFromDatabase(COLLECTION_COLLEGE_CODE,DOCUMENT_COURSE_NAME,COLLECTION_YEAR_CODE);
+            return thereIsANewMessage;
+        }
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
         }
 
         @Override
-        protected void onPostExecute(String result) {
-            if(result!=null) {
-                receivedmsg.setText(result);
+        protected void onPostExecute(Boolean result) {
+            if(result) {
+                senderName.setText(getPreviousMessageAndSenderText()[0]);
+                receivedmsg.setText(getPreviousMessageAndSenderText()[1]);
+                chatView.removeAllViews();
+                chatView.addView(receiveLayout);
             }
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -162,52 +173,36 @@ public class ChatRoomActivity extends AppCompatActivity {
                     readMessage = new ReadMessage();
                     readMessage.execute();
                 }
-            }, 100);
+            }, 10);
             super.onPostExecute(result);
         }
     }
 
-    private void setOnline(Boolean status){
-        Map<String, Object> data = new HashMap<>();
-        data.put("active", status);
-        DocumentReference coll  =  db.collection("userbase").document(getStoredEmail());
-        coll.set(data, SetOptions.merge());
-    }
-
-
-    private String getStoredEmail(){
-        String cred;
-        SharedPreferences mSharedPreferences = getSharedPreferences("credentials", MODE_PRIVATE);
-        cred =  mSharedPreferences.getString("email", "");
-        return cred;
-    }
-
-    private Boolean checkIfEmailVerified() {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        return user.isEmailVerified();
-    }
-    private void sendVerificationEmail() {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        user.sendEmailVerification()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(),"A confirmation email is sent to your email address.", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-    }
-
-    private void setMessageToDatabase(String college, String course, String year,String message, int code){
+    private void updateMessageInDatabase(String college, String course, String year,String message, String uid, Long timestamp){
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("text",message);
-        userMap.put("serialnum", code);
+        userMap.put("uid", uid);
+        userMap.put("time", timestamp);
         db.collection(college).document(course).collection(year).document("currentmsg")
         .update(userMap);
+        saveMessageToDevice(timestamp,message,uid);
     }
-
-    private void setMessageFromDatabase(String college, String course, String year){
+    private void saveMessageToDevice(long num, String txt, String id){
+        SharedPreferences mSharedPreferences = getSharedPreferences("messages", MODE_PRIVATE);
+        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+        mEditor.putLong("stamp", num);
+        mEditor.putString("msg", txt);
+        mEditor.putString("id", id);
+        mEditor.apply();
+    }
+    private String[] getPreviousMessageAndSenderText(){
+        String[] idMsg = {"",""};
+        SharedPreferences mSharedPreferences = getSharedPreferences("messages", MODE_PRIVATE);
+        idMsg[0] = mSharedPreferences.getString("id", "");
+        idMsg[1] = mSharedPreferences.getString("msg", "");
+        return idMsg;
+    }
+    private void getMessageFromDatabase(String college, String course, String year){
         db.collection(college).document(course).collection(year).document("currentmsg")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -216,36 +211,43 @@ public class ChatRoomActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                int code = Integer.parseInt(document.get("serialnum").toString());
-                                if(getPreviousMessageNumber() < code){
-                                    saveMessage(code,document.getString("text"));
+                                long ts = Long.parseLong(document.get("time").toString());
+                                if(!getUserEmailIDFromLocalStorage().equals(document.getString("uid"))){
                                     thereIsANewMessage = true;
+                                    saveMessageToDevice(ts,document.getString("text"),document.getString("uid"));
                                 } else {
                                     thereIsANewMessage = false;
                                 }
-                            } else {
-                                Log.d(TAG, "No such document");
                             }
                         }
                     }
                 });
     }
 
-    private void saveMessage(int num, String txt){
-        SharedPreferences mSharedPreferences = getSharedPreferences("messages", MODE_PRIVATE);
-        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putInt("serial", num);
-        mEditor.putString("msg", txt);
-        mEditor.apply();
+    private boolean isInternetAvailable() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        }
+        catch (IOException | InterruptedException e){ e.printStackTrace(); }
+        return false;
     }
-    private int getPreviousMessageNumber(){
-        SharedPreferences mSharedPreferences = getSharedPreferences("messages", MODE_PRIVATE);
-        return mSharedPreferences.getInt("serial", 0);
+    String[] getAdditionalInfo() {
+        String[] CCY = {null, null, null};
+        SharedPreferences mSharedPreferences = getSharedPreferences("additionalInfo", MODE_PRIVATE);
+        CCY[0] = mSharedPreferences.getString("college", "");
+        CCY[1] = mSharedPreferences.getString("course", "");
+        CCY[2] = mSharedPreferences.getString("year", "");
+        return CCY;
     }
-    private String getPreviousMessageText(){
-        SharedPreferences mSharedPreferences = getSharedPreferences("messages", MODE_PRIVATE);
-        return mSharedPreferences.getString("msg", "");
+
+    private void setOnline(Boolean status){
+        Map<String, Object> data = new HashMap<>();
+        data.put("active", status);
+        DocumentReference coll  =  db.collection("userbase").document(getUserEmailIDFromLocalStorage());
+        coll.set(data, SetOptions.merge());
     }
 
     public void setAppTheme(int code) {
@@ -259,8 +261,20 @@ public class ChatRoomActivity extends AppCompatActivity {
             default:setTheme(R.style.BlueLightTheme);
         }
     }
+
     private int getThemeStatus() {
         SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
         return mSharedPreferences.getInt("themeCode", 0);
+    }
+    private String getUserEmailIDFromLocalStorage(){
+        String cred;
+        SharedPreferences mSharedPreferences = getSharedPreferences("credentials", MODE_PRIVATE);
+        cred =  mSharedPreferences.getString("email", "");
+        return cred;
+    }
+
+    private Boolean checkIfEmailVerified() {
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        return user.isEmailVerified();
     }
 }
