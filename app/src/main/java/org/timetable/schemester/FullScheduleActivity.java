@@ -66,6 +66,7 @@ import java.util.TimeZone;
 import static android.content.ContentValues.TAG;
 
 public class FullScheduleActivity extends AppCompatActivity {
+    ApplicationSchemester schemester;
     TextView c1,c2,c3,c4,c5,c6,c7,c8,c9, p1,p2,p3,p4,p5,p6,p7,p8,p9,email, roll, semester, courseText, collegeText, yearText;
     Button m,t,w,th,f, logoutbtn;
     TextView[] p = {p1,p2,p3,p4,p5,p6,p7,p8,p9};       //period objects
@@ -76,48 +77,22 @@ public class FullScheduleActivity extends AppCompatActivity {
     String[] dayString = {"monday", "tuesday", "wednesday", "thursday", "friday"};
     View settingsview, aboutview;
     ImageButton setting, about, git, dml, webbtn, fullsetting, updatecheck, noticebtn;
-    String clg, course,year;        //TODO :To be assigned by user.
     NestedScrollView dayschedulePortrait;       //common view for both orientations
     HorizontalScrollView horizontalScrollView;
     ScrollView scrollView;
     TextView versionNameView;
-    ImageButton chatbtn;
+    ImageButton chatbtn, incognito;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     CustomLoadDialogClass customLoadDialogClass;
     CustomDownloadLoadDialog customDownloadLoadDialog;
 
-    //For time period string resources - 12 and 24 hours separately
-    int[] periodStringResource12 = {
-            R.string.period112,
-            R.string.period212,
-            R.string.period312,
-            R.string.period412,
-            R.string.period512,
-            R.string.period612,
-            R.string.period712,
-            R.string.period812,
-            R.string.period912},
-            periodStringResource24 = {
-                    R.string.period1,
-                    R.string.period2,
-                    R.string.period3,
-                    R.string.period4,
-                    R.string.period5,
-                    R.string.period6,
-                    R.string.period7,
-                    R.string.period8,
-                    R.string.period9
-            };
-
     //Following assignments for version check and app update feature.
     int versionCode = BuildConfig.VERSION_CODE;
     String versionName = BuildConfig.VERSION_NAME;
-
-    //Theme codes
-     final static int CODE_DARK_THEME = 102, CODE_LIGHT_THEME = 101;
      String websiteLink;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        schemester = (ApplicationSchemester) this.getApplication(); 
         super.onCreate(savedInstanceState);
         setAppTheme(getThemeStatus());
         setContentView(R.layout.activity_full_schedule);
@@ -126,20 +101,26 @@ public class FullScheduleActivity extends AppCompatActivity {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         
         //Setting navigation and status bar color according to theme
-        if(getThemeStatus() == CODE_LIGHT_THEME) {
-            window.setStatusBarColor(this.getResources().getColor(R.color.blue));
-            window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
-        } else if(getThemeStatus() == CODE_DARK_THEME){
+        if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO) {
+            window.setStatusBarColor(this.getResources().getColor(R.color.black));
+            window.setNavigationBarColor(this.getResources().getColor(R.color.black));
+        } else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
             window.setStatusBarColor(this.getResources().getColor(R.color.spruce));
             window.setNavigationBarColor(this.getResources().getColor(R.color.spruce));
         } else {
             window.setStatusBarColor(this.getResources().getColor(R.color.blue));
             window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
         }
-        //TODO - Accept these values from user.
-        clg = "DBC";
-        course = "PHY-H";
-        year = "Y2";
+        schemester.setCollegeCourseYear(getAdditionalInfo()[0],getAdditionalInfo()[1],getAdditionalInfo()[2]);
+        incognito = findViewById(R.id.incognitoBtn);
+        incognito.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(FullScheduleActivity.this, ModeOfConduct.class);
+                startActivity(i);
+            }
+        });
+        
         
         int[] periodView = { R.id.period1, R.id.period2, R.id.period3, R.id.period4, R.id.period5, R.id.period6, R.id.period7, R.id.period8, R.id.period9,
         }, classView = { R.id.class1, R.id.class2, R.id.class3, R.id.class4, R.id.class5, R.id.class6, R.id.class7, R.id.class8, R.id.class9,
@@ -263,6 +244,9 @@ public class FullScheduleActivity extends AppCompatActivity {
 //                Toast.makeText(FullScheduleActivity.this, "Under Construction, will be available soon!", Toast.LENGTH_LONG).show();
                 if(!checkIfEmailVerified()) {
                     customConfirmDialogClassVerfication.show();
+                }else if(getThemeStatus() == 103){
+                    Intent mode = new Intent(FullScheduleActivity.this, ModeOfConduct.class);
+                    startActivity(mode);
                 } else {
                     Intent room = new Intent(FullScheduleActivity.this, ChatRoomActivity.class);
                     startActivity(room);
@@ -283,24 +267,24 @@ public class FullScheduleActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
         int getDayCount = calendar.get(Calendar.DAY_OF_WEEK);
         switch (getDayCount){
-            case 3: readDatabase(clg,course,year,dayString[1]);
+            case 3: readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),schemester.getCOLLECTION_YEAR_CODE(),dayString[1]);
                 dayBtn[1].setBackgroundResource(R.drawable.leftroundbtnselected);
                 dayBtn[1].setTextColor(getResources().getColor(R.color.blue));
                 break;
-            case 4: readDatabase(clg,course,year,dayString[2]);
+            case 4: readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),schemester.getCOLLECTION_YEAR_CODE(),dayString[2]);
                 dayBtn[2].setBackgroundResource(R.drawable.leftroundbtnselected);
                 dayBtn[2].setTextColor(getResources().getColor(R.color.blue));
                 break;
-            case 5: readDatabase(clg,course,year,dayString[3]);
+            case 5: readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),schemester.getCOLLECTION_YEAR_CODE(),dayString[3]);
                 dayBtn[3].setBackgroundResource(R.drawable.leftroundbtnselected);
                 dayBtn[3].setTextColor(getResources().getColor(R.color.blue));
                 break;
-            case 6: readDatabase(clg,course,year,dayString[4]);
+            case 6: readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),schemester.getCOLLECTION_YEAR_CODE(),dayString[4]);
                 dayBtn[4].setBackgroundResource(R.drawable.leftroundbtnselected);
                 dayBtn[4].setTextColor(getResources().getColor(R.color.blue));
                 break;
             case  2:
-            default:readDatabase(clg,course,year,dayString[0]);
+            default:readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),schemester.getCOLLECTION_YEAR_CODE(),dayString[0]);
                 dayBtn[0].setBackgroundResource(R.drawable.leftroundbtnselected);
                 dayBtn[0].setTextColor(getResources().getColor(R.color.blue));
         }
@@ -324,7 +308,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
-                readDatabase(clg,course,year,dayString[0]);
+                readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),schemester.getCOLLECTION_YEAR_CODE(),dayString[0]);
             }
         });
         dayBtn[1].setOnClickListener(new View.OnClickListener() {
@@ -346,7 +330,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
-                readDatabase(clg,course,year,dayString[1]);
+                readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),schemester.getCOLLECTION_YEAR_CODE(),dayString[1]);
             }
         });
         dayBtn[2].setOnClickListener(new View.OnClickListener() {
@@ -368,7 +352,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
-                readDatabase(clg,course,year,dayString[2]);
+                readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),schemester.getCOLLECTION_YEAR_CODE(),dayString[2]);
             }
         });
         dayBtn[3].setOnClickListener(new View.OnClickListener() {
@@ -390,7 +374,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
-                readDatabase(clg,course,year,dayString[3]);
+                readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),schemester.getCOLLECTION_YEAR_CODE(),dayString[3]);
             }
         });
         dayBtn[4].setOnClickListener(new View.OnClickListener() {
@@ -412,7 +396,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 checkOrientationSetVisibility(View.VISIBLE);
                 settingsview.setVisibility(View.GONE);
                 aboutview.setVisibility(View.GONE);
-                readDatabase(clg,course,year,dayString[4]);
+                readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),schemester.getCOLLECTION_YEAR_CODE(),dayString[4]);
             }
         });
 
@@ -422,10 +406,9 @@ public class FullScheduleActivity extends AppCompatActivity {
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                readSemester(clg,course,year);
-                String[] creds = getCredentials();
-                email.setText(creds[0]);
-                roll.setText(creds[1]);
+                readSemester(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),schemester.getCOLLECTION_YEAR_CODE());
+                email.setText(getCredentials()[0]);
+                roll.setText(getCredentials()[1]);
                 checkOrientationSetVisibility(View.GONE);
                 settingsview.setVisibility(View.VISIBLE);
                 aboutview.setVisibility(View.GONE);
@@ -524,12 +507,12 @@ public class FullScheduleActivity extends AppCompatActivity {
         int i = 0;
         if(tFormat == 12) {
             while (i < 9) {
-                p[i].setText(getStringResource(periodStringResource12[i]));
+                p[i].setText(getStringResource(schemester.getPeriodStringResource12()[i]));
                 ++i;
             }
         } else {
             while (i < 9) {
-                p[i].setText(getStringResource(periodStringResource24[i]));
+                p[i].setText(getStringResource(schemester.getPeriodStringResource24()[i]));
                 ++i;
             }
         }
@@ -799,17 +782,18 @@ private void requestStoragePermission(){
     }
     public void setAppTheme(int code) {
         switch (code) {
-            case CODE_LIGHT_THEME:
-                setTheme(R.style.BlueLightTheme);
+            case ApplicationSchemester.CODE_THEME_INCOGNITO:
+                setTheme(R.style.IncognitoTheme);
                 break;
-            case CODE_DARK_THEME:
+            case ApplicationSchemester.CODE_THEME_DARK:
                 setTheme(R.style.BlueDarkTheme);
                 break;
+            case ApplicationSchemester.CODE_THEME_LIGHT:
             default:setTheme(R.style.BlueLightTheme);
         }
     }
     private int getThemeStatus() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
+        SharedPreferences mSharedPreferences = getApplication().getSharedPreferences("schemeTheme", MODE_PRIVATE);
         return mSharedPreferences.getInt("themeCode", 0);
     }
     private boolean isLandscape() {
@@ -825,7 +809,7 @@ private void requestStoragePermission(){
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = Objects.requireNonNull(connectivityManager).getActiveNetworkInfo();
         if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
-            Toast.makeText(getApplicationContext(),"Connect to internet for latest details",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),schemester.getStringResource(R.string.internet_error),Toast.LENGTH_LONG).show();
         }
     }
 }

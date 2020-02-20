@@ -91,7 +91,7 @@
         android:paddingTop="10dp"
         android:paddingEnd="12dp"
         android:paddingBottom="10dp"
-        android:text="Re-login"
+        android:text="@string/back"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="?attr/foreground_text_color"
         android:textSize="20sp"

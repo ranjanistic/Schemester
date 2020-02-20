@@ -24,22 +24,26 @@ import java.util.Objects;
 import static android.content.ContentValues.TAG;
 
 public class Splash extends AppCompatActivity {
+    ApplicationSchemester schemester;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        schemester = (ApplicationSchemester) this.getApplication();
         super.onCreate(savedInstanceState);
         String[] addInfo = getAdditionalInfo();
         if(user!=null) {
-            if(Objects.equals(addInfo[0],"")||Objects.equals(addInfo[1],"")||Objects.equals(addInfo[2],"")){
-                Intent intent = new Intent(this, AdditionalLoginInfo.class);
-                startActivity(intent);
-                finish();
-            } else {
+            if(!(Objects.equals(getAdditionalInfo()[0],"")&&Objects.equals(getAdditionalInfo()[1],"")&&Objects.equals(getAdditionalInfo()[2],""))) {
+                schemester.setCollegeCourseYear(getAdditionalInfo()[0], getAdditionalInfo()[1], getAdditionalInfo()[2]);
                 isHolidayOtherThanWeekend(addInfo[0], addInfo[1]);
                 isHolidayOtherThanWeekend(addInfo[0], "local_info");
                 isHolidayOtherThanWeekend("global_info", "holiday_info");
                 Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(this, PositionActivity.class);
                 startActivity(intent);
                 finish();
             }

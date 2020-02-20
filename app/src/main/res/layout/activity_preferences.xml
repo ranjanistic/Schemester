@@ -38,13 +38,13 @@
     app:layout_constraintVertical_bias="0">
     <ImageButton
         android:id="@+id/backBtn"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:backgroundTint="?attr/display_foreground"
         android:padding="12dp"
         android:scaleType="centerInside"
         android:background="@drawable/round_btn"
-        app:srcCompat="@drawable/ic_arrowleft"/>
+        app:srcCompat="@drawable/ic_halfarrow"/>
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -55,7 +55,7 @@
         android:textColor="@color/blue"
         android:gravity="center"
         android:fontFamily="@font/comfortaa_bold"
-        android:textSize="28sp"
+        android:textSize="26sp"
         android:textStyle="bold"
         android:layout_gravity="center"
         android:text="@string/settings" />
@@ -64,10 +64,11 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
     <ImageView
-        android:layout_width="60dp"
-                        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:clickable="false"
         android:focusable="false"
+        android:visibility="invisible"
         android:background="@drawable/ic_settingico_mini"
         android:backgroundTint="?attr/display_foreground" />
 </LinearLayout>
@@ -106,6 +107,59 @@
                     android:textColor="@color/blue"
                     android:textStyle="bold"
                     android:textSize="20sp"/>
+                <LinearLayout
+                    android:id="@+id/anonymousOptions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:id="@+id/loginAgainBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="12dp"
+                        android:gravity="center"
+                        android:background="@drawable/square_edgy_btn"
+                        android:backgroundTint="@android:color/transparent"
+                        android:layout_gravity="center_horizontal"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingEnd="8dp"
+                            android:paddingStart="0dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="250dp"
+                                android:textColor="?attr/base_text_color"
+                                android:layout_height="wrap_content"
+                                android:singleLine="false"
+                                android:text="You are anonymous"
+                                android:textSize="18sp"/>
+                            <TextView
+                                android:layout_width="250dp"
+                                android:textColor="?attr/base_text_color"
+                                android:layout_height="wrap_content"
+                                android:text="Tap to login to change account settings."
+                                android:paddingTop="4dp"
+                                android:singleLine="false"
+                                android:textSize="14sp"/>
+                        </LinearLayout>
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:scaleType="fitCenter"
+                            app:srcCompat="@drawable/ic_icognitoman"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/accountOptions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
                 <LinearLayout
                     android:id="@+id/changeEmailIdBtn"
                     android:layout_width="match_parent"
@@ -278,6 +332,7 @@
                         app:srcCompat="@drawable/ic_trashico"
                         
                         android:scaleType="fitCenter" />
+                </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         <LinearLayout
@@ -494,7 +549,78 @@
                     android:scaleType="fitCenter" />
             </LinearLayout>
         </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ccyOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/roundcontainerbox"
+                android:backgroundTint="?attr/base_background"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Service options"
+                    android:textColor="@color/blue"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+                <LinearLayout
+                    android:id="@+id/ccyUpdateBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:gravity="center"
+                    android:background="@drawable/square_edgy_btn"
+                    android:backgroundTint="@android:color/transparent"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="8dp"
+                        android:paddingStart="0dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="250dp"
+                            android:textColor="?attr/base_text_color"
+                            android:layout_height="wrap_content"
+                            android:singleLine="false"
+                            android:text="Update source"
+                            android:textSize="18sp"/>
+                        <TextView
+                            android:layout_width="250dp"
+                            android:textColor="?attr/base_text_color"
+                            android:layout_height="wrap_content"
+                            android:text="Use this to update your college, course or year."
+                            android:paddingTop="4dp"
+                            android:singleLine="false"
+                            android:textSize="14sp"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:padding="4dp"
+
+                        android:backgroundTint="@color/dull_blue"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/ic_mailopen"/>
+                </LinearLayout>
+            </LinearLayout>
         <LinearLayout
+            android:id="@+id/developerOptions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/roundcontainerbox"
@@ -557,7 +683,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:padding="4dp"
-                    
+
                     android:backgroundTint="@color/dull_blue"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/ic_mailopen"/>

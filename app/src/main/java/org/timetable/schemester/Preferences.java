@@ -52,7 +52,8 @@ import static android.content.ContentValues.TAG;
 
 public class Preferences extends AppCompatActivity {
     Switch timeFormatSwitch;
-    LinearLayout dobUpdate, emailChange, rollChange, appUpdate, deleteAcc, restarter, themebtn, feedback, clockTypeSwitch;
+    LinearLayout dobUpdate, emailChange, rollChange, appUpdate, deleteAcc, restarter, themebtn, feedback, clockTypeSwitch, loginAgain, anonymOps, userOps, ccySwitch, ccyGroup,
+            devOpsGroup;
     ImageButton returnbtn;
     CustomVerificationDialog customVerificationDialogDeleteAccount, customVerificationDialogEmailChange;
     CustomLoadDialogClass customLoadDialogClass;
@@ -65,37 +66,78 @@ public class Preferences extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setAppTheme(getThemeStatus());
+        setAppTheme();
         setContentView(R.layout.activity_preferences);
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        if(getThemeStatus() == 101) {
+        anonymOps = findViewById(R.id.anonymousOptions);
+        userOps = findViewById(R.id.accountOptions);
+        ccyGroup = findViewById(R.id.ccyOptions);
+        devOpsGroup = findViewById(R.id.developerOptions);
+        if(getThemeStatus() == ApplicationSchemester.CODE_THEME_LIGHT) {
             window.setStatusBarColor(this.getResources().getColor(R.color.white));
             window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
-        } else if(getThemeStatus() == 102){
+            anonymOps.setVisibility(View.GONE);
+            userOps.setVisibility(View.VISIBLE);
+            ccyGroup.setVisibility(View.VISIBLE);
+            devOpsGroup.setVisibility(View.VISIBLE);
+        }else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO){
+            window.setStatusBarColor(this.getResources().getColor(R.color.black_overlay));
+            window.setNavigationBarColor(this.getResources().getColor(R.color.black));
+            anonymOps.setVisibility(View.VISIBLE);
+            userOps.setVisibility(View.GONE);
+            ccyGroup.setVisibility(View.GONE);
+            devOpsGroup.setVisibility(View.GONE);
+        }else {
             window.setStatusBarColor(this.getResources().getColor(R.color.charcoal));
             window.setNavigationBarColor(this.getResources().getColor(R.color.spruce));
+            anonymOps.setVisibility(View.GONE);
+            userOps.setVisibility(View.VISIBLE);
+            ccyGroup.setVisibility(View.VISIBLE);
+            devOpsGroup.setVisibility(View.VISIBLE);
         }
+
         customLoadDialogClass = new CustomLoadDialogClass(Preferences.this, new OnDialogLoadListener() {
             @Override
             public void onLoad() {
             }
-
             @Override
             public String onLoadText() {
-                return "Hold up";
+                return "Just a moment";
             }
         });
+
         returnbtn = findViewById(R.id.backBtn);
         returnbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
-                overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
             }
         });
 
+        loginAgain = findViewById(R.id.loginAgainBtn);
+        loginAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mode = new Intent(Preferences.this, ModeOfConduct.class);
+                startActivity(mode);
+            }
+        });
+
+        ccySwitch = findViewById(R.id.ccyUpdateBtn);
+        ccySwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(checkIfEmailVerified()) {
+                    Intent ccyIntent = new Intent(Preferences.this, AdditionalLoginInfo.class);
+                    startActivity(ccyIntent);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Verify your email first, or change email ID if unable to do so", Toast.LENGTH_LONG)
+                            .show();
+                }
+            }
+        });
         deleteAcc = findViewById(R.id.accountDelete);
         deleteAcc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -249,6 +291,10 @@ public class Preferences extends AppCompatActivity {
                 startActivity(web);
             }
         });
+    }
+    private Boolean checkIfEmailVerified() {
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        return user.isEmailVerified();
     }
     private void changeDobResetState(Boolean state, Float alpha){
         dobUpdate.setAlpha(alpha);
@@ -722,21 +768,20 @@ public class Preferences extends AppCompatActivity {
         return mSharedPreferences.getInt("format", 24);
     }
 
-    public void setAppTheme(int code) {
-        switch (code) {
-            case 101:
-                setTheme(R.style.BlueWhiteThemeLight);
-                break;
-            case 102:
+    public void setAppTheme() {
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
+        switch (mSharedPreferences.getInt("themeCode", 0)) {
+            case ApplicationSchemester.CODE_THEME_INCOGNITO:
+                setTheme(R.style.IncognitoTheme);break;
+            case ApplicationSchemester.CODE_THEME_DARK:
                 setTheme(R.style.BlueWhiteThemeDark);
                 break;
+            case ApplicationSchemester.CODE_THEME_LIGHT:
             default:setTheme(R.style.BlueWhiteThemeLight);
         }
     }
     private int getThemeStatus() {
         SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
-        return mSharedPreferences.getInt("themeCode", 101);
+        return mSharedPreferences.getInt("themeCode", 0);
     }
-
-
 }

@@ -38,29 +38,25 @@ import java.util.Map;
 import static android.content.ContentValues.TAG;
 
 public class ChatRoomActivity extends AppCompatActivity {
+    ApplicationSchemester schemester;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     ImageButton pullUp, pullDown, exit;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     ReadMessage readMessage;
     String newMessage;
     LinearLayout chatView;
-    MainActivity mainActivity;
     TextView receivedmsg, sendmsg, senderName, myName;
     ImageButton sendMsgBtn;
     LinearLayout sendlayout, receiveLayout;
     EditText mymsg;
     Boolean thereIsANewMessage = false;
-    String COLLECTION_COLLEGE_CODE , DOCUMENT_COURSE_NAME , COLLECTION_YEAR_CODE;
     checkNetSendMyMessageTask netCheckMessageSendTask;
-    long msgsequence = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        schemester = (ApplicationSchemester) this.getApplication();
         super.onCreate(savedInstanceState);
-        setAppTheme(getThemeStatus());
+        setAppTheme();
         setContentView(R.layout.activity_chat_room);
-        COLLECTION_COLLEGE_CODE = getAdditionalInfo()[0];
-        DOCUMENT_COURSE_NAME = getAdditionalInfo()[1];
-        COLLECTION_YEAR_CODE = getAdditionalInfo()[2];
         if (!checkIfEmailVerified()) {
             Toast.makeText(ChatRoomActivity.this, "Please verify your email first.", Toast.LENGTH_LONG).show();
             finish();
@@ -113,7 +109,11 @@ public class ChatRoomActivity extends AppCompatActivity {
                     chatView.addView(sendlayout);
                     long t = calendar.getTimeInMillis();
                     saveMessageToDevice(t,newMessage,getUserEmailIDFromLocalStorage());
-                    updateMessageInDatabase(COLLECTION_COLLEGE_CODE, DOCUMENT_COURSE_NAME, COLLECTION_YEAR_CODE, newMessage, getUserEmailIDFromLocalStorage(), t);
+                    updateMessageInDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),
+                            schemester.getDOCUMENT_COURSE_CODE(),
+                            schemester.getCOLLECTION_YEAR_CODE(),
+                            newMessage, getUserEmailIDFromLocalStorage(), t
+                    );
                     sendmsg.setText(newMessage);
                     myName.setText(getUserEmailIDFromLocalStorage());
                     mymsg.setText("");
@@ -150,7 +150,9 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            getMessageFromDatabase(COLLECTION_COLLEGE_CODE,DOCUMENT_COURSE_NAME,COLLECTION_YEAR_CODE);
+            getMessageFromDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),
+                    schemester.getDOCUMENT_COURSE_CODE(),
+                    schemester.getCOLLECTION_YEAR_CODE());
             return thereIsANewMessage;
         }
         @Override
@@ -246,26 +248,21 @@ public class ChatRoomActivity extends AppCompatActivity {
     private void setOnline(Boolean status){
         Map<String, Object> data = new HashMap<>();
         data.put("active", status);
-        DocumentReference coll  =  db.collection("userbase").document(getUserEmailIDFromLocalStorage());
-        coll.set(data, SetOptions.merge());
+        db.collection("userbase").document(getUserEmailIDFromLocalStorage())
+                .update(data);
     }
 
-    public void setAppTheme(int code) {
-        switch (code) {
-            case 101:
-                setTheme(R.style.BlueLightTheme);
-                break;
-            case 102:
+    public void setAppTheme() {
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
+        switch (mSharedPreferences.getInt("themeCode", 0)) {
+            case ApplicationSchemester.CODE_THEME_DARK:
                 setTheme(R.style.BlueDarkTheme);
                 break;
+            case ApplicationSchemester.CODE_THEME_LIGHT:
             default:setTheme(R.style.BlueLightTheme);
         }
     }
 
-    private int getThemeStatus() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
-        return mSharedPreferences.getInt("themeCode", 0);
-    }
     private String getUserEmailIDFromLocalStorage(){
         String cred;
         SharedPreferences mSharedPreferences = getSharedPreferences("credentials", MODE_PRIVATE);

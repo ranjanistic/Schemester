@@ -75,34 +75,22 @@
             android:textSize="18sp"
             android:text="@string/settings"/>
     </LinearLayout>
-    <!--LinearLayout
-        android:id="@+id/logoutTab"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:background="@drawable/square_edgy_btn"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="16dp"
-        android:backgroundTint="@android:color/transparent"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/blue"
-            android:textSize="18sp"
-            android:text="Log Out"/>
-        <View
-android:visibility="gone"
-
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-        <ImageView
-android:visibility="gone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="?attr/group_card_text_color"
-            app:srcCompat="@drawable/ic_exitdoor"/>
-    </LinearLayout-->
+        android:singleLine="false"
+        android:textColor="?attr/base_text_color"
+        android:text="Logged in as"
+        android:textSize="14sp"/>
+    <TextView
+        android:id="@+id/drawerLoginID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="false"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:textColor="?attr/base_text_color"
+        android:paddingBottom="4dp"
+        android:text="priyanshutanajna88@gmail.com"
+        android:textSize="14sp"/>
 </LinearLayout>

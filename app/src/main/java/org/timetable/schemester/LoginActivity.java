@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        setAppTheme(getThemeStatus());
+        setAppTheme();
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
         collegeRollInputLayout = findViewById(R.id.collegeRollLayout);
@@ -190,6 +190,25 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        if(user!=null && userHasProvidedAdditionalInfo()) {
+            finish();
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        if(user!=null && userHasProvidedAdditionalInfo()){
+            Intent passToMain = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(passToMain);
+            finish();
+        } else if(user!=null && !userHasProvidedAdditionalInfo()){
+            FirebaseAuth.getInstance().signOut();
+        }
+        super.onStart();
+    }
     private void registerInit(){
         final String email, rollnum, dd, mm, yyyy;
         email = emailid.getText().toString();
@@ -205,9 +224,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         if (!isTeacher&&TextUtils.isEmpty(rollnum)) {
             Toast.makeText(getApplicationContext(), "Your college roll number required.", Toast.LENGTH_LONG).show();
-            return;
-        } else if(!isTeacher && !rollnum.trim().contains("18")){
-            Toast.makeText(getApplicationContext(), "Only for 2018 batch 2nd year.", Toast.LENGTH_LONG).show();
             return;
         }
         if (TextUtils.isEmpty(dd)) {
@@ -246,14 +262,8 @@ public class LoginActivity extends AppCompatActivity {
             confirmEmailDialog = new CustomConfirmDialogClass(LoginActivity.this, new OnDialogConfirmListener() {
                 @Override
                 public void onApply(Boolean confirm) {
-                    customLoadDialogClass.show();
                     dob = dd+mm+yyyy;
-                    if(isInternetAvailable()) {
-                        new registerLoginTask().execute(email, dob);
-                    } else {
-                        Toast.makeText(getApplicationContext(),"No internet",Toast.LENGTH_SHORT).show();
-                        customLoadDialogClass.hide();
-                    }
+                    new registerLoginTask().execute(email, dob);
                 }
                 @Override
                 public String onCallText() {
@@ -270,17 +280,32 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public class registerLoginTask extends AsyncTask<String,String,String> {
+    public class registerLoginTask extends AsyncTask<String,String,Boolean> {
         @Override
-        protected String doInBackground(String... creds){
-            String emailCred = creds[0];
-            String passCred = creds[1];
-            register(emailCred, passCred);
-            return emailCred;
+        protected Boolean doInBackground(String... creds){
+            if(!isInternetAvailable()){
+                return false;
+            } else {
+                String emailCred = creds[0];
+                String passCred = creds[1];
+                register(emailCred, passCred);
+                return true;
+            }
         }
+
         @Override
-        protected void onPostExecute(String result){
+        protected void onPreExecute() {
+            customLoadDialogClass.show();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result){
             super.onPostExecute(result);
+            if(!result) {
+                Toast.makeText(getApplicationContext(), "No internet", Toast.LENGTH_SHORT).show();
+                customLoadDialogClass.hide();
+            }
         }
     }
 
@@ -319,7 +344,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Complete your profile", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(LoginActivity.this, AdditionalLoginInfo.class);
                                 startActivity(intent);
-                                finish();
+                                customLoadDialogClass.hide();
                             }
                         }
                         else {
@@ -463,19 +488,14 @@ public class LoginActivity extends AppCompatActivity {
         return user.isEmailVerified();
     }
 
-    public void setAppTheme(int code) {
-        switch (code) {
-            case 101:
-                setTheme(R.style.BlueLightTheme);
-                break;
+    public void setAppTheme() {
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
+        switch (mSharedPreferences.getInt("themeCode", 0)) {
             case 102:
                 setTheme(R.style.BlueDarkTheme);
                 break;
+            case 101:
             default:setTheme(R.style.BlueLightTheme);
         }
-    }
-    private int getThemeStatus() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
-        return mSharedPreferences.getInt("themeCode", 0);
     }
 }

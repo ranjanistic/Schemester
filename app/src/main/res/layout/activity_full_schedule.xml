@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:backgroundTint="?attr/display_foreground"
-                android:background="@drawable/round_btn"
+                android:background="@drawable/square_round_btn"
                 app:srcCompat="@drawable/ic_noticeicon"/>
             <ImageButton
                 android:id="@+id/chatButton"
@@ -34,8 +34,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:backgroundTint="?attr/display_foreground"
-                android:background="@drawable/round_btn"
-                app:srcCompat="@drawable/ic_peoplegossip"/>
+                android:background="@drawable/square_round_btn"
+                app:srcCompat="@drawable/ic_messageiconfillforschemester"/>
         <ScrollView
             android:layout_width="80dp"
             android:layout_height="match_parent"

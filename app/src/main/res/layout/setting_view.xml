@@ -9,8 +9,8 @@
 
     <ScrollView
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout4"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -47,12 +47,14 @@
                     android:textSize="22sp"
                     android:textStyle="bold" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="22dp"
                 android:paddingBottom="22dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -70,7 +72,8 @@
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
-        </LinearLayout>
+            </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -120,6 +123,7 @@
                     android:textSize="22sp"
                     android:textStyle="bold" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -144,6 +148,7 @@
                     android:textSize="22sp"
                     android:textStyle="bold" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -168,14 +173,16 @@
                     android:textSize="22sp"
                     android:textStyle="bold" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
                 android:backgroundTint="@color/dull_white"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp">
+
                 <TextView
                     android:id="@+id/checkUpdate"
                     android:layout_width="wrap_content"
@@ -184,29 +191,33 @@
                     android:text="@string/check_for_updates"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
+
                 <ImageButton
                     android:id="@+id/checkupdateBtn"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:contentDescription="@string/update_check_button"
-                    android:padding="4dp"
                     android:background="@drawable/square_round_btn"
                     android:backgroundTint="@color/spruce"
+                    android:contentDescription="@string/update_check_button"
+                    android:padding="4dp"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/ic_clouddownload2"/>
+                    app:srcCompat="@drawable/ic_clouddownload2" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -214,20 +225,22 @@
                     android:text="@string/major_settings"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
+
                 <ImageButton
                     android:id="@+id/fullsettingsbtn"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:contentDescription="@string/open_settings_button"
                     android:layout_gravity="center"
                     android:background="@drawable/round_btn"
                     android:backgroundTint="@color/blue"
+                    android:contentDescription="@string/open_settings_button"
                     android:scaleType="centerInside"
-                    app:srcCompat="@drawable/ic_settingico_mini"/>
+                    app:srcCompat="@drawable/ic_settingico_mini" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
@@ -240,6 +253,7 @@
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="16dp"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -249,6 +263,16 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/incognitoBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="12dp"
+            app:srcCompat="@drawable/ic_icognitoman"
+            android:background="@drawable/round_btn"
+            android:backgroundTint="?attr/base_text_color"
+            />
 
         <Button
             android:id="@+id/logout"

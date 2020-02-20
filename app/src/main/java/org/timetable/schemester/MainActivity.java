@@ -50,18 +50,16 @@ import java.util.TimeZone;
 import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity{
+    ApplicationSchemester schemester;
     int versionCode = BuildConfig.VERSION_CODE;
     String versionName = BuildConfig.VERSION_NAME;
     private TextView semestertxt, noclass,
-            c1,c2,c3,c4,c5,c6,c7,c8,c9,p1,p2,p3,p4,p5,p6,p7,p8,p9,
-            day, month, time;
+    c1,c2,c3,c4,c5,c6,c7,c8,c9,p1,p2,p3,p4,p5,p6,p7,p8,p9,
+    day, month, time;
     private TextView[] c = {c1,c2,c3,c4,c5,c6,c7,c8,c9},
     p = {p1,p2,p3,p4,p5,p6,p7,p8,p9};
-    static String[] pKey = {"p1","p2","p3","p4","p5","p6","p7","p8","p9"};
-    String COLLECTION_GLOBAL_INFO = "global_info",
-            DOCUMENT_GLOBAL_SEMESTER = "semester",
-            COLLECTION_COLLEGE_CODE , DOCUMENT_COURSE_NAME , COLLECTION_YEAR_CODE;
 
+    private TextView loginIdOnDrawer;
     private Button date;
     private ImageButton drawerArrow, switchThemeBtn;
     private LinearLayout headingView, settingTab, scheduleTab;
@@ -72,16 +70,7 @@ public class MainActivity extends AppCompatActivity{
     public Activity mainact;
     public static boolean isCreated = false;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private int[] periodStringResource12 = {
-            R.string.period112, R.string.period212, R.string.period312, R.string.period412, R.string.period512,
-            R.string.period612, R.string.period712, R.string.period812, R.string.period912
-    }, periodStringResource24 = {
-            R.string.period1, R.string.period2, R.string.period3, R.string.period4,
-            R.string.period5, R.string.period6, R.string.period7, R.string.period8, R.string.period9
-    }, timeStringResource = {
-            R.string.time1, R.string.time2, R.string.time3, R.string.time4, R.string.time5,
-            R.string.time6, R.string.time7, R.string.time8, R.string.time9, R.string.time10,
-    }, periodView = {
+    private int[]  periodView = {
             R.id.periodMain1, R.id.periodMain2, R.id.periodMain3, R.id.periodMain4, R.id.periodMain5,
             R.id.periodMain6, R.id.periodMain7, R.id.periodMain8, R.id.periodMain9,
     }, classView = {
@@ -91,46 +80,56 @@ public class MainActivity extends AppCompatActivity{
     private LinearLayout bottomDrawer;
     private checkUpdate update;     //update checker asyncTask class
     private Window window;
-
+    private BottomSheetBehavior bottomSheetBehavior;
     @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setAppTheme(getThemeStatus());
+        schemester = (ApplicationSchemester) this.getApplication();
+        setAppTheme();
         mainact = this;
         isCreated = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        COLLECTION_COLLEGE_CODE = getAdditionalInfo()[0];
-        DOCUMENT_COURSE_NAME = getAdditionalInfo()[1];
-        COLLECTION_YEAR_CODE = getAdditionalInfo()[2];
-        window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
+
+        setWindowDecorDefaults();
         storeUserDefinition(readUserPosition(),getStoredEmail());
         calendar = Calendar.getInstance(TimeZone.getDefault());
-
         setViews();         //assigning all views to their respective objects
         setBottomSheetFeature();            //setting bottom drawer behaviour
         runTimeDisplayOnBottomSheet();      //display current time
-        setThemeConsequenciesAndActions();      //set navigation bar color and theme button listener
+        setThemeConsequencesAndActions();      //set navigation bar color and theme button listener
         setButtonClickListeners();      //self explanatory
 
         //alert internet availability
-        if(!isInternetAvailable()){
-            Toast.makeText(getApplicationContext(),"Connect to internet for latest details",Toast.LENGTH_LONG).show();
-        }
-
-        //initializing main schedule update task
-        mHighlightClassTask = new HighlightUpdatedClassTask();
 
         //check holiday and display accordingly
         setHolidayViewIfHoliday();
+
+        //initializing main schedule update task
+        mHighlightClassTask = new HighlightUpdatedClassTask();
 
         //check for updates task
         update = new checkUpdate();
         update.execute();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.finishAffinity();
+        super.onBackPressed();
+    }
+
+    private class checkNetAsync extends AsyncTask<Void,Void,Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            return isInternetAvailable();
+        }
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            if(!aBoolean) Toast.makeText(getApplicationContext(),schemester.getStringResource(R.string.internet_error), Toast.LENGTH_LONG).show();
+            super.onPostExecute(aBoolean);
+        }
     }
 
     private void setViews(){
@@ -153,10 +152,18 @@ public class MainActivity extends AppCompatActivity{
         date = findViewById(R.id.present_date);
         day = findViewById(R.id.weekday_text);
         month = findViewById(R.id.month_text);
+        loginIdOnDrawer = findViewById(R.id.drawerLoginID);
+    }
+
+    private void setWindowDecorDefaults(){
+        window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
     }
 
     private void setBottomSheetFeature(){
-        final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomDrawer);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomDrawer);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         bottomSheetBehavior.setHideable(false);
         LinearLayout drawerPeek = findViewById(R.id.drawerarrowHolder);
@@ -174,10 +181,18 @@ public class MainActivity extends AppCompatActivity{
                 }
             }
         });
-        bottomSheetBehavior.setHideable(true);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO){
+            loginIdOnDrawer.setText(schemester.getStringResource(R.string.anonymous));
+        } else loginIdOnDrawer.setText(getCredentials()[0]);
     }
-
+    private String[] getCredentials(){
+        String[] cred = {"",""};
+        SharedPreferences mSharedPreferences = getSharedPreferences("credentials", MODE_PRIVATE);
+        cred[0] =  mSharedPreferences.getString("email", "");
+        cred[1] =  mSharedPreferences.getString("roll", "");
+        return cred;
+    }
     @SuppressLint("SimpleDateFormat")
     private void runTimeDisplayOnBottomSheet(){
         final Handler timeHandler = new Handler(getMainLooper());
@@ -193,30 +208,32 @@ public class MainActivity extends AppCompatActivity{
             }
         }, 10);
     }
-    private void setThemeConsequenciesAndActions(){
+    private void setThemeConsequencesAndActions(){
         hide = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.gone_centrally);
         show = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.emerge_centrally);
         fadeOn = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fadeliton);
         fadeOff= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fadelitoff);
 
         if(isLandscape()){
-            if(getThemeStatus() == 101)
-                window.setNavigationBarColor(this.getResources().getColor(R.color.white));
-            else if(getThemeStatus() == 102)
+            if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK)
                 window.setNavigationBarColor(this.getResources().getColor(R.color.charcoal));
-        } else {
-            if(getThemeStatus() == 101)
-                window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
-            else if(getThemeStatus() == 102)
+            else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO)
                 window.setNavigationBarColor(this.getResources().getColor(R.color.black_overlay));
+            else    window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
+        } else {
+            if(getThemeStatus() == ApplicationSchemester.CODE_THEME_LIGHT)
+                window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
+            else window.setNavigationBarColor(this.getResources().getColor(R.color.black_overlay));
         }
 
         final Intent restart = new Intent(MainActivity.this, MainActivity.class);
-        if(getThemeStatus() == 102){
+        if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
             switchThemeBtn.setBackgroundResource(R.drawable.ic_moonsmallicon);
-        } else {
+        } else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO) {
+            switchThemeBtn.setBackgroundResource(R.drawable.ic_icognitoman);
+        }else{
             switchThemeBtn.setBackgroundResource(R.drawable.ic_suniconsmall);
-            storeThemeStatus(101);
+            storeThemeStatus(ApplicationSchemester.CODE_THEME_LIGHT);
         }
 
         switchThemeBtn.setOnClickListener(new View.OnClickListener() {
@@ -224,25 +241,28 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View view) {
                 switchThemeBtn.startAnimation(hide);
                 switchThemeBtn.startAnimation(fadeOff);
-                if(getThemeStatus() == 101){
+                if(getThemeStatus() == ApplicationSchemester.CODE_THEME_LIGHT){
                     switchThemeBtn.setBackgroundResource(R.drawable.ic_moonsmallicon);
-                    storeThemeStatus(102);
+                    storeThemeStatus(ApplicationSchemester.CODE_THEME_DARK);
                     startActivity(restart);
                     finish();
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     switchThemeBtn.startAnimation(show);
                     switchThemeBtn.startAnimation(fadeOn);
-                } else if(getThemeStatus() == 102){
+                } else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
                     switchThemeBtn.setBackgroundResource(R.drawable.ic_suniconsmall);
-                    storeThemeStatus(101);
+                    storeThemeStatus(ApplicationSchemester.CODE_THEME_LIGHT);
                     startActivity(restart);
                     finish();
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     switchThemeBtn.startAnimation(show);
                     switchThemeBtn.startAnimation(fadeOn);
+                }else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO){
+                    Intent mode = new Intent(MainActivity.this, ModeOfConduct.class);
+                    startActivity(mode);
                 } else {
                     switchThemeBtn.setBackgroundResource(R.drawable.ic_moonsmallicon);
-                    storeThemeStatus(102);
+                    storeThemeStatus(ApplicationSchemester.CODE_THEME_DARK);
                     startActivity(restart);
                     finish();
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -272,6 +292,13 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(i);
             }
         });
+
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+        });
     }
 
     private class checkUpdate extends AsyncTask<Void,Void,Void>{
@@ -287,10 +314,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void checkUpdateThenNotify(){
-        if(isInternetAvailable()) {
-            final String COLLECTION_APP_CONFIGURATION = "appConfig",DOCUMENT_VERSION_CURRENT = "verCurrent",
-                    FIELD_VERSION_NAME = "verName", FIELD_DOWNLOAD_LINK = "downlink", FIELD_VERSION_CODE = "verCode";
-            db.collection(COLLECTION_APP_CONFIGURATION).document(DOCUMENT_VERSION_CURRENT)
+            db.collection(schemester.getCOLLECTION_APP_CONFIGURATION()).document(schemester.getDOCUMENT_VERSION_CURRENT())
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
@@ -299,9 +323,9 @@ public class MainActivity extends AppCompatActivity{
                                 DocumentSnapshot document = task.getResult();
                                 if (Objects.requireNonNull(document).exists()) {
                                     Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                    int vcode = Integer.parseInt(Objects.requireNonNull(document.get(FIELD_VERSION_CODE)).toString());
-                                    final String vname = document.getString(FIELD_VERSION_NAME);
-                                    final String link = document.getString(FIELD_DOWNLOAD_LINK);
+                                    int vcode = Integer.parseInt(Objects.requireNonNull(document.get(schemester.getFIELD_VERSION_CODE())).toString());
+                                    final String vname = document.getString(schemester.getFIELD_VERSION_NAME());
+                                    final String link = document.getString(schemester.getFIELD_DOWNLOAD_LINK());
                                     if (vcode != versionCode || !Objects.equals(vname, versionName)) {
                                         Toast.makeText(getApplicationContext(), "Update available", Toast.LENGTH_LONG).show();
                                         final CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(MainActivity.this, new OnDialogConfirmListener() {
@@ -352,7 +376,6 @@ public class MainActivity extends AppCompatActivity{
                             }
                         }
                     });
-        }
     }
 
     /**
@@ -405,7 +428,8 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onStart() {
-        setSemester(COLLECTION_GLOBAL_INFO,DOCUMENT_GLOBAL_SEMESTER,COLLECTION_YEAR_CODE);
+        new checkNetAsync().execute();
+        setSemester(schemester.getCOLLECTION_GLOBAL_INFO(),schemester.getDOCUMENT_GLOBAL_SEMESTER(),schemester.getCOLLECTION_YEAR_CODE());
         date.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
         day.setText(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
         month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
@@ -441,13 +465,6 @@ public class MainActivity extends AppCompatActivity{
         super.onStop();
     }
 
-    private void storeThemeStatus(int themechoice){
-        SharedPreferences mSharedPreferences = getSharedPreferences("schemeTheme", MODE_PRIVATE);
-        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putInt("themeCode", themechoice);
-        mEditor.apply();
-    }
-
     /**
      * gets saved format preference from user choice stored in sharedPreferences
      * and sets time format accordingly
@@ -457,20 +474,15 @@ public class MainActivity extends AppCompatActivity{
         int i = 0;
         if(tFormat == 12) {
             while (i < 9) {
-                p[i].setText(getStringResource(periodStringResource12[i]));
+                p[i].setText(schemester.getStringResource(schemester.getPeriodStringResource12()[i]));
                 ++i;
             }
         } else {
             while (i < 9) {
-                p[i].setText(getStringResource(periodStringResource24[i]));
+                p[i].setText(schemester.getStringResource(schemester.getPeriodStringResource24()[i]));
                 ++i;
             }
         }
-    }
-
-    //String resource extractor
-    private String getStringResource(int res){
-        return getResources().getString(res);
     }
 
     //schedule update task
@@ -480,14 +492,18 @@ public class MainActivity extends AppCompatActivity{
             date.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
             day.setText(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
             month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
-            setSemester(COLLECTION_GLOBAL_INFO,DOCUMENT_GLOBAL_SEMESTER,COLLECTION_YEAR_CODE);
+            setSemester(schemester.getCOLLECTION_GLOBAL_INFO(),schemester.getDOCUMENT_GLOBAL_SEMESTER(),schemester.getCOLLECTION_YEAR_CODE());
             super.onPreExecute();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             if (!isHolidayToday()) {
-                readDatabase(COLLECTION_COLLEGE_CODE,DOCUMENT_COURSE_NAME,COLLECTION_YEAR_CODE,getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
+                readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),
+                        schemester.getDOCUMENT_COURSE_CODE(),
+                        schemester.getCOLLECTION_YEAR_CODE(),
+                        getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK))
+                );
             }
             return null;
         }
@@ -537,34 +553,34 @@ public class MainActivity extends AppCompatActivity{
         SharedPreferences mSharedPreferences = getSharedPreferences("otherHoliday", MODE_PRIVATE);
         return mSharedPreferences.getBoolean("holiday", false);
     }
-    
-    private String getWeekdayFromCode(int daycode){
-        switch (daycode) {
-            case 1: return getStringResource(R.string.sunday);
-            case 2: return getStringResource(R.string.monday);
-            case 3: return getStringResource(R.string.tuesday);
-            case 4: return getStringResource(R.string.wednesday);
-            case 5: return getStringResource(R.string.thursday);
-            case 6: return getStringResource(R.string.friday);
-            case 7: return getStringResource(R.string.saturday);
+
+    private String getWeekdayFromCode(int dayCode){
+        switch (dayCode) {
+            case 1: return schemester.getStringResource(R.string.sunday);
+            case 2: return schemester.getStringResource(R.string.monday);
+            case 3: return schemester.getStringResource(R.string.tuesday);
+            case 4: return schemester.getStringResource(R.string.wednesday);
+            case 5: return schemester.getStringResource(R.string.thursday);
+            case 6: return schemester.getStringResource(R.string.friday);
+            case 7: return schemester.getStringResource(R.string.saturday);
             default: return "Error";
         }
     }
-    
+
     private String getMonthFromCode(int getMonthCount){
         switch (getMonthCount) {
-            case 0:return getStringResource(R.string.jan);
-            case 1: return getStringResource(R.string.feb);
-            case 2: return getStringResource(R.string.mar);
-            case 3: return getStringResource(R.string.apr);
-            case 4: return getStringResource(R.string.may);
-            case 5: return getStringResource(R.string.jun);
-            case 6: return getStringResource(R.string.jul);
-            case 7: return getStringResource(R.string.aug);
-            case 8: return getStringResource(R.string.sept);
-            case 9: return getStringResource(R.string.oct);
-            case 10: return getStringResource(R.string.nov);
-            case 11: return getStringResource(R.string.dec);
+            case 0:return schemester.getStringResource(R.string.jan);
+            case 1: return schemester.getStringResource(R.string.feb);
+            case 2: return schemester.getStringResource(R.string.mar);
+            case 3: return schemester.getStringResource(R.string.apr);
+            case 4: return schemester.getStringResource(R.string.may);
+            case 5: return schemester.getStringResource(R.string.jun);
+            case 6: return schemester.getStringResource(R.string.jul);
+            case 7: return schemester.getStringResource(R.string.aug);
+            case 8: return schemester.getStringResource(R.string.sept);
+            case 9: return schemester.getStringResource(R.string.oct);
+            case 10: return schemester.getStringResource(R.string.nov);
+            case 11: return schemester.getStringResource(R.string.dec);
             default: return "Error";
         }
     }
@@ -601,11 +617,12 @@ public class MainActivity extends AppCompatActivity{
     //highlights current time period in main view
     private void highlightCurrentPeriod(){
         int i = 0, s = 0;
-        if(checkPeriod(getStringResource(timeStringResource[0]), getStringResource(timeStringResource[1]))){
+        if(checkPeriod(schemester.getStringResource(schemester.getTimeStringResource()[0]),
+                schemester.getStringResource(schemester.getTimeStringResource()[1]))){
             p[i].setTextColor(getResources().getColor(R.color.white));
             p[i].setBackgroundResource(R.drawable.roundactivetimecontainer);
             return;
-        } else if(checkPeriod(getStringResource(timeStringResource[9]),"23:59:59")) {     //after day is over
+        } else if(checkPeriod(schemester.getStringResource(schemester.getTimeStringResource()[9]),"23:59:59")) {     //after day is over
             int d = 0;
             while (d<9) {
                 p[d].setTextColor(getResources().getColor(R.color.white));
@@ -613,7 +630,7 @@ public class MainActivity extends AppCompatActivity{
                 d++;
             }
             return;
-        } else if(checkPeriod("00:00:00",getStringResource(timeStringResource[0]))) {   //during night
+        } else if(checkPeriod("00:00:00",schemester.getStringResource(schemester.getTimeStringResource()[0]))) {   //during night
             int d = 0;
             while (d<9) {
                 p[d].setBackgroundResource(R.drawable.roundcontainerbox);
@@ -624,7 +641,7 @@ public class MainActivity extends AppCompatActivity{
         } else {      //checking period during work hours and assigning 's'
             int k = 1;
             while (k<10){
-                if(checkPeriod(getStringResource(timeStringResource[k]),getStringResource(timeStringResource[k+1]))){
+                if(checkPeriod(schemester.getStringResource(schemester.getTimeStringResource()[k]),schemester.getStringResource(schemester.getTimeStringResource()[k+1]))){
                     s = k;
                     break;
                 } else {
@@ -673,7 +690,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    
+
     private String returnClassBeginTime(){
         String currently = new SimpleDateFormat("HH:mm:ss").format(new Date());
         if(currently.equals(getResources().getString(R.string.time1))) {
@@ -751,7 +768,7 @@ public class MainActivity extends AppCompatActivity{
                                     Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                     int i = 0;
                                     while(i<9) {
-                                        c[i].setText(document.getString(pKey[i]));
+                                        c[i].setText(document.getString(schemester.getPKey()[i]));
                                         i++;
                                     }
                                 } else {
@@ -796,19 +813,27 @@ public class MainActivity extends AppCompatActivity{
         return mSharedPreferences.getBoolean("loginstatus", false);
     }
 
-    public void setAppTheme(int code) {
-        switch (code) {
-            case 102: setTheme(R.style.DarkTheme);break;
-            case 101:
+    private void storeThemeStatus(int themechoice){
+        SharedPreferences mSharedPreferences = getSharedPreferences("schemeTheme", MODE_PRIVATE);
+        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+        mEditor.putInt("themeCode", themechoice);
+        mEditor.apply();
+    }
+
+    public void setAppTheme() {
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
+        switch (mSharedPreferences.getInt("themeCode", 0)) {
+            case ApplicationSchemester.CODE_THEME_INCOGNITO: setTheme(R.style.IncognitoTheme); break;
+            case ApplicationSchemester.CODE_THEME_DARK: setTheme(R.style.DarkTheme);break;
+            case ApplicationSchemester.CODE_THEME_LIGHT:
             default:setTheme(R.style.AppTheme);
         }
     }
 
-    private int getThemeStatus() {
+    public int getThemeStatus(){
         SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
         return mSharedPreferences.getInt("themeCode", 0);
     }
-
 
     private boolean isLandscape() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;

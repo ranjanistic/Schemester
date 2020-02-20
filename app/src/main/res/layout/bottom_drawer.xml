@@ -8,8 +8,7 @@
     android:layout_width="match_parent"
     app:layout_behavior="@string/bottom_sheet_behavior"
     android:layout_height="wrap_content"
-    android:id="@+id/bottom_drawer"
-    >
+    android:id="@+id/bottom_drawer">
     <LinearLayout
         android:id="@+id/drawerarrowHolder"
         android:layout_width="match_parent"
@@ -39,7 +38,7 @@
             android:gravity="top|end"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:text="@string/today"
+            android:text="@string/n_a"
             android:textAllCaps="false"
             android:textColor="?attr/base_text_color"
             android:textSize="16sp" />
@@ -112,33 +111,26 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:contentDescription="@string/open_settings_button"
-            app:srcCompat="@drawable/setting_large"/>
+            app:srcCompat="@drawable/ic_settingico_mini"/>
     </LinearLayout>
-    <!--LinearLayout
-        android:id="@+id/logoutTab"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:background="@drawable/square_edgy_btn"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="16dp"
-        android:backgroundTint="@android:color/transparent"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/blue"
-            android:textSize="18sp"
-            android:text="Log Out"/>
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="?attr/group_card_text_color"
-            app:srcCompat="@drawable/ic_exitdoor"/>
-    </LinearLayout-->
+        android:singleLine="false"
+        android:layout_gravity="center"
+        android:textColor="?attr/base_text_color"
+        android:text="Logged in as"
+        android:textSize="14sp"/>
+    <TextView
+        android:id="@+id/drawerLoginID"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:singleLine="false"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:textColor="?attr/heading_text_color"
+        android:paddingBottom="4dp"
+        android:text="@string/n_a"
+        android:textSize="14sp"/>
 </LinearLayout>

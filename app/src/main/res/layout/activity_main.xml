@@ -38,7 +38,7 @@
                         android:text="@string/loading"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="?attr/base_text_color"
-                        android:textSize="32sp"
+                        android:textSize="28sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -82,7 +82,7 @@
                         android:text="@string/weekday"
                         android:textAllCaps="false"
                         android:textColor="@color/linktextcolor"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/month_text"
@@ -97,7 +97,7 @@
                         android:text="@string/month"
                         android:textAllCaps="false"
                         android:textColor="@color/linktextcolor"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
 
                 </LinearLayout>
@@ -643,6 +643,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat"
+        android:visibility="invisible"
         android:gravity="center_horizontal|start"
         android:text="@string/no_classes_today_enjoy"
         android:textAllCaps="true"
