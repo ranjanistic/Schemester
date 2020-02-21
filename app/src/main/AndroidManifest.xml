@@ -15,10 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ModeOfConduct"/>
-        <activity android:name=".AdditionalLoginInfo" />
-        <activity
-            android:name=".ChatRoomActivity"
+        <activity android:name=".ChatRoomActivity"/>
+        <activity android:name=".ModeOfConduct" />
+        <activity android:name=".AdditionalLoginInfo"
             android:theme="@style/BlueLightTheme" />
         <activity
             android:name=".PositionActivity"

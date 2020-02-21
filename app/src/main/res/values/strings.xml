@@ -167,7 +167,7 @@
     <string name="continue_as_user_message"> will ensure that no data is being collected while you remain anonymous in the app.
         \n\nHowever, this will disable the features which require user to be identified, such as messaging, sending notifications, changing account settings, and many others.
         \n\nBasic functionality of this app will continue to work as is.\n\n</string>
-<string name="internet_error">For latest details, connect to internet</string>
+    <string name="internet_error">For latest details, connect to internet</string>
     <string name="back">Back</string>
     <string-array name="course_array">
         <item>Physics Hons.</item>

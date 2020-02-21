@@ -43,6 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity{
         isCreated = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        schemester.setCollegeCourseYear(getAdditionalInfo()[0],getAdditionalInfo()[1],getAdditionalInfo()[2]);
         setWindowDecorDefaults();
         storeUserDefinition(readUserPosition(),getStoredEmail());
         calendar = Calendar.getInstance(TimeZone.getDefault());
@@ -112,6 +113,7 @@ public class MainActivity extends AppCompatActivity{
         update = new checkUpdate();
         update.execute();
 
+
     }
 
     @Override
@@ -130,6 +132,16 @@ public class MainActivity extends AppCompatActivity{
             if(!aBoolean) Toast.makeText(getApplicationContext(),schemester.getStringResource(R.string.internet_error), Toast.LENGTH_LONG).show();
             super.onPostExecute(aBoolean);
         }
+    }
+    private void highlightCurrentPeriodDelay(){
+        final Handler dataHandler = new Handler(getMainLooper());
+        dataHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                highlightCurrentPeriod();
+                dataHandler.postDelayed(this, 10);
+            }
+        }, 10);
     }
 
     private void setViews(){
@@ -399,6 +411,7 @@ public class MainActivity extends AppCompatActivity{
                     showPackageAlert(version);
                 } else {
                     Toast.makeText(getApplicationContext(), "Download Interrupted", Toast.LENGTH_SHORT).show();
+                    update.cancel(true);
                 }
             }
         });
@@ -435,6 +448,7 @@ public class MainActivity extends AppCompatActivity{
         month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
           if(!isHolidayToday()) {
               setTimeFormat(getTimeFormat());
+              highlightCurrentPeriodDelay();
               if(mHighlightClassTask.isCancelled()) {
                   mHighlightClassTask = new HighlightUpdatedClassTask();
                   mHighlightClassTask.execute();
@@ -443,6 +457,7 @@ public class MainActivity extends AppCompatActivity{
                   mHighlightClassTask = new HighlightUpdatedClassTask();
                   mHighlightClassTask.execute();
               }
+
           }
         super.onStart();
     }
@@ -492,12 +507,14 @@ public class MainActivity extends AppCompatActivity{
             date.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
             day.setText(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
             month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
-            setSemester(schemester.getCOLLECTION_GLOBAL_INFO(),schemester.getDOCUMENT_GLOBAL_SEMESTER(),schemester.getCOLLECTION_YEAR_CODE());
             super.onPreExecute();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
+            setSemester(schemester.getCOLLECTION_GLOBAL_INFO(),
+                    schemester.getDOCUMENT_GLOBAL_SEMESTER(),
+                    schemester.getCOLLECTION_YEAR_CODE());
             if (!isHolidayToday()) {
                 readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),
                         schemester.getDOCUMENT_COURSE_CODE(),
@@ -509,15 +526,15 @@ public class MainActivity extends AppCompatActivity{
         }
         @Override
         protected void onPostExecute(Void aVoid) {
-            highlightCurrentPeriod();
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     mHighlightClassTask = new HighlightUpdatedClassTask();
                     mHighlightClassTask.execute();
+                    handler.postDelayed(this,1000);
                 }
-            }, 100);
+            }, 1000);
             super.onPostExecute(aVoid);
         }
     }
@@ -640,7 +657,7 @@ public class MainActivity extends AppCompatActivity{
             return;
         } else {      //checking period during work hours and assigning 's'
             int k = 1;
-            while (k<10){
+            while (k<9){
                 if(checkPeriod(schemester.getStringResource(schemester.getTimeStringResource()[k]),schemester.getStringResource(schemester.getTimeStringResource()[k+1]))){
                     s = k;
                     break;

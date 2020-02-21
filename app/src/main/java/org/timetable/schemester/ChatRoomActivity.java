@@ -2,276 +2,247 @@ package org.timetable.schemester;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.AsyncDifferConfig;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.util.LongSparseArray;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
-
-import static android.content.ContentValues.TAG;
+import java.util.Objects;
 
 public class ChatRoomActivity extends AppCompatActivity {
     ApplicationSchemester schemester;
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    ImageButton pullUp, pullDown, exit;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    ReadMessage readMessage;
-    String newMessage;
-    LinearLayout chatView;
-    TextView receivedmsg, sendmsg, senderName, myName;
-    ImageButton sendMsgBtn;
-    LinearLayout sendlayout, receiveLayout;
-    EditText mymsg;
-    Boolean thereIsANewMessage = false;
-    checkNetSendMyMessageTask netCheckMessageSendTask;
+    FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    String TAG_MESSAGE_DATA = "localMessages";
+    ImageButton exit, menu, send;
+    EditText myTypedMsg;
+    Boolean connected;
+    RecyclerView mMessageRecycler;
+    MessageListAdapter mMessageAdapter;
+    Handler dataHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        schemester = (ApplicationSchemester) this.getApplication();
         super.onCreate(savedInstanceState);
-        setAppTheme();
+        schemester = (ApplicationSchemester) this.getApplication();
         setContentView(R.layout.activity_chat_room);
-        if (!checkIfEmailVerified()) {
-            Toast.makeText(ChatRoomActivity.this, "Please verify your email first.", Toast.LENGTH_LONG).show();
-            finish();
-        } else {
-            sendlayout = findViewById(R.id.sendMsgLayout);
-            receiveLayout = findViewById(R.id.receiveMsgLayout);
-            mymsg = findViewById(R.id.messageTextTyping);
-            sendmsg = findViewById(R.id.myMessage);
-            senderName = findViewById(R.id.senderID);
-            myName = findViewById(R.id.myID);
-            receivedmsg = findViewById(R.id.receivedMsg);
-            sendMsgBtn = findViewById(R.id.sendTextMessage);
-            pullUp = findViewById(R.id.pullUpbtn);
-            pullDown = findViewById(R.id.pullDownbtn);
-            chatView = findViewById(R.id.chatWindowLinear);
-            exit = findViewById(R.id.exitBtn);
-            exit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    finish();
-                }
-            });
-            sendMsgBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    netCheckMessageSendTask = new checkNetSendMyMessageTask();
-                    netCheckMessageSendTask.execute();
-                }
-            });
-            readMessage = new ReadMessage();
-            readMessage.execute();
-        }
+        setViewsAndListeners();
+        mMessageRecycler = findViewById(R.id.chatRecycleView);
+        mMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
     }
 
-
-    private class checkNetSendMyMessageTask extends AsyncTask<Void,Void,Boolean>{
-
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            return isInternetAvailable();
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            if(result) {
-                Calendar calendar = Calendar.getInstance();
-                newMessage = mymsg.getText().toString();
-                if(!(newMessage.equals(" ")||newMessage.equals(""))){
-                    chatView.removeAllViews();
-                    chatView.addView(sendlayout);
-                    long t = calendar.getTimeInMillis();
-                    saveMessageToDevice(t,newMessage,getUserEmailIDFromLocalStorage());
-                    updateMessageInDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),
-                            schemester.getDOCUMENT_COURSE_CODE(),
-                            schemester.getCOLLECTION_YEAR_CODE(),
-                            newMessage, getUserEmailIDFromLocalStorage(), t
-                    );
-                    sendmsg.setText(newMessage);
-                    myName.setText(getUserEmailIDFromLocalStorage());
-                    mymsg.setText("");
-                }
-            } else{
-                Toast.makeText(getApplicationContext(),"Connection error", Toast.LENGTH_SHORT).show();
-            }
-            netCheckMessageSendTask.cancel(true);
-            super.onPostExecute(result);
-        }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        setOnline(false);
     }
 
     @Override
     protected void onStart() {
-        setOnline(true);
-        if(readMessage.isCancelled()) {
-            readMessage = new ReadMessage();
-            readMessage.execute();
-        } else {
-            readMessage.cancel(true);
-            readMessage = new ReadMessage();
-            readMessage.execute();
-        }
         super.onStart();
-    }
-    @Override
-    protected void onStop() {
-        setOnline(false);
-        readMessage.cancel(true);
-        super.onStop();
-    }
-
-    public class ReadMessage extends AsyncTask<Void,Void,Boolean>{
-
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            getMessageFromDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),
-                    schemester.getDOCUMENT_COURSE_CODE(),
-                    schemester.getCOLLECTION_YEAR_CODE());
-            return thereIsANewMessage;
-        }
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(Boolean result) {
-            if(result) {
-                senderName.setText(getPreviousMessageAndSenderText()[0]);
-                receivedmsg.setText(getPreviousMessageAndSenderText()[1]);
-                chatView.removeAllViews();
-                chatView.addView(receiveLayout);
+        setOnline(true);
+        dataHandler = new Handler(getMainLooper());
+        dataHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                new checkNewMessage().execute();
+                dataHandler.postDelayed(this,10);
             }
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    readMessage = new ReadMessage();
-                    readMessage.execute();
-                }
-            }, 10);
-            super.onPostExecute(result);
-        }
+        }, 10);
     }
 
-    private void updateMessageInDatabase(String college, String course, String year,String message, String uid, Long timestamp){
-        Map<String, Object> userMap = new HashMap<>();
-        userMap.put("text",message);
-        userMap.put("uid", uid);
-        userMap.put("time", timestamp);
-        db.collection(college).document(course).collection(year).document("currentmsg")
-        .update(userMap);
-        saveMessageToDevice(timestamp,message,uid);
-    }
-    private void saveMessageToDevice(long num, String txt, String id){
-        SharedPreferences mSharedPreferences = getSharedPreferences("messages", MODE_PRIVATE);
-        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putLong("stamp", num);
-        mEditor.putString("msg", txt);
-        mEditor.putString("id", id);
-        mEditor.apply();
-    }
-    private String[] getPreviousMessageAndSenderText(){
-        String[] idMsg = {"",""};
-        SharedPreferences mSharedPreferences = getSharedPreferences("messages", MODE_PRIVATE);
-        idMsg[0] = mSharedPreferences.getString("id", "");
-        idMsg[1] = mSharedPreferences.getString("msg", "");
-        return idMsg;
-    }
-    private void getMessageFromDatabase(String college, String course, String year){
-        db.collection(college).document(course).collection(year).document("currentmsg")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                long ts = Long.parseLong(document.get("time").toString());
-                                if(!getUserEmailIDFromLocalStorage().equals(document.getString("uid"))){
-                                    thereIsANewMessage = true;
-                                    saveMessageToDevice(ts,document.getString("text"),document.getString("uid"));
-                                } else {
-                                    thereIsANewMessage = false;
-                                }
-                            }
-                        }
-                    }
-                });
-    }
-
-    private boolean isInternetAvailable() {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
-            return (exitValue == 0);
-        }
-        catch (IOException | InterruptedException e){ e.printStackTrace(); }
-        return false;
-    }
-    String[] getAdditionalInfo() {
-        String[] CCY = {null, null, null};
-        SharedPreferences mSharedPreferences = getSharedPreferences("additionalInfo", MODE_PRIVATE);
-        CCY[0] = mSharedPreferences.getString("college", "");
-        CCY[1] = mSharedPreferences.getString("course", "");
-        CCY[2] = mSharedPreferences.getString("year", "");
-        return CCY;
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        setOnline(false);
     }
 
     private void setOnline(Boolean status){
-        Map<String, Object> data = new HashMap<>();
-        data.put("active", status);
-        db.collection("userbase").document(getUserEmailIDFromLocalStorage())
-                .update(data);
+        Map<String,Object> state = new HashMap<>();
+        state.put("active",status);
+        firestore.collection(schemester.getCOLLECTION_USERBASE())
+                .document(getStoredEmail())
+                .update(state);
     }
 
-    public void setAppTheme() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
-        switch (mSharedPreferences.getInt("themeCode", 0)) {
-            case ApplicationSchemester.CODE_THEME_DARK:
-                setTheme(R.style.BlueDarkTheme);
-                break;
-            case ApplicationSchemester.CODE_THEME_LIGHT:
-            default:setTheme(R.style.BlueLightTheme);
-        }
-    }
+    private void setViewsAndListeners(){
+        exit = findViewById(R.id.exitRoomBtn);
+        menu = findViewById(R.id.infoRoomBtn);
+        send = findViewById(R.id.sendMyMsgBtn);
+        myTypedMsg = findViewById(R.id.messageTyping);
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-    private String getUserEmailIDFromLocalStorage(){
+            }
+        });
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new checkNetAsync().execute();
+                    String[] msgSet = {null,null,null};
+                    msgSet[0] = String.valueOf(Calendar.getInstance().getTimeInMillis());
+                    msgSet[1] = myTypedMsg.getText().toString();
+                    msgSet[2] = getStoredEmail();
+                    new sendNewMessage().execute(msgSet);
+
+            }
+        });
+    }
+    private String getStoredEmail(){
         String cred;
         SharedPreferences mSharedPreferences = getSharedPreferences("credentials", MODE_PRIVATE);
         cred =  mSharedPreferences.getString("email", "");
         return cred;
     }
 
-    private Boolean checkIfEmailVerified() {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        return user.isEmailVerified();
+    private class checkNewMessage extends AsyncTask<Void,Void,Void>{
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if(isInternetAvailable()) {
+                checkNewMessageInCloud();
+            }
+            return null;
+        }
+    }
+
+    private class sendNewMessage extends AsyncTask<String,Void,String>{
+        @Override
+        protected String doInBackground(String... keyValUser) {
+            if(isInternetAvailable()) {
+                sendMessageToCloud(keyValUser[0], keyValUser[1], keyValUser[2]);
+            }
+            return null;
+        }
+    }
+    private void sendMessageToCloud(final String key, final String value, String uid){
+        Map<String,Object> data = new HashMap<>();
+        data.put("text",value);
+        data.put("time",key);
+        data.put("uid",uid);
+        firestore.collection(schemester.getCOLLECTION_COLLEGE_CODE())
+                .document(schemester.getDOCUMENT_COURSE_CODE())
+                .collection(schemester.getCOLLECTION_YEAR_CODE())
+                .document("currentmsg")
+                .update(data)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            saveDataToLocalStorage(key,value);
+                        }
+                    }
+                });
+    }
+
+    private void checkNewMessageInCloud() {
+        firestore.collection(schemester.getCOLLECTION_COLLEGE_CODE())
+                .document(schemester.getDOCUMENT_COURSE_CODE())
+                .collection(schemester.getCOLLECTION_YEAR_CODE())
+                .document("currentmsg")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (Objects.requireNonNull(document).exists()) {
+                                long serverlast;
+                                Long localLast;
+                                serverlast = document.getLong("time");
+                                localLast = retrieveMessageFromLocal();
+                                if(!(serverlast == localLast)){
+                                    Toast.makeText(getApplicationContext(),"New",Toast.LENGTH_SHORT).show();
+                                    saveDataToLocalStorage(String.valueOf(document.getLong("time")), document.getString("text"));
+                                    mMessageAdapter = new MessageListAdapter(ChatRoomActivity.this, Objects.equals(getStoredEmail(),document.getString("uid")),
+                                            document.getString("text"),String.valueOf(document.getLong("time")), document.getString("uid"));
+                                } else {
+                                    Toast.makeText(getApplicationContext(),"Phew",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    }
+                });
+    }
+    private void saveDataToLocalStorage(String mID, String msg){
+        Map<String, Object> msgMap = new HashMap<>();
+        msgMap.put(mID,msg);
+        File file = new File(getDir(TAG_MESSAGE_DATA, MODE_PRIVATE), "msgMap");
+        ObjectOutputStream outputStream;
+        try {
+            outputStream = new ObjectOutputStream(new FileOutputStream(file,true));
+            outputStream.writeObject(msgMap);
+            outputStream.flush();
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    Long readData;
+    private Long retrieveMessageFromLocal(){
+        File file = new File(getDir(TAG_MESSAGE_DATA, MODE_PRIVATE), "msgMap");
+        ObjectInputStream inputStream = null;
+        try {
+            inputStream = new ObjectInputStream(new FileInputStream(file));
+            inputStream.readObject();
+            readData = inputStream.readLong();
+            inputStream.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return readData;
+    }
+
+    private class checkNetAsync extends AsyncTask<Void,Void,Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            return isInternetAvailable();
+        }
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            connected = aBoolean;
+            if(!aBoolean) Toast.makeText(getApplicationContext(),"Connection error", Toast.LENGTH_SHORT).show();
+            super.onPostExecute(aBoolean);
+        }
+    }
+
+    public boolean isInternetAvailable() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        }
+        catch (IOException | InterruptedException e) { e.printStackTrace(); }
+        return false;
     }
 }

@@ -71,31 +71,35 @@ public class Preferences extends AppCompatActivity {
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
         anonymOps = findViewById(R.id.anonymousOptions);
         userOps = findViewById(R.id.accountOptions);
         ccyGroup = findViewById(R.id.ccyOptions);
         devOpsGroup = findViewById(R.id.developerOptions);
+        themebtn = findViewById(R.id.themeChangeBtn);
+
         if(getThemeStatus() == ApplicationSchemester.CODE_THEME_LIGHT) {
             window.setStatusBarColor(this.getResources().getColor(R.color.white));
             window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
-            anonymOps.setVisibility(View.GONE);
-            userOps.setVisibility(View.VISIBLE);
-            ccyGroup.setVisibility(View.VISIBLE);
-            devOpsGroup.setVisibility(View.VISIBLE);
-        }else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO){
+        } else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO){
             window.setStatusBarColor(this.getResources().getColor(R.color.black_overlay));
             window.setNavigationBarColor(this.getResources().getColor(R.color.black));
+        } else {
+            window.setStatusBarColor(this.getResources().getColor(R.color.charcoal));
+            window.setNavigationBarColor(this.getResources().getColor(R.color.spruce));
+        }
+        if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO){
             anonymOps.setVisibility(View.VISIBLE);
             userOps.setVisibility(View.GONE);
             ccyGroup.setVisibility(View.GONE);
             devOpsGroup.setVisibility(View.GONE);
-        }else {
-            window.setStatusBarColor(this.getResources().getColor(R.color.charcoal));
-            window.setNavigationBarColor(this.getResources().getColor(R.color.spruce));
+            themebtn.setVisibility(View.GONE);
+        } else {
             anonymOps.setVisibility(View.GONE);
             userOps.setVisibility(View.VISIBLE);
             ccyGroup.setVisibility(View.VISIBLE);
             devOpsGroup.setVisibility(View.VISIBLE);
+            themebtn.setVisibility(View.VISIBLE);
         }
 
         customLoadDialogClass = new CustomLoadDialogClass(Preferences.this, new OnDialogLoadListener() {
@@ -161,7 +165,7 @@ public class Preferences extends AppCompatActivity {
                 readVersionCheckUpdate();
             }
         });
-        themebtn = findViewById(R.id.themeChangeBtn);
+
         themebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

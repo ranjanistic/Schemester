@@ -64,12 +64,6 @@ public class AdditionalLoginInfo extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onBackPressed() {
-        FirebaseAuth.getInstance().signOut();
-        super.onBackPressed();
-    }
-
 
     private void saveAdditionalInfo(String college, String course, String year){
         SharedPreferences mSharedPreferences = getSharedPreferences("additionalInfo", MODE_PRIVATE);

@@ -15,7 +15,8 @@ public class ApplicationSchemester  extends Application {
     String COLLECTION_GLOBAL_INFO = "global_info", DOCUMENT_GLOBAL_SEMESTER = "semester",
     COLLECTION_COLLEGE_CODE , DOCUMENT_COURSE_CODE , COLLECTION_YEAR_CODE,
     COLLECTION_APP_CONFIGURATION = "appConfig",DOCUMENT_VERSION_CURRENT = "verCurrent",
-    FIELD_VERSION_NAME = "verName", FIELD_DOWNLOAD_LINK = "downlink", FIELD_VERSION_CODE = "verCode";
+    FIELD_VERSION_NAME = "verName", FIELD_DOWNLOAD_LINK = "downlink", FIELD_VERSION_CODE = "verCode",
+    COLLECTION_USERBASE = "userbase", FIELD_USER_ACTIVE = "active", FIELD_USER_DEFINITION = "definition",FIELD_USER_NAME = "name";
     public String getCOLLECTION_GLOBAL_INFO(){
         return COLLECTION_GLOBAL_INFO;
     }
@@ -46,6 +47,9 @@ public class ApplicationSchemester  extends Application {
     public String getFIELD_VERSION_CODE(){
         return FIELD_VERSION_CODE;
     }
+    public String getCOLLECTION_USERBASE(){ return COLLECTION_USERBASE;}
+    public String getFIELD_USER_ACTIVE(){ return FIELD_USER_ACTIVE; }
+    public String getFIELD_USER_DEFINITION(){ return FIELD_USER_DEFINITION;}
     public void setCollegeCourseYear(String college, String course, String year){
         this.COLLECTION_COLLEGE_CODE = college;
         this.DOCUMENT_COURSE_CODE = course;
