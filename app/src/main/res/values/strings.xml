@@ -159,18 +159,36 @@
     <string name="returning_as">Returning as</string>
     <string name="return_as_user_message"> will allow you to access the forbidden features requiring non-anonymous user like messaging,
         account settings, and many others.\n\nThis will make you no longer anonymous, and normal data collection will resume as is.\n\n</string>
-    <string-array name="college_array">
-        <item>Deshbandhu College</item>
-        <item>Other</item>
-    </string-array>
     <string name="continue_as">Continuing as </string>
     <string name="continue_as_user_message"> will ensure that no data is being collected while you remain anonymous in the app.
         \n\nHowever, this will disable the features which require user to be identified, such as messaging, sending notifications, changing account settings, and many others.
         \n\nBasic functionality of this app will continue to work as is.\n\n</string>
     <string name="internet_error">For latest details, connect to internet</string>
     <string name="back">Back</string>
+    <string name="some_crucial_information">Some\ncrucial\ninformation.</string>
+    <string name="other">Other</string>
+    <string-array name="college_array">
+        <item>Deshbandhu College</item>
+    </string-array>
+    <string-array name="college_code_array">
+        <item>DBC</item>
+    </string-array>
+
     <string-array name="course_array">
         <item>Physics Hons.</item>
-        <item>Other</item>
+    </string-array>
+    <string-array name="course_code_array">
+        <item>PHY-H</item>
+    </string-array>
+
+    <string-array name="year_array">
+        <item>First year</item>
+        <item>Second year</item>
+        <item>Third year</item>
+    </string-array>
+    <string-array name="year_code_array">
+        <item>Y1</item>
+        <item>Y2</item>
+        <item>Y3</item>
     </string-array>
 </resources>

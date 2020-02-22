@@ -99,7 +99,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        
+
         //Setting navigation and status bar color according to theme
         if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO) {
             window.setStatusBarColor(this.getResources().getColor(R.color.black));
@@ -407,8 +407,13 @@ public class FullScheduleActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 readSemester(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),schemester.getCOLLECTION_YEAR_CODE());
-                email.setText(getCredentials()[0]);
-                roll.setText(getCredentials()[1]);
+                if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO) {
+                    email.setText(schemester.getStringResource(R.string.anonymous));
+                    roll.setText(schemester.getStringResource(R.string.anonymous));
+                }else {
+                    email.setText(getCredentials()[0]);
+                    roll.setText(getCredentials()[1]);
+                }
                 checkOrientationSetVisibility(View.GONE);
                 settingsview.setVisibility(View.VISIBLE);
                 aboutview.setVisibility(View.GONE);

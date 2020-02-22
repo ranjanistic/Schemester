@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity{
     day, month, time;
     private TextView[] c = {c1,c2,c3,c4,c5,c6,c7,c8,c9},
     p = {p1,p2,p3,p4,p5,p6,p7,p8,p9};
-
+    String[] pKey = {"p1","p2","p3","p4","p5","p6","p7","p8","p9"};
     private TextView loginIdOnDrawer;
     private Button date;
     private ImageButton drawerArrow, switchThemeBtn;
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity{
     private ScrollView scrollView;
     private Calendar calendar;
     private Animation hide, show, fadeOn, fadeOff;
-    private HighlightUpdatedClassTask mHighlightClassTask;
+    private ReadClassFromDatabaseTask mreadClassFromDatabaseTask;
     public Activity mainact;
     public static boolean isCreated = false;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -82,6 +82,9 @@ public class MainActivity extends AppCompatActivity{
     private checkUpdate update;     //update checker asyncTask class
     private Window window;
     private BottomSheetBehavior bottomSheetBehavior;
+
+    String COLLECTION_GLOBAL_INFO = "global_info", DOCUMENT_GLOBAL_SEMESTER = "semester",
+            COLLECTION_COLLEGE_CODE , DOCUMENT_COURSE_CODE , COLLECTION_YEAR_CODE;
     @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +95,9 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         schemester.setCollegeCourseYear(getAdditionalInfo()[0],getAdditionalInfo()[1],getAdditionalInfo()[2]);
+        COLLECTION_COLLEGE_CODE = getAdditionalInfo()[0];
+        DOCUMENT_COURSE_CODE = getAdditionalInfo()[1];
+        COLLECTION_YEAR_CODE = getAdditionalInfo()[2];
         setWindowDecorDefaults();
         storeUserDefinition(readUserPosition(),getStoredEmail());
         calendar = Calendar.getInstance(TimeZone.getDefault());
@@ -105,9 +111,9 @@ public class MainActivity extends AppCompatActivity{
 
         //check holiday and display accordingly
         setHolidayViewIfHoliday();
-
+        
         //initializing main schedule update task
-        mHighlightClassTask = new HighlightUpdatedClassTask();
+        mreadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
 
         //check for updates task
         update = new checkUpdate();
@@ -133,17 +139,6 @@ public class MainActivity extends AppCompatActivity{
             super.onPostExecute(aBoolean);
         }
     }
-    private void highlightCurrentPeriodDelay(){
-        final Handler dataHandler = new Handler(getMainLooper());
-        dataHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                highlightCurrentPeriod();
-                dataHandler.postDelayed(this, 10);
-            }
-        }, 10);
-    }
-
     private void setViews(){
         scrollView = findViewById(R.id.scrollView);
         headingView = findViewById(R.id.period_view);
@@ -199,7 +194,7 @@ public class MainActivity extends AppCompatActivity{
         } else loginIdOnDrawer.setText(getCredentials()[0]);
     }
     private String[] getCredentials(){
-        String[] cred = {"",""};
+        String[] cred = {null,null};
         SharedPreferences mSharedPreferences = getSharedPreferences("credentials", MODE_PRIVATE);
         cred[0] =  mSharedPreferences.getString("email", "");
         cred[1] =  mSharedPreferences.getString("roll", "");
@@ -289,9 +284,7 @@ public class MainActivity extends AppCompatActivity{
         scheduleTab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!mHighlightClassTask.isCancelled()){
-                    mHighlightClassTask.cancel(true);
-                }
+                mreadClassFromDatabaseTask.cancel(true);
                 Intent i = new Intent(MainActivity.this, FullScheduleActivity.class);
                 startActivity(i);
             }
@@ -300,6 +293,7 @@ public class MainActivity extends AppCompatActivity{
         settingTab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mreadClassFromDatabaseTask.cancel(true);
                 Intent i = new Intent(MainActivity.this, Preferences.class);
                 startActivity(i);
             }
@@ -442,41 +436,43 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onStart() {
         new checkNetAsync().execute();
-        setSemester(schemester.getCOLLECTION_GLOBAL_INFO(),schemester.getDOCUMENT_GLOBAL_SEMESTER(),schemester.getCOLLECTION_YEAR_CODE());
+        setSemester(schemester.getCOLLECTION_GLOBAL_INFO(),
+                schemester.getDOCUMENT_GLOBAL_SEMESTER(),
+                schemester.getCOLLECTION_YEAR_CODE());
         date.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
         day.setText(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
         month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
           if(!isHolidayToday()) {
               setTimeFormat(getTimeFormat());
-              highlightCurrentPeriodDelay();
-              if(mHighlightClassTask.isCancelled()) {
-                  mHighlightClassTask = new HighlightUpdatedClassTask();
-                  mHighlightClassTask.execute();
+              if(mreadClassFromDatabaseTask.isCancelled()) {
+                  mreadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
+                  mreadClassFromDatabaseTask.execute();
               } else {
-                  mHighlightClassTask.cancel(true);
-                  mHighlightClassTask = new HighlightUpdatedClassTask();
-                  mHighlightClassTask.execute();
+                  mreadClassFromDatabaseTask.cancel(true);
+                  mreadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
+                  mreadClassFromDatabaseTask.execute();
               }
-
           }
         super.onStart();
     }
 
     @Override
     protected void onDestroy() {
-        mHighlightClassTask.cancel(true);
+        mreadClassFromDatabaseTask.cancel(true);
+        
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
-        mHighlightClassTask.cancel(true);
+        mreadClassFromDatabaseTask.cancel(true);
         super.onPause();
     }
 
     @Override
     protected void onStop() {
-        mHighlightClassTask.cancel(true);
+        mreadClassFromDatabaseTask.cancel(true);
+        
         super.onStop();
     }
 
@@ -499,9 +495,9 @@ public class MainActivity extends AppCompatActivity{
             }
         }
     }
-
+    
     //schedule update task
-    private class HighlightUpdatedClassTask extends AsyncTask<Void,Void,Void> {
+    private class ReadClassFromDatabaseTask extends AsyncTask<Void,Void,Void> {
         @Override
         protected void onPreExecute() {
             date.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
@@ -512,29 +508,28 @@ public class MainActivity extends AppCompatActivity{
 
         @Override
         protected Void doInBackground(Void... voids) {
-            setSemester(schemester.getCOLLECTION_GLOBAL_INFO(),
-                    schemester.getDOCUMENT_GLOBAL_SEMESTER(),
-                    schemester.getCOLLECTION_YEAR_CODE());
-            if (!isHolidayToday()) {
-                readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),
-                        schemester.getDOCUMENT_COURSE_CODE(),
-                        schemester.getCOLLECTION_YEAR_CODE(),
+            setSemester(COLLECTION_GLOBAL_INFO, 
+                    DOCUMENT_GLOBAL_SEMESTER,
+                    COLLECTION_YEAR_CODE);
+                readDatabase(COLLECTION_COLLEGE_CODE,
+                        DOCUMENT_COURSE_CODE,
+                        COLLECTION_YEAR_CODE,
                         getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK))
                 );
-            }
             return null;
         }
         @Override
         protected void onPostExecute(Void aVoid) {
-            final Handler handler = new Handler();
+            highlightCurrentPeriod();
+            final Handler handler = new Handler(getMainLooper());
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mHighlightClassTask = new HighlightUpdatedClassTask();
-                    mHighlightClassTask.execute();
-                    handler.postDelayed(this,1000);
+                    mreadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
+                    mreadClassFromDatabaseTask.execute();
+                    handler.postDelayed(this,100);
                 }
-            }, 1000);
+            }, 100);
             super.onPostExecute(aVoid);
         }
     }
@@ -644,34 +639,36 @@ public class MainActivity extends AppCompatActivity{
             while (d<9) {
                 p[d].setTextColor(getResources().getColor(R.color.white));
                 p[d].setBackgroundResource(R.drawable.roundtimeovercontainer);
-                d++;
+                ++d;
             }
             return;
         } else if(checkPeriod("00:00:00",schemester.getStringResource(schemester.getTimeStringResource()[0]))) {   //during night
-            int d = 0;
-            while (d<9) {
-                p[d].setBackgroundResource(R.drawable.roundcontainerbox);
-                p[d].setTextColor(getResources().getColor(R.color.white));
-                d++;
+            int n = 0;
+            while (n<9) {
+                p[n].setBackgroundResource(R.drawable.roundcontainerbox);
+                p[n].setTextColor(getResources().getColor(R.color.white));
+                ++n;
             }
             return;
         } else {      //checking period during work hours and assigning 's'
-            int k = 1;
+            int k = 0;
             while (k<9){
                 if(checkPeriod(schemester.getStringResource(schemester.getTimeStringResource()[k]),schemester.getStringResource(schemester.getTimeStringResource()[k+1]))){
                     s = k;
-                    break;
+                    k=9;
                 } else {
                     ++k;
                 }
             }
         }
-        while (i < s) {     //work hours highlighter
-            p[i].setTextColor(getResources().getColor(R.color.white));
-            p[i].setBackgroundResource(R.drawable.roundtimeovercontainer);
-            p[s].setBackgroundResource(R.drawable.roundactivetimecontainer);
-            p[s].setTextColor(getResources().getColor(R.color.white));
-            ++i;
+        if(s>i) {
+            while (i < s) {     //work hours highlighter
+                p[i].setTextColor(getResources().getColor(R.color.white));
+                p[i].setBackgroundResource(R.drawable.roundtimeovercontainer);
+                p[s].setBackgroundResource(R.drawable.roundactivetimecontainer);
+                p[s].setTextColor(getResources().getColor(R.color.white));
+                ++i;
+            }
         }
         i=i+1;
         while (i<9){    //upcoming period highlighter
@@ -679,61 +676,11 @@ public class MainActivity extends AppCompatActivity{
             p[i].setBackgroundResource(R.drawable.roundcontainerbox);
             ++i;
         }
-    }
-
-    /*
-    private String returnPeriodDetail(){
-        readDatabase(getWeekdayFromCode(Calendar.DAY_OF_WEEK));
-        if(checkPeriod("08:30:00", "09:30:00")){
-            return c1.getText().toString();
-        } else if(checkPeriod("09:30:00", "10:30:00")){
-            return c2.getText().toString();
-        }else if(checkPeriod("10:30:00", "11:30:00")){
-            return c3.getText().toString();
-        }else if(checkPeriod("11:30:00","12:30:00")){
-            return c4.getText().toString();
-        }else if(checkPeriod("12:30:00","13:30:00")){
-            return c5.getText().toString();
-        }else if(checkPeriod("13:30:00","14:30:00")){
-            return c6.getText().toString();
-        }else if(checkPeriod("14:30:00","15:30:00")){
-            return c7.getText().toString();
-        }else if(checkPeriod("16:46:00","16:48:00")){
-            return c8.getText().toString();
-        }else if(checkPeriod("16:30:00","17:30:00")){
-            return c9.getText().toString();
-        } else {
-            return "All classes over.";
-        }
+        
     }
 
 
-    private String returnClassBeginTime(){
-        String currently = new SimpleDateFormat("HH:mm:ss").format(new Date());
-        if(currently.equals(getResources().getString(R.string.time1))) {
-            return currently;
-        } else if(currently.equals(getResources().getString(R.string.time2))) {
-            return currently;
-        } else if(currently.equals(getResources().getString(R.string.time3))) {
-            return currently;
-        } else if(currently.equals(getResources().getString(R.string.time4))) {
-            return currently;
-        } else if(currently.equals(getResources().getString(R.string.time5))) {
-            return currently;
-        } else if(currently.equals(getResources().getString(R.string.time6))) {
-            return currently;
-        } else if(currently.equals(getResources().getString(R.string.time7))) {
-            return currently;
-        } else if(currently.equals(getResources().getString(R.string.time8))) {
-            return currently;
-        } else if(currently.equals(getResources().getString(R.string.time9))) {
-            return currently;
-        } else {
-            return "Not yet.";
-        }
-    }
-*/
-    String[] getAdditionalInfo() {
+    private String[] getAdditionalInfo() {
         String[] CCY = {null, null, null};
         SharedPreferences mSharedPreferences = getSharedPreferences("additionalInfo", MODE_PRIVATE);
         CCY[0] = mSharedPreferences.getString("college", "");
@@ -785,12 +732,9 @@ public class MainActivity extends AppCompatActivity{
                                     Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                     int i = 0;
                                     while(i<9) {
-                                        c[i].setText(document.getString(schemester.getPKey()[i]));
-                                        i++;
+                                        c[i].setText(document.getString(pKey[i]));
+                                        ++i;
                                     }
-                                } else {
-                                    Log.d(TAG, "No such document");
-                                    Toast.makeText(MainActivity.this, "Server error.", Toast.LENGTH_LONG).show();
                                 }
                             }
                         }

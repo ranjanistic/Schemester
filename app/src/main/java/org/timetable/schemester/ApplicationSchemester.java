@@ -2,6 +2,7 @@ package org.timetable.schemester;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 public class ApplicationSchemester  extends Application {
     public static final int CODE_THEME_LIGHT = 101, CODE_THEME_DARK = 102,
@@ -77,5 +78,35 @@ public class ApplicationSchemester  extends Application {
     }
     public String getStringResource(int resId){
         return getResources().getString(resId);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        setCollegeCourseYear(getAdditionalInfo()[0],getAdditionalInfo()[1],getAdditionalInfo()[2]);
+    }
+
+    String[] getAdditionalInfo() {
+        String[] CCY = {null, null, null};
+        SharedPreferences mSharedPreferences = getSharedPreferences("additionalInfo", MODE_PRIVATE);
+        CCY[0] = mSharedPreferences.getString("college", "");
+        CCY[1] = mSharedPreferences.getString("course", "");
+        CCY[2] = mSharedPreferences.getString("year", "");
+        return CCY;
+    }
+    public void toasterLong(String message){
+        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
+    }
+    public void toasterShort(String message){
+        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+    }
+    public void setAppTheme() {
+        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
+        switch (mSharedPreferences.getInt("themeCode", 0)) {
+            case CODE_THEME_INCOGNITO: setTheme(R.style.IncognitoTheme); break;
+            case CODE_THEME_DARK: setTheme(R.style.BlueDarkTheme);break;
+            case CODE_THEME_LIGHT:
+            default:setTheme(R.style.BlueLightTheme);
+        }
     }
 }

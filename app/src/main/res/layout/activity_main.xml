@@ -23,8 +23,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end|center_vertical"
-                    android:gravity="end"
+                    android:layout_gravity="start"
+                    android:gravity="start"
                     android:orientation="vertical">
 
                     <TextView
@@ -34,7 +34,7 @@
                         android:layout_marginStart="12dp"
                         android:layout_marginEnd="12dp"
                         android:fontFamily="@font/comfortaa_bold"
-                        android:gravity="bottom"
+                        android:gravity="start"
                         android:text="@string/loading"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="?attr/base_text_color"
