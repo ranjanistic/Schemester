@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="16sp"
+    android:padding="12dp"
+    android:background="@drawable/square_edgy_btn"
+    android:backgroundTint="?attr/base_background"
+    android:textColor="?attr/base_text_color"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

@@ -31,13 +31,12 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         schemester = (ApplicationSchemester) this.getApplication();
         super.onCreate(savedInstanceState);
-        String[] addInfo = getAdditionalInfo();
         if(user!=null) {
             if(!(Objects.equals(getAdditionalInfo()[0],"")&&Objects.equals(getAdditionalInfo()[1],"")&&Objects.equals(getAdditionalInfo()[2],""))) {
                 schemester.setCollegeCourseYear(getAdditionalInfo()[0], getAdditionalInfo()[1], getAdditionalInfo()[2]);
-                isHolidayOtherThanWeekend(addInfo[0], addInfo[1]);
-                isHolidayOtherThanWeekend(addInfo[0], "local_info");
-                isHolidayOtherThanWeekend("global_info", "holiday_info");
+                isHolidayOtherThanWeekend(getAdditionalInfo()[0], getAdditionalInfo()[1]);
+                isHolidayOtherThanWeekend(getAdditionalInfo()[0], schemester.getDOCUMENT_LOCAL_INFO());
+                isHolidayOtherThanWeekend(schemester.getCOLLECTION_GLOBAL_INFO(), schemester.getDOCUMENT_HOLIDAY_INFO());
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -55,10 +54,10 @@ public class Splash extends AppCompatActivity {
     }
     private String[] getAdditionalInfo() {
         String[] CCY = {null, null, null};
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("additionalInfo", MODE_PRIVATE);
-        CCY[0] = mSharedPreferences.getString("college", "");
-        CCY[1] = mSharedPreferences.getString("course", "");
-        CCY[2] = mSharedPreferences.getString("year", "");
+        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_ADDITIONAL_INFO(), MODE_PRIVATE);
+        CCY[0] = mSharedPreferences.getString(schemester.getPREF_KEY_COLLEGE(), "");
+        CCY[1] = mSharedPreferences.getString(schemester.getPREF_KEY_COURSE(), "");
+        CCY[2] = mSharedPreferences.getString(schemester.getPREF_KEY_YEAR(), "");
         return CCY;
     }
     private void isHolidayOtherThanWeekend(String collector, String doc){
@@ -69,57 +68,17 @@ public class Splash extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
-                            if (Objects.requireNonNull(document).exists()) {
-                                Log.d(TAG, "Document Holiday data: " + document.getData());
-                                saveHolidayStatus(document.getBoolean("holiday"));
+                            if (Objects.requireNonNull(document).exists()) { ;
+                                saveHolidayStatus(document.getBoolean(schemester.getFIELD_HOLIDAY()));
                             }
                         }
                     }
                 });
     }
     private void saveHolidayStatus(Boolean isHoliday){
-        SharedPreferences mSharedPreferences = getSharedPreferences("otherHoliday", MODE_PRIVATE);
+        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_OTHER_HOLIDAY(), MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putBoolean("holiday", isHoliday);
+        mEditor.putBoolean(schemester.getPREF_KEY_OTHER_HOLIDAY(), isHoliday);
         mEditor.apply();
-    }
-/*
-    private Boolean getLoginStatus(){
-        SharedPreferences mSharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
-        return mSharedPreferences.getBoolean("loginstatus", false);
-    }
-
-    public void setAppTheme(int code) {
-        switch (code) {
-            case 101:
-                setTheme(R.style.splashTheme);
-                break;
-            case 102:
-                setTheme(R.style.splashThemeDark);
-                break;
-                default:setTheme(R.style.splashTheme);
-        }
-    }
-
-    private int getThemeStatus() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
-        return mSharedPreferences.getInt("themeCode", 0);
-    }
-    */
-
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("NewPeriod", name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
     }
 }

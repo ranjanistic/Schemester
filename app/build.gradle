@@ -19,7 +19,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             android.applicationVariants.all { variant ->
                 variant.outputs.all {
-                    outputFileName = "org.timetable.schemester-${variant.versionName}.apk"
+                    outputFileName = "${applicationId}-${variant.versionName}.apk"
                 }
             }
         }

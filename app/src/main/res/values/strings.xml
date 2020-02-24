@@ -68,6 +68,7 @@
     <string name="nov">November</string>
     <string name="dec">December</string>
 
+    <string name="send">Send</string>
     <string name="valid">Valid</string>
     <string name="invalidtext">Invalid till now</string>
     <string name="not_verified">Not verified</string>
@@ -102,7 +103,6 @@
     <string name="ddmmyyyy">DDMMYYYY</string>
     <string name="proceed">Proceed</string>
     <string name="cancel">Cancel</string>
-    <string name="date_of_birth">Date of Birth</string>
     <string name="selected_choice_preview">selected choice preview</string>
     <string name="choose_a_theme">Choose a theme</string>
     <string name="light_theme">Light theme</string>
@@ -167,6 +167,20 @@
     <string name="back">Back</string>
     <string name="some_crucial_information">Some\ncrucial\ninformation.</string>
     <string name="other">Other</string>
+    <string name="update_source">Update source</string>
+    <string name="use_this_to_update_your_college_course_or_year">Use this to update your college, course or year.</string>
+    <string name="ranjanistic_github">https://www.github.com/ranjanistic</string>
+    <string name="darkmodelabs_github">https://www.github.com/darkmodelabs</string>
+    <string name="mm">MM</string>
+    <string name="dd">DD</string>
+    <string name="yyyy">YYYY</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="college_roll_number">College Roll Number</string>
+    <string name="forgot">Forgot?</string>
+    <string name="course_studying">Course studying</string>
+    <string name="the_crucial_detailing">The\nCrucial\nDetailing.</string>
+    <string name="in_association_with">In association with</string>
+    <string name="stay_tuned_for_exciting_updates">Stay tuned for exciting updates!</string>
     <string-array name="college_array">
         <item>Deshbandhu College</item>
     </string-array>

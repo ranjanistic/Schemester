@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/base_background"
+    android:backgroundTint="?attr/base_background"
+    tools:context=".PermanentActionActivity">
+
+    <TextView
+        android:id="@+id/ploadingcaption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:gravity="center_horizontal"
+        android:text="@string/downloading_latest_version"
+        android:textColor="?attr/base_text_color"
+        android:textSize="22sp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+    <ProgressBar
+        android:id="@+id/pdownloadProgresss"
+        style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="false"
+        android:indeterminateOnly="false"
+        android:indeterminateTint="@color/green"
+        android:max="100"
+        android:progressBackgroundTint="@color/dull_white"
+        android:progressTint="@color/white"
+        android:secondaryProgressTint="@color/green"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0"/>
+    <ProgressBar
+        android:id="@+id/pdownloadProgress"
+        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:indeterminate="false"
+        android:indeterminateOnly="false"
+        android:max="100"
+        android:progress="33"
+        android:progressTint="?attr/action_text_color"
+        android:secondaryProgressTint="?attr/action_text_color"
+        android:indeterminateTint="?attr/action_text_color"
+        android:progressBackgroundTint="?attr/action_text_color"
+        app:layout_constraintBottom_toTopOf="@id/pcancelDownload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ploadingcaption" />
+
+
+        <TextView
+            android:id="@+id/ppercentCompleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/_0_percent"
+            android:textColor="?attr/base_text_color"
+            android:textSize="42sp"
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintTop_toTopOf="@id/pdownloadProgress"
+            app:layout_constraintBottom_toTopOf="@id/pappSize"
+            app:layout_constraintStart_toStartOf="@id/pdownloadProgress"
+            app:layout_constraintEnd_toEndOf="@id/pdownloadProgress"/>
+
+        <TextView
+            android:id="@+id/pappSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/of_0_mb"
+            android:textColor="?attr/base_text_color"
+            android:textSize="26sp"
+            app:layout_constraintStart_toStartOf="@id/pdownloadProgress"
+            app:layout_constraintEnd_toEndOf="@id/pdownloadProgress"
+            app:layout_constraintTop_toTopOf="@id/pdownloadProgress"
+            app:layout_constraintBottom_toBottomOf="@id/pdownloadProgress"/>
+
+    <Button
+        android:id="@+id/pcancelDownload"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="12dp"
+        android:background="@drawable/square_round_btn"
+        android:backgroundTint="?attr/warning_button_color"
+        android:text="@string/cancel"
+        android:textAllCaps="false"
+        android:textColor="?attr/button_text_color"
+        android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

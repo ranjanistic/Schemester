@@ -51,21 +51,21 @@ import static android.content.ContentValues.TAG;
 
 
 public class Preferences extends AppCompatActivity {
+    ApplicationSchemester schemester;
     Switch timeFormatSwitch;
-    LinearLayout dobUpdate, emailChange, rollChange, appUpdate, deleteAcc, restarter, themebtn, feedback, clockTypeSwitch, loginAgain, anonymOps, userOps, ccySwitch, ccyGroup,
-            devOpsGroup;
+    LinearLayout dobUpdate, emailChange, rollChange, appUpdate, deleteAcc, restarter, themebtn,
+            feedback, clockTypeSwitch, loginAgain, anonymOps, userOps, ccySwitch, ccyGroup, devOpsGroup;
     ImageButton returnbtn;
     CustomVerificationDialog customVerificationDialogDeleteAccount, customVerificationDialogEmailChange;
     CustomLoadDialogClass customLoadDialogClass;
     CustomTextDialog customTextDialog;
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     int CODE_DELETE_ACCOUNT = 102, CODE_CHANGE_EMAIL = 101;
-    int versionCode = BuildConfig.VERSION_CODE;
-    String versionName = BuildConfig.VERSION_NAME;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        schemester = (ApplicationSchemester) this.getApplication();
         setAppTheme();
         setContentView(R.layout.activity_preferences);
         Window window = this.getWindow();
@@ -104,8 +104,7 @@ public class Preferences extends AppCompatActivity {
 
         customLoadDialogClass = new CustomLoadDialogClass(Preferences.this, new OnDialogLoadListener() {
             @Override
-            public void onLoad() {
-            }
+            public void onLoad() { }
             @Override
             public String onLoadText() {
                 return "Just a moment";
@@ -134,11 +133,11 @@ public class Preferences extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(checkIfEmailVerified()) {
+                    setAllActivityStarterButtonsDisabled(true);
                     Intent ccyIntent = new Intent(Preferences.this, AdditionalLoginInfo.class);
                     startActivity(ccyIntent);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Verify your email first, or change email ID if unable to do so", Toast.LENGTH_LONG)
-                            .show();
+                    schemester.toasterLong("Verify your email first, or change email ID if unable to do so");
                 }
             }
         });
@@ -223,9 +222,9 @@ public class Preferences extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                         if (isNetworkConnected()) {
-                            Snackbar snackbar = Snackbar.make(view, "Send a link to your email address for this?", 5000);
+                            Snackbar snackbar = Snackbar.make(view, "Shall I send a link to your email address for this?", 5000);
                             snackbar.setActionTextColor(getResources().getColor(R.color.green));
-                            snackbar.setAction("Send", new View.OnClickListener() {
+                            snackbar.setAction(schemester.getStringResource(R.string.send), new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     Snackbar.make(view, "Sending...", Snackbar.LENGTH_INDEFINITE)
@@ -246,7 +245,7 @@ public class Preferences extends AppCompatActivity {
         restarter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(Preferences.this, "Restarting", Toast.LENGTH_SHORT).show();
+                schemester.toasterShort("Restarting");
                 restartApplication();
             }
         });
@@ -296,9 +295,15 @@ public class Preferences extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setAllActivityStarterButtonsDisabled(false);
+    }
+
     private Boolean checkIfEmailVerified() {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        return user.isEmailVerified();
+        return FirebaseAuth.getInstance().getCurrentUser().isEmailVerified();
     }
     private void changeDobResetState(Boolean state, Float alpha){
         dobUpdate.setAlpha(alpha);
@@ -333,7 +338,7 @@ public class Preferences extends AppCompatActivity {
         String[] creds;
         creds = getCredentials();
         if(!uid.equals(creds[0])){
-            Toast.makeText(Preferences.this, "Wrong credentials.", Toast.LENGTH_SHORT).show();
+            schemester.toasterLong("Wrong credentials");
             customLoadDialogClass.hide();
             return;
         }
@@ -344,13 +349,13 @@ public class Preferences extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(Preferences.this, "Authentication passed", Toast.LENGTH_SHORT).show();
+                            schemester.toasterShort("Authentication passed");
                             if(taskCode == CODE_DELETE_ACCOUNT){
                                 CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(Preferences.this, new OnDialogConfirmListener() {
                                     @Override
                                     public void onApply(Boolean confirm) {
                                       if(confirm){
-                                          db.collection("userbase").document(getStoredEmail()).delete();
+                                          db.collection(schemester.getCOLLECTION_USERBASE()).document(getCredentials()[0]).delete();
                                           deleteUser();
                                       } else {
                                           customLoadDialogClass.hide();
@@ -372,7 +377,7 @@ public class Preferences extends AppCompatActivity {
                             }
                             customLoadDialogClass.hide();
                         } else {
-                            Toast.makeText(Preferences.this, "Wrong credentials or network problem", Toast.LENGTH_SHORT).show();
+                            schemester.toasterLong("Wrong credentials or network problem");
                             customLoadDialogClass.hide();
                         }
                     }
@@ -388,14 +393,14 @@ public class Preferences extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 storeLoginStatus(false);
                                 customLoadDialogClass.hide();
-                                Toast.makeText(Preferences.this, "Your account was deleted permanently.", Toast.LENGTH_SHORT).show();
+                                schemester.toasterLong("Your account was deleted permanently");
                                 Intent i = new Intent(Preferences.this, PositionActivity.class);
                                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // To clean up all activities
                                 startActivity(i);
                                 overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
                             } else {
                                 customLoadDialogClass.hide();
-                                Toast.makeText(Preferences.this, "Network problem maybe?", Toast.LENGTH_SHORT).show();
+                                schemester.toasterShort("Network problem maybe?");
                             }
                         }
                     });
@@ -404,12 +409,8 @@ public class Preferences extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Network problem?", Toast.LENGTH_LONG).show();
         }
     }
-
-    private String getStoredEmail(){
-        String cred;
-        SharedPreferences mSharedPreferences = getSharedPreferences("credentials", MODE_PRIVATE);
-        cred =  mSharedPreferences.getString("email", "");
-        return cred;
+    private void setAllActivityStarterButtonsDisabled(Boolean state){
+        ccySwitch.setClickable(!state);
     }
 
     String newMail;
@@ -447,9 +448,9 @@ public class Preferences extends AppCompatActivity {
                         public void onApply(String text) {
                             if(text.matches("[0-9]+/[0-9]+")) {
                                 storeCredentials("", text);
-                                Toast.makeText(getApplicationContext(), "Roll number updated", Toast.LENGTH_LONG).show();
+                                schemester.toasterLong("Roll number updated");
                             } else {
-                                Toast.makeText(getApplicationContext(), "Invalid roll number.", Toast.LENGTH_LONG).show();
+                                schemester.toasterLong("Invalid roll number");
                             }
                         }
                         @Override
@@ -464,7 +465,7 @@ public class Preferences extends AppCompatActivity {
                     customTextDialog1.setCanceledOnTouchOutside(false);
                     customTextDialog1.show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Incorrect roll number", Toast.LENGTH_LONG).show();
+                    schemester.toasterLong("Incorrect roll number");
                 }
             }
             @Override
@@ -479,10 +480,10 @@ public class Preferences extends AppCompatActivity {
         customTextDialog.show();
     }
     private String[] getCredentials(){
-        String[] cred = {"",""};
-        SharedPreferences mSharedPreferences = getSharedPreferences("credentials", MODE_PRIVATE);
-        cred[0] =  mSharedPreferences.getString("email", "");
-        cred[1] =  mSharedPreferences.getString("roll", "");
+        String[] cred = new String[2];
+        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE);
+        cred[0] =  mSharedPreferences.getString(schemester.getPREF_KEY_EMAIL(), "");
+        cred[1] =  mSharedPreferences.getString(schemester.getPREF_KEY_ROLL(), "");
         return cred;
     }
 
@@ -496,13 +497,13 @@ public class Preferences extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    migrateDataAtEmailChange(getStoredEmail(), newMail);
+                                    migrateDataAtEmailChange(getCredentials()[0], newMail);
                                     customLoadDialogClass.hide();
                                     storeCredentials(newMail,"");
-                                    setAlert("Email successfully changed","Your new login ID aka email ID is \'"+updatemail+"\'. You'll need to login again with new email ID.");
+                                    setEmailChangedAlert("Email successfully changed","Your new login ID aka email ID is \'"+updatemail+"\'. You'll need to login again with new email ID.");
                                 } else {
                                     customLoadDialogClass.hide();
-                                    Toast.makeText(getApplicationContext(), "Network problem?", Toast.LENGTH_LONG).show();
+                                    schemester.toasterLong("Network problem?");
                                 }
                             }
                         });
@@ -524,23 +525,19 @@ public class Preferences extends AppCompatActivity {
     }
 
     private void migrateDataAtEmailChange(final String migrateFrom, final String migrateTo) {
-        db.collection("userbase").document(migrateFrom)
+        db.collection(schemester.getCOLLECTION_USERBASE()).document(migrateFrom)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            String def = document.getString("definition");
                             Map<String, Object> statusData = new HashMap<>();
-                            statusData.put("definition", readUserPosition());
-                            db.collection("userbase").document(migrateTo)
+                            statusData.put(schemester.getFIELD_USER_DEFINITION(), readUserPosition());
+                            db.collection(schemester.getCOLLECTION_USERBASE()).document(migrateTo)
                                     .set(statusData, SetOptions.merge());
-                            db.collection("userbase").document(migrateFrom).delete();
-                            return;
+                            db.collection(schemester.getCOLLECTION_USERBASE()).document(migrateFrom).delete();
                         } else {
                             setEmailIfConfirmed("Failed to migrate", "Existing data failed to migrate, hence email ID was not updated. \nCheck your connection and try again.",migrateFrom);
-                            return;
                         }
                     }
                 });
@@ -548,12 +545,11 @@ public class Preferences extends AppCompatActivity {
     }
 
     private String readUserPosition(){
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("userDefinition", MODE_PRIVATE);
-        return mSharedPreferences.getString("position", "");
+        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE);
+        return mSharedPreferences.getString(schemester.getPREF_KEY_USER_DEF(), "");
     }
 
-    private void setAlert(final String head, final String body){
-
+    private void setEmailChangedAlert(final String head, final String body){
         CustomAlertDialog customAlertDialog = new CustomAlertDialog(Preferences.this, new OnDialogAlertListener() {
             @Override
             public void onDismiss(){
@@ -583,9 +579,9 @@ public class Preferences extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(),"A confirmation email is sent to your new email address.", Toast.LENGTH_LONG).show();
+                            schemester.toasterLong("A confirmation email is sent to your new email address.");
                         } else{
-                            Toast.makeText(getApplicationContext(), "Network problem?", Toast.LENGTH_LONG).show();
+                            schemester.toasterLong("Network problem?");
                         }
                     }
                 });
@@ -593,7 +589,7 @@ public class Preferences extends AppCompatActivity {
 
     private void readVersionCheckUpdate(){
         if(isNetworkConnected()) {
-            db.collection("appConfig").document("verCurrent")
+            db.collection(schemester.COLLECTION_APP_CONFIGURATION).document(schemester.DOCUMENT_VERSION_CURRENT)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
@@ -601,12 +597,11 @@ public class Preferences extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 if (Objects.requireNonNull(document).exists()) {
-                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                    int vcode = Integer.parseInt(document.get("verCode").toString());
-                                    final String vname = document.getString("verName");
-                                    final String link = document.getString("downlink");
+                                    int vcode = Integer.parseInt(Objects.toString(document.get(schemester.FIELD_VERSION_CODE)));
+                                    final String vname = document.getString(schemester.FIELD_VERSION_NAME);
+                                    final String link = document.getString(schemester.FIELD_DOWNLOAD_LINK);
                                     customLoadDialogClass.hide();
-                                    if (vcode != versionCode || !Objects.equals(vname, versionName)) {
+                                    if (vcode != ApplicationSchemester.versionCode || !Objects.equals(vname, ApplicationSchemester.versionName)) {
                                         Toast.makeText(getApplicationContext(), "Update available", Toast.LENGTH_LONG).show();
                                         final CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(Preferences.this, new OnDialogConfirmListener() {
                                             @Override
@@ -657,27 +652,27 @@ public class Preferences extends AppCompatActivity {
                                             }
                                             @Override
                                             public String onCallSub() {
-                                                return "Your app version : " + versionName + "\nNew Version : " + vname + "\n\nUpdate to get the latest features and bug fixes. Download will start automatically. \nConfirm to download from website?";
+                                                return "Your app version : " + ApplicationSchemester.versionName + "\nNew Version : " + vname + "\n\nUpdate to get the latest features and bug fixes. Download will start automatically. \nConfirm to download from website?";
                                             }
                                         });
                                         customConfirmDialogClass.setCanceledOnTouchOutside(false);
                                         customConfirmDialogClass.show();
                                     } else {
-                                        Toast.makeText(getApplicationContext(), "App is up to date. Check again later.", Toast.LENGTH_LONG).show();
+                                        schemester.toasterLong("App is up to date. Check again later.");
                                     }
                                 } else {
                                     customLoadDialogClass.hide();
-                                    Toast.makeText(getApplicationContext(), "Server error.", Toast.LENGTH_LONG).show();
+                                    schemester.toasterLong("Server error.");
                                 }
                             } else {
                                 customLoadDialogClass.hide();
-                                Toast.makeText(getApplicationContext(), "Network problem?", Toast.LENGTH_LONG).show();
+                                schemester.toasterShort("Network problem?");
                             }
                         }
                     });
         } else {
             customLoadDialogClass.hide();
-            Toast.makeText(getApplicationContext(), "Network problem?", Toast.LENGTH_LONG).show();
+            schemester.toasterShort("Network problem?");
         }
     }
 
@@ -697,7 +692,7 @@ public class Preferences extends AppCompatActivity {
                     showPackageAlert(version);
                 } else {
                     customLoadDialogClass.hide();
-                    Toast.makeText(getApplicationContext(), "Download Interrupted", Toast.LENGTH_SHORT).show();
+                    schemester.toasterLong("Download Interrupted");
                 }
             }
         });
@@ -715,7 +710,7 @@ public class Preferences extends AppCompatActivity {
             }
             @Override
             public String onCallSub() {
-                return "Latest version is downloaded. \n\nGo to File manager > Internal Storage > Schemester >\n\nHere you'll find the latest package to install.\n\n(Delete that file if it is causing problems)";
+                return "Latest version is downloaded. \n\nGo to File manager > Internal Storage > Schemester >\n\nHere you'll find the latest package ("+ newVname +" ) to install.\n\n(Delete that file if it is causing problems and try again)";
             }
         });
         downloadFinishAlert.show();
@@ -730,51 +725,51 @@ public class Preferences extends AppCompatActivity {
     }
 
     private void storeCredentials(String mail, String rollnum){
-        SharedPreferences mSharedPreferences = getSharedPreferences("credentials", MODE_PRIVATE);
+        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.PREF_HEAD_CREDENTIALS, MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
         if(!mail.equals("")) {
-            mEditor.putString("email", mail);
+            mEditor.putString(schemester.PREF_KEY_EMAIL, mail);
             mEditor.apply();
         }
         if(!rollnum.equals("")) {
-            mEditor.putString("roll", rollnum);
+            mEditor.putString(schemester.PREF_KEY_ROLL, rollnum);
             mEditor.apply();
         }
     }
 
     private void storeLoginStatus(Boolean logged){
-        SharedPreferences mSharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.PREF_HEAD_LOGIN_STAT, MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putBoolean("loginstatus", logged);
+        mEditor.putBoolean(schemester.PREF_KEY_LOGIN_STAT, logged);
         mEditor.apply();
     }
 
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+        return (cm != null ? Objects.requireNonNull(cm).getActiveNetworkInfo() : null) != null && cm.getActiveNetworkInfo().isConnected();
     }
 
     private void storeThemeStatus(int themechoice){
-        SharedPreferences mSharedPreferences = getSharedPreferences("schemeTheme", MODE_PRIVATE);
+        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putInt("themeCode", themechoice);
+        mEditor.putInt(schemester.getPREF_KEY_THEME(), themechoice);
         mEditor.apply();
     }
 
     private void storeTimeFormat(int format){
-        SharedPreferences mSharedPreferences = getSharedPreferences("schemeTime", MODE_PRIVATE);
+        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_TIME_FORMAT(), MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putInt("format", format);
+        mEditor.putInt(schemester.getPREF_KEY_TIME_FORMAT(), format);
         mEditor.apply();
     }
     private int getTimeFormat() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTime", MODE_PRIVATE);
-        return mSharedPreferences.getInt("format", 24);
+        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_TIME_FORMAT(), MODE_PRIVATE);
+        return mSharedPreferences.getInt(schemester.getPREF_KEY_TIME_FORMAT(), 24);
     }
 
     public void setAppTheme() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
-        switch (mSharedPreferences.getInt("themeCode", 0)) {
+        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
+        switch (mSharedPreferences.getInt(schemester.getPREF_KEY_THEME(), 0)) {
             case ApplicationSchemester.CODE_THEME_INCOGNITO:
                 setTheme(R.style.IncognitoTheme);break;
             case ApplicationSchemester.CODE_THEME_DARK:
@@ -785,7 +780,7 @@ public class Preferences extends AppCompatActivity {
         }
     }
     private int getThemeStatus() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
-        return mSharedPreferences.getInt("themeCode", 0);
+        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
+        return mSharedPreferences.getInt(schemester.getPREF_KEY_THEME(), 0);
     }
 }

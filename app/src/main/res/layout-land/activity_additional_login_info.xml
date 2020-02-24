@@ -7,16 +7,15 @@
     android:padding="12dp"
     android:background="?attr/display_foreground"
     tools:context=".AdditionalLoginInfo">
-
     <TextView
-        android:id="@+id/loginheading"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:id="@+id/additionalheading"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
         android:layout_gravity="start"
         android:alpha="1"
         android:elevation="12dp"
         android:fontFamily="@font/reem_kufi"
-        android:gravity="bottom|start"
+        android:gravity="start|center"
         android:paddingStart="22dp"
         android:paddingEnd="22dp"
         android:text="@string/the_crucial_detailing"
@@ -25,12 +24,24 @@
         android:textColor="@color/white"
         android:textSize="42sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout8"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1" />
-
+    <ScrollView
+        android:id="@+id/scrollViewAdditonalDetail"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/additionalheading"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="1">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical">
     <LinearLayout
         android:id="@+id/linearLayout8"
         android:layout_width="match_parent"
@@ -122,12 +133,14 @@
             android:padding="22dp"
             android:textAlignment="textStart" />
     </LinearLayout>
+</LinearLayout>
+    </ScrollView>
     <Button
         android:id="@+id/reloginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/square_round_btn"
         android:backgroundTint="?attr/display_foreground"
         android:paddingStart="12dp"
@@ -140,8 +153,8 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@id/scrollViewAdditonalDetail"
+        app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
@@ -151,7 +164,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/square_round_btn"
         android:backgroundTint="?attr/base_background"
         android:paddingStart="12dp"
@@ -164,9 +177,9 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/scrollViewAdditonalDetail"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toEndOf="@id/reloginBtn"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

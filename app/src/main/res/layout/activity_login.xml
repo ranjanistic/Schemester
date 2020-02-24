@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="?attr/display_foreground"
     android:backgroundTint="?attr/display_foreground"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    tools:targetApi="Q">
 
     <TextView
         android:id="@+id/loginheading"
@@ -21,7 +22,7 @@
         android:paddingTop="22dp"
         android:paddingEnd="32dp"
         android:paddingBottom="0dp"
-        android:text="Fill up \nyour \ncredentials."
+        android:text="@string/fill_up_your_credentials"
         android:textAllCaps="true"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/white"
@@ -62,7 +63,7 @@
                 android:id="@+id/emailId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email ID"
+                android:hint="@string/email_id"
                 android:textCursorDrawable="@drawable/cursor_appearence"
                 android:inputType="textEmailAddress"
                 android:paddingStart="12dp"
@@ -102,7 +103,7 @@
             android:id="@+id/rollpass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="College Roll Number"
+            android:hint="@string/college_roll_number"
             android:textCursorDrawable="@drawable/cursor_appearence"
             android:inputType="textVisiblePassword"
             android:paddingStart="12dp"
@@ -140,11 +141,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Date of Birth"
+            android:text="@string/date_of_birth"
             android:textAlignment="textStart"
             android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="14sp" />
             <Button
                 android:id="@+id/forgotBtn"
                 android:layout_width="wrap_content"
@@ -155,7 +155,7 @@
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
                 android:visibility="gone"
-                android:text="Forgot?"
+                android:text="@string/forgot"
                 android:textStyle="bold"
                 android:textAllCaps="false"
                 android:textColor="@color/linktextcolorwhite"
@@ -172,7 +172,7 @@
                 android:id="@+id/birthdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="DD"
+                android:hint="@string/dd"
                 android:gravity="center_horizontal"
                 android:textColorHint="@color/dull_white"
                 android:inputType="number"
@@ -191,7 +191,7 @@
                 android:id="@+id/birthmonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="MM"
+                android:hint="@string/mm"
                 android:inputType="number"
                 android:gravity="center_horizontal"
                 android:maxLength="2"
@@ -204,13 +204,14 @@
                 android:paddingBottom="22dp"
                 android:textColor="@color/white"
                 android:textSize="22sp"
-                android:textCursorDrawable="@drawable/cursor_appearence"/>
+                android:textCursorDrawable="@drawable/cursor_appearence"
+                android:autofillHints="false" />
 
             <EditText
                 android:id="@+id/birthyear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="YYYY"
+                android:hint="@string/yyyy"
                 android:inputType="number"
                 android:maxLength="4"
                 android:paddingStart="12dp"

@@ -195,6 +195,10 @@
         android:gravity="center"
         android:padding="8dp"
         android:orientation="horizontal">
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
         <ImageButton
             android:id="@+id/incognitoBtn"
             android:layout_width="50dp"
@@ -206,6 +210,10 @@
             android:background="@drawable/round_btn"
             android:backgroundTint="?attr/base_background"
             />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
         <ImageButton
             android:id="@+id/fullsettingsbtn"
             android:layout_width="50dp"
@@ -217,19 +225,26 @@
             android:contentDescription="@string/open_settings_button"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/ic_settingico_mini" />
-
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
         <ImageButton
             android:id="@+id/checkupdateBtn"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:background="@drawable/square_round_btn"
-            android:backgroundTint="@color/spruce"
+            android:background="@drawable/round_btn"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:contentDescription="@string/update_check_button"
             android:padding="4dp"
             android:layout_marginEnd="8dp"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/ic_clouddownload2" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
     </LinearLayout>
         <Button
             android:id="@+id/logout"

@@ -44,6 +44,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.j2objc.annotations.ObjectiveCName;
+import com.google.protobuf.LazyStringArrayList;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -55,8 +56,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,7 +74,6 @@ public class FullScheduleActivity extends AppCompatActivity {
     Button m,t,w,th,f, logoutbtn;
     TextView[] p = {p1,p2,p3,p4,p5,p6,p7,p8,p9};       //period objects
     TextView[] c = {c1,c2,c3,c4,c5,c6,c7,c8,c9};        //class name textview objects
-    String[] pkey = {"p1","p2","p3","p4","p5","p6","p7","p8","p9"};     //keys to access database values
     Button[] dayBtn = {m,t,w,th,f};
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String[] dayString = {"monday", "tuesday", "wednesday", "thursday", "friday"};
@@ -87,12 +89,10 @@ public class FullScheduleActivity extends AppCompatActivity {
     CustomDownloadLoadDialog customDownloadLoadDialog;
 
     //Following assignments for version check and app update feature.
-    int versionCode = BuildConfig.VERSION_CODE;
-    String versionName = BuildConfig.VERSION_NAME;
      String websiteLink;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        schemester = (ApplicationSchemester) this.getApplication(); 
+        schemester = (ApplicationSchemester) this.getApplication();
         super.onCreate(savedInstanceState);
         setAppTheme(getThemeStatus());
         setContentView(R.layout.activity_full_schedule);
@@ -101,18 +101,21 @@ public class FullScheduleActivity extends AppCompatActivity {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 
         //Setting navigation and status bar color according to theme
-        if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO) {
+        if (getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO) {
             window.setStatusBarColor(this.getResources().getColor(R.color.black));
             window.setNavigationBarColor(this.getResources().getColor(R.color.black));
-        } else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
+        } else if (getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK) {
             window.setStatusBarColor(this.getResources().getColor(R.color.spruce));
             window.setNavigationBarColor(this.getResources().getColor(R.color.spruce));
         } else {
             window.setStatusBarColor(this.getResources().getColor(R.color.blue));
             window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
         }
-        schemester.setCollegeCourseYear(getAdditionalInfo()[0],getAdditionalInfo()[1],getAdditionalInfo()[2]);
+        schemester.setCollegeCourseYear(getAdditionalInfo()[0], getAdditionalInfo()[1], getAdditionalInfo()[2]);
         incognito = findViewById(R.id.incognitoBtn);
+        if (getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO) {
+            incognito.setImageResource(R.drawable.ic_usericon);
+        } else incognito.setImageResource(R.drawable.ic_icognitoman);
         incognito.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,26 +123,26 @@ public class FullScheduleActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        
-        
-        int[] periodView = { R.id.period1, R.id.period2, R.id.period3, R.id.period4, R.id.period5, R.id.period6, R.id.period7, R.id.period8, R.id.period9,
-        }, classView = { R.id.class1, R.id.class2, R.id.class3, R.id.class4, R.id.class5, R.id.class6, R.id.class7, R.id.class8, R.id.class9,
+
+
+        int[] periodView = {R.id.period1, R.id.period2, R.id.period3, R.id.period4, R.id.period5, R.id.period6, R.id.period7, R.id.period8, R.id.period9,
+        }, classView = {R.id.class1, R.id.class2, R.id.class3, R.id.class4, R.id.class5, R.id.class6, R.id.class7, R.id.class8, R.id.class9,
         };
         int k = 0;
-        while(k<9) {
+        while (k < 9) {
             p[k] = findViewById(periodView[k]);
             c[k] = findViewById(classView[k]);
             ++k;
         }
         int[] workDayID = {R.id.mon, R.id.tue, R.id.wed, R.id.thu, R.id.fri};
         int w = 0;
-        while(w<5) {
+        while (w < 5) {
             dayBtn[w] = findViewById(workDayID[w]);
             ++w;
         }
 
         versionNameView = findViewById(R.id.versionCodeName);
-        versionNameView.setText(versionName);
+        versionNameView.setText(ApplicationSchemester.versionName);
         about = findViewById(R.id.aboutbtn);
         settingsview = findViewById(R.id.settingview);
         aboutview = findViewById(R.id.aboutview);
@@ -151,14 +154,27 @@ public class FullScheduleActivity extends AppCompatActivity {
         courseText = findViewById(R.id.courseTextSetting);
         collegeText = findViewById(R.id.collegeTextSetting);
         yearText = findViewById(R.id.yearTextSetting);
-        if(Objects.equals(getAdditionalInfo()[0],"DBC")){
-            collegeText.setText(getStringResource(R.string.dbc_du));
+
+        int i = 0;
+        while(i<getResources().getStringArray(R.array.college_code_array).length) {
+            if (Objects.equals(getAdditionalInfo()[0], getResources().getStringArray(R.array.college_code_array)[i])) {
+                collegeText.setText(getResources().getStringArray(R.array.college_array)[i]);
+            }
+            ++i;
         }
-        if(Objects.equals(getAdditionalInfo()[1],"PHY-H")) {
-            courseText.setText(getStringResource(R.string.phy_h));
+        i = 0;
+        while(i<getResources().getStringArray(R.array.course_code_array).length) {
+            if (Objects.equals(getAdditionalInfo()[1], getResources().getStringArray(R.array.course_code_array)[i])) {
+                courseText.setText(getResources().getStringArray(R.array.course_array)[i]);
+            }
+            ++i;
         }
-        if(Objects.equals(getAdditionalInfo()[2],"Y2")) {
-            yearText.setText(getStringResource(R.string.second));
+        i=0;
+        while(i<getResources().getStringArray(R.array.year_code_array).length) {
+            if (Objects.equals(getAdditionalInfo()[2], getResources().getStringArray(R.array.year_code_array)[i])) {
+                yearText.setText(getResources().getStringArray(R.array.year_array)[i]);
+            }
+            ++i;
         }
 
         //by default, settings and about pages not shown
@@ -169,7 +185,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         git.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri uri = Uri.parse("https://www.github.com/ranjanistic");
+                Uri uri = Uri.parse(schemester.getStringResource(R.string.ranjanistic_github));
                 Intent web = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(web);
             }
@@ -187,7 +203,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         dml.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri uri = Uri.parse("https://www.github.com/darkmodelabs");
+                Uri uri = Uri.parse(schemester.getStringResource(R.string.darkmodelabs_github));
                 Intent web = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(web);
             }
@@ -211,11 +227,11 @@ public class FullScheduleActivity extends AppCompatActivity {
             }
         });
 
-        //TODO: Notice board  and chatroom feature
+        //TODO: Notice board  and chat room feature
         noticebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(FullScheduleActivity.this, "Under Construction, will be available soon!", Toast.LENGTH_LONG).show();
+                schemester.toasterLong("Under Construction, will be available soon!");
 /*                Intent nIntent = new Intent(FullScheduleActivity.this, NoticeBoard.class);
                 startActivity(nIntent);
  */
@@ -241,15 +257,16 @@ public class FullScheduleActivity extends AppCompatActivity {
         chatbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Toast.makeText(FullScheduleActivity.this, "Under Construction, will be available soon!", Toast.LENGTH_LONG).show();
                 if(!checkIfEmailVerified()) {
                     customConfirmDialogClassVerfication.show();
-                }else if(getThemeStatus() == 103){
+                }else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO){
                     Intent mode = new Intent(FullScheduleActivity.this, ModeOfConduct.class);
                     startActivity(mode);
                 } else {
-                    Intent room = new Intent(FullScheduleActivity.this, ChatRoomActivity.class);
+                    schemester.toasterLong("Under Construction, will be available soon!");
+/*                    Intent room = new Intent(FullScheduleActivity.this, ChatRoomActivity.class);
                     startActivity(room);
+ */
                 }
             }
         });
@@ -406,7 +423,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                readSemester(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),schemester.getCOLLECTION_YEAR_CODE());
+                readSemester(schemester.getCOLLECTION_GLOBAL_INFO(),schemester.getDOCUMENT_GLOBAL_SEMESTER(),schemester.getCOLLECTION_YEAR_CODE());
                 if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO) {
                     email.setText(schemester.getStringResource(R.string.anonymous));
                     roll.setText(schemester.getStringResource(R.string.anonymous));
@@ -459,7 +476,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         });
     }
     private void getWebsiteLinkFromDatabase(){
-        db.collection("appConfig").document("links")
+        db.collection(schemester.getCOLLECTION_APP_CONFIGURATION()).document(schemester.getDOCUMENT_LINKS())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -467,7 +484,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (Objects.requireNonNull(document).exists()) {
-                                websiteLink = document.getString("website");
+                                websiteLink = document.getString(schemester.getFIELD_WEBSITE());
                             }
                         }
                     }
@@ -482,11 +499,11 @@ public class FullScheduleActivity extends AppCompatActivity {
     }
 
     String[] getAdditionalInfo() {
-        String[] CCY = {null, null, null};
-        SharedPreferences mSharedPreferences = getSharedPreferences("additionalInfo", MODE_PRIVATE);
-        CCY[0] = mSharedPreferences.getString("college", "");
-        CCY[1] = mSharedPreferences.getString("course", "");
-        CCY[2] = mSharedPreferences.getString("year", "");
+        String[] CCY = new String[3];
+        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_ADDITIONAL_INFO(), MODE_PRIVATE);
+        CCY[0] = mSharedPreferences.getString(schemester.getPREF_KEY_COLLEGE(), "");
+        CCY[1] = mSharedPreferences.getString(schemester.getPREF_KEY_COURSE(), "");
+        CCY[2] = mSharedPreferences.getString(schemester.getPREF_KEY_YEAR(), "");
         return CCY;
     }
 
@@ -497,7 +514,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(),"A confirmation email is sent to your email address.", Toast.LENGTH_LONG).show();
+                            schemester.toasterLong("A confirmation email is sent to your email address");
                             logoutCurrentUser();
                         }
                     }
@@ -529,13 +546,13 @@ public class FullScheduleActivity extends AppCompatActivity {
     }
 
     private int getTimeFormat() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTime", MODE_PRIVATE);
-        return mSharedPreferences.getInt("format", 24);
+        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_TIME_FORMAT(), MODE_PRIVATE);
+        return mSharedPreferences.getInt(schemester.getPREF_KEY_TIME_FORMAT(), 24);
     }
 
     //this reads semester name from database and sets in semester textview
-    private void readSemester(String source, String course,String year) {
-            db.collection(source).document(course).collection(year).document("semester")
+    private void readSemester(String source, String course,final String year) {
+        db.collection(source).document(course)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -543,15 +560,10 @@ public class FullScheduleActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (Objects.requireNonNull(document).exists()) {
-                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                  semester.setText(Objects.requireNonNull(document.get("semnum")).toString());
+                                semester.setText(Objects.requireNonNull(document.get(year)).toString());
                             } else {
-                                Log.d(TAG, "Server error");
-                                Toast.makeText(FullScheduleActivity.this, "Server error", Toast.LENGTH_LONG).show();
+                                schemester.toasterLong("Unable to read");
                             }
-                        } else {
-                            Log.d(TAG, "Failed to receive data", task.getException());
-                            Toast.makeText(FullScheduleActivity.this, "Connect to internet for latest details.", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -559,13 +571,13 @@ public class FullScheduleActivity extends AppCompatActivity {
 
     //gets locally stored credentials during login/register
     private String[] getCredentials(){
-        String[] cred = {"",""};
-        SharedPreferences mSharedPreferences = getSharedPreferences("credentials", MODE_PRIVATE);
-        cred[0] =  mSharedPreferences.getString("email", "");
-        cred[1] =  mSharedPreferences.getString("roll", "");
+        String[] cred = new String[2];
+        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE);
+        cred[0] =  mSharedPreferences.getString(schemester.getPREF_KEY_EMAIL(), "");
+        cred[1] =  mSharedPreferences.getString(schemester.getPREF_KEY_ROLL(), "");
         return cred;
     }
-    //reads period details from database and sets to their resp. textviews
+    //reads period details from database and sets to their resp. text views
     private void readDatabase(String source, String course, String year, String weekday){
         db.collection(source).document(course).collection(year).document(weekday)
                 .get()
@@ -575,19 +587,16 @@ public class FullScheduleActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (Objects.requireNonNull(document).exists()) {
-                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                 int i = 0;
                                 while(i<9) {
-                                    c[i].setText(document.getString(pkey[i]));
+                                    c[i].setText(document.getString(schemester.getPKey()[i]));
                                     i++;
                                 }
                             } else {
-                                Log.d(TAG, "No such document");
-                                Toast.makeText(FullScheduleActivity.this, "Server error. Try reinstalling.", Toast.LENGTH_LONG).show();
+                                schemester.toasterLong("Server error. Try reinstalling");
                             }
                         } else {
-                            Log.d(TAG, "get failed with ", task.getException());
-                            Toast.makeText(FullScheduleActivity.this, "Connect to internet for latest details.", Toast.LENGTH_LONG).show();
+                            schemester.toasterLong(schemester.getStringResource(R.string.internet_error));
                         }
                     }
                 });
@@ -598,29 +607,29 @@ public class FullScheduleActivity extends AppCompatActivity {
         if(isNetworkConnected()) {
             setOnline(false);
             FirebaseAuth.getInstance().signOut();
-            Toast.makeText(FullScheduleActivity.this, "Logged out", Toast.LENGTH_LONG).show();
+            schemester.toasterLong("Logged out");
             Intent i = new Intent(FullScheduleActivity.this, PositionActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
             startActivity(i);
             overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
             finish();
         } else {
-            Toast.makeText(FullScheduleActivity.this, "Connect to internet", Toast.LENGTH_SHORT).show();
+            schemester.toasterShort("Connect to internet");
         }
     }
 
-    //sets active status of user to database (to be used for chatroom feature)
+    //sets active status of user to database (to be used for chat room feature)
     private void setOnline(Boolean status){
         Map<String, Object> data = new HashMap<>();
-        data.put("active", status);
-        db.collection("userbase").document(email.getText().toString())
-                .set(data, SetOptions.merge());
+        data.put(schemester.getFIELD_USER_ACTIVE(), status);
+        db.collection(schemester.getCOLLECTION_USERBASE()).document(email.getText().toString())
+                .update(data);
     }
 
     private void storeLoginStatus(Boolean logged){
-        SharedPreferences mSharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_LOGIN_STAT(), MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putBoolean("loginstatus", logged);
+        mEditor.putBoolean(schemester.getPREF_KEY_LOGIN_STAT(), logged);
         mEditor.apply();
     }
 
@@ -637,7 +646,7 @@ public class FullScheduleActivity extends AppCompatActivity {
     //app updater function
     private void readVersionCheckUpdate(){
         if(isNetworkConnected()) {
-            db.collection("appConfig").document("verCurrent")
+            db.collection(schemester.getCOLLECTION_APP_CONFIGURATION()).document(schemester.getDOCUMENT_VERSION_CURRENT())
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
@@ -645,12 +654,11 @@ public class FullScheduleActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 if (Objects.requireNonNull(document).exists()) {
-                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                    int vcode = Integer.parseInt(document.get("verCode").toString());
-                                    final String vname = document.get("verName").toString();
-                                    final String link = document.get("downlink").toString();
+                                    int vcode = Integer.parseInt(Objects.toString(document.get(schemester.getFIELD_VERSION_CODE())));
+                                    final String vname = document.getString(schemester.getFIELD_VERSION_NAME());
+                                    final String link = document.getString(schemester.getFIELD_DOWNLOAD_LINK());
                                     customLoadDialogClass.hide();
-                                    if (vcode != versionCode || !vname.equals(versionName)) {
+                                    if (vcode != ApplicationSchemester.versionCode || !Objects.equals(vname,ApplicationSchemester.versionName)) {
                                         Toast.makeText(getApplicationContext(), "Update available", Toast.LENGTH_LONG).show();
                                         final CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(FullScheduleActivity.this, new OnDialogConfirmListener() {
                                             @Override
@@ -701,7 +709,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                                             }
                                             @Override
                                             public String onCallSub() {
-                                                return "Your app version : " + versionName + "\nNew Version : " + vname + "\n\nUpdate to get the latest features and bug fixes. Download will start automatically. \nConfirm to download from website?";
+                                                return "Your app version : " + ApplicationSchemester.versionName + "\nNew Version : " + vname + "\n\nUpdate to get the latest features and bug fixes. Download will start automatically. \nConfirm to download from website?";
                                             }
                                         });
                                         customConfirmDialogClass.setCanceledOnTouchOutside(false);
@@ -798,8 +806,8 @@ private void requestStoragePermission(){
         }
     }
     private int getThemeStatus() {
-        SharedPreferences mSharedPreferences = getApplication().getSharedPreferences("schemeTheme", MODE_PRIVATE);
-        return mSharedPreferences.getInt("themeCode", 0);
+        SharedPreferences mSharedPreferences = getApplication().getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
+        return mSharedPreferences.getInt(schemester.getPREF_KEY_THEME(), 0);
     }
     private boolean isLandscape() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
@@ -814,7 +822,7 @@ private void requestStoragePermission(){
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = Objects.requireNonNull(connectivityManager).getActiveNetworkInfo();
         if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
-            Toast.makeText(getApplicationContext(),schemester.getStringResource(R.string.internet_error),Toast.LENGTH_LONG).show();
+            schemester.toasterLong(schemester.getStringResource(R.string.internet_error));
         }
     }
 }

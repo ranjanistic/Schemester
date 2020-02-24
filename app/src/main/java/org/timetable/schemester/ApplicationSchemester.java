@@ -4,27 +4,63 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
+import androidx.core.content.res.ColorStateListInflaterCompat;
+
+import java.security.KeyStore;
+
 public class ApplicationSchemester  extends Application {
     public static final int CODE_THEME_LIGHT = 101, CODE_THEME_DARK = 102,
     CODE_THEME_INCOGNITO = 103;
 
+    public static final int versionCode = BuildConfig.VERSION_CODE;
+    public static final String versionName = BuildConfig.VERSION_NAME;
+
     String[] pKey = {"p1","p2","p3","p4","p5","p6","p7","p8","p9"};
-    public String[] getPKey(){
-        return pKey;
-    }
+    public String[] getPKey(){ return pKey; }
 
     String COLLECTION_GLOBAL_INFO = "global_info", DOCUMENT_GLOBAL_SEMESTER = "semester",
+    DOCUMENT_LOCAL_INFO = "local_info", DOCUMENT_HOLIDAY_INFO = "holiday_info",
+    FIELD_HOLIDAY = "holiday",
     COLLECTION_COLLEGE_CODE , DOCUMENT_COURSE_CODE , COLLECTION_YEAR_CODE,
-    COLLECTION_APP_CONFIGURATION = "appConfig",DOCUMENT_VERSION_CURRENT = "verCurrent",
-    FIELD_VERSION_NAME = "verName", FIELD_DOWNLOAD_LINK = "downlink", FIELD_VERSION_CODE = "verCode",
-    COLLECTION_USERBASE = "userbase", FIELD_USER_ACTIVE = "active", FIELD_USER_DEFINITION = "definition",FIELD_USER_NAME = "name";
+    COLLECTION_APP_CONFIGURATION = "appConfig",DOCUMENT_VERSION_CURRENT = "verCurrent", DOCUMENT_LINKS = "links",
+    FIELD_VERSION_NAME = "verName", FIELD_DOWNLOAD_LINK = "downlink", FIELD_VERSION_CODE = "verCode", FIELD_WEBSITE = "website",
+    COLLECTION_USERBASE = "userbase", FIELD_USER_ACTIVE = "active", FIELD_USER_DEFINITION = "definition",FIELD_USER_NAME = "name",
+    PREF_KEY_COLLEGE = "college", PREF_KEY_COURSE = "course", PREF_KEY_YEAR ="year" , PREF_HEAD_ADDITIONAL_INFO = "additionalInfo",
+    PREF_KEY_THEME = "themeCode", PREF_HEAD_THEME = "schemeTheme",
+    PREF_HEAD_CREDENTIALS =  "credentials", PREF_KEY_EMAIL = "email", PREF_KEY_ROLL = "roll",
+    PREF_HEAD_LOGIN_STAT = "login", PREF_KEY_LOGIN_STAT = "loginstatus",
+    PREF_HEAD_TIME_FORMAT = "schemeTime", PREF_KEY_TIME_FORMAT = "format",
+    PREF_HEAD_OTHER_HOLIDAY = "otherHoliday", PREF_KEY_OTHER_HOLIDAY = "holiday",
+    PREF_HEAD_USER_DEF = "userDefinition",PREF_KEY_USER_DEF = "position";
+
+    public String getPREF_HEAD_USER_DEF(){return PREF_HEAD_USER_DEF;}
+    public String getPREF_KEY_USER_DEF(){ return PREF_KEY_USER_DEF;}
+    public String getPREF_HEAD_OTHER_HOLIDAY(){return PREF_HEAD_OTHER_HOLIDAY;}
+    public String getPREF_KEY_OTHER_HOLIDAY(){return PREF_KEY_OTHER_HOLIDAY;}
+    public String getPREF_HEAD_TIME_FORMAT(){return PREF_HEAD_TIME_FORMAT;}
+    public String getPREF_KEY_TIME_FORMAT(){return PREF_KEY_TIME_FORMAT;}
+    public String getPREF_HEAD_LOGIN_STAT(){return PREF_HEAD_LOGIN_STAT;}
+    public String getPREF_KEY_LOGIN_STAT(){return PREF_KEY_LOGIN_STAT;}
+    public String getPREF_HEAD_CREDENTIALS(){return PREF_HEAD_CREDENTIALS;}
+    public String getPREF_KEY_EMAIL(){ return PREF_KEY_EMAIL; }
+    public String getPREF_KEY_ROLL(){ return PREF_KEY_ROLL;}
+    public String getPREF_KEY_COLLEGE(){ return PREF_KEY_COLLEGE;}
+    public String getPREF_KEY_COURSE(){ return PREF_KEY_COURSE;}
+    public String getPREF_KEY_YEAR(){ return PREF_KEY_YEAR;}
+    public String getPREF_HEAD_ADDITIONAL_INFO(){ return PREF_HEAD_ADDITIONAL_INFO;}
+    public String getPREF_KEY_THEME(){ return PREF_KEY_THEME;}
+    public String getPREF_HEAD_THEME(){return PREF_HEAD_THEME;}
+    public String getFIELD_HOLIDAY(){return FIELD_HOLIDAY;}
+    public String getDOCUMENT_LINKS(){ return DOCUMENT_LINKS;}
+    public String getFIELD_WEBSITE(){return FIELD_WEBSITE;}
     public String getCOLLECTION_GLOBAL_INFO(){
         return COLLECTION_GLOBAL_INFO;
     }
     public String getDOCUMENT_GLOBAL_SEMESTER(){
         return DOCUMENT_GLOBAL_SEMESTER;
     }
-
+    public String getDOCUMENT_LOCAL_INFO(){ return DOCUMENT_LOCAL_INFO;}
+    public String getDOCUMENT_HOLIDAY_INFO(){ return DOCUMENT_HOLIDAY_INFO;}
     public String getCOLLECTION_COLLEGE_CODE(){ return COLLECTION_COLLEGE_CODE; }
     public String getDOCUMENT_COURSE_CODE(){
         return DOCUMENT_COURSE_CODE;
@@ -51,6 +87,7 @@ public class ApplicationSchemester  extends Application {
     public String getCOLLECTION_USERBASE(){ return COLLECTION_USERBASE;}
     public String getFIELD_USER_ACTIVE(){ return FIELD_USER_ACTIVE; }
     public String getFIELD_USER_DEFINITION(){ return FIELD_USER_DEFINITION;}
+    public String getFIELD_USER_NAME(){ return FIELD_USER_NAME;}
     public void setCollegeCourseYear(String college, String course, String year){
         this.COLLECTION_COLLEGE_CODE = college;
         this.DOCUMENT_COURSE_CODE = course;
@@ -87,11 +124,11 @@ public class ApplicationSchemester  extends Application {
     }
 
     String[] getAdditionalInfo() {
-        String[] CCY = {null, null, null};
-        SharedPreferences mSharedPreferences = getSharedPreferences("additionalInfo", MODE_PRIVATE);
-        CCY[0] = mSharedPreferences.getString("college", "");
-        CCY[1] = mSharedPreferences.getString("course", "");
-        CCY[2] = mSharedPreferences.getString("year", "");
+        String[] CCY = new String[3];
+        SharedPreferences mSharedPreferences = getSharedPreferences(PREF_HEAD_ADDITIONAL_INFO, MODE_PRIVATE);
+        CCY[0] = mSharedPreferences.getString(PREF_KEY_COLLEGE, "");
+        CCY[1] = mSharedPreferences.getString(PREF_KEY_COURSE, "");
+        CCY[2] = mSharedPreferences.getString(PREF_KEY_YEAR, "");
         return CCY;
     }
     public void toasterLong(String message){
@@ -101,8 +138,8 @@ public class ApplicationSchemester  extends Application {
         Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
     }
     public void setAppTheme() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
-        switch (mSharedPreferences.getInt("themeCode", 0)) {
+        SharedPreferences mSharedPreferences = this.getSharedPreferences(PREF_HEAD_THEME, MODE_PRIVATE);
+        switch (mSharedPreferences.getInt(PREF_KEY_THEME, 0)) {
             case CODE_THEME_INCOGNITO: setTheme(R.style.IncognitoTheme); break;
             case CODE_THEME_DARK: setTheme(R.style.BlueDarkTheme);break;
             case CODE_THEME_LIGHT:

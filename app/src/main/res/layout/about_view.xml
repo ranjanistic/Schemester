@@ -84,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat"
-                    android:text="In association with"
+                    android:text="@string/in_association_with"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
@@ -134,7 +134,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/montserrat"
-        android:text="Stay tuned for exciting updates!"
+        android:text="@string/stay_tuned_for_exciting_updates"
         android:textColor="@color/white"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout3"

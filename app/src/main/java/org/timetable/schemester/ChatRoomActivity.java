@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -48,6 +50,10 @@ public class ChatRoomActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         schemester = (ApplicationSchemester) this.getApplication();
+        if(!checkIfEmailVerified()){
+            schemester.toasterLong("Email not verified");
+            finish();
+        }
         setContentView(R.layout.activity_chat_room);
         setViewsAndListeners();
         mMessageRecycler = findViewById(R.id.chatRecycleView);
@@ -234,7 +240,9 @@ public class ChatRoomActivity extends AppCompatActivity {
             super.onPostExecute(aBoolean);
         }
     }
-
+    private Boolean checkIfEmailVerified() {
+        return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).isEmailVerified();
+    }
     public boolean isInternetAvailable() {
         Runtime runtime = Runtime.getRuntime();
         try {

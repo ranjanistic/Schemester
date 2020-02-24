@@ -51,4 +51,10 @@ public class CustomAlertDialog extends AppCompatDialog {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        setCancelable(false);
+        super.onBackPressed();
+    }
 }

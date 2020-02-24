@@ -9,19 +9,6 @@
     android:background="?attr/display_foreground"
     tools:context=".Preferences">
 
-    <ImageView
-        android:contentDescription="@string/setting_background"
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0.4"
-        android:translationZ="-18dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:srcCompat="@drawable/setting_large" />
-
     <LinearLayout
     android:id="@+id/headingsetting"
     android:layout_width="match_parent"
@@ -93,7 +80,7 @@
                 android:layout_marginEnd="12dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"
-                android:paddingTop="8dp"
+                android:paddingTop="0dp"
                 android:paddingBottom="8dp"
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp"
@@ -102,9 +89,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
+                    android:background="@drawable/bottomroundview"
+                    android:backgroundTint="?attr/display_foreground"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/account_options"
-                    android:textColor="@color/blue"
+                    android:textColor="?attr/foreground_text_color"
                     android:textStyle="bold"
                     android:textSize="20sp"/>
                 <LinearLayout
@@ -344,7 +333,7 @@
             android:layout_marginEnd="12dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
-            android:paddingTop="8dp"
+            android:paddingTop="0dp"
             android:paddingBottom="8dp"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
@@ -354,8 +343,10 @@
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:text="@string/app_options"
+                android:background="@drawable/bottomroundview"
+                android:backgroundTint="?attr/display_foreground"
                 android:layout_gravity="center_horizontal"
-                android:textColor="@color/blue"
+                android:textColor="?attr/foreground_text_color"
                 android:textStyle="bold"
                 android:textSize="20sp"/>
             <LinearLayout
@@ -559,7 +550,7 @@
                 android:layout_marginEnd="12dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"
-                android:paddingTop="8dp"
+                android:paddingTop="0dp"
                 android:paddingBottom="8dp"
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp"
@@ -570,7 +561,9 @@
                     android:padding="12dp"
                     android:layout_gravity="center_horizontal"
                     android:text="Service options"
-                    android:textColor="@color/blue"
+                    android:background="@drawable/bottomroundview"
+                    android:backgroundTint="?attr/display_foreground"
+                    android:textColor="?attr/foreground_text_color"
                     android:textStyle="bold"
                     android:textSize="20sp"/>
                 <LinearLayout
@@ -594,13 +587,13 @@
                             android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
                             android:singleLine="false"
-                            android:text="Update source"
+                            android:text="@string/update_source"
                             android:textSize="18sp"/>
                         <TextView
                             android:layout_width="250dp"
                             android:textColor="?attr/base_text_color"
                             android:layout_height="wrap_content"
-                            android:text="Use this to update your college, course or year."
+                            android:text="@string/use_this_to_update_your_college_course_or_year"
                             android:paddingTop="4dp"
                             android:singleLine="false"
                             android:textSize="14sp"/>
@@ -616,7 +609,7 @@
 
                         android:backgroundTint="@color/dull_blue"
                         android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/ic_mailopen"/>
+                        app:srcCompat="@drawable/ic_additionalinfoiconforschemester"/>
                 </LinearLayout>
             </LinearLayout>
         <LinearLayout
@@ -629,7 +622,7 @@
             android:layout_marginEnd="12dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
-            android:paddingTop="8dp"
+            android:paddingTop="0dp"
             android:paddingBottom="8dp"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
@@ -640,7 +633,9 @@
                 android:padding="12dp"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/developer_options"
-                android:textColor="@color/blue"
+                android:background="@drawable/bottomroundview"
+                android:backgroundTint="?attr/display_foreground"
+                android:textColor="?attr/foreground_text_color"
                 android:textStyle="bold"
                 android:textSize="20sp"/>
             <LinearLayout
@@ -686,7 +681,7 @@
 
                     android:backgroundTint="@color/dull_blue"
                     android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/ic_mailopen"/>
+                    app:srcCompat="@drawable/ic_developericon"/>
             </LinearLayout>
             </LinearLayout>
         </LinearLayout>

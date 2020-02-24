@@ -29,13 +29,14 @@ public class CustomTextDialog extends AppCompatDialog {
         super(context);
         this.onDialogTextListener = onDialogTextListener;
     }
-    public boolean isValid;
+    private boolean isValid = true;
     private TextView validity;
     private int textCode = 0;
     private EditText text;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.custom_text_dialog);
         Objects.requireNonNull(this.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -75,7 +76,9 @@ public class CustomTextDialog extends AppCompatDialog {
                 String entryTxt = text.getText().toString();
                 if ( TextUtils.isEmpty(entryTxt)){
                     Toast.makeText(getContext(),"This field can\'t be empty.",Toast.LENGTH_LONG).show();
-                } else{
+                } else if(!isValid){
+                    Toast.makeText(getContext(),"Invalid details",Toast.LENGTH_LONG).show();
+                }else{
                     onDialogTextListener.onApply(entryTxt);
                     dismiss();
                 }

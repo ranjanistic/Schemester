@@ -71,7 +71,7 @@ public class ModeOfConduct extends AppCompatActivity {
             cCaption.setTextColor(getResources().getColor(R.color.black));
             cLoginPath.setTextColor(getResources().getColor(R.color.black));
             cMessage.setTextColor(getResources().getColor(R.color.black));
-            cBackImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_settingico_mini));
+            cBackImg.setImageDrawable(getResources().getDrawable(R.drawable.ic_usericon));
             activityFull.setBackgroundColor(getResources().getColor(R.color.white));
             cCaption.setText(schemester.getStringResource(R.string.returning_as));
             cLoginPath.setText(getCredentials()[0]);
