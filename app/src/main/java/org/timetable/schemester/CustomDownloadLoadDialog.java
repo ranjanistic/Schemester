@@ -55,11 +55,13 @@ public class CustomDownloadLoadDialog extends AppCompatDialog {
         this.setCanceledOnTouchOutside(false);
         Objects.requireNonNull(this.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         progressBar = findViewById(R.id.downloadProgress);
+        assert progressBar != null;
         progressBar.setMax(100);
         percentage = findViewById(R.id.percentCompleted);
         downsize = findViewById(R.id.appSize);
         mdownloadUpdateApk = new downloadUpdateApk(getContext());
         Button cancel = findViewById(R.id.cancelDownload);
+        assert cancel != null;
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

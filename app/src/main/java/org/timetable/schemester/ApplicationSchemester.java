@@ -4,22 +4,22 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
-import androidx.core.content.res.ColorStateListInflaterCompat;
-
-import java.security.KeyStore;
-
 public class ApplicationSchemester  extends Application {
     public static final int CODE_THEME_LIGHT = 101, CODE_THEME_DARK = 102,
     CODE_THEME_INCOGNITO = 103;
 
     public static final int versionCode = BuildConfig.VERSION_CODE;
-    public static final String versionName = BuildConfig.VERSION_NAME;
+    public static final String versionName = BuildConfig.VERSION_NAME,
+    applicationId = BuildConfig.APPLICATION_ID;
+    String[] pKey = {"p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8", "p9"},
+    workDayString = {"monday", "tuesday", "wednesday", "thursday", "friday"};
 
-    String[] pKey = {"p1","p2","p3","p4","p5","p6","p7","p8","p9"};
     public String[] getPKey(){ return pKey; }
+    public String[] getWorkDayString(){return workDayString;}
 
     String COLLECTION_GLOBAL_INFO = "global_info", DOCUMENT_GLOBAL_SEMESTER = "semester",
     DOCUMENT_LOCAL_INFO = "local_info", DOCUMENT_HOLIDAY_INFO = "holiday_info",
+    DOCUMENT_NOTICE = "notice",
     FIELD_HOLIDAY = "holiday",
     COLLECTION_COLLEGE_CODE , DOCUMENT_COURSE_CODE , COLLECTION_YEAR_CODE,
     COLLECTION_APP_CONFIGURATION = "appConfig",DOCUMENT_VERSION_CURRENT = "verCurrent", DOCUMENT_LINKS = "links",
@@ -68,7 +68,7 @@ public class ApplicationSchemester  extends Application {
     public String getCOLLECTION_YEAR_CODE(){
         return COLLECTION_YEAR_CODE;
     }
-
+    public String getDOCUMENT_NOTICE(){return DOCUMENT_NOTICE;}
     public String getCOLLECTION_APP_CONFIGURATION(){
         return COLLECTION_APP_CONFIGURATION;
     }
@@ -136,14 +136,5 @@ public class ApplicationSchemester  extends Application {
     }
     public void toasterShort(String message){
         Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
-    }
-    public void setAppTheme() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences(PREF_HEAD_THEME, MODE_PRIVATE);
-        switch (mSharedPreferences.getInt(PREF_KEY_THEME, 0)) {
-            case CODE_THEME_INCOGNITO: setTheme(R.style.IncognitoTheme); break;
-            case CODE_THEME_DARK: setTheme(R.style.BlueDarkTheme);break;
-            case CODE_THEME_LIGHT:
-            default:setTheme(R.style.BlueLightTheme);
-        }
     }
 }

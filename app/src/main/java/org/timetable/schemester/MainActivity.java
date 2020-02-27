@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -18,7 +17,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -29,13 +27,11 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -43,21 +39,15 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
 
-import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity{
     ApplicationSchemester schemester;
-    private TextView semestertxt, noclass,
-    c1,c2,c3,c4,c5,c6,c7,c8,c9,p1,p2,p3,p4,p5,p6,p7,p8,p9,
-    day, month, time;
-    private TextView[] c = {c1,c2,c3,c4,c5,c6,c7,c8,c9},
-    p = {p1,p2,p3,p4,p5,p6,p7,p8,p9};
-    String[] pKey = {"p1","p2","p3","p4","p5","p6","p7","p8","p9"};
+    private TextView semestertxt, noclass, day, month, time;
+    private TextView[] c = new TextView[9], p = new TextView[9];
     private TextView loginIdOnDrawer;
     private Button date;
     private ImageButton drawerArrow, switchThemeBtn;
@@ -80,6 +70,8 @@ public class MainActivity extends AppCompatActivity{
     int[] timeStringResource = {
         R.string.time1, R.string.time2, R.string.time3, R.string.time4, R.string.time5,
                 R.string.time6, R.string.time7, R.string.time8, R.string.time9, R.string.time10,
+    }, pkeyResource = {R.string.p1,R.string.p2,R.string.p3,R.string.p4
+            ,R.string.p5,R.string.p6,R.string.p7,R.string.p8,R.string.p9
     };
     private LinearLayout bottomDrawer;
     private checkUpdate update;     //update checker asyncTask class
@@ -197,7 +189,7 @@ public class MainActivity extends AppCompatActivity{
         } else loginIdOnDrawer.setText(getCredentials()[0]);
     }
     private String[] getCredentials(){
-        String[] cred = {null,null};
+        String[] cred = new String[2];
         SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE);
         cred[0] =  mSharedPreferences.getString(schemester.getPREF_KEY_EMAIL(), "");
         cred[1] =  mSharedPreferences.getString(schemester.getPREF_KEY_ROLL(), "");
@@ -340,7 +332,7 @@ public class MainActivity extends AppCompatActivity{
                                     final String vname = document.getString(schemester.getFIELD_VERSION_NAME());
                                     final String link = document.getString(schemester.getFIELD_DOWNLOAD_LINK());
                                     if (vcode != ApplicationSchemester.versionCode || !Objects.equals(vname, ApplicationSchemester.versionName)) {
-                                        schemester.toasterLong("Update available");
+                                        schemester.toasterLong(getStringResource(R.string.update_available));
                                         final CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(MainActivity.this, new OnDialogConfirmListener() {
                                             @Override
                                             public void onApply(Boolean confirm) {
@@ -369,11 +361,11 @@ public class MainActivity extends AppCompatActivity{
                                                         }
                                                         @Override
                                                         public String onCallText() {
-                                                            return "Storage permission required";
+                                                            return getStringResource(R.string.storage_permit_required);
                                                         }
                                                         @Override
                                                         public String onCallSub() {
-                                                            return "To download and save the latest version on your device, we need your storage permission. Confirm?";
+                                                            return getStringResource(R.string.storage_permit_request_text);
                                                         }
                                                     });
                                                     permissionDialog.show();
@@ -381,12 +373,15 @@ public class MainActivity extends AppCompatActivity{
                                             }
                                             @Override
                                             public String onCallText() {
-                                                return "An update is available";
+                                                return getStringResource(R.string.an_update_is_available);
                                             }
                                             @Override
                                             public String onCallSub() {
-                                                return "Your app version : " + ApplicationSchemester.versionName + "\nNew Version : " + vname + "\n\nUpdate to get the latest features and bug fixes. Download will start automatically. \nConfirm to download?";
-                                            }
+                                                return getStringResource(R.string.your_app_ver_colon) +
+                                                        ApplicationSchemester.versionName + "\n"+
+                                                        getStringResource(R.string.new_ver_colon) + vname +"\n\n"+
+                                                        getStringResource(R.string.update_persuade_text) +"\n"+ 
+                                                        getStringResource(R.string.confirm_to_download); }
                                         });
                                         customConfirmDialogClass.setCanceledOnTouchOutside(false);
                                         customConfirmDialogClass.show();
@@ -417,7 +412,7 @@ public class MainActivity extends AppCompatActivity{
                 if (isCompleted) {
                     showPackageAlert(version);
                 } else {
-                    schemester.toasterShort("Download Interrupted");
+                    schemester.toasterShort(getStringResource(R.string.download_interrupted));
                     update.cancel(true);
                 }
             }
@@ -436,7 +431,7 @@ public class MainActivity extends AppCompatActivity{
             }
             @Override
             public String onCallText() {
-                return "Download completed";
+                return getStringResource(R.string.download_completed);
             }
             @Override
             public String onCallSub() {
@@ -457,7 +452,7 @@ public class MainActivity extends AppCompatActivity{
         day.setText(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
         month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
           if(!isHolidayToday()) {
-              setTimeFormat(getTimeFormat());
+              setTimeFormatInMainSchedule(getTimeFormat());
               if(mreadClassFromDatabaseTask.isCancelled()) {
                   mreadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
                   mreadClassFromDatabaseTask.execute();
@@ -534,7 +529,7 @@ public class MainActivity extends AppCompatActivity{
      * and sets time format accordingly
      * @param tFormat: 12 or 24 hours format.
      */
-    private void setTimeFormat(int tFormat){
+    private void setTimeFormatInMainSchedule(int tFormat){
         int i = 0;
         if(tFormat == 12) {
             while (i < 9) {
@@ -667,7 +662,7 @@ public class MainActivity extends AppCompatActivity{
                                 if (Objects.requireNonNull(document).exists()) {
                                     semestertxt.setText(Objects.requireNonNull(document.get(year)).toString());
                                 } else {
-                                    schemester.toasterShort("Unable to read");
+                                    schemester.toasterShort(getStringResource(R.string.unable_to_read));
                                 }
                             }
                         }
@@ -682,7 +677,7 @@ public class MainActivity extends AppCompatActivity{
             p[i].setTextColor(getResources().getColor(R.color.white));
             p[i].setBackgroundResource(R.drawable.roundactivetimecontainer);
             return;
-        } else if(checkPeriod(getStringResource(timeStringResource[9]),"23:59:59")) {     //after day is over
+        } else if(checkPeriod(getStringResource(timeStringResource[9]),getStringResource(R.string.one_second_before_new_day))) {     //after day is over
             int d = 0;
             while (d<9) {
                 p[d].setTextColor(getResources().getColor(R.color.white));
@@ -690,7 +685,7 @@ public class MainActivity extends AppCompatActivity{
                 ++d;
             }
             return;
-        } else if(checkPeriod("00:00:00",getStringResource(timeStringResource[0]))) {   //during night
+        } else if(checkPeriod(getStringResource(R.string.zero_seconds_after_new_day),getStringResource(timeStringResource[0]))) {   //during night
             int n = 0;
             while (n<9) {
                 p[n].setBackgroundResource(R.drawable.roundcontainerbox);
@@ -745,8 +740,8 @@ public class MainActivity extends AppCompatActivity{
      */
     @SuppressLint("SimpleDateFormat")
     private Boolean checkPeriod(String begin, String end){
-        String currentTime = new SimpleDateFormat("HH:mm:ss").format(new Date());
-        SimpleDateFormat parser = new SimpleDateFormat("HH:mm:ss");
+        String currentTime = new SimpleDateFormat(getStringResource(R.string.time_pattern_hhmmss)).format(new Date());
+        SimpleDateFormat parser = new SimpleDateFormat(getStringResource(R.string.time_pattern_hhmmss));
         try {
             Date start = parser.parse(begin);
             Date finish = parser.parse(end);
@@ -777,10 +772,9 @@ public class MainActivity extends AppCompatActivity{
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 if (Objects.requireNonNull(document).exists()) {
-                                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                     int i = 0;
                                     while(i<9) {
-                                        c[i].setText(document.getString(pKey[i]));
+                                        c[i].setText(document.getString(getStringResource(pkeyResource[i])));
                                         ++i;
                                     }
                                 }
@@ -808,7 +802,7 @@ public class MainActivity extends AppCompatActivity{
         return getResources().getString(resId);
     }
     
-    //storage permission requestor to store apk on update availability
+    //storage permission request to store apk on update availability
     private void requestStoragePermission(){
         ActivityCompat.requestPermissions(MainActivity.this,
                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -851,8 +845,8 @@ public class MainActivity extends AppCompatActivity{
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
     private int getTimeFormat() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTime", MODE_PRIVATE);
-        return mSharedPreferences.getInt("format", 24);
+        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_TIME_FORMAT(), MODE_PRIVATE);
+        return mSharedPreferences.getInt(schemester.getPREF_KEY_TIME_FORMAT(), 24);
     }
     public boolean isInternetAvailable() {
         Runtime runtime = Runtime.getRuntime();

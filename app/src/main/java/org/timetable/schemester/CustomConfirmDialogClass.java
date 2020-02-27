@@ -38,8 +38,6 @@ public class CustomConfirmDialogClass extends AppCompatDialog {
         assert dianeg != null;
         String head = onDialogConfirmListener.onCallText();
         String subhead = onDialogConfirmListener.onCallSub();
-    //    int poscol = onDialogConfirmListener.onCallPoscol();
-        //int negcol = onDialogConfirmListener.onCallNegcol();
 
         diacont.setText(head);
         diasubcont.setText(subhead);

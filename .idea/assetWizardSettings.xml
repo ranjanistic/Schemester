@@ -196,8 +196,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_developericon" />
-                            <entry key="sourceFile" value="E:\myprojects\Github\vector-assets\developericon.svg" />
+                            <entry key="outputName" value="ic_noticeiconfilforschemester" />
+                            <entry key="sourceFile" value="E:\myprojects\Github\vector-assets\noticeIconFilForSchemester.svg" />
                           </map>
                         </option>
                       </PersistentState>

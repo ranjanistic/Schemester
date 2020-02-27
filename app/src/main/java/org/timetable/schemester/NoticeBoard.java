@@ -28,6 +28,7 @@ import java.util.Objects;
 import static android.content.ContentValues.TAG;
 
 public class NoticeBoard extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+    ApplicationSchemester schemester;
     TextView head,body,signedby;
     SwipeRefreshLayout swipeRefreshLayout;
     Button read,save,delete;
@@ -38,6 +39,7 @@ public class NoticeBoard extends AppCompatActivity implements SwipeRefreshLayout
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        schemester = (ApplicationSchemester) this.getApplication();
         setAppTheme(getThemeStatus());
         setContentView(R.layout.activity_notice_board);
         noticeBoard = findViewById(R.id.noticeLayout);
@@ -70,11 +72,10 @@ public class NoticeBoard extends AppCompatActivity implements SwipeRefreshLayout
             head.setText(notice[0]);
             body.setText(notice[1]);
             signedby.setText(notice[2]);
-        } else {
-        }
+        } else { }
         if(settings[0]){
             noticeBoard.setAlpha((float) 0.5);
-            read.setText("Marked Read");
+            read.setText(schemester.getStringResource(R.string.marked_read));
             read.setAlpha((float)0.5);
             save.setVisibility(View.INVISIBLE);
             delete.setVisibility(View.INVISIBLE);
@@ -82,7 +83,6 @@ public class NoticeBoard extends AppCompatActivity implements SwipeRefreshLayout
         super.onStart();
     }
     public class noticeUpdate extends AsyncTask<Void,Void,Void>{
-
         @Override
         protected Void doInBackground(Void... voids) {
             getNotice();
@@ -134,7 +134,7 @@ public class NoticeBoard extends AppCompatActivity implements SwipeRefreshLayout
     }
     private void getNotice(){
       if(isNetworkConnected()){
-          db.collection("global_info").document("notice")
+          db.collection(schemester.getCOLLECTION_GLOBAL_INFO()).document(schemester.getDOCUMENT_NOTICE())
                   .get()
                   .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                       @Override
@@ -142,9 +142,8 @@ public class NoticeBoard extends AppCompatActivity implements SwipeRefreshLayout
                           if (task.isSuccessful()) {
                               DocumentSnapshot document = task.getResult();
                               if (Objects.requireNonNull(document).exists()) {
-                                  Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                  String[] older =  readNotice();
-                                  if(older[0].equals(document.getString("head"))|| older[1].equals(document.getString("body"))||older.equals(document.getString("signee"))){
+                                  if(readNotice()[0].equals(document.getString("head"))|| readNotice()[1].equals(document.getString("body"))
+                                          ||readNotice()[2].equals(document.getString("signee"))){
                                       return;
                                   } else {
                                       savenoticeSetting(false,false,false);
@@ -170,7 +169,7 @@ public class NoticeBoard extends AppCompatActivity implements SwipeRefreshLayout
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
     private String[] readNotice(){
-        String[] fullNotice = {"","","",""};
+        String[] fullNotice = new String[4];
         SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeNotice", MODE_PRIVATE);
          fullNotice[0] = mSharedPreferences.getString("nheading", "");
         fullNotice[1] = mSharedPreferences.getString("nbody", "");
@@ -195,7 +194,7 @@ public class NoticeBoard extends AppCompatActivity implements SwipeRefreshLayout
         mEditor.apply();
     }
     private Boolean[] readNoticeSettings(){
-        Boolean[] action = {false,false,false};
+        Boolean[] action = new Boolean[3];
         SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeNoticeAction", MODE_PRIVATE);
         action[0] = mSharedPreferences.getBoolean("read", false);
         action[1] = mSharedPreferences.getBoolean("save", false);
@@ -205,18 +204,16 @@ public class NoticeBoard extends AppCompatActivity implements SwipeRefreshLayout
 
     public void setAppTheme(int code) {
         switch (code) {
-            case 101:
-                setTheme(R.style.AppTheme);
-                break;
-            case 102:
+            case ApplicationSchemester.CODE_THEME_DARK:
                 setTheme(R.style.DarkTheme);
                 break;
+            case ApplicationSchemester.CODE_THEME_LIGHT:
             default:setTheme(R.style.AppTheme);
         }
     }
 
     private int getThemeStatus() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
-        return mSharedPreferences.getInt("themeCode", 0);
+         return  this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
+                 .getInt(schemester.getPREF_KEY_THEME(), 0);
     }
 }

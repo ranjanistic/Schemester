@@ -171,7 +171,7 @@
                 android:background="@drawable/square_round_btn"
                 android:backgroundTint="@android:color/transparent"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_schemestericonupdated_jazz" />
+                app:srcCompat="@drawable/ic_schemestericon_latest" />
 
             <ImageButton
                 android:id="@+id/githubbtn"

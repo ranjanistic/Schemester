@@ -2,7 +2,6 @@ package org.timetable.schemester;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,25 +17,20 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
 
 public class LoginActivity extends AppCompatActivity {
+    ApplicationSchemester schemester;
     Button login, forgot;
     EditText emailid, roll, bdate, bmonth, byear;
     TextView emailValid, rollValid;
@@ -49,10 +42,10 @@ public class LoginActivity extends AppCompatActivity {
     CustomConfirmDialogClass confirmEmailDialog;
     Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
     boolean isRollValid = false, isEmailValid = false, isDateValid= false, isTeacher = false;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        schemester = (ApplicationSchemester) this.getApplication();
         Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -60,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
         collegeRollInputLayout = findViewById(R.id.collegeRollLayout);
-        if(readUserPosition().equals("teacher")){
+        if(readUserPosition().equals(schemester.getStringResource(R.string.teacher))){
             isTeacher = true;
             collegeRollInputLayout.setVisibility(View.GONE);
         }
@@ -70,20 +63,16 @@ public class LoginActivity extends AppCompatActivity {
             }
             @Override
             public String onLoadText() {
-                return "Need few moments";
+                return schemester.getStringResource(R.string.need_few_moments);
             }
         });
         login = findViewById(R.id.registerbtn);
         emailid = findViewById(R.id.emailId);
         emailValid = findViewById(R.id.emailValidityText);
         emailid.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-                checkEmailValidity(emailid.getText().toString().trim(),s);
-            }
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-            public void onTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void afterTextChanged(Editable s) { checkEmailValidity(emailid.getText().toString().trim(),s); }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int count, int after) {}
         });
         forgot = findViewById(R.id.forgotBtn);
         forgot.setOnClickListener(new View.OnClickListener() {
@@ -103,20 +92,15 @@ public class LoginActivity extends AppCompatActivity {
                             }
                             @Override
                             public String onCallText() {
-                                return "Reset birthdate link";
+                                return "Reset birth date link";
                             }
                             @Override
                             public String onCallSub() {
                                 return "A link will be sent to your provided email ID, if the account already exists and you have forgot your date of birth.\n\nYou can reset your date of birth with that link. Confirm?";
                             }
-                        });
-                        customConfirmDialogClass.show();
-                    } else {
-                        Toast.makeText(getApplicationContext(),"Please provide an email ID", Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    Toast.makeText(getApplicationContext(),"Please provide an email ID", Toast.LENGTH_LONG).show();
-                }
+                        });customConfirmDialogClass.show();
+                    } else { schemester.toasterLong(schemester.getStringResource(R.string.request_email_text)); }
+                } else { schemester.toasterLong(schemester.getStringResource(R.string.request_email_text)); }
                 customLoadDialogClass.hide();
             }
         });
@@ -124,19 +108,12 @@ public class LoginActivity extends AppCompatActivity {
             roll = findViewById(R.id.rollpass);
             rollValid = findViewById(R.id.rollValidityText);
             roll.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) {
-                    checkRollNumValidity(roll.getText().toString().trim(), s);
-                }
-
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                public void onTextChanged(CharSequence s, int start, int count, int after) {
-                }
+                public void afterTextChanged(Editable s) { checkRollNumValidity(roll.getText().toString().trim(), s); }
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void onTextChanged(CharSequence s, int start, int count, int after) {}
             });
-        } else {
-            isRollValid = true;
-        }
+        } else { isRollValid = true; }
+
         bdate = findViewById(R.id.birthdate);
         bmonth = findViewById(R.id.birthmonth);
         byear = findViewById(R.id.birthyear);
@@ -155,10 +132,8 @@ public class LoginActivity extends AppCompatActivity {
                     isDateValid = false;
                 }
             }
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-            public void onTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int count, int after) {}
         });
         bmonth.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
@@ -175,10 +150,8 @@ public class LoginActivity extends AppCompatActivity {
                     isDateValid = false;
                 }
             }
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-            public void onTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onTextChanged(CharSequence s, int start, int count, int after) {}
         });
 
         dob = bdate.getText().toString()+  bmonth.getText().toString() + byear.getText().toString();
@@ -192,9 +165,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        if(user!=null && userHasProvidedAdditionalInfo()) {
-            finish();
-        }
+        if(user!=null && userHasProvidedAdditionalInfo()) { finish(); }
         super.onResume();
     }
 
@@ -212,51 +183,50 @@ public class LoginActivity extends AppCompatActivity {
     private void registerInit(){
         final String email, rollnum, dd, mm, yyyy;
         email = emailid.getText().toString();
-        if(Objects.equals(readUserPosition(),"student")) rollnum = roll.getText().toString();
+        if(Objects.equals(readUserPosition(),schemester.getStringResource(R.string.student))) rollnum = roll.getText().toString();
         else rollnum = "0";
         dd = bdate.getText().toString();
         mm = bmonth.getText().toString();
         yyyy = byear.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), "Email ID required", Toast.LENGTH_LONG).show();
+            schemester.toasterLong(schemester.getStringResource(R.string.email_id_required));
             return;
         }
         if (!isTeacher&&TextUtils.isEmpty(rollnum)) {
-            Toast.makeText(getApplicationContext(), "Your college roll number required.", Toast.LENGTH_LONG).show();
+            schemester.toasterLong(schemester.getStringResource(R.string.college_roll_required_text));
             return;
         }
         if (TextUtils.isEmpty(dd)) {
-            Toast.makeText(getApplicationContext(), "We need your birth date.", Toast.LENGTH_LONG).show();
+            schemester.toasterLong(schemester.getStringResource(R.string.we_need_your_birthdate));
             return;
         }
         if(Integer.parseInt(dd)<1||Integer.parseInt(dd)>31){
-            Toast.makeText(getApplicationContext(), "Invalid birth date.", Toast.LENGTH_LONG).show();
+            schemester.toasterLong(schemester.getStringResource(R.string.invalid_bdate));
             return;
         }
         if (TextUtils.isEmpty(mm)) {
-            Toast.makeText(getApplicationContext(), "We need your birth month.", Toast.LENGTH_LONG).show();
+            schemester.toasterLong(schemester.getStringResource(R.string.we_need_your_bmonth));
             return;
         }
         if(Integer.parseInt(mm)<1||Integer.parseInt(mm)>12){
-            Toast.makeText(getApplicationContext(), "Invalid birth month.", Toast.LENGTH_LONG).show();
+            schemester.toasterLong(schemester.getStringResource(R.string.invalid_bmonth));
             return;
         }
         if (TextUtils.isEmpty(yyyy)) {
-            Toast.makeText(getApplicationContext(), "We need your birth year.", Toast.LENGTH_LONG).show();
+            schemester.toasterLong(schemester.getStringResource(R.string.we_need_byear));
             return;
         }
         if(Integer.parseInt(yyyy)>calendar.get(Calendar.YEAR)){
-            Toast.makeText(getApplicationContext(), "You cannot be born in future!", Toast.LENGTH_LONG).show();
+            schemester.toasterLong(schemester.getStringResource(R.string.future_year_entry_warning));
             return;
         }
         if(!isEmailValid || !isRollValid &&!isTeacher){
-            Toast.makeText(getApplicationContext(), "Invalid details", Toast.LENGTH_LONG).show();
+            schemester.toasterLong(schemester.getStringResource(R.string.invalid_details));
             return;
         }
         if(!isDateValid){
-            Toast.makeText(getApplicationContext(), "Invalid format (DD or MM or YYYY)", Toast.LENGTH_LONG).show();
-            return;
+            schemester.toasterLong(schemester.getStringResource(R.string.invalid_date_format));
         }
         else {
             confirmEmailDialog = new CustomConfirmDialogClass(LoginActivity.this, new OnDialogConfirmListener() {
@@ -267,12 +237,12 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 @Override
                 public String onCallText() {
-                    return "Important";
+                    return schemester.getStringResource(R.string.important);
                 }
 
                 @Override
                 public String onCallSub() {
-                    return "You should proceed only if your details are correct, and you take full responsibility of providing your email ID. \n\nAn email will be sent to your provided email ID to confirm your authenticity, so it should be  really yours.\n\nBe assured that your credentials are safe with us.\n\nConfirm?";
+                    return schemester.getStringResource(R.string.email_ID_provision_disclaimer);
                 }
             });
             confirmEmailDialog.show();
@@ -303,7 +273,7 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean result){
             super.onPostExecute(result);
             if(!result) {
-                Toast.makeText(getApplicationContext(), "No internet", Toast.LENGTH_SHORT).show();
+                schemester.toasterLong(schemester.getStringResource(R.string.internet_problem));
                 customLoadDialogClass.hide();
             }
         }
@@ -311,10 +281,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private String[] getAdditionalInfo() {
         String[] CCY = {null, null, null};
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("additionalInfo", MODE_PRIVATE);
-        CCY[0] = mSharedPreferences.getString("college", "");
-        CCY[1] = mSharedPreferences.getString("course", "");
-        CCY[2] = mSharedPreferences.getString("year", "");
+        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_ADDITIONAL_INFO(), MODE_PRIVATE);
+        CCY[0] = mSharedPreferences.getString(schemester.getPREF_KEY_COLLEGE(), "");
+        CCY[1] = mSharedPreferences.getString(schemester.getPREF_KEY_COURSE(), "");
+        CCY[2] = mSharedPreferences.getString(schemester.getPREF_KEY_YEAR(), "");
         return CCY;
     }
     private Boolean userHasProvidedAdditionalInfo(){
@@ -328,20 +298,19 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             storeLoginStatus(true);
+
                             //storeUserDefinition(readUserPosition(), emailIdFinalLogin);
-                            if(!isTeacher) {
-                                storeCredentials(emailIdFinalLogin, roll.getText().toString());
-                            } else {
-                                storeCredentials(emailIdFinalLogin, "");
-                            }
+                            if(!isTeacher) { storeCredentials(emailIdFinalLogin, roll.getText().toString()); }
+                            else { storeCredentials(emailIdFinalLogin, ""); }
+
                             if(userHasProvidedAdditionalInfo()) {
-                                Toast.makeText(getApplicationContext(), "Logged in as " + emailIdFinalLogin, Toast.LENGTH_LONG).show();
+                                schemester.toasterLong(schemester.getStringResource(R.string.logged_in_as)+ emailIdFinalLogin);
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_from_top);
                                 finish();
                             } else {
-                                Toast.makeText(getApplicationContext(), "Complete your profile", Toast.LENGTH_LONG).show();
+                                schemester.toasterLong(schemester.getStringResource(R.string.complete_your_profile));
                                 Intent intent = new Intent(LoginActivity.this, AdditionalLoginInfo.class);
                                 startActivity(intent);
                                 customLoadDialogClass.hide();
@@ -349,7 +318,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         else {
                             storeLoginStatus(false);
-                            Toast.makeText(getApplicationContext(), "Some of your credentials were incorrect.", Toast.LENGTH_LONG).show();
+                            schemester.toasterLong(schemester.getStringResource(R.string.incorrect_credentials));
                             forgot.setVisibility(View.VISIBLE);
                             customLoadDialogClass.dismiss();
                         }
@@ -365,12 +334,11 @@ public class LoginActivity extends AppCompatActivity {
                         user = FirebaseAuth.getInstance().getCurrentUser();
                         if (task.isSuccessful()) {
                             storeLoginStatus(true);
+
                             //storeUserDefinition(readUserPosition(), uid);
-                            if(!isTeacher) {
-                                storeCredentials(uid, roll.getText().toString());
-                            } else {
-                                storeCredentials(uid, "");
-                            }
+                            if(!isTeacher) { storeCredentials(uid, roll.getText().toString()); }
+                            else { storeCredentials(uid, ""); }
+
                             Intent intent = new Intent(LoginActivity.this, AdditionalLoginInfo.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY);
                             startActivity(intent);
@@ -387,17 +355,17 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void storeLoginStatus(Boolean logged){
-        SharedPreferences mSharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_LOGIN_STAT(), MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putBoolean("loginstatus", logged);
+        mEditor.putBoolean(schemester.getPREF_KEY_LOGIN_STAT(), logged);
         mEditor.apply();
     }
 
     private void storeCredentials(String mail, String rollnum){
-        SharedPreferences mSharedPreferences = getSharedPreferences("credentials", MODE_PRIVATE);
+        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putString("email", mail);
-        mEditor.putString("roll", rollnum);
+        mEditor.putString(schemester.getPREF_KEY_EMAIL(), mail);
+        mEditor.putString(schemester.getPREF_KEY_ROLL(), rollnum);
         mEditor.apply();
     }
     private boolean isInternetAvailable() {
@@ -453,20 +421,20 @@ public class LoginActivity extends AppCompatActivity {
 
     private void sendVerificationEmail() {
         user = FirebaseAuth.getInstance().getCurrentUser();
-        user.sendEmailVerification()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(),"A confirmation email is sent to your email address.", Toast.LENGTH_LONG).show();
+        if (user != null) {
+            user.sendEmailVerification()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) { schemester.toasterLong(schemester.getStringResource(R.string.confirmation_email_sent_text)); }
                         }
-                    }
-                });
+                    });
+        }
     }
 
     private String readUserPosition(){
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("userDefinition", MODE_PRIVATE);
-        return mSharedPreferences.getString("position", "");
+        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE);
+        return mSharedPreferences.getString(schemester.getPREF_KEY_USER_DEF(), "");
     }
 
     private void resetLinkSender(final String email){
@@ -475,22 +443,16 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(getApplicationContext(),"A link has been sent at "+email, Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(getApplicationContext(),"Check your connection", Toast.LENGTH_LONG).show();
-                            }
+                                schemester.toasterLong(schemester.getStringResource(R.string.a_link_has_been_sent_at)+email);
+                            } else { schemester.toasterLong(schemester.getStringResource(R.string.check_your_connection)); }
                         }
                     });
             customLoadDialogClass.hide();
     }
-    private Boolean checkIfEmailVerified() {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        return user.isEmailVerified();
-    }
 
     public void setAppTheme() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
-        switch (mSharedPreferences.getInt("themeCode", 0)) {
+        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
+        switch (mSharedPreferences.getInt(schemester.getPREF_KEY_THEME(), 0)) {
             case 102:
                 setTheme(R.style.BlueDarkTheme);
                 break;
