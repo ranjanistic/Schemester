@@ -1,10 +1,8 @@
 package org.timetable.schemester;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -13,13 +11,10 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDialog;
-
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Objects;
 
@@ -97,7 +92,7 @@ public class CustomTextDialog extends AppCompatDialog {
                 validity.setVisibility(View.VISIBLE);
                 validity.setText(getContext().getResources().getString(R.string.valid));
                 validity.setTextColor(getContext().getResources().getColor(R.color.white));
-                validity.setBackgroundResource(R.drawable.roundcontainerboxgreen);
+                validity.setBackgroundResource(R.drawable.topleftsharpboxgreen);
                 isValid = true;
             } else if (s.length() == 0) {
                 validity.setVisibility(View.GONE);
@@ -106,7 +101,7 @@ public class CustomTextDialog extends AppCompatDialog {
                 validity.setVisibility(View.VISIBLE);
                 validity.setText(getContext().getResources().getString(R.string.invalidtext));
                 validity.setTextColor(getContext().getResources().getColor(R.color.white));
-                validity.setBackgroundResource(R.drawable.roundcontainerboxred);
+                validity.setBackgroundResource(R.drawable.topleftsharpboxred);
                 isValid = false;
             }
         }

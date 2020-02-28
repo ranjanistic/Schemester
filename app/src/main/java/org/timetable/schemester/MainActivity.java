@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity{
     private Button date;
     private ImageButton drawerArrow, switchThemeBtn;
     private LinearLayout headingView, settingTab, scheduleTab;
+    private LinearLayout[] duration = new LinearLayout[9];
     private ScrollView scrollView;
     private Calendar calendar;
     private Animation hide, show, fadeOn, fadeOff;
@@ -66,6 +67,9 @@ public class MainActivity extends AppCompatActivity{
     }, classView = {
             R.id.classMain1, R.id.classMain2, R.id.classMain3, R.id.classMain4, R.id.classMain5,
             R.id.classMain6, R.id.classMain7, R.id.classMain8, R.id.classMain9,
+    }, durationView = {
+            R.id.duration1,R.id.duration2,R.id.duration3,R.id.duration4,R.id.duration5,
+            R.id.duration6,R.id.duration7,R.id.duration8,R.id.duration9,
     };
     int[] timeStringResource = {
         R.string.time1, R.string.time2, R.string.time3, R.string.time4, R.string.time5,
@@ -77,9 +81,11 @@ public class MainActivity extends AppCompatActivity{
     private checkUpdate update;     //update checker asyncTask class
     private Window window;
     private BottomSheetBehavior bottomSheetBehavior;
-
+    String className,durationClass,location;
+    Boolean classAvailable;
     String COLLECTION_GLOBAL_INFO = "global_info", DOCUMENT_GLOBAL_SEMESTER = "semester",
             COLLECTION_COLLEGE_CODE , DOCUMENT_COURSE_CODE , COLLECTION_YEAR_CODE;
+    DurationDetailsDialog durationDetailsDialog;
     @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +112,7 @@ public class MainActivity extends AppCompatActivity{
 
         //check holiday and display accordingly
         setHolidayViewIfHoliday();
-        
+
         //initializing main schedule update task
         mreadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
         mhighilighterTask = new highlighterTask();
@@ -132,6 +138,13 @@ public class MainActivity extends AppCompatActivity{
             super.onPostExecute(aBoolean);
         }
     }
+    private void setWindowDecorDefaults(){
+        window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
+    }
+
     private void setViews(){
         scrollView = findViewById(R.id.scrollView);
         headingView = findViewById(R.id.period_view);
@@ -146,6 +159,7 @@ public class MainActivity extends AppCompatActivity{
         while(k<9) {
             p[k] = findViewById(periodView[k]);
             c[k] = findViewById(classView[k]);
+            duration[k] = findViewById(durationView[k]);
             ++k;
         }
         bottomDrawer = findViewById(R.id.bottom_drawer);
@@ -153,13 +167,6 @@ public class MainActivity extends AppCompatActivity{
         day = findViewById(R.id.weekday_text);
         month = findViewById(R.id.month_text);
         loginIdOnDrawer = findViewById(R.id.drawerLoginID);
-    }
-
-    private void setWindowDecorDefaults(){
-        window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
     }
 
     private void setBottomSheetFeature(){
@@ -202,9 +209,9 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void run() {
                 if(getTimeFormat() == 12) {
-                    time.setText(new SimpleDateFormat("hh:mm a").format(new Date()));
+                    time.setText(new SimpleDateFormat(getStringResource(R.string.time_format_hhmm_ampm)).format(new Date()));
                 } else{
-                    time.setText(new SimpleDateFormat("HH:mm").format(new Date()));
+                    time.setText(new SimpleDateFormat(getStringResource(R.string.time_format_hhmm)).format(new Date()));
                 }
                 timeHandler.postDelayed(this, 10);
             }
@@ -305,7 +312,29 @@ public class MainActivity extends AppCompatActivity{
                 } else bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
         });
+        int  d;
+        for(d = 0;d<9;++d) {
+            final int finalD = d;
+            duration[d].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    durationDetailsDialog = new DurationDetailsDialog(MainActivity.this, new DurationDetailDialogListener() {
+                        @Override
+                        public String onCallClassName() { return c[finalD].getText().toString(); }
+                        @Override
+                        public String onCallClassDuration() { return p[finalD].getText().toString(); }
+                        @Override
+                        public String classLocation() { return getStringResource(R.string.n_a); }
+                        @Override
+                        public Boolean classIsOn() { return null; }
+                    });
+                    durationDetailsDialog.show();
+                }
+            });
+        }
+        d=0;
     }
+
 
     private class checkUpdate extends AsyncTask<Void,Void,Void>{
         @Override
@@ -453,14 +482,6 @@ public class MainActivity extends AppCompatActivity{
         month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
           if(!isHolidayToday()) {
               setTimeFormatInMainSchedule(getTimeFormat());
-              if(mreadClassFromDatabaseTask.isCancelled()) {
-                  mreadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
-                  mreadClassFromDatabaseTask.execute();
-              } else {
-                  mreadClassFromDatabaseTask.cancel(true);
-                  mreadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
-                  mreadClassFromDatabaseTask.execute();
-              }
               if(mhighilighterTask.isCancelled()) {
                   mhighilighterTask = new highlighterTask();
                   mhighilighterTask.execute();
@@ -468,6 +489,14 @@ public class MainActivity extends AppCompatActivity{
                   mhighilighterTask.cancel(true);
                   mhighilighterTask = new highlighterTask();
                   mhighilighterTask.execute();
+              }
+              if(mreadClassFromDatabaseTask.isCancelled()) {
+                  mreadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
+                  mreadClassFromDatabaseTask.execute();
+              } else {
+                  mreadClassFromDatabaseTask.cancel(true);
+                  mreadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
+                  mreadClassFromDatabaseTask.execute();
               }
           }
         super.onStart();
@@ -774,7 +803,11 @@ public class MainActivity extends AppCompatActivity{
                                 if (Objects.requireNonNull(document).exists()) {
                                     int i = 0;
                                     while(i<9) {
-                                        c[i].setText(document.getString(getStringResource(pkeyResource[i])));
+                                        if(Objects.equals(document.getString(getStringResource(pkeyResource[i])),"Nothing")){
+                                            duration[i].setVisibility(View.GONE);
+                                        } else {
+                                            c[i].setText(document.getString(getStringResource(pkeyResource[i])));
+                                        }
                                         ++i;
                                     }
                                 }

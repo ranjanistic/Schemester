@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".PermanentActionActivity"></activity>
+        <activity android:name=".PermanentActionActivity"/>
         <activity android:name=".ChatRoomActivity" />
         <activity android:name=".ModeOfConduct" />
         <activity
@@ -38,7 +38,6 @@
             android:theme="@style/splashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -46,10 +45,8 @@
             android:name=".LoginActivity"
             android:theme="@style/BlueLightTheme" />
         <activity android:name=".MainActivity" />
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
-
 </manifest>

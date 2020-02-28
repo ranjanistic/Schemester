@@ -74,7 +74,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:background="@android:color/transparent"
-                        android:fontFamily="@font/montserrat"
                         android:foregroundGravity="right"
                         android:gravity="bottom|end"
                         android:paddingStart="8dp"
@@ -90,7 +89,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:background="@android:color/transparent"
-                        android:fontFamily="@font/montserrat"
+                        
                         android:gravity="top|end"
                         android:paddingStart="8dp"
                         android:paddingEnd="8dp"
@@ -108,7 +107,7 @@
                     android:layout_height="60dp"
                     android:layout_gravity="center"
                     android:background="@drawable/round_btn"
-                    android:backgroundTint="@color/colorAccent"
+                    android:backgroundTint="?action_text_color"
                     android:fontFamily="@font/comfortaa_bold"
                     android:gravity="center"
                     android:text="@string/_0"
@@ -174,7 +173,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:backgroundTint="?attr/display_foreground"
-        android:background="@color/blue"
+        android:background="?attr/display_foreground"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -189,6 +188,11 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/duration1"
+                android:background="@drawable/square_edgy_btn"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -203,7 +207,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
@@ -222,7 +226,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="?attr/foreground_text_color"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
@@ -237,6 +241,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/duration2"
+                android:background="@drawable/square_edgy_btn"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -251,7 +260,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
@@ -270,7 +279,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="?attr/foreground_text_color"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
@@ -286,6 +295,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/duration3"
+                android:background="@drawable/square_edgy_btn"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -302,7 +316,7 @@
                     
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="?attr/foreground_text_color"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
@@ -320,7 +334,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="?attr/foreground_text_color"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
@@ -336,6 +350,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/duration4"
+                android:background="@drawable/square_edgy_btn"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -349,10 +368,9 @@
                     android:id="@+id/periodMain4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="?attr/foreground_text_color"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
@@ -370,7 +388,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="?attr/foreground_text_color"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
@@ -385,6 +403,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/duration5"
+                android:background="@drawable/square_edgy_btn"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -401,7 +424,7 @@
                     
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="?attr/foreground_text_color"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
@@ -419,7 +442,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="?attr/foreground_text_color"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
@@ -435,6 +458,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/duration6"
+                android:background="@drawable/square_edgy_btn"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -451,7 +479,7 @@
                     
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="?attr/foreground_text_color"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
@@ -469,7 +497,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="?attr/foreground_text_color"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:gravity="bottom"
                     android:paddingTop="18dp"
@@ -486,6 +514,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/duration7"
+                android:background="@drawable/square_edgy_btn"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -502,7 +535,7 @@
                     
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="?attr/foreground_text_color"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
@@ -520,7 +553,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="?attr/foreground_text_color"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
@@ -537,6 +570,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/duration8"
+                android:background="@drawable/square_edgy_btn"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -553,7 +591,7 @@
                     
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="?attr/foreground_text_color"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
@@ -571,7 +609,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="?attr/foreground_text_color"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
@@ -588,6 +626,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/duration9"
+                android:background="@drawable/square_edgy_btn"
+                android:backgroundTint="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -604,7 +647,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="?attr/foreground_text_color"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
@@ -622,7 +665,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
                     android:textColor="?attr/foreground_text_color"
-                    android:fontFamily="@font/montserrat"
+                    
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
@@ -642,7 +685,7 @@
         android:id="@+id/noclasstext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/montserrat"
+        
         android:visibility="invisible"
         android:gravity="center_horizontal|start"
         android:text="@string/no_classes_today_enjoy"

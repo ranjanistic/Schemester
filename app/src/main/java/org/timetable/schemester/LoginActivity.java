@@ -304,7 +304,7 @@ public class LoginActivity extends AppCompatActivity {
                             else { storeCredentials(emailIdFinalLogin, ""); }
 
                             if(userHasProvidedAdditionalInfo()) {
-                                schemester.toasterLong(schemester.getStringResource(R.string.logged_in_as)+ emailIdFinalLogin);
+                                schemester.toasterLong(schemester.getStringResource(R.string.logged_in_as)+"\n"+ emailIdFinalLogin);
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_from_top);
@@ -385,7 +385,7 @@ public class LoginActivity extends AppCompatActivity {
             emailValid.setVisibility(View.VISIBLE);
             emailValid.setText(getResources().getString(R.string.valid));
             emailValid.setTextColor(getResources().getColor(R.color.white));
-            emailValid.setBackgroundResource(R.drawable.roundcontainerboxgreen);
+            emailValid.setBackgroundResource(R.drawable.topleftsharpboxgreen);
             isEmailValid = true;
         }
         else if(s.length()==0){
@@ -394,7 +394,7 @@ public class LoginActivity extends AppCompatActivity {
             emailValid.setVisibility(View.VISIBLE);
             emailValid.setText(getResources().getString(R.string.invalidtext));
             emailValid.setTextColor(getResources().getColor(R.color.white));
-            emailValid.setBackgroundResource(R.drawable.roundcontainerboxred);
+            emailValid.setBackgroundResource(R.drawable.topleftsharpboxred);
             isEmailValid = false;
         }
     }
@@ -405,7 +405,7 @@ public class LoginActivity extends AppCompatActivity {
             rollValid.setVisibility(View.VISIBLE);
             rollValid.setText(getResources().getString(R.string.valid));
             rollValid.setTextColor(getResources().getColor(R.color.white));
-            rollValid.setBackgroundResource(R.drawable.roundcontainerboxgreen);
+            rollValid.setBackgroundResource(R.drawable.topleftsharpboxgreen);
             isRollValid = true;
         }
         else if(s.length() == 0){
@@ -414,7 +414,7 @@ public class LoginActivity extends AppCompatActivity {
             rollValid.setVisibility(View.VISIBLE);
             rollValid.setText(getResources().getString(R.string.invalidtext));
             rollValid.setTextColor(getResources().getColor(R.color.white));
-            rollValid.setBackgroundResource(R.drawable.roundcontainerboxred);
+            rollValid.setBackgroundResource(R.drawable.topleftsharpboxred);
             isRollValid = false;
         }
     }

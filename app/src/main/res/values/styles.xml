@@ -19,7 +19,6 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="android:fontFamily">@font/montserrat</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -43,7 +42,8 @@
         <item name="warning_button_color">@color/dark_red</item>
         <item name="secondary_background">@color/dull_blue</item>
     </style>
-    
+
+
     <style name="DarkTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:fontFamily">@font/montserrat</item>
         <item name="colorPrimary">@color/colorPrimary</item>

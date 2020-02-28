@@ -53,7 +53,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/blue"
+            android:textColor="?attr/action_text_color"
             android:textSize="18sp"
             android:text="@string/full_week_schedule"/>
     </LinearLayout>
@@ -71,7 +71,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/blue"
+            android:textColor="?attr/action_text_color"
             android:textSize="18sp"
             android:text="@string/settings"/>
     </LinearLayout>
@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:singleLine="false"
         android:textColor="?attr/base_text_color"
-        android:text="Logged in as"
+        android:text="@string/logged_in_as"
         android:textSize="14sp"/>
     <TextView
         android:id="@+id/drawerLoginID"
@@ -89,8 +89,8 @@
         android:singleLine="false"
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
-        android:textColor="?attr/base_text_color"
+        android:textColor="?attr/action_text_color"
         android:paddingBottom="4dp"
-        android:text="priyanshutanajna88@gmail.com"
+        android:text="@string/n_a"
         android:textSize="14sp"/>
 </LinearLayout>

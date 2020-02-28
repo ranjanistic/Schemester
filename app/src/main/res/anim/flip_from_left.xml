@@ -1,17 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:interpolator="@android:anim/accelerate_decelerate_interpolator"
-    android:shareInterpolator="true">
-    <scale
-        android:duration="2700"
-        android:fromYScale="30%"
-        android:toYScale="80%"
-        />
-<scale
-    android:duration="2700"
-    android:fromXScale="80%"
-    android:toXScale="100%"
-    android:fromYScale="80%"
-    android:toYScale="100%"
-    />
+    android:interpolator="@android:anim/accelerate_decelerate_interpolator">
 </set>

@@ -71,7 +71,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/blue"
+            android:textColor="?attr/action_text_color"
             android:textSize="18sp"
             android:text="@string/view_full_week_schedule"/>
         <View
@@ -100,7 +100,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/blue"
+            android:textColor="?attr/action_text_color"
             android:textSize="18sp"
             android:text="@string/settings"/>
         <View
@@ -119,7 +119,7 @@
         android:singleLine="false"
         android:layout_gravity="center"
         android:textColor="?attr/base_text_color"
-        android:text="Logged in as"
+        android:text="@string/logged_in_as"
         android:textSize="14sp"/>
     <TextView
         android:id="@+id/drawerLoginID"
@@ -129,7 +129,7 @@
         android:singleLine="false"
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
-        android:textColor="?attr/heading_text_color"
+        android:textColor="?attr/action_text_color"
         android:paddingBottom="4dp"
         android:text="@string/n_a"
         android:textSize="14sp"/>

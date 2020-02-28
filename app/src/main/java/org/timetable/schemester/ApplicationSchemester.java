@@ -2,12 +2,12 @@ package org.timetable.schemester;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.widget.Toast;
 
 public class ApplicationSchemester  extends Application {
     public static final int CODE_THEME_LIGHT = 101, CODE_THEME_DARK = 102,
     CODE_THEME_INCOGNITO = 103;
-
     public static final int versionCode = BuildConfig.VERSION_CODE;
     public static final String versionName = BuildConfig.VERSION_NAME,
     applicationId = BuildConfig.APPLICATION_ID;

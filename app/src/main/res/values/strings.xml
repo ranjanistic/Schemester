@@ -4,7 +4,7 @@
     <string name="title_dayschedule_detail">Day Schedule Detail</string>
 
     <string name="new_period_notification_title_template">New period: %1$s</string>
-    <string name="okay">okay</string>
+    <string name="okay">Okay</string>
     <string name="channel_name">New period notification</string>
     <string name="channel_description">To notify about next class.</string>
 
@@ -97,7 +97,7 @@
     <string name="app_version">version-1.2-infant-stage2</string>
     <string name="version">Version</string>
     <string name="roll_number">Roll number</string>
-    <string name="logged_in_as">Logged in as\n</string>
+    <string name="logged_in_as">Logged in as</string>
     <string name="check_for_updates">Check for updates</string>
     <string name="major_settings">Major settings</string>
     <string name="type_here">Type here</string>
@@ -262,6 +262,10 @@
     <string name="check_connection_try_again">Check your connection and try again.</string>
     <string name="migration_failed_text">Existing data failed to migrate, hence email ID was not updated.</string>
     <string name="marked_read">Marked Read</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="time_format_hhmm_ampm">hh:mm a</string>
+    <string name="time_format_hhmm">HH:mm</string>
     <string-array name="college_array">
         <item>Deshbandhu College</item>
     </string-array>
