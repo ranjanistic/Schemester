@@ -16,6 +16,7 @@ import android.os.Environment;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -33,6 +35,23 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+
+import org.timetable.schemester.dialog.CustomAlertDialog;
+import org.timetable.schemester.dialog.CustomConfirmDialogClass;
+import org.timetable.schemester.dialog.CustomDownloadLoadDialog;
+import org.timetable.schemester.dialog.CustomLoadDialogClass;
+import org.timetable.schemester.dialog.CustomOnOptListener;
+import org.timetable.schemester.dialog.CustomTextDialog;
+import org.timetable.schemester.dialog.CustomVerificationDialog;
+import org.timetable.schemester.listener.OnDialogAlertListener;
+import org.timetable.schemester.listener.OnDialogApplyListener;
+import org.timetable.schemester.listener.OnDialogConfirmListener;
+import org.timetable.schemester.listener.OnDialogDownloadLoadListener;
+import org.timetable.schemester.listener.OnDialogLoadListener;
+import org.timetable.schemester.listener.OnDialogTextListener;
+import org.timetable.schemester.listener.OnOptionChosenListener;
+import org.timetable.schemester.student.AdditionalLoginInfo;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,8 +60,9 @@ import java.util.Objects;;
 public class Preferences extends AppCompatActivity {
     ApplicationSchemester schemester;
     Switch timeFormatSwitch;
-    LinearLayout dobUpdate, emailChange, rollChange, appUpdate, deleteAcc, restarter, themebtn,
-            feedback, clockTypeSwitch, loginAgain, anonymOps, userOps, ccySwitch, ccyGroup, devOpsGroup;
+    LinearLayout dobUpdate, emailChange, rollChange, appUpdate, deleteAcc, restarter, themebtn, appUpdateNotif,
+            feedback, clockTypeSwitch, loginAgain, anonymOps, userOps, ccySwitch, ccyGroup,devOpsGroup;
+    CheckBox appUpdateNotifCheck;
     ImageButton returnbtn;
     TextView timetext;
     CustomVerificationDialog customVerificationDialogDeleteAccount, customVerificationDialogEmailChange;
@@ -92,6 +112,8 @@ public class Preferences extends AppCompatActivity {
         feedback = findViewById(R.id.feedbackmailbtn);
         timeFormatSwitch = findViewById(R.id.clockTypeSwitch);
         clockTypeSwitch = findViewById(R.id.clockTypeSwitchView);
+        appUpdateNotif = findViewById(R.id.automaticAppUpdatePrefer);
+        appUpdateNotifCheck = findViewById(R.id.appUpdateNotificationCheckbox);
     }
 
     private void setThemeConsequences(){
@@ -140,6 +162,7 @@ public class Preferences extends AppCompatActivity {
     }
 
     private void setListenersAndInitializers(){
+        appUpdateNotifCheck.setChecked(userWantsUpdateNotification());
         returnbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -239,12 +262,16 @@ public class Preferences extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (isNetworkConnected()) {
-                    Snackbar snackbar = Snackbar.make(view, schemester.getStringResource(R.string.confirm_to_send_email_link), 5000);
-                    snackbar.setActionTextColor(getResources().getColor(R.color.green));
+                    Snackbar snackbar = Snackbar.make(view, schemester.getStringResource(R.string.confirm_to_send_email_link), 5000)
+                            .setBackgroundTint(getResources().getColor(R.color.dead_blue))
+                            .setTextColor(getResources().getColor(R.color.white));
+                    snackbar.setActionTextColor(getResources().getColor(R.color.yellow));
                     snackbar.setAction(schemester.getStringResource(R.string.send), new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             Snackbar.make(view, schemester.getStringResource(R.string.sending), Snackbar.LENGTH_INDEFINITE)
+                                    .setBackgroundTint(getResources().getColor(R.color.dark_blue))
+                                    .setTextColor(getResources().getColor(R.color.white))
                                     .show();
                             resetLinkSender(getCredentials()[0]);
                         }
@@ -252,6 +279,8 @@ public class Preferences extends AppCompatActivity {
                     snackbar.show();
                 } else {
                     Snackbar.make(view, schemester.getStringResource(R.string.network_error_occurred), Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(getResources().getColor(R.color.dark_red))
+                            .setTextColor(getResources().getColor(R.color.white))
                             .show();
                 }
             }
@@ -288,16 +317,57 @@ public class Preferences extends AppCompatActivity {
                     timetext.setText(getResources().getString(R.string.time_format_12_hours));
                     storeTimeFormat(12);
                     Snackbar.make(buttonView,schemester.getStringResource(R.string.time_format_12_notify),Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(getResources().getColor(R.color.dead_blue))
+                            .setTextColor(getResources().getColor(R.color.white))
                             .show();
                 } else {
                     timetext.setText(getResources().getString(R.string.time_format_24_hours));
                     storeTimeFormat(24);
                     Snackbar.make(buttonView,schemester.getStringResource(R.string.time_format_24_notify),Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(getResources().getColor(R.color.dead_blue))
+                            .setTextColor(getResources().getColor(R.color.white))
                             .show();
                 }
             }
         });
-
+        appUpdateNotifCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                storeUpdateNotificationPreference(!userWantsUpdateNotification());
+                appUpdateNotifCheck.setChecked(userWantsUpdateNotification());
+            }
+        });
+        appUpdateNotifCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b) {
+                    Snackbar.make(compoundButton, schemester.getStringResource(R.string.update_notification_enabled_text), 5000)
+                            .setBackgroundTint(getResources().getColor(R.color.dead_blue))
+                            .setTextColor(getResources().getColor(R.color.white))
+                            .show();
+                } else {
+                    Snackbar.make(compoundButton, schemester.getStringResource(R.string.update_notification_disabled_text), 7000)
+                            .setBackgroundTint(getResources().getColor(R.color.dark_red))
+                            .setTextColor(getResources().getColor(R.color.white))
+                            .setAction("Undo", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    storeUpdateNotificationPreference(true);
+                                    appUpdateNotifCheck.setChecked(userWantsUpdateNotification());
+                                }
+                            })
+                            .setActionTextColor(getResources().getColor(R.color.yellow))
+                            .show();
+                }
+            }
+        });
+        appUpdateNotif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                storeUpdateNotificationPreference(!userWantsUpdateNotification());
+                appUpdateNotifCheck.setChecked(userWantsUpdateNotification());
+            }
+        });
 
         feedback.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -325,6 +395,8 @@ public class Preferences extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         Snackbar.make(findViewById(R.id.preferencesID), schemester.getStringResource(R.string.email_sent_notif), Snackbar.LENGTH_LONG)
+                                .setBackgroundTint(getResources().getColor(R.color.dead_blue))
+                                .setTextColor(getResources().getColor(R.color.white))
                                 .show();
                     }
                 })
@@ -332,6 +404,8 @@ public class Preferences extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Snackbar.make(findViewById(R.id.preferencesID), schemester.getStringResource(R.string.error_occurred_try_later), Snackbar.LENGTH_LONG)
+                                .setBackgroundTint(getResources().getColor(R.color.dark_red))
+                                .setTextColor(getResources().getColor(R.color.white))
                                 .show();
                     }
                 });
@@ -730,7 +804,16 @@ public class Preferences extends AppCompatActivity {
         mEditor.putInt(schemester.getPREF_KEY_THEME(), themechoice);
         mEditor.apply();
     }
-
+    private void storeUpdateNotificationPreference(Boolean getUpdateNotification){
+        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_UPDATE_NOTIFY(), MODE_PRIVATE);
+        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+        mEditor.putBoolean(schemester.getPREF_KEY_UPDATE_NOTIFY(),getUpdateNotification);
+        mEditor.apply();
+    }
+    private Boolean userWantsUpdateNotification(){
+        return this.getSharedPreferences(schemester.getPREF_HEAD_UPDATE_NOTIFY(), MODE_PRIVATE)
+                .getBoolean(schemester.getPREF_KEY_UPDATE_NOTIFY(), true);
+    }
     private void storeTimeFormat(int format){
         SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_TIME_FORMAT(), MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();

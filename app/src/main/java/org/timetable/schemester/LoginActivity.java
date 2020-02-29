@@ -23,6 +23,13 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import org.timetable.schemester.dialog.CustomConfirmDialogClass;
+import org.timetable.schemester.dialog.CustomLoadDialogClass;
+import org.timetable.schemester.listener.OnDialogConfirmListener;
+import org.timetable.schemester.listener.OnDialogLoadListener;
+import org.timetable.schemester.student.AdditionalLoginInfo;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;

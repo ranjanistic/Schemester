@@ -429,7 +429,6 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
-
                 <Switch
                     android:id="@+id/clockTypeSwitch"
                     android:layout_width="60dp"
@@ -467,16 +466,16 @@
                     android:paddingStart="0dp"
                     android:orientation="vertical">
                     <TextView
-                            android:layout_width="250dp"
-                            android:textColor="?attr/base_text_color"
-                            android:layout_height="wrap_content"
+                        android:layout_width="250dp"
+                        android:textColor="?attr/base_text_color"
+                        android:layout_height="wrap_content"
                         android:singleLine="false"
                         android:text="@string/app_update"
                         android:textSize="18sp"/>
                     <TextView
-                            android:layout_width="250dp"
-                            android:textColor="?attr/base_text_color"
-                            android:layout_height="wrap_content"
+                        android:layout_width="250dp"
+                        android:textColor="?attr/base_text_color"
+                        android:layout_height="wrap_content"
                         android:text="@string/check_for_app_updates"
                         android:paddingTop="4dp"
                         android:singleLine="false"
@@ -488,9 +487,8 @@
                     android:layout_weight="1" />
                 <ImageView
                     android:layout_width="60dp"
-                        android:layout_height="60dp"
+                    android:layout_height="60dp"
                     android:padding="8dp"
-                    
                     app:srcCompat="@drawable/ic_clouddownload2"
                     android:scaleType="fitCenter" />
             </LinearLayout>
@@ -560,7 +558,7 @@
                     android:layout_height="wrap_content"
                     android:padding="12dp"
                     android:layout_gravity="center_horizontal"
-                    android:text="Service options"
+                    android:text="@string/service_options"
                     android:background="@drawable/bottomroundview"
                     android:backgroundTint="?attr/display_foreground"
                     android:textColor="?attr/foreground_text_color"
@@ -606,10 +604,58 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:padding="4dp"
-
                         android:backgroundTint="@color/dull_blue"
                         android:scaleType="fitCenter"
                         app:srcCompat="@drawable/ic_additionalinfoiconforschemester"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/automaticAppUpdatePrefer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:gravity="center"
+                    android:background="@drawable/square_edgy_btn"
+                    android:backgroundTint="@android:color/transparent"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="8dp"
+                        android:paddingStart="0dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="250dp"
+                            android:textColor="?attr/base_text_color"
+                            android:layout_height="wrap_content"
+                            android:singleLine="false"
+                            android:text="@string/app_update_notification"
+                            android:textSize="18sp"/>
+                        <TextView
+                            android:layout_width="250dp"
+                            android:textColor="?attr/base_text_color"
+                            android:layout_height="wrap_content"
+                            android:text="@string/check_this_to_get_notification_as_soon_as_app_update_is_available"
+                            android:paddingTop="4dp"
+                            android:singleLine="false"
+                            android:textSize="14sp"/>
+                    </LinearLayout>
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <CheckBox
+                        android:id="@+id/appUpdateNotificationCheckbox"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:checked="true"
+                        android:foregroundGravity="center"
+                        android:button="@null"
+                        android:background="?android:attr/listChoiceIndicatorMultiple"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:hapticFeedbackEnabled="true" />
                 </LinearLayout>
             </LinearLayout>
         <LinearLayout
@@ -678,7 +724,6 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:padding="4dp"
-
                     android:backgroundTint="@color/dull_blue"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/ic_developericon"/>

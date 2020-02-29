@@ -1,8 +1,7 @@
-package org.timetable.schemester;
+package org.timetable.schemester.dialog;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -17,14 +16,13 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDialog;
 
-import com.google.android.material.tabs.TabLayout;
+import org.timetable.schemester.listener.OnDialogDownloadLoadListener;
+import org.timetable.schemester.R;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,13 +30,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.security.spec.ECFieldF2m;
 import java.util.Objects;
 
 public class CustomDownloadLoadDialog extends AppCompatDialog {
     OnDialogDownloadLoadListener onDialogDownloadLoadListener;
-    CustomDownloadLoadDialog(Context context, OnDialogDownloadLoadListener onDialogDownloadLoadListener){
+    public CustomDownloadLoadDialog(Context context, OnDialogDownloadLoadListener onDialogDownloadLoadListener){
         super(context);
         this.onDialogDownloadLoadListener = onDialogDownloadLoadListener;
     }

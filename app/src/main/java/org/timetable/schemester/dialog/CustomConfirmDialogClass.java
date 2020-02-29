@@ -1,23 +1,24 @@
-package org.timetable.schemester;
+package org.timetable.schemester.dialog;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatDialog;
 
+import org.timetable.schemester.listener.OnDialogConfirmListener;
+import org.timetable.schemester.R;
+
 import java.util.Objects;
 
 public class CustomConfirmDialogClass extends AppCompatDialog {
-    private OnDialogConfirmListener onDialogConfirmListener;
-    CustomConfirmDialogClass(Context context, OnDialogConfirmListener onDialogConfirmListener){
+     OnDialogConfirmListener onDialogConfirmListener;
+    public CustomConfirmDialogClass(Context context, OnDialogConfirmListener onDialogConfirmListener){
         super(context);
         this.onDialogConfirmListener = onDialogConfirmListener;
     }

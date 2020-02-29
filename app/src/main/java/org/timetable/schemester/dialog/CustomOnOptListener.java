@@ -1,14 +1,12 @@
-package org.timetable.schemester;
+package org.timetable.schemester.dialog;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -16,6 +14,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatDialog;
+
+import org.timetable.schemester.listener.OnOptionChosenListener;
+import org.timetable.schemester.R;
 
 import java.util.Objects;
 
@@ -25,7 +26,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class CustomOnOptListener extends AppCompatDialog {
     private OnOptionChosenListener onOptionChosenListener;
     private  Button set;
-    CustomOnOptListener(Context context, OnOptionChosenListener onOptionChosenListener) {
+    public CustomOnOptListener(Context context, OnOptionChosenListener onOptionChosenListener) {
         super(context);
         this.onOptionChosenListener = onOptionChosenListener;
     }

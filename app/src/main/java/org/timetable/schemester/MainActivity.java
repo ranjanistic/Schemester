@@ -24,6 +24,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -32,6 +33,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.timetable.schemester.dialog.CustomAlertDialog;
+import org.timetable.schemester.dialog.CustomConfirmDialogClass;
+import org.timetable.schemester.dialog.CustomDownloadLoadDialog;
+import org.timetable.schemester.dialog.DurationDetailsDialog;
+import org.timetable.schemester.listener.DurationDetailDialogListener;
+import org.timetable.schemester.listener.OnDialogAlertListener;
+import org.timetable.schemester.listener.OnDialogConfirmListener;
+import org.timetable.schemester.listener.OnDialogDownloadLoadListener;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
@@ -46,20 +57,21 @@ import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity{
     ApplicationSchemester schemester;
-    private TextView semestertxt, noclass, day, month, time;
+    private TextView semesterText, noClassText, day, month, time;
     private TextView[] c = new TextView[9], p = new TextView[9];
     private TextView loginIdOnDrawer;
     private Button date;
+    private ImageView noClassImage;
     private ImageButton drawerArrow, switchThemeBtn;
     private LinearLayout headingView, settingTab, scheduleTab;
     private LinearLayout[] duration = new LinearLayout[9];
     private ScrollView scrollView;
     private Calendar calendar;
     private Animation hide, show, fadeOn, fadeOff;
-    private ReadClassFromDatabaseTask mreadClassFromDatabaseTask;
+    private ReadClassFromDatabaseTask mReadClassFromDatabaseTask;
     public Activity mainact;
     public static boolean isCreated = false;
-    highlighterTask mhighilighterTask;
+    private HighlighterTask mHighlighterTask;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private int[]  periodView = {
             R.id.periodMain1, R.id.periodMain2, R.id.periodMain3, R.id.periodMain4, R.id.periodMain5,
@@ -81,9 +93,7 @@ public class MainActivity extends AppCompatActivity{
     private checkUpdate update;     //update checker asyncTask class
     private Window window;
     private BottomSheetBehavior bottomSheetBehavior;
-    String className,durationClass,location;
-    Boolean classAvailable;
-    String COLLECTION_GLOBAL_INFO = "global_info", DOCUMENT_GLOBAL_SEMESTER = "semester",
+    private String COLLECTION_GLOBAL_INFO, DOCUMENT_GLOBAL_SEMESTER,
             COLLECTION_COLLEGE_CODE , DOCUMENT_COURSE_CODE , COLLECTION_YEAR_CODE;
     DurationDetailsDialog durationDetailsDialog;
     @SuppressLint("SimpleDateFormat")
@@ -95,15 +105,10 @@ public class MainActivity extends AppCompatActivity{
         isCreated = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        schemester.setCollegeCourseYear(getAdditionalInfo()[0],getAdditionalInfo()[1],getAdditionalInfo()[2]);
-        COLLECTION_COLLEGE_CODE = getAdditionalInfo()[0];
-        DOCUMENT_COURSE_CODE = getAdditionalInfo()[1];
-        COLLECTION_YEAR_CODE = getAdditionalInfo()[2];
-
+        
+        assignDefaultValues();
         setWindowDecorDefaults();
         storeUserDefinition(readUserPosition(),getStoredEmail());
-        calendar = Calendar.getInstance(TimeZone.getDefault());
         setViews();         //assigning all views to their respective objects
         setBottomSheetFeature();            //setting bottom drawer behaviour
         runTimeDisplayOnBottomSheet();      //display current time
@@ -114,11 +119,8 @@ public class MainActivity extends AppCompatActivity{
         setHolidayViewIfHoliday();
 
         //initializing main schedule update task
-        mreadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
-        mhighilighterTask = new highlighterTask();
-        //check for updates task
-        update = new checkUpdate();
-        update.execute();
+        mReadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
+        mHighlighterTask = new HighlighterTask();
     }
 
     @Override
@@ -134,9 +136,28 @@ public class MainActivity extends AppCompatActivity{
         }
         @Override
         protected void onPostExecute(Boolean aBoolean) {
-            if(!aBoolean) schemester.toasterLong(schemester.getStringResource(R.string.internet_error));
+            if(!aBoolean) {
+                schemester.toasterLong(schemester.getStringResource(R.string.internet_error));
+            }
+            else {
+                if(userWantsUpdateNotification()) {
+                    //check for updates task
+                    update = new checkUpdate();
+                    update.execute();
+                }
+            }
             super.onPostExecute(aBoolean);
         }
+    }
+
+    private void assignDefaultValues(){
+        schemester.setCollegeCourseYear(getAdditionalInfo()[0],getAdditionalInfo()[1],getAdditionalInfo()[2]);
+        COLLECTION_GLOBAL_INFO = schemester.getCOLLECTION_GLOBAL_INFO();
+        DOCUMENT_GLOBAL_SEMESTER = schemester.getDOCUMENT_GLOBAL_SEMESTER();
+        COLLECTION_COLLEGE_CODE = getAdditionalInfo()[0];
+        DOCUMENT_COURSE_CODE = getAdditionalInfo()[1];
+        COLLECTION_YEAR_CODE = getAdditionalInfo()[2];
+        calendar = Calendar.getInstance(TimeZone.getDefault());
     }
     private void setWindowDecorDefaults(){
         window = this.getWindow();
@@ -148,10 +169,11 @@ public class MainActivity extends AppCompatActivity{
     private void setViews(){
         scrollView = findViewById(R.id.scrollView);
         headingView = findViewById(R.id.period_view);
-        noclass = findViewById(R.id.noclasstext);
+        noClassText = findViewById(R.id.noclasstext);
+        noClassImage = findViewById(R.id.noclassImage);
         settingTab = findViewById(R.id.settingTab);
         scheduleTab = findViewById(R.id.fullScheduleTab);
-        semestertxt = findViewById(R.id.sem_text);
+        semesterText = findViewById(R.id.sem_text);
         switchThemeBtn = findViewById(R.id.switchThemeMain);
         time = findViewById(R.id.present_time);
         drawerArrow = findViewById(R.id.drawerarrow);
@@ -167,6 +189,9 @@ public class MainActivity extends AppCompatActivity{
         day = findViewById(R.id.weekday_text);
         month = findViewById(R.id.month_text);
         loginIdOnDrawer = findViewById(R.id.drawerLoginID);
+        schemester.imageLongPressToast(noClassImage,"Weekend & Chill?");
+        schemester.textLongPressToast(date,"Today's date");
+        schemester.imageButtonLongPressToast(switchThemeBtn,"Touch to renovate");
     }
 
     private void setBottomSheetFeature(){
@@ -234,24 +259,27 @@ public class MainActivity extends AppCompatActivity{
                 window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
             else window.setNavigationBarColor(this.getResources().getColor(R.color.black_overlay));
         }
-
-        final Intent restart = new Intent(MainActivity.this, MainActivity.class);
         if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
             switchThemeBtn.setBackgroundResource(R.drawable.ic_moonsmallicon);
+            noClassImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_nightfullmoonbeachgradient));
         } else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO) {
             switchThemeBtn.setBackgroundResource(R.drawable.ic_icognitoman);
+            noClassImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_nightfullmoonbeachgradient));
         }else{
             switchThemeBtn.setBackgroundResource(R.drawable.ic_suniconsmall);
+            noClassImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_redsunsetbeachgradient));
             storeThemeStatus(ApplicationSchemester.CODE_THEME_LIGHT);
         }
+    }
 
+    private void setButtonClickListeners(){
+        final Intent restart = new Intent(MainActivity.this, MainActivity.class);
         switchThemeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switchThemeBtn.startAnimation(hide);
                 switchThemeBtn.startAnimation(fadeOff);
                 if(getThemeStatus() == ApplicationSchemester.CODE_THEME_LIGHT){
-                    switchThemeBtn.setBackgroundResource(R.drawable.ic_moonsmallicon);
                     storeThemeStatus(ApplicationSchemester.CODE_THEME_DARK);
                     startActivity(restart);
                     finish();
@@ -259,7 +287,6 @@ public class MainActivity extends AppCompatActivity{
                     switchThemeBtn.startAnimation(show);
                     switchThemeBtn.startAnimation(fadeOn);
                 } else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
-                    switchThemeBtn.setBackgroundResource(R.drawable.ic_suniconsmall);
                     storeThemeStatus(ApplicationSchemester.CODE_THEME_LIGHT);
                     startActivity(restart);
                     finish();
@@ -270,7 +297,6 @@ public class MainActivity extends AppCompatActivity{
                     Intent mode = new Intent(MainActivity.this, ModeOfConduct.class);
                     startActivity(mode);
                 } else {
-                    switchThemeBtn.setBackgroundResource(R.drawable.ic_moonsmallicon);
                     storeThemeStatus(ApplicationSchemester.CODE_THEME_DARK);
                     startActivity(restart);
                     finish();
@@ -280,14 +306,11 @@ public class MainActivity extends AppCompatActivity{
                 }
             }
         });
-    }
-
-    private void setButtonClickListeners(){
         scheduleTab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setActivityChangerButtonsDisabled(true);
-                mreadClassFromDatabaseTask.cancel(true);
+                mReadClassFromDatabaseTask.cancel(true);
                 Intent i = new Intent(MainActivity.this, FullScheduleActivity.class);
                 startActivity(i);
             }
@@ -297,8 +320,8 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 setActivityChangerButtonsDisabled(true);
-                mreadClassFromDatabaseTask.cancel(true);
-                mhighilighterTask.cancel(true);
+                mReadClassFromDatabaseTask.cancel(true);
+                mHighlighterTask.cancel(true);
                 Intent i = new Intent(MainActivity.this, Preferences.class);
                 startActivity(i);
             }
@@ -312,7 +335,7 @@ public class MainActivity extends AppCompatActivity{
                 } else bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
         });
-        int  d;
+        int d;
         for(d = 0;d<9;++d) {
             final int finalD = d;
             duration[d].setOnClickListener(new View.OnClickListener() {
@@ -482,27 +505,27 @@ public class MainActivity extends AppCompatActivity{
         month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
           if(!isHolidayToday()) {
               setTimeFormatInMainSchedule(getTimeFormat());
-              if(mhighilighterTask.isCancelled()) {
-                  mhighilighterTask = new highlighterTask();
-                  mhighilighterTask.execute();
+              if(mHighlighterTask.isCancelled()) {
+                  mHighlighterTask = new HighlighterTask();
+                  mHighlighterTask.execute();
               } else {
-                  mhighilighterTask.cancel(true);
-                  mhighilighterTask = new highlighterTask();
-                  mhighilighterTask.execute();
+                  mHighlighterTask.cancel(true);
+                  mHighlighterTask = new HighlighterTask();
+                  mHighlighterTask.execute();
               }
-              if(mreadClassFromDatabaseTask.isCancelled()) {
-                  mreadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
-                  mreadClassFromDatabaseTask.execute();
+              if(mReadClassFromDatabaseTask.isCancelled()) {
+                  mReadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
+                  mReadClassFromDatabaseTask.execute();
               } else {
-                  mreadClassFromDatabaseTask.cancel(true);
-                  mreadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
-                  mreadClassFromDatabaseTask.execute();
+                  mReadClassFromDatabaseTask.cancel(true);
+                  mReadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
+                  mReadClassFromDatabaseTask.execute();
               }
           }
         super.onStart();
     }
 
-    private class highlighterTask extends AsyncTask<Void,Void,Void>{
+    private class HighlighterTask extends AsyncTask<Void,Void,Void>{
         @Override
         protected Void doInBackground(Void... voids) {
             return null;
@@ -515,7 +538,7 @@ public class MainActivity extends AppCompatActivity{
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    new highlighterTask().execute();
+                    new HighlighterTask().execute();
                 }
             }, 100);
         }
@@ -523,15 +546,15 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onDestroy() {
-        mreadClassFromDatabaseTask.cancel(true);
-        mhighilighterTask.cancel(true);
+        mReadClassFromDatabaseTask.cancel(true);
+        mHighlighterTask.cancel(true);
         super.onDestroy();
     }
 
     @Override
     protected void onPause() {
-        mreadClassFromDatabaseTask.cancel(true);
-        mhighilighterTask.cancel(true);
+        mReadClassFromDatabaseTask.cancel(true);
+        mHighlighterTask.cancel(true);
         super.onPause();
     }
 
@@ -543,8 +566,8 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onStop() {
-        mreadClassFromDatabaseTask.cancel(true);
-        mhighilighterTask.cancel(true);
+        mReadClassFromDatabaseTask.cancel(true);
+        mHighlighterTask.cancel(true);
         super.onStop();
     }
 
@@ -601,8 +624,8 @@ public class MainActivity extends AppCompatActivity{
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mreadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
-                    mreadClassFromDatabaseTask.execute();
+                    mReadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
+                    mReadClassFromDatabaseTask.execute();
                 }
             }, 1500);
             super.onPostExecute(aVoid);
@@ -620,11 +643,13 @@ public class MainActivity extends AppCompatActivity{
         if (isHolidayToday()) {
             scrollView.setVisibility(View.INVISIBLE);
             headingView.setVisibility(View.INVISIBLE);
-            noclass.setVisibility(View.VISIBLE);
+            noClassText.setVisibility(View.VISIBLE);
+            noClassImage.setVisibility(View.VISIBLE);
         } else {
             scrollView.setVisibility(View.VISIBLE);
             headingView.setVisibility(View.VISIBLE);
-            noclass.setVisibility(View.INVISIBLE);
+            noClassText.setVisibility(View.INVISIBLE);
+            noClassImage.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -642,34 +667,44 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private String getWeekdayFromCode(int dayCode){
-        switch (dayCode) {
-            case 1: return schemester.getStringResource(R.string.sunday);
-            case 2: return schemester.getStringResource(R.string.monday);
-            case 3: return schemester.getStringResource(R.string.tuesday);
-            case 4: return schemester.getStringResource(R.string.wednesday);
-            case 5: return schemester.getStringResource(R.string.thursday);
-            case 6: return schemester.getStringResource(R.string.friday);
-            case 7: return schemester.getStringResource(R.string.saturday);
-            default: return "Error";
+        String[] dayString = {
+                schemester.getStringResource(R.string.sunday),
+                schemester.getStringResource(R.string.monday),
+                schemester.getStringResource(R.string.tuesday),
+                schemester.getStringResource(R.string.wednesday),
+                schemester.getStringResource(R.string.thursday),
+                schemester.getStringResource(R.string.friday),
+                schemester.getStringResource(R.string.saturday),
+        };
+        for(int m = 1;m<8;++m) {
+            if (m==dayCode) {
+                return dayString[m-1];
+            }
         }
+        return "Error";
     }
 
     private String getMonthFromCode(int getMonthCount){
-        switch (getMonthCount) {
-            case 0:return schemester.getStringResource(R.string.jan);
-            case 1: return schemester.getStringResource(R.string.feb);
-            case 2: return schemester.getStringResource(R.string.mar);
-            case 3: return schemester.getStringResource(R.string.apr);
-            case 4: return schemester.getStringResource(R.string.may);
-            case 5: return schemester.getStringResource(R.string.jun);
-            case 6: return schemester.getStringResource(R.string.jul);
-            case 7: return schemester.getStringResource(R.string.aug);
-            case 8: return schemester.getStringResource(R.string.sept);
-            case 9: return schemester.getStringResource(R.string.oct);
-            case 10: return schemester.getStringResource(R.string.nov);
-            case 11: return schemester.getStringResource(R.string.dec);
-            default: return "Error";
+        String[] monthString = {
+         schemester.getStringResource(R.string.jan),
+        schemester.getStringResource(R.string.feb),
+         schemester.getStringResource(R.string.mar),
+         schemester.getStringResource(R.string.apr),
+         schemester.getStringResource(R.string.may),
+         schemester.getStringResource(R.string.jun),
+         schemester.getStringResource(R.string.jul),
+         schemester.getStringResource(R.string.aug),
+        schemester.getStringResource(R.string.sept),
+        schemester.getStringResource(R.string.oct),
+         schemester.getStringResource(R.string.nov),
+         schemester.getStringResource(R.string.dec)
+        };
+        for(int m = 0;m<12;++m) {
+            if (m==getMonthCount) {
+                return monthString[m];
+            }
         }
+        return "Error";
     }
 
     /**
@@ -689,7 +724,7 @@ public class MainActivity extends AppCompatActivity{
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 if (Objects.requireNonNull(document).exists()) {
-                                    semestertxt.setText(Objects.requireNonNull(document.get(year)).toString());
+                                    semesterText.setText(Objects.requireNonNull(document.get(year)).toString());
                                 } else {
                                     schemester.toasterShort(getStringResource(R.string.unable_to_read));
                                 }
@@ -852,6 +887,10 @@ public class MainActivity extends AppCompatActivity{
         return mSharedPreferences.getBoolean(schemester.getPREF_KEY_LOGIN_STAT(), false);
     }
 
+    private Boolean userWantsUpdateNotification(){
+        return this.getSharedPreferences(schemester.getPREF_HEAD_UPDATE_NOTIFY(), MODE_PRIVATE)
+                .getBoolean(schemester.getPREF_KEY_UPDATE_NOTIFY(), true);
+    }
     private void storeThemeStatus(int themechoice){
         SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();

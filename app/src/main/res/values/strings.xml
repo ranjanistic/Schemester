@@ -89,7 +89,7 @@
     <string name="_0">0</string>
     <string name="duration">Duration</string>
     <string name="view_full_week_schedule">Full week schedule</string>
-    <string name="no_classes_today_enjoy">No classes \ntoday. \nEnjoy!</string>
+    <string name="no_classes_today_enjoy">No classes today.\nEnjoy!</string>
     <string name="class_">Class</string>
     <string name="delete_account">Delete Account</string>
     <string name="logout">Logout</string>
@@ -266,6 +266,11 @@
     <string name="no">No</string>
     <string name="time_format_hhmm_ampm">hh:mm a</string>
     <string name="time_format_hhmm">HH:mm</string>
+    <string name="service_options">Service options</string>
+    <string name="update_notification_enabled_text">I\'ll notify you if update is available. Relax.</string>
+    <string name="update_notification_disabled_text">You\'ll have to check for updates manually from settings.</string>
+    <string name="app_update_notification">App update notification</string>
+    <string name="check_this_to_get_notification_as_soon_as_app_update_is_available">Check this to get notification as soon as app update is available.</string>
     <string-array name="college_array">
         <item>Deshbandhu College</item>
     </string-array>

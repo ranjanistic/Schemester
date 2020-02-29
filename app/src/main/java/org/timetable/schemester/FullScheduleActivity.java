@@ -28,10 +28,21 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.timetable.schemester.dialog.CustomAlertDialog;
+import org.timetable.schemester.dialog.CustomConfirmDialogClass;
+import org.timetable.schemester.dialog.CustomDownloadLoadDialog;
+import org.timetable.schemester.dialog.CustomLoadDialogClass;
+import org.timetable.schemester.listener.OnDialogAlertListener;
+import org.timetable.schemester.listener.OnDialogConfirmListener;
+import org.timetable.schemester.listener.OnDialogDownloadLoadListener;
+import org.timetable.schemester.listener.OnDialogLoadListener;
+
 import java.io.File;
 import java.util.Calendar;
 import java.util.Objects;
@@ -109,9 +120,17 @@ public class FullScheduleActivity extends AppCompatActivity {
             ++k;
         }
         int[] workDayID = {R.id.mon, R.id.tue, R.id.wed, R.id.thu, R.id.fri};
+        String[] workDayName = {
+                schemester.getStringResource(R.string.monday).toUpperCase(),
+                schemester.getStringResource(R.string.tuesday).toUpperCase(),
+                schemester.getStringResource(R.string.wednesday).toUpperCase(),
+                schemester.getStringResource(R.string.thursday).toUpperCase(),
+                schemester.getStringResource(R.string.friday).toUpperCase()
+        };
         int w = 0;
         while (w < 5) {
             dayBtn[w] = findViewById(workDayID[w]);
+            schemester.buttonLongPressToast(dayBtn[w],workDayName[w]);
             ++w;
         }
         semester = findViewById(R.id.semtextsetting);
@@ -122,6 +141,19 @@ public class FullScheduleActivity extends AppCompatActivity {
         roll = findViewById(R.id.rolltextsetting);
         setting = findViewById(R.id.settingbtn);
         logoutbtn = findViewById(R.id.logout);
+        fullsetting = findViewById(R.id.fullsettingsbtn);
+        git = findViewById(R.id.githubbtn);
+        updatecheck = findViewById(R.id.checkupdateBtn);
+        webbtn = findViewById(R.id.websiteBtn);
+
+        schemester.imageButtonLongPressToast(noticebtn,"Notices from authority");
+        schemester.imageButtonLongPressToast(chatbtn,"Chat with others!");
+        schemester.imageButtonLongPressToast(setting,"Quick settings");
+        schemester.imageButtonLongPressToast(about,"About");
+        schemester.imageButtonLongPressToast(incognito,"Go anonymous");
+        schemester.imageButtonLongPressToast(fullsetting, "Full settings");
+        schemester.imageButtonLongPressToast(updatecheck,"Check for updates");
+        schemester.imageButtonLongPressToast(webbtn,"Visit online");
     }
 
     private void setThemeConsequences(){
@@ -187,7 +219,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        git = findViewById(R.id.githubbtn);
+
         git.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -196,7 +228,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 startActivity(web);
             }
         });
-        webbtn = findViewById(R.id.websiteBtn);
+
         webbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -215,7 +247,6 @@ public class FullScheduleActivity extends AppCompatActivity {
             }
         });
 
-        fullsetting = findViewById(R.id.fullsettingsbtn);
         fullsetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -224,7 +255,7 @@ public class FullScheduleActivity extends AppCompatActivity {
             }
         });
 
-        updatecheck = findViewById(R.id.checkupdateBtn);
+
         updatecheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -283,8 +314,18 @@ public class FullScheduleActivity extends AppCompatActivity {
         logoutbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                storeLoginStatus(false);
-                logoutCurrentUser();
+                final Snackbar snackbar
+                = Snackbar.make(view, "Sure to log out?", 7000);
+                        snackbar.setBackgroundTint(getResources().getColor(R.color.dead_blue))
+                        .setTextColor(getResources().getColor(R.color.white))
+                        .setAction("Logout", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                storeLoginStatus(false);
+                                logoutCurrentUser();
+                            }
+                        }).setActionTextColor(getResources().getColor(R.color.yellow))
+                        .show();
             }
         });
 

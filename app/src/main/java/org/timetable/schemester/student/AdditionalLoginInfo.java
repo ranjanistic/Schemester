@@ -1,4 +1,4 @@
-package org.timetable.schemester;
+package org.timetable.schemester.student;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +10,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+
+import org.timetable.schemester.ApplicationSchemester;
+import org.timetable.schemester.MainActivity;
+import org.timetable.schemester.R;
+
 import java.util.Objects;
 
 public class AdditionalLoginInfo extends AppCompatActivity {

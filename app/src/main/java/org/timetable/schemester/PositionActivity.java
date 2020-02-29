@@ -35,6 +35,7 @@ public class PositionActivity extends AppCompatActivity {
         fadeon = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fadeliton);
         fadeoff= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fadelitoff);
         modeSwitch = findViewById(R.id.modeSwitchBtnInitial);
+        schemester.imageButtonLongPressToast(modeSwitch,"Touch to renovate");
         if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
             modeSwitch.setImageResource(R.drawable.ic_moonsmallicon);
         } else {

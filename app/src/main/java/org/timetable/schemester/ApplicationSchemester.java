@@ -3,6 +3,11 @@ package org.timetable.schemester;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.os.Environment;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ApplicationSchemester  extends Application {
@@ -31,8 +36,11 @@ public class ApplicationSchemester  extends Application {
     PREF_HEAD_LOGIN_STAT = "login", PREF_KEY_LOGIN_STAT = "loginstatus",
     PREF_HEAD_TIME_FORMAT = "schemeTime", PREF_KEY_TIME_FORMAT = "format",
     PREF_HEAD_OTHER_HOLIDAY = "otherHoliday", PREF_KEY_OTHER_HOLIDAY = "holiday",
-    PREF_HEAD_USER_DEF = "userDefinition",PREF_KEY_USER_DEF = "position";
+    PREF_HEAD_USER_DEF = "userDefinition",PREF_KEY_USER_DEF = "position",
+    PREF_HEAD_UPDATE_NOTIFY = "schemeUpdateNotification", PREF_KEY_UPDATE_NOTIFY = "getSchemeUpdateNotification";
 
+    public String getPREF_HEAD_UPDATE_NOTIFY(){ return PREF_HEAD_UPDATE_NOTIFY;}
+    public String getPREF_KEY_UPDATE_NOTIFY(){ return PREF_KEY_UPDATE_NOTIFY;}
     public String getPREF_HEAD_USER_DEF(){return PREF_HEAD_USER_DEF;}
     public String getPREF_KEY_USER_DEF(){ return PREF_KEY_USER_DEF;}
     public String getPREF_HEAD_OTHER_HOLIDAY(){return PREF_HEAD_OTHER_HOLIDAY;}
@@ -56,9 +64,7 @@ public class ApplicationSchemester  extends Application {
     public String getCOLLECTION_GLOBAL_INFO(){
         return COLLECTION_GLOBAL_INFO;
     }
-    public String getDOCUMENT_GLOBAL_SEMESTER(){
-        return DOCUMENT_GLOBAL_SEMESTER;
-    }
+    public String getDOCUMENT_GLOBAL_SEMESTER(){ return DOCUMENT_GLOBAL_SEMESTER;}
     public String getDOCUMENT_LOCAL_INFO(){ return DOCUMENT_LOCAL_INFO;}
     public String getDOCUMENT_HOLIDAY_INFO(){ return DOCUMENT_HOLIDAY_INFO;}
     public String getCOLLECTION_COLLEGE_CODE(){ return COLLECTION_COLLEGE_CODE; }
@@ -126,10 +132,46 @@ public class ApplicationSchemester  extends Application {
     String[] getAdditionalInfo() {
         String[] CCY = new String[3];
         SharedPreferences mSharedPreferences = getSharedPreferences(PREF_HEAD_ADDITIONAL_INFO, MODE_PRIVATE);
-        CCY[0] = mSharedPreferences.getString(PREF_KEY_COLLEGE, "");
-        CCY[1] = mSharedPreferences.getString(PREF_KEY_COURSE, "");
-        CCY[2] = mSharedPreferences.getString(PREF_KEY_YEAR, "");
+        CCY[0] = mSharedPreferences.getString(PREF_KEY_COLLEGE, null);
+        CCY[1] = mSharedPreferences.getString(PREF_KEY_COURSE, null);
+        CCY[2] = mSharedPreferences.getString(PREF_KEY_YEAR, null);
         return CCY;
+    }
+    public void buttonLongPressToast(Button button,final String message) {
+        button.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                toasterShort(message);
+                return true;
+            }
+        });
+    }
+    public void textLongPressToast(TextView textView, final String message) {
+        textView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                toasterShort(message);
+                return true;
+            }
+        });
+    }
+    public void imageLongPressToast(ImageView imageView, final String message) {
+        imageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                toasterShort(message);
+                return true;
+            }
+        });
+    }
+    public void imageButtonLongPressToast(ImageButton imageButton, final String message){
+            imageButton.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    toasterShort(message);
+                    return true;
+                }
+            });
     }
     public void toasterLong(String message){
         Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();

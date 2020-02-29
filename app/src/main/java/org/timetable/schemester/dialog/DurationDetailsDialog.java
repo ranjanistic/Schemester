@@ -1,9 +1,8 @@
-package org.timetable.schemester;
+package org.timetable.schemester.dialog;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.tv.TvContentRating;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -13,11 +12,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatDialog;
 
+import org.timetable.schemester.listener.DurationDetailDialogListener;
+import org.timetable.schemester.R;
+
 import java.util.Objects;
 
 public class DurationDetailsDialog extends AppCompatDialog {
     private DurationDetailDialogListener durationDetailDialogListener;
-    DurationDetailsDialog(Context context, DurationDetailDialogListener durationDetailDialogListener){
+    public DurationDetailsDialog(Context context, DurationDetailDialogListener durationDetailDialogListener){
         super(context);
         this.durationDetailDialogListener = durationDetailDialogListener;
     }

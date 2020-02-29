@@ -19,7 +19,7 @@
         <activity android:name=".ChatRoomActivity" />
         <activity android:name=".ModeOfConduct" />
         <activity
-            android:name=".AdditionalLoginInfo"
+            android:name=".student.AdditionalLoginInfo"
             android:theme="@style/BlueLightTheme" />
         <activity
             android:name=".PositionActivity"

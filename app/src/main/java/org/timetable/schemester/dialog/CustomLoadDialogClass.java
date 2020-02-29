@@ -1,4 +1,4 @@
-package org.timetable.schemester;
+package org.timetable.schemester.dialog;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,11 +9,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatDialog;
 
+import org.timetable.schemester.listener.OnDialogLoadListener;
+import org.timetable.schemester.R;
+
 import java.util.Objects;
 
 public class CustomLoadDialogClass extends AppCompatDialog {
     private OnDialogLoadListener onDialogLoadListener;
-    CustomLoadDialogClass(Context context, OnDialogLoadListener onDialogLoadListener){
+    public CustomLoadDialogClass(Context context, OnDialogLoadListener onDialogLoadListener){
         super(context);
         this.onDialogLoadListener = onDialogLoadListener;
     }

@@ -1,4 +1,4 @@
-package org.timetable.schemester;
+package org.timetable.schemester.dialog;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -13,11 +13,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDialog;
 
+import org.timetable.schemester.listener.OnDialogApplyListener;
+import org.timetable.schemester.R;
+
 import java.util.Objects;
 
 public class CustomVerificationDialog extends AppCompatDialog {
     OnDialogApplyListener onDialogApplyListener;
-    CustomVerificationDialog(Context context, OnDialogApplyListener onDialogApplyListener){
+    public CustomVerificationDialog(Context context, OnDialogApplyListener onDialogApplyListener){
         super(context);
         this.onDialogApplyListener = onDialogApplyListener;
     }

@@ -1,4 +1,4 @@
-package org.timetable.schemester;
+package org.timetable.schemester.listener;
 
 public interface DurationDetailDialogListener {
     String onCallClassName();
