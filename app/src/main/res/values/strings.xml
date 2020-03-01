@@ -271,6 +271,8 @@
     <string name="update_notification_disabled_text">You\'ll have to check for updates manually from settings.</string>
     <string name="app_update_notification">App update notification</string>
     <string name="check_this_to_get_notification_as_soon_as_app_update_is_available">Check this to get notification as soon as app update is available.</string>
+    <string name="result_button">Result button</string>
+    <string name="check_your_result">Check your result</string>
     <string-array name="college_array">
         <item>Deshbandhu College</item>
     </string-array>

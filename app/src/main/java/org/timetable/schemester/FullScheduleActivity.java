@@ -157,26 +157,25 @@ public class FullScheduleActivity extends AppCompatActivity {
     }
 
     private void setThemeConsequences(){
-        //Setting navigation and status bar color according to theme
         if (getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO) {
             window.setStatusBarColor(this.getResources().getColor(R.color.black));
             window.setNavigationBarColor(this.getResources().getColor(R.color.black));
+            incognito.setImageResource(R.drawable.ic_usericon);
+            logoutbtn.setVisibility(View.GONE);
+            email.setText(schemester.getStringResource(R.string.anonymous));
+            roll.setText(schemester.getStringResource(R.string.anonymous));
         } else if (getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK) {
             window.setStatusBarColor(this.getResources().getColor(R.color.spruce));
             window.setNavigationBarColor(this.getResources().getColor(R.color.spruce));
+            incognito.setImageResource(R.drawable.ic_icognitoman);
+            logoutbtn.setVisibility(View.VISIBLE);
         } else {
             window.setStatusBarColor(this.getResources().getColor(R.color.blue));
             window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
+            incognito.setImageResource(R.drawable.ic_icognitoman);
+            logoutbtn.setVisibility(View.VISIBLE);
         }
-
-        if (getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO) {
-            incognito.setImageResource(R.drawable.ic_usericon);
-        } else incognito.setImageResource(R.drawable.ic_icognitoman);
-
-        if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO) {
-            email.setText(schemester.getStringResource(R.string.anonymous));
-            roll.setText(schemester.getStringResource(R.string.anonymous));
-        }else {
+        if(getThemeStatus() != ApplicationSchemester.CODE_THEME_INCOGNITO) {
             email.setText(getCredentials()[0]);
             roll.setText(getCredentials()[1]);
         }

@@ -60,7 +60,6 @@
         android:id="@+id/fullScheduleTab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:gravity="center_vertical"
         android:background="@drawable/square_edgy_btn"
         android:clickable="true"
@@ -85,6 +84,33 @@
             android:backgroundTint="?attr/group_card_text_color"
             android:foregroundTint="?attr/group_card_text_color"
             android:background="@drawable/ic_menuactionicon"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/resultTab"
+        android:layout_width="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:background="@drawable/square_edgy_btn"
+        android:padding="16dp"
+        android:backgroundTint="@android:color/transparent"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/action_text_color"
+            android:textSize="18sp"
+            android:text="@string/check_your_result"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/result_button"
+            app:srcCompat="@drawable/ic_marksheeticonforschemester"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/settingTab"

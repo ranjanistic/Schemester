@@ -28,6 +28,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -45,6 +47,7 @@ import org.timetable.schemester.listener.OnDialogDownloadLoadListener;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.Reference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -63,7 +66,7 @@ public class MainActivity extends AppCompatActivity{
     private Button date;
     private ImageView noClassImage;
     private ImageButton drawerArrow, switchThemeBtn;
-    private LinearLayout headingView, settingTab, scheduleTab;
+    private LinearLayout headingView, settingTab, scheduleTab, resultTab;
     private LinearLayout[] duration = new LinearLayout[9];
     private ScrollView scrollView;
     private Calendar calendar;
@@ -95,7 +98,9 @@ public class MainActivity extends AppCompatActivity{
     private BottomSheetBehavior bottomSheetBehavior;
     private String COLLECTION_GLOBAL_INFO, DOCUMENT_GLOBAL_SEMESTER,
             COLLECTION_COLLEGE_CODE , DOCUMENT_COURSE_CODE , COLLECTION_YEAR_CODE;
-    DurationDetailsDialog durationDetailsDialog;
+    private DurationDetailsDialog durationDetailsDialog;
+    private Boolean localHoliday = false;
+    CheckHolidayOtherThanWeekend checkHolidayOtherThanWeekend;
     @SuppressLint("SimpleDateFormat")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,10 +119,6 @@ public class MainActivity extends AppCompatActivity{
         runTimeDisplayOnBottomSheet();      //display current time
         setThemeConsequencesAndActions();      //set navigation bar color and theme button listener
         setButtonClickListeners();
-
-        //check holiday and display accordingly
-        setHolidayViewIfHoliday();
-
         //initializing main schedule update task
         mReadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
         mHighlighterTask = new HighlighterTask();
@@ -145,9 +146,114 @@ public class MainActivity extends AppCompatActivity{
                     update = new checkUpdate();
                     update.execute();
                 }
+                if(!isWeekendToday()){
+                    mReadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
+                    mReadClassFromDatabaseTask.execute();
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            checkHolidayOtherThanWeekend = new CheckHolidayOtherThanWeekend();
+                            checkHolidayOtherThanWeekend.execute();
+                            handler.postDelayed(this,1500);
+                        }
+                    }, 2000);
+                } else{
+                    setHolidayViewIfHoliday(isWeekendToday());
+                }
             }
             super.onPostExecute(aBoolean);
         }
+    }
+
+    private class CheckHolidayOtherThanWeekend extends AsyncTask<Void,Void,Void> {
+        private String globe, holiday;
+        @Override
+        protected void onPreExecute() {
+            globe = COLLECTION_GLOBAL_INFO;
+            holiday = schemester.getDOCUMENT_HOLIDAY_INFO();
+            super.onPreExecute();
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            isGlobalHoliday(globe, holiday);
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+    }
+    private void  isGlobalHoliday(String collector, String doc){
+        localHoliday=false;
+        db.collection(collector).document(doc)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (Objects.requireNonNull(document).exists()) {
+                                Boolean temp = document.getBoolean("holiday");
+                                if(temp!=null && !temp){
+                                    isCollegeHoliday(COLLECTION_COLLEGE_CODE,schemester.getDOCUMENT_LOCAL_INFO());
+                                } else {
+                                    localHoliday = true;
+                                    setHolidayViewIfHoliday(true);
+                                }
+                            } else {
+                                setHolidayViewIfHoliday(false);
+                                localHoliday = false;
+                            }
+                        }
+                    }
+                });
+    }
+    private void  isCollegeHoliday(String collector, String doc){
+        localHoliday=false;
+        db.collection(collector).document(doc)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (Objects.requireNonNull(document).exists()) {
+                                Boolean temp = document.getBoolean("holiday");
+                                if(!temp){
+                                    isCourseHoliday(COLLECTION_COLLEGE_CODE,DOCUMENT_COURSE_CODE);
+                                } else {
+                                    localHoliday = true;
+                                    setHolidayViewIfHoliday(true);
+                                }
+                            } else {
+                                setHolidayViewIfHoliday(false);
+                                localHoliday = false;
+                            }
+                        }
+                    }
+                });
+    }
+    private void isCourseHoliday(String collector, String doc){
+        localHoliday=false;
+        db.collection(collector).document(doc)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (Objects.requireNonNull(document).exists()) {
+                                Boolean temp = document.getBoolean("holiday");
+                                    localHoliday = temp;
+                                    setHolidayViewIfHoliday(temp);
+                            } else {
+                                setHolidayViewIfHoliday(false);
+                                localHoliday = false;
+                            }
+                        }
+                    }
+                });
     }
 
     private void assignDefaultValues(){
@@ -173,6 +279,7 @@ public class MainActivity extends AppCompatActivity{
         noClassImage = findViewById(R.id.noclassImage);
         settingTab = findViewById(R.id.settingTab);
         scheduleTab = findViewById(R.id.fullScheduleTab);
+        resultTab = findViewById(R.id.resultTab);
         semesterText = findViewById(R.id.sem_text);
         switchThemeBtn = findViewById(R.id.switchThemeMain);
         time = findViewById(R.id.present_time);
@@ -315,7 +422,6 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(i);
             }
         });
-
         settingTab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -326,7 +432,12 @@ public class MainActivity extends AppCompatActivity{
                 startActivity(i);
             }
         });
-
+        resultTab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                schemester.toasterShort(schemester.getStringResource(R.string.under_construction_message));
+            }
+        });
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -503,7 +614,7 @@ public class MainActivity extends AppCompatActivity{
         date.setText(String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)));
         day.setText(getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK)));
         month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
-          if(!isHolidayToday()) {
+          if(!isWeekendToday() && !localHoliday) {
               setTimeFormatInMainSchedule(getTimeFormat());
               if(mHighlighterTask.isCancelled()) {
                   mHighlighterTask = new HighlighterTask();
@@ -635,35 +746,28 @@ public class MainActivity extends AppCompatActivity{
     //whether user is a teacher or student
     private String readUserPosition(){
         SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE);
-        return mSharedPreferences.getString(schemester.getPREF_KEY_USER_DEF(), "");
+        return mSharedPreferences.getString(schemester.getPREF_KEY_USER_DEF(), null);
     }
 
     //check holiday and set view accordingly
-    private void setHolidayViewIfHoliday(){
-        if (isHolidayToday()) {
-            scrollView.setVisibility(View.INVISIBLE);
-            headingView.setVisibility(View.INVISIBLE);
+    private void setHolidayViewIfHoliday(Boolean todayIsHoliday){
+        if (todayIsHoliday) {
+            scrollView.setVisibility(View.GONE);
+            headingView.setVisibility(View.GONE);
             noClassText.setVisibility(View.VISIBLE);
             noClassImage.setVisibility(View.VISIBLE);
         } else {
             scrollView.setVisibility(View.VISIBLE);
             headingView.setVisibility(View.VISIBLE);
-            noClassText.setVisibility(View.INVISIBLE);
-            noClassImage.setVisibility(View.INVISIBLE);
+            noClassText.setVisibility(View.GONE);
+            noClassImage.setVisibility(View.GONE);
         }
     }
 
     //returns true if holiday
-    private Boolean isHolidayToday(){
-        return (readSavedHolidayFromCloud()||
-                calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ||
+    private Boolean isWeekendToday(){
+        return (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ||
                 calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY);
-    }
-
-    //returns true if holiday is set explicitly by authority on database
-    private Boolean readSavedHolidayFromCloud(){
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_OTHER_HOLIDAY(), MODE_PRIVATE);
-        return mSharedPreferences.getBoolean(schemester.getPREF_KEY_OTHER_HOLIDAY(), false);
     }
 
     private String getWeekdayFromCode(int dayCode){
@@ -790,9 +894,9 @@ public class MainActivity extends AppCompatActivity{
     private String[] getAdditionalInfo() {
         String[] CCY = new String[3];
         SharedPreferences mSharedPreferences = getSharedPreferences(schemester.PREF_HEAD_ADDITIONAL_INFO, MODE_PRIVATE);
-        CCY[0] = mSharedPreferences.getString(schemester.PREF_KEY_COLLEGE, "");
-        CCY[1] = mSharedPreferences.getString(schemester.getPREF_KEY_COURSE(), "");
-        CCY[2] = mSharedPreferences.getString(schemester.getPREF_KEY_YEAR(), "");
+        CCY[0] = mSharedPreferences.getString(schemester.PREF_KEY_COLLEGE, null);
+        CCY[1] = mSharedPreferences.getString(schemester.getPREF_KEY_COURSE(), null);
+        CCY[2] = mSharedPreferences.getString(schemester.getPREF_KEY_YEAR(), null);
         return CCY;
     }
 

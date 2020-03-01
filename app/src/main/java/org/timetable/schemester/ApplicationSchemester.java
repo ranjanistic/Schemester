@@ -35,7 +35,6 @@ public class ApplicationSchemester  extends Application {
     PREF_HEAD_CREDENTIALS =  "credentials", PREF_KEY_EMAIL = "email", PREF_KEY_ROLL = "roll",
     PREF_HEAD_LOGIN_STAT = "login", PREF_KEY_LOGIN_STAT = "loginstatus",
     PREF_HEAD_TIME_FORMAT = "schemeTime", PREF_KEY_TIME_FORMAT = "format",
-    PREF_HEAD_OTHER_HOLIDAY = "otherHoliday", PREF_KEY_OTHER_HOLIDAY = "holiday",
     PREF_HEAD_USER_DEF = "userDefinition",PREF_KEY_USER_DEF = "position",
     PREF_HEAD_UPDATE_NOTIFY = "schemeUpdateNotification", PREF_KEY_UPDATE_NOTIFY = "getSchemeUpdateNotification";
 
@@ -43,8 +42,6 @@ public class ApplicationSchemester  extends Application {
     public String getPREF_KEY_UPDATE_NOTIFY(){ return PREF_KEY_UPDATE_NOTIFY;}
     public String getPREF_HEAD_USER_DEF(){return PREF_HEAD_USER_DEF;}
     public String getPREF_KEY_USER_DEF(){ return PREF_KEY_USER_DEF;}
-    public String getPREF_HEAD_OTHER_HOLIDAY(){return PREF_HEAD_OTHER_HOLIDAY;}
-    public String getPREF_KEY_OTHER_HOLIDAY(){return PREF_KEY_OTHER_HOLIDAY;}
     public String getPREF_HEAD_TIME_FORMAT(){return PREF_HEAD_TIME_FORMAT;}
     public String getPREF_KEY_TIME_FORMAT(){return PREF_KEY_TIME_FORMAT;}
     public String getPREF_HEAD_LOGIN_STAT(){return PREF_HEAD_LOGIN_STAT;}

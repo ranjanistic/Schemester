@@ -19,6 +19,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,8 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         customLoadDialogClass = new CustomLoadDialogClass(this, new OnDialogLoadListener() {
             @Override
-            public void onLoad() {
-            }
+            public void onLoad() {}
             @Override
             public String onLoadText() {
                 return schemester.getStringResource(R.string.need_few_moments);
@@ -88,26 +89,39 @@ public class LoginActivity extends AppCompatActivity {
                 customLoadDialogClass.show();
                 if(isEmailValid) {
                     if(!(emailid.getText().toString().length() == 0)) {
-                        CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(LoginActivity.this, new OnDialogConfirmListener() {
-                            @Override
-                            public void onApply(Boolean confirm) {
-                                if(confirm) {
-                                    forgot.setVisibility(View.GONE);
-                                    customLoadDialogClass.show();
-                                    resetLinkSender(emailid.getText().toString());
-                                }
-                            }
-                            @Override
-                            public String onCallText() {
-                                return "Reset birth date link";
-                            }
-                            @Override
-                            public String onCallSub() {
-                                return "A link will be sent to your provided email ID, if the account already exists and you have forgot your date of birth.\n\nYou can reset your date of birth with that link. Confirm?";
-                            }
-                        });customConfirmDialogClass.show();
-                    } else { schemester.toasterLong(schemester.getStringResource(R.string.request_email_text)); }
-                } else { schemester.toasterLong(schemester.getStringResource(R.string.request_email_text)); }
+                        Snackbar.make(view,
+                                "Get a link on provided email to reset your date of birth.", 10000)
+                                .setAction(schemester.getStringResource(R.string.send), new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        if(isInternetAvailable()) {
+                                            Snackbar.make(view, schemester.getStringResource(R.string.sending), Snackbar.LENGTH_INDEFINITE)
+                                                    .setTextColor(getResources().getColor(R.color.white))
+                                                    .setBackgroundTint(getResources().getColor(R.color.deep_blue))
+                                                    .show();
+                                            forgot.setVisibility(View.GONE);
+                                            customLoadDialogClass.show();
+                                            resetLinkSender(emailid.getText().toString());
+                                        } else{
+                                            Snackbar.make(view, schemester.getStringResource(R.string.internet_problem), 5000)
+                                                    .setTextColor(getResources().getColor(R.color.white))
+                                                    .setBackgroundTint(getResources().getColor(R.color.dark_red))
+                                                    .show();
+                                        }
+                                    }
+                                })
+                                .setTextColor(getResources().getColor(R.color.white))
+                                .setBackgroundTint(getResources().getColor(R.color.dead_blue))
+                                .setActionTextColor(getResources().getColor(R.color.yellow))
+                                .show();
+                    } else { Snackbar.make(view, schemester.getStringResource(R.string.request_email_text), 5000)
+                            .setTextColor(getResources().getColor(R.color.white))
+                            .setBackgroundTint(getResources().getColor(R.color.dark_red))
+                            .show(); }
+                } else { Snackbar.make(view, schemester.getStringResource(R.string.request_email_text), 5000)
+                        .setTextColor(getResources().getColor(R.color.white))
+                        .setBackgroundTint(getResources().getColor(R.color.dark_red))
+                        .show(); }
                 customLoadDialogClass.hide();
             }
         });
@@ -450,8 +464,14 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                schemester.toasterLong(schemester.getStringResource(R.string.a_link_has_been_sent_at)+email);
-                            } else { schemester.toasterLong(schemester.getStringResource(R.string.check_your_connection)); }
+                                Snackbar.make(findViewById(R.id.loginActivityID), schemester.getStringResource(R.string.email_sent_notif), 5000)
+                                        .setTextColor(getResources().getColor(R.color.white))
+                                        .setBackgroundTint(getResources().getColor(R.color.dead_blue))
+                                        .show();
+                            } else {Snackbar.make(findViewById(R.id.loginActivityID), schemester.getStringResource(R.string.network_error_occurred), 5000)
+                                    .setTextColor(getResources().getColor(R.color.white))
+                                    .setBackgroundTint(getResources().getColor(R.color.dark_red))
+                                    .show();}
                         }
                     });
             customLoadDialogClass.hide();

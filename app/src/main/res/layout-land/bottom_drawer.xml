@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:backgroundTint="?attr/group_card_color"
     android:background="@drawable/toproundview"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:gravity="center"
     app:layout_behavior="@string/bottom_sheet_behavior"
     android:layout_height="wrap_content"
@@ -40,10 +40,10 @@
     </LinearLayout>
     <LinearLayout
         android:id="@+id/fullScheduleTab"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:background="@drawable/square_edgy_btn"
         android:clickable="true"
         android:focusable="true"
@@ -56,6 +56,24 @@
             android:textColor="?attr/action_text_color"
             android:textSize="18sp"
             android:text="@string/full_week_schedule"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/resultTab"
+        android:layout_width="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@drawable/square_edgy_btn"
+        android:padding="16dp"
+        android:backgroundTint="@android:color/transparent"
+        android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?attr/action_text_color"
+        android:textSize="18sp"
+        android:text="@string/check_your_result"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/settingTab"

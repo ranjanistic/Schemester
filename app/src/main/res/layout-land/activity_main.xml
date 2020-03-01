@@ -32,7 +32,7 @@
 
                 <LinearLayout
                     android:id="@+id/linearLayout7"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_gravity="start|center_vertical"
                     android:gravity="center"
@@ -166,23 +166,22 @@
 
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:background="@drawable/toproundview"
+            android:backgroundTint="?attr/display_foreground"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/period_view"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/toproundview"
-                android:backgroundTint="?attr/display_foreground"
                 android:gravity="center_horizontal"
                 android:elevation="12dp"
                 android:orientation="horizontal"
                 android:paddingStart="22dp"
                 android:paddingTop="8dp"
                 android:paddingEnd="22dp"
-                android:paddingBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -198,7 +197,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:fontFamily="@font/reem_kufi"
-                    android:padding="12dp"
+                    android:paddingStart="22dp"
+                    android:paddingEnd="22dp"
+                    android:paddingBottom="12dp"
+                    android:paddingTop="12dp"
                     android:text="@string/duration"
                     android:textColor="?attr/foreground_text_color"
                     android:textSize="30sp"
@@ -208,12 +210,15 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
-
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/reem_kufi"
-                    android:padding="12dp"
+                    android:gravity="center"
+                    android:paddingStart="22dp"
+                    android:paddingEnd="22dp"
+                    android:paddingBottom="12dp"
+                    android:paddingTop="12dp"
                     android:text="@string/class_"
                     android:textColor="?attr/foreground_text_color"
                     android:textSize="30sp"
@@ -223,23 +228,12 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
             </LinearLayout>
 
             <ScrollView
                 android:id="@+id/scrollView"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:backgroundTint="?attr/display_foreground"
-                android:background="?attr/display_foreground"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -288,12 +282,13 @@
 
                         <TextView
                             android:id="@+id/classMain1"
-                            android:layout_width="200dp"
+                            android:layout_width="250dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
                             android:fontFamily="@font/montserrat"
                             android:paddingStart="8dp"
+                            android:gravity="center"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
                             android:paddingBottom="18dp"
@@ -341,7 +336,7 @@
 
                         <TextView
                             android:id="@+id/classMain2"
-                            android:layout_width="200dp"
+                            android:layout_width="250dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
@@ -352,7 +347,8 @@
                             android:paddingBottom="18dp"
                             android:singleLine="false"
                             android:text="@string/loading"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:gravity="center"/>
                         <View
                             android:layout_width="0dp"
                             android:layout_height="0dp"
@@ -396,7 +392,7 @@
 
                         <TextView
                             android:id="@+id/classMain3"
-                            android:layout_width="200dp"
+                            android:layout_width="250dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
@@ -407,7 +403,8 @@
                             android:paddingBottom="18dp"
                             android:singleLine="false"
                             android:text="@string/loading"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+android:gravity="center"/>
                         <View
                             android:layout_width="0dp"
                             android:layout_height="0dp"
@@ -451,7 +448,7 @@
 
                         <TextView
                             android:id="@+id/classMain4"
-                            android:layout_width="200dp"
+                            android:layout_width="250dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
@@ -462,7 +459,8 @@
                             android:paddingBottom="18dp"
                             android:singleLine="false"
                             android:text="@string/loading"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+android:gravity="center"/>
                         <View
                             android:layout_width="0dp"
                             android:layout_height="0dp"
@@ -505,7 +503,7 @@
                             android:layout_weight="1" />
                         <TextView
                             android:id="@+id/classMain5"
-                            android:layout_width="200dp"
+                            android:layout_width="250dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
@@ -516,7 +514,8 @@
                             android:paddingBottom="18dp"
                             android:singleLine="false"
                             android:text="@string/loading"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+android:gravity="center"/>
                         <View
                             android:layout_width="0dp"
                             android:layout_height="0dp"
@@ -560,7 +559,7 @@
                             android:layout_weight="1" />
                         <TextView
                             android:id="@+id/classMain6"
-                            android:layout_width="200dp"
+                            android:layout_width="250dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
@@ -571,7 +570,8 @@
                             android:paddingBottom="18dp"
                             android:singleLine="false"
                             android:text="@string/loading"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+android:gravity="center"/>
                         <View
                             android:layout_width="0dp"
                             android:layout_height="0dp"
@@ -615,7 +615,7 @@
 
                         <TextView
                             android:id="@+id/classMain7"
-                            android:layout_width="200dp"
+                            android:layout_width="250dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
@@ -626,7 +626,8 @@
                             android:paddingBottom="18dp"
                             android:singleLine="false"
                             android:text="@string/loading"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+android:gravity="center"/>
                         <View
                             android:layout_width="0dp"
                             android:layout_height="0dp"
@@ -671,7 +672,7 @@
 
                         <TextView
                             android:id="@+id/classMain8"
-                            android:layout_width="200dp"
+                            android:layout_width="250dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
@@ -682,7 +683,8 @@
                             android:paddingBottom="18dp"
                             android:singleLine="false"
                             android:text="@string/loading"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+android:gravity="center"/>
                         <View
                             android:layout_width="0dp"
                             android:layout_height="0dp"
@@ -726,7 +728,7 @@
 
                         <TextView
                             android:id="@+id/classMain9"
-                            android:layout_width="200dp"
+                            android:layout_width="250dp"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
@@ -737,7 +739,8 @@
                             android:paddingBottom="18dp"
                             android:singleLine="false"
                             android:text="@string/loading"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+android:gravity="center"/>
                         <View
                             android:layout_width="0dp"
                             android:layout_height="0dp"
