@@ -39,13 +39,15 @@
     <string name="period812">3:30 pm to 4:30 pm</string>
     <string name="period912">4:30 pm to 5:30 pm</string>
 
-    <string name="monday">Monday</string>
-    <string name="tuesday">Tuesday</string>
-    <string name="wednesday">Wednesday</string>
-    <string name="thursday">Thursday</string>
-    <string name="friday">Friday</string>
-    <string name="saturday">Saturday</string>
-    <string name="sunday">Sunday</string>
+    <string-array name="weekdays">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
 
     <string name="mon">Mon</string>
     <string name="tue">Tue</string>
@@ -54,20 +56,22 @@
     <string name="fri">Fri</string>
     <string name="sat">Sat</string>
     <string name="sun">Sun</string>
-
-    <string name="jan">January</string>
-    <string name="feb">February</string>
-    <string name="mar">March</string>
-    <string name="apr">April</string>
-    <string name="may">May</string>
-    <string name="jun">June</string>
-    <string name="jul">July</string>
-    <string name="aug">August</string>
-    <string name="sept">September</string>
-    <string name="oct">October</string>
-    <string name="nov">November</string>
-    <string name="dec">December</string>
-
+    
+    <string-array name="months">
+    <item>January</item>
+    <item>February</item>
+    <item>March</item>
+    <item>April</item>
+    <item>May</item>
+    <item>June</item>
+    <item>July</item>
+    <item>August</item>
+    <item>September</item>
+    <item>October</item>
+    <item>November</item>
+    <item>December</item>
+    </string-array>
+    
     <string name="p1">p1</string>
     <string name="p2">p2</string>
     <string name="p3">p3</string>
@@ -273,6 +277,7 @@
     <string name="check_this_to_get_notification_as_soon_as_app_update_is_available">Check this to get notification as soon as app update is available.</string>
     <string name="result_button">Result button</string>
     <string name="check_your_result">Check your result</string>
+    <string name="error">Error</string>
     <string-array name="college_array">
         <item>Deshbandhu College</item>
     </string-array>

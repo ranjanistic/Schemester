@@ -36,8 +36,11 @@ public class ApplicationSchemester  extends Application {
     PREF_HEAD_LOGIN_STAT = "login", PREF_KEY_LOGIN_STAT = "loginstatus",
     PREF_HEAD_TIME_FORMAT = "schemeTime", PREF_KEY_TIME_FORMAT = "format",
     PREF_HEAD_USER_DEF = "userDefinition",PREF_KEY_USER_DEF = "position",
-    PREF_HEAD_UPDATE_NOTIFY = "schemeUpdateNotification", PREF_KEY_UPDATE_NOTIFY = "getSchemeUpdateNotification";
+    PREF_HEAD_UPDATE_NOTIFY = "schemeUpdateNotification", PREF_KEY_UPDATE_NOTIFY = "getSchemeUpdateNotification",
+    PREF_HEAD_MESSAGE_DATA = "schemeChat", PREF_KEY_MESSAGE_COUNT = "chatCount";
 
+    public String getPREF_HEAD_MESSAGE_DATA(){return PREF_HEAD_MESSAGE_DATA;}
+    public String getPREF_KEY_MESSAGE_COUNT(){return PREF_KEY_MESSAGE_COUNT;}
     public String getPREF_HEAD_UPDATE_NOTIFY(){ return PREF_HEAD_UPDATE_NOTIFY;}
     public String getPREF_KEY_UPDATE_NOTIFY(){ return PREF_KEY_UPDATE_NOTIFY;}
     public String getPREF_HEAD_USER_DEF(){return PREF_HEAD_USER_DEF;}

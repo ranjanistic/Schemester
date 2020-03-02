@@ -122,27 +122,34 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
 
     private void populateUsersList(String message, String id, String time, int sender) {
-        ArrayList<ChatRoomModel> arrayOfUsers = ChatRoomModel.setModel(message,id,time,25);
+        ArrayList<ChatRoomModel> arrayOfUsers = ChatRoomModel.setModel(message,id,time,deviceMessageCount(0));
+        MessageListAdapter adapter = new MessageListAdapter(this, arrayOfUsers, sender);
+        listView.setAdapter(adapter);
+    }
+    private void setLocalAvailableMessages(String message, String id, String time, int sender){
+        ArrayList<ChatRoomModel> arrayOfUsers = ChatRoomModel.setModel(message,id,time,deviceMessageCount(0));
         MessageListAdapter adapter = new MessageListAdapter(this, arrayOfUsers, sender);
         listView.setAdapter(adapter);
     }
 
-    private String getStoredEmail(){
-        String cred;
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE);
-        cred =  mSharedPreferences.getString(schemester.getPREF_KEY_EMAIL(), null);
-        return cred;
-    }
-    private Boolean checkIfEmailVerified() {
-        return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).isEmailVerified();
+    private long deviceMessageCount(int increment){
+        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_MESSAGE_DATA(), MODE_PRIVATE);
+        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+        mEditor.putLong(schemester.getPREF_KEY_MESSAGE_COUNT(), mSharedPreferences.getLong(schemester.getPREF_KEY_MESSAGE_COUNT(),0)+increment);
+        mEditor.apply();
+        return mSharedPreferences.getLong(schemester.getPREF_KEY_MESSAGE_COUNT(),0);
     }
 
-    public void setAppTheme() {
-        switch (this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
-                .getInt(schemester.getPREF_KEY_THEME(), 0)) {
-            case ApplicationSchemester.CODE_THEME_DARK:
-                setTheme(R.style.BlueDarkTheme);
-                break;
+    private String getStoredEmail(){
+        return getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE)
+                .getString(schemester.getPREF_KEY_EMAIL(), null);
+    }
+    private Boolean checkIfEmailVerified() {
+        return Objects.requireNonNull(user).isEmailVerified();
+    }
+    private void setAppTheme() {
+        switch (getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE).getInt(schemester.getPREF_KEY_THEME(), 0)) {
+            case ApplicationSchemester.CODE_THEME_DARK: setTheme(R.style.BlueDarkTheme);break;
             case ApplicationSchemester.CODE_THEME_LIGHT:
             default:setTheme(R.style.BlueLightTheme);
         }

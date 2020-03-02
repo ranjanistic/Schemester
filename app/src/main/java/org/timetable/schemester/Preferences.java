@@ -26,7 +26,6 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -78,6 +77,7 @@ public class Preferences extends AppCompatActivity {
         schemester = (ApplicationSchemester) this.getApplication();
         setAppTheme();
         setContentView(R.layout.activity_preferences);
+
         window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -85,7 +85,7 @@ public class Preferences extends AppCompatActivity {
         findViewsAndSetObjects();
         setThemeConsequences();
         initiateCustomDialogs();
-        setListenersAndInitializers();
+        setListenersAndInitialize();
     }
 
     @Override
@@ -93,6 +93,8 @@ public class Preferences extends AppCompatActivity {
         super.onStart();
         setAllActivityStarterButtonsDisabled(false);
     }
+
+    //Startup functions
     private void findViewsAndSetObjects(){
         anonymOps = findViewById(R.id.anonymousOptions);
         userOps = findViewById(R.id.accountOptions);
@@ -115,7 +117,6 @@ public class Preferences extends AppCompatActivity {
         appUpdateNotif = findViewById(R.id.automaticAppUpdatePrefer);
         appUpdateNotifCheck = findViewById(R.id.appUpdateNotificationCheckbox);
     }
-
     private void setThemeConsequences(){
         if(getThemeStatus() == ApplicationSchemester.CODE_THEME_LIGHT) {
             window.setStatusBarColor(this.getResources().getColor(R.color.white));
@@ -141,7 +142,6 @@ public class Preferences extends AppCompatActivity {
             themebtn.setVisibility(View.VISIBLE);
         }
     }
-
     private void initiateCustomDialogs(){
         customLoadDialogClass = new CustomLoadDialogClass(Preferences.this, new OnDialogLoadListener() {
             @Override
@@ -160,8 +160,7 @@ public class Preferences extends AppCompatActivity {
             }
         });
     }
-
-    private void setListenersAndInitializers(){
+    private void setListenersAndInitialize(){
         appUpdateNotifCheck.setChecked(userWantsUpdateNotification());
         returnbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,8 +172,7 @@ public class Preferences extends AppCompatActivity {
         loginAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent mode = new Intent(Preferences.this, ModeOfConduct.class);
-                startActivity(mode);
+                startActivity(new Intent(Preferences.this, ModeOfConduct.class));
             }
         });
 
@@ -378,17 +376,8 @@ public class Preferences extends AppCompatActivity {
             }
         });
     }
-    private Boolean checkIfEmailVerified() {
-        return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).isEmailVerified();
-    }
 
-    private void restartApplication(){
-        Intent splash = new Intent(Preferences.this, Splash.class);
-        splash.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // To clean up all activities
-        startActivity(splash);
-        overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
-    }
-
+    //Account action functions
     private void resetLinkSender(final String email){
         FirebaseAuth.getInstance().sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -482,34 +471,6 @@ public class Preferences extends AppCompatActivity {
             schemester.toasterLong(schemester.getStringResource(R.string.network_problem));
         }
     }
-    private void setAllActivityStarterButtonsDisabled(Boolean state){
-        ccySwitch.setClickable(!state);
-    }
-
-    String newMail;
-    private void updateEmail(){
-        customLoadDialogClass.hide();
-        customTextDialog = new CustomTextDialog(Preferences.this, new OnDialogTextListener() {
-            @Override
-            public void onApply(String text) {
-                customLoadDialogClass.show();
-                newMail = text;
-                setEmailIfConfirmed("Email to be verified", "A verification email will be sent to \'"+newMail+"\'. Confirm this is yours?", newMail);
-                customLoadDialogClass.hide();
-            }
-            @Override
-            public String onCallText() {
-                return schemester.getStringResource(R.string.enter_new_email);
-            }
-            @Override
-            public int textType() {
-                return 38411;
-            }
-        });
-        customTextDialog.setCanceledOnTouchOutside(false);
-        customTextDialog.show();
-    }
-
     private void rollUpdater(){
         customTextDialog = new CustomTextDialog(Preferences.this, new OnDialogTextListener() {
             @Override
@@ -543,29 +504,43 @@ public class Preferences extends AppCompatActivity {
         });
         customTextDialog.show();
     }
-
-    private String[] getCredentials(){
-        String[] cred = new String[2];
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE);
-        cred[0] =  mSharedPreferences.getString(schemester.getPREF_KEY_EMAIL(), "");
-        cred[1] =  mSharedPreferences.getString(schemester.getPREF_KEY_ROLL(), "");
-        return cred;
+    String newMail;
+    private void updateEmail(){
+        customLoadDialogClass.hide();
+        customTextDialog = new CustomTextDialog(Preferences.this, new OnDialogTextListener() {
+            @Override
+            public void onApply(String text) {
+                customLoadDialogClass.show();
+                newMail = text;
+                setEmailIfConfirmed("Email to be verified", "A verification email will be sent to \'"+newMail+"\'. Confirm this is yours?", newMail);
+                customLoadDialogClass.hide();
+            }
+            @Override
+            public String onCallText() {
+                return schemester.getStringResource(R.string.enter_new_email);
+            }
+            @Override
+            public int textType() {
+                return 38411;
+            }
+        });
+        customTextDialog.setCanceledOnTouchOutside(false);
+        customTextDialog.show();
     }
-
-    private void setEmailIfConfirmed(final String head, final String body, final String updatemail){
+    private void setEmailIfConfirmed(final String head, final String body, final String updateMail) {
         final CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(Preferences.this, new OnDialogConfirmListener() {
             @Override
             public void onApply(Boolean confirm) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                Objects.requireNonNull(user).updateEmail(updatemail)
+                Objects.requireNonNull(user).updateEmail(updateMail)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     migrateDataAtEmailChange(getCredentials()[0], newMail);
                                     customLoadDialogClass.hide();
-                                    storeCredentials(newMail,"");
-                                    setEmailChangedAlert("Email successfully changed","Your new login ID aka email ID is \'"+updatemail+"\'. You'll need to login again with new email ID.");
+                                    storeCredentials(newMail, "");
+                                    setEmailChangedAlert("Your new login ID aka email ID is \'" + updateMail + "\'. You'll need to login again with new email ID.");
                                 } else {
                                     customLoadDialogClass.hide();
                                     schemester.toasterLong(schemester.getStringResource(R.string.network_problem));
@@ -588,7 +563,6 @@ public class Preferences extends AppCompatActivity {
         customConfirmDialogClass.setCanceledOnTouchOutside(false);
         customConfirmDialogClass.show();
     }
-
     private void migrateDataAtEmailChange(final String migrateFrom, final String migrateTo) {
         db.collection(schemester.getCOLLECTION_USERBASE()).document(migrateFrom)
                 .get()
@@ -609,13 +583,7 @@ public class Preferences extends AppCompatActivity {
                 });
 
     }
-
-    private String readUserPosition(){
-        return this.getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE)
-                .getString(schemester.getPREF_KEY_USER_DEF(), "");
-    }
-
-    private void setEmailChangedAlert(final String head, final String body){
+    private void setEmailChangedAlert(final String body){
         CustomAlertDialog customAlertDialog = new CustomAlertDialog(Preferences.this, new OnDialogAlertListener() {
             @Override
             public void onDismiss(){
@@ -627,7 +595,7 @@ public class Preferences extends AppCompatActivity {
             }
             @Override
             public String onCallText() {
-                return head;
+                return "Email successfully changed";
             }
             @Override
             public String onCallSub() {
@@ -635,9 +603,7 @@ public class Preferences extends AppCompatActivity {
             }
         });
         customAlertDialog.show();
-
     }
-
     private void readVersionCheckUpdate(){
         if(isNetworkConnected()) {
             db.collection(schemester.COLLECTION_APP_CONFIGURATION).document(schemester.DOCUMENT_VERSION_CURRENT)
@@ -727,6 +693,7 @@ public class Preferences extends AppCompatActivity {
         }
     }
 
+    //App update step functions
     private void downloader(final String link,final  String version){
         CustomDownloadLoadDialog customDownloadLoadDialog = new CustomDownloadLoadDialog(Preferences.this, new OnDialogDownloadLoadListener() {
             @Override
@@ -749,7 +716,6 @@ public class Preferences extends AppCompatActivity {
         });
         customDownloadLoadDialog.show();
     }
-
     private void showPackageAlert(final String newVname){
         CustomAlertDialog downloadFinishAlert = new CustomAlertDialog(Preferences.this, new OnDialogAlertListener() {
             @Override
@@ -764,7 +730,8 @@ public class Preferences extends AppCompatActivity {
             }
         });downloadFinishAlert.show();
     }
-    private boolean storagePermissionGranted(){ return (ContextCompat.checkSelfPermission(Preferences.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    private boolean storagePermissionGranted(){
+        return (ContextCompat.checkSelfPermission(Preferences.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             == (PackageManager.PERMISSION_GRANTED));
     }
     private void requestStoragePermission(){
@@ -773,72 +740,78 @@ public class Preferences extends AppCompatActivity {
                 1);
     }
 
-    private void storeCredentials(String mail, String rollnum){
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.PREF_HEAD_CREDENTIALS, MODE_PRIVATE);
-        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        if(!mail.equals("")) {
-            mEditor.putString(schemester.PREF_KEY_EMAIL, mail);
-            mEditor.apply();
-        }
-        if(!rollnum.equals("")) {
-            mEditor.putString(schemester.PREF_KEY_ROLL, rollnum);
-            mEditor.apply();
-        }
+    //Stored preference dependent functions
+    private void storeCredentials(String mail, String roll){
+        SharedPreferences.Editor mEditor = getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE).edit();
+        if(!mail.equals("")) mEditor.putString(schemester.getPREF_KEY_EMAIL(), mail).apply();
+        if(!roll.equals("")) mEditor.putString(schemester.getPREF_KEY_ROLL(), roll).apply();
     }
-
+    private String[] getCredentials(){
+        String[] cred = new String[2];
+        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE);
+        cred[0] =  mSharedPreferences.getString(schemester.getPREF_KEY_EMAIL(), null);
+        cred[1] =  mSharedPreferences.getString(schemester.getPREF_KEY_ROLL(), null);
+        return cred;
+    }
     private void storeLoginStatus(Boolean logged){
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.PREF_HEAD_LOGIN_STAT, MODE_PRIVATE);
-        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putBoolean(schemester.PREF_KEY_LOGIN_STAT, logged);
-        mEditor.apply();
-    }
-
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return (cm != null ? Objects.requireNonNull(cm).getActiveNetworkInfo() : null) != null && cm.getActiveNetworkInfo().isConnected();
-    }
-
-    private void storeThemeStatus(int themechoice){
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
-        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putInt(schemester.getPREF_KEY_THEME(), themechoice);
-        mEditor.apply();
+        getSharedPreferences(schemester.PREF_HEAD_LOGIN_STAT, MODE_PRIVATE).edit()
+                .putBoolean(schemester.PREF_KEY_LOGIN_STAT, logged).apply();
     }
     private void storeUpdateNotificationPreference(Boolean getUpdateNotification){
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_UPDATE_NOTIFY(), MODE_PRIVATE);
-        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putBoolean(schemester.getPREF_KEY_UPDATE_NOTIFY(),getUpdateNotification);
-        mEditor.apply();
+        getSharedPreferences(schemester.getPREF_HEAD_UPDATE_NOTIFY(), MODE_PRIVATE).edit()
+                .putBoolean(schemester.getPREF_KEY_UPDATE_NOTIFY(),getUpdateNotification)
+                .apply();
     }
     private Boolean userWantsUpdateNotification(){
         return this.getSharedPreferences(schemester.getPREF_HEAD_UPDATE_NOTIFY(), MODE_PRIVATE)
                 .getBoolean(schemester.getPREF_KEY_UPDATE_NOTIFY(), true);
     }
     private void storeTimeFormat(int format){
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_TIME_FORMAT(), MODE_PRIVATE);
-        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putInt(schemester.getPREF_KEY_TIME_FORMAT(), format);
-        mEditor.apply();
+        getSharedPreferences(schemester.getPREF_HEAD_TIME_FORMAT(), MODE_PRIVATE).edit()
+                .putInt(schemester.getPREF_KEY_TIME_FORMAT(), format)
+                .apply();
     }
     private int getTimeFormat() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_TIME_FORMAT(), MODE_PRIVATE);
-        return mSharedPreferences.getInt(schemester.getPREF_KEY_TIME_FORMAT(), 24);
+        return this.getSharedPreferences(schemester.getPREF_HEAD_TIME_FORMAT(), MODE_PRIVATE)
+                .getInt(schemester.getPREF_KEY_TIME_FORMAT(), 24);
     }
-
+    private void storeThemeStatus(int themeChoice){
+        getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE).edit()
+                .putInt(schemester.getPREF_KEY_THEME(), themeChoice).apply();
+    }
+    private String readUserPosition(){
+        return this.getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE)
+                .getString(schemester.getPREF_KEY_USER_DEF(), null);
+    }
     public void setAppTheme() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
-        switch (mSharedPreferences.getInt(schemester.getPREF_KEY_THEME(), 0)) {
-            case ApplicationSchemester.CODE_THEME_INCOGNITO:
-                setTheme(R.style.IncognitoTheme);break;
-            case ApplicationSchemester.CODE_THEME_DARK:
-                setTheme(R.style.BlueWhiteThemeDark);
-                break;
+        switch (this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
+                .getInt(schemester.getPREF_KEY_THEME(), 0)) {
+            case ApplicationSchemester.CODE_THEME_INCOGNITO: setTheme(R.style.IncognitoTheme);break;
+            case ApplicationSchemester.CODE_THEME_DARK: setTheme(R.style.BlueWhiteThemeDark);break;
             case ApplicationSchemester.CODE_THEME_LIGHT:
             default:setTheme(R.style.BlueWhiteThemeLight);
         }
     }
     private int getThemeStatus() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
-        return mSharedPreferences.getInt(schemester.getPREF_KEY_THEME(), 0);
+        return this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
+                .getInt(schemester.getPREF_KEY_THEME(), 0);
+    }
+
+    //Quick action functions
+    private Boolean checkIfEmailVerified() {
+        return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).isEmailVerified();
+    }
+    private void restartApplication(){
+        Intent splash = new Intent(Preferences.this, Splash.class);
+        splash.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // To clean up all activities
+        startActivity(splash);
+        overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
+    }
+    private void setAllActivityStarterButtonsDisabled(Boolean state){
+        ccySwitch.setClickable(!state);
+    }
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return (cm != null ? Objects.requireNonNull(cm).getActiveNetworkInfo() : null) != null && Objects.requireNonNull(cm.getActiveNetworkInfo()).isConnected();
     }
 }

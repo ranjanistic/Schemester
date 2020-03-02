@@ -120,17 +120,10 @@ public class FullScheduleActivity extends AppCompatActivity {
             ++k;
         }
         int[] workDayID = {R.id.mon, R.id.tue, R.id.wed, R.id.thu, R.id.fri};
-        String[] workDayName = {
-                schemester.getStringResource(R.string.monday).toUpperCase(),
-                schemester.getStringResource(R.string.tuesday).toUpperCase(),
-                schemester.getStringResource(R.string.wednesday).toUpperCase(),
-                schemester.getStringResource(R.string.thursday).toUpperCase(),
-                schemester.getStringResource(R.string.friday).toUpperCase()
-        };
         int w = 0;
         while (w < 5) {
             dayBtn[w] = findViewById(workDayID[w]);
-            schemester.buttonLongPressToast(dayBtn[w],workDayName[w]);
+            schemester.buttonLongPressToast(dayBtn[w],getResources().getStringArray(R.array.weekdays)[w+1]);
             ++w;
         }
         semester = findViewById(R.id.semtextsetting);
@@ -208,6 +201,13 @@ public class FullScheduleActivity extends AppCompatActivity {
                 yearText.setText(getResources().getStringArray(R.array.year_array)[i]);
             }
             ++i;
+        }
+        if(isLandscape()) {
+            int d = 0;
+            while (d<5) {
+                dayBtn[d].setText(getResources().getStringArray(R.array.weekdays)[d+1]);
+                ++d;
+            }
         }
         getWebsiteLinkFromDatabase();
 

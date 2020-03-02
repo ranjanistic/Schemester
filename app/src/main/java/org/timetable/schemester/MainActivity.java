@@ -53,6 +53,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
@@ -694,17 +695,16 @@ public class MainActivity extends AppCompatActivity{
      */
     private void setTimeFormatInMainSchedule(int tFormat){
         int i = 0;
-        if(tFormat == 12) {
+        if(tFormat == 12)
             while (i < 9) {
                 p[i].setText(schemester.getStringResource(schemester.getPeriodStringResource12()[i]));
                 ++i;
             }
-        } else {
+        else
             while (i < 9) {
                 p[i].setText(schemester.getStringResource(schemester.getPeriodStringResource24()[i]));
                 ++i;
             }
-        }
     }
 
     //schedule receiver from database task
@@ -716,7 +716,6 @@ public class MainActivity extends AppCompatActivity{
             month.setText(getMonthFromCode(calendar.get(Calendar.MONTH)));
             super.onPreExecute();
         }
-
         @Override
         protected Void doInBackground(Void... voids) {
             setSemester(COLLECTION_GLOBAL_INFO,
@@ -745,8 +744,8 @@ public class MainActivity extends AppCompatActivity{
 
     //whether user is a teacher or student
     private String readUserPosition(){
-        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE);
-        return mSharedPreferences.getString(schemester.getPREF_KEY_USER_DEF(), null);
+        return getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE)
+                .getString(schemester.getPREF_KEY_USER_DEF(), null);
     }
 
     //check holiday and set view accordingly
@@ -771,44 +770,17 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private String getWeekdayFromCode(int dayCode){
-        String[] dayString = {
-                schemester.getStringResource(R.string.sunday),
-                schemester.getStringResource(R.string.monday),
-                schemester.getStringResource(R.string.tuesday),
-                schemester.getStringResource(R.string.wednesday),
-                schemester.getStringResource(R.string.thursday),
-                schemester.getStringResource(R.string.friday),
-                schemester.getStringResource(R.string.saturday),
-        };
-        for(int m = 1;m<8;++m) {
-            if (m==dayCode) {
-                return dayString[m-1];
-            }
-        }
-        return "Error";
+        for(int m = 1;m<=getResources().getStringArray(R.array.weekdays).length;++m)
+            if (m==dayCode)
+                return getResources().getStringArray(R.array.weekdays)[m-1];
+        return getStringResource(R.string.error);
     }
 
     private String getMonthFromCode(int getMonthCount){
-        String[] monthString = {
-         schemester.getStringResource(R.string.jan),
-        schemester.getStringResource(R.string.feb),
-         schemester.getStringResource(R.string.mar),
-         schemester.getStringResource(R.string.apr),
-         schemester.getStringResource(R.string.may),
-         schemester.getStringResource(R.string.jun),
-         schemester.getStringResource(R.string.jul),
-         schemester.getStringResource(R.string.aug),
-        schemester.getStringResource(R.string.sept),
-        schemester.getStringResource(R.string.oct),
-         schemester.getStringResource(R.string.nov),
-         schemester.getStringResource(R.string.dec)
-        };
-        for(int m = 0;m<12;++m) {
-            if (m==getMonthCount) {
-                return monthString[m];
-            }
-        }
-        return "Error";
+        for(int m = 0;m<getResources().getStringArray(R.array.months).length;++m)
+            if (m==getMonthCount)
+                return getResources().getStringArray(R.array.months)[m];
+        return getStringResource(R.string.error);
     }
 
     /**
@@ -845,7 +817,8 @@ public class MainActivity extends AppCompatActivity{
             p[i].setTextColor(getResources().getColor(R.color.white));
             p[i].setBackgroundResource(R.drawable.roundactivetimecontainer);
             return;
-        } else if(checkPeriod(getStringResource(timeStringResource[9]),getStringResource(R.string.one_second_before_new_day))) {     //after day is over
+        }
+        else if(checkPeriod(getStringResource(timeStringResource[9]),getStringResource(R.string.one_second_before_new_day))) {     //after day is over
             int d = 0;
             while (d<9) {
                 p[d].setTextColor(getResources().getColor(R.color.white));
@@ -865,8 +838,7 @@ public class MainActivity extends AppCompatActivity{
             int k = 0;
             while (k<9){
                 if(checkPeriod(getStringResource(timeStringResource[k]),getStringResource(timeStringResource[k+1]))){
-                    s = k;
-                    k=9;
+                    s = k; k=9;
                 } else {
                     ++k;
                 }
@@ -887,14 +859,13 @@ public class MainActivity extends AppCompatActivity{
             p[i].setBackgroundResource(R.drawable.roundcontainerbox);
             ++i;
         }
-        
     }
 
 
     private String[] getAdditionalInfo() {
         String[] CCY = new String[3];
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.PREF_HEAD_ADDITIONAL_INFO, MODE_PRIVATE);
-        CCY[0] = mSharedPreferences.getString(schemester.PREF_KEY_COLLEGE, null);
+        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_ADDITIONAL_INFO(), MODE_PRIVATE);
+        CCY[0] = mSharedPreferences.getString(schemester.getPREF_KEY_COLLEGE(), null);
         CCY[1] = mSharedPreferences.getString(schemester.getPREF_KEY_COURSE(), null);
         CCY[2] = mSharedPreferences.getString(schemester.getPREF_KEY_YEAR(), null);
         return CCY;
@@ -906,21 +877,13 @@ public class MainActivity extends AppCompatActivity{
      * @param end: ending time
      * @return: true if current time lies between begin and end
      */
-    @SuppressLint("SimpleDateFormat")
     private Boolean checkPeriod(String begin, String end){
-        String currentTime = new SimpleDateFormat(getStringResource(R.string.time_pattern_hhmmss)).format(new Date());
-        SimpleDateFormat parser = new SimpleDateFormat(getStringResource(R.string.time_pattern_hhmmss));
+        String currentTime = new SimpleDateFormat(getStringResource(R.string.time_pattern_hhmmss), Locale.getDefault()).format(new Date());
+        SimpleDateFormat parser = new SimpleDateFormat(getStringResource(R.string.time_pattern_hhmmss),Locale.getDefault());
         try {
-            Date start = parser.parse(begin);
-            Date finish = parser.parse(end);
-            Date userTime = parser.parse(currentTime);
-            assert userTime != null;
-            if (userTime.after(start) && userTime.before(finish)) {
-                return true;
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+            return Objects.requireNonNull(parser.parse(currentTime)).after( parser.parse(begin))
+                    && Objects.requireNonNull(parser.parse(currentTime)).before(parser.parse(end));
+        } catch (ParseException e) { e.printStackTrace(); }
         return false;
     }
 
@@ -942,11 +905,9 @@ public class MainActivity extends AppCompatActivity{
                                 if (Objects.requireNonNull(document).exists()) {
                                     int i = 0;
                                     while(i<9) {
-                                        if(Objects.equals(document.getString(getStringResource(pkeyResource[i])),"Nothing")){
+                                        if(Objects.equals(document.getString(getStringResource(pkeyResource[i])),"Nothing"))
                                             duration[i].setVisibility(View.GONE);
-                                        } else {
-                                            c[i].setText(document.getString(getStringResource(pkeyResource[i])));
-                                        }
+                                        else c[i].setText(document.getString(getStringResource(pkeyResource[i])));
                                         ++i;
                                     }
                                 }
@@ -986,21 +947,19 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private Boolean getLoginStatus(){
-        return this.getSharedPreferences(schemester.getPREF_HEAD_LOGIN_STAT(), MODE_PRIVATE)
+        return getSharedPreferences(schemester.getPREF_HEAD_LOGIN_STAT(), MODE_PRIVATE)
                 .getBoolean(schemester.getPREF_KEY_LOGIN_STAT(), false);
     }
 
     private Boolean userWantsUpdateNotification(){
-        return this.getSharedPreferences(schemester.getPREF_HEAD_UPDATE_NOTIFY(), MODE_PRIVATE)
+        return getSharedPreferences(schemester.getPREF_HEAD_UPDATE_NOTIFY(), MODE_PRIVATE)
                 .getBoolean(schemester.getPREF_KEY_UPDATE_NOTIFY(), true);
     }
-    private void storeThemeStatus(int themechoice){
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
-        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putInt(schemester.getPREF_KEY_THEME(), themechoice);
-        mEditor.apply();
-    }
 
+    private void storeThemeStatus(int themeChoice){
+        getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE).edit()
+                .putInt(schemester.getPREF_KEY_THEME(), themeChoice).apply();
+    }
     public void setAppTheme() {
         switch (this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
                 .getInt(schemester.getPREF_KEY_THEME(), 0)) {
@@ -1010,25 +969,23 @@ public class MainActivity extends AppCompatActivity{
             default:setTheme(R.style.AppTheme);
         }
     }
-
     public int getThemeStatus(){
-        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
-        return mSharedPreferences.getInt(schemester.getPREF_KEY_THEME(), 0);
+        return getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
+                .getInt(schemester.getPREF_KEY_THEME(), 0);
     }
-
     private boolean isLandscape() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
     private int getTimeFormat() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_TIME_FORMAT(), MODE_PRIVATE);
-        return mSharedPreferences.getInt(schemester.getPREF_KEY_TIME_FORMAT(), 24);
+        return getSharedPreferences(schemester.getPREF_HEAD_TIME_FORMAT(), MODE_PRIVATE)
+                .getInt(schemester.getPREF_KEY_TIME_FORMAT(), 24);
     }
-    public boolean isInternetAvailable() {
+    private boolean isInternetAvailable() {
         Runtime runtime = Runtime.getRuntime();
         try {
             Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
             int exitValue = ipProcess.waitFor();
-            return (exitValue == 0);
+            return exitValue == 0;
         }
         catch (IOException | InterruptedException e) { e.printStackTrace(); }
         return false;

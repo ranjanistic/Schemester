@@ -25,8 +25,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginBottom="22dp"
         android:textColor="?attr/button_text_color"
-        android:textAllCaps="false"
-        android:text="@string/monday"/>
+        android:textAllCaps="false" />
 
     <Button
         android:id="@+id/tue"
@@ -39,7 +38,6 @@
         android:paddingTop="8dp"
         android:paddingEnd="12dp"
         android:paddingBottom="8dp"
-        android:text="@string/tuesday"
         android:textAllCaps="false"
         android:textColor="?attr/button_text_color"
         android:textSize="18sp" />
@@ -58,7 +56,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginBottom="22dp"
         android:textColor="?attr/button_text_color"
-        android:text="@string/wednesday"/>
+        />
     <Button
         android:id="@+id/thu"
         android:layout_width="wrap_content"
@@ -74,7 +72,7 @@
         android:layout_marginBottom="22dp"
         android:textColor="?attr/button_text_color"
         android:textAllCaps="false"
-        android:text="@string/thursday"/>
+        />
     <Button
         android:id="@+id/fri"
         android:layout_width="wrap_content"
@@ -90,7 +88,7 @@
         android:layout_marginBottom="22dp"
         android:textColor="?attr/button_text_color"
         android:textAllCaps="false"
-        android:text="@string/friday"/>
+        />
     <ImageButton
         android:id="@+id/settingbtn"
         android:layout_width="wrap_content"
