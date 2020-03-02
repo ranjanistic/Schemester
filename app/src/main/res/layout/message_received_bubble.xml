@@ -14,9 +14,9 @@
         android:layout_height="wrap_content"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        android:text="I was sent"
-        android:textColor="@color/black"
-        android:textSize="14sp"
+        android:text=""
+        android:textColor="?attr/base_text_color"
+        android:textSize="12sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="false"
-        android:text="Hello everyone! I'm sender Hello everyone! I'm sender Hello everyone! I'm sender"
+        android:text=""
         android:maxWidth="300dp"
         android:textColor="?attr/foreground_text_color"
         android:padding="8dp"
@@ -39,8 +39,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:text="12:36"
-        android:textColor="@color/black"
+        android:text=""
+        android:textColor="?attr/base_text_color"
         android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@id/receivedMsg"
         app:layout_constraintBottom_toBottomOf="@id/receivedMsg"/>

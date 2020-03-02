@@ -965,10 +965,8 @@ public class MainActivity extends AppCompatActivity{
 
     //email stored on device
     private String getStoredEmail(){
-        String cred;
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE);
-        cred =  mSharedPreferences.getString(schemester.getPREF_KEY_EMAIL(), "");
-        return cred;
+        return getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE)
+                .getString(schemester.getPREF_KEY_EMAIL(), null);
     }
     public String getStringResource(int resId){
         return getResources().getString(resId);
@@ -983,12 +981,13 @@ public class MainActivity extends AppCompatActivity{
 
     //returns condition of permission grant
     private boolean storagePermissionGranted(){
-        return (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED));
+        return (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == (PackageManager.PERMISSION_GRANTED));
     }
 
     private Boolean getLoginStatus(){
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_LOGIN_STAT(), MODE_PRIVATE);
-        return mSharedPreferences.getBoolean(schemester.getPREF_KEY_LOGIN_STAT(), false);
+        return this.getSharedPreferences(schemester.getPREF_HEAD_LOGIN_STAT(), MODE_PRIVATE)
+                .getBoolean(schemester.getPREF_KEY_LOGIN_STAT(), false);
     }
 
     private Boolean userWantsUpdateNotification(){
@@ -1003,8 +1002,8 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void setAppTheme() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
-        switch (mSharedPreferences.getInt(schemester.getPREF_KEY_THEME(), 0)) {
+        switch (this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
+                .getInt(schemester.getPREF_KEY_THEME(), 0)) {
             case ApplicationSchemester.CODE_THEME_INCOGNITO: setTheme(R.style.IncognitoTheme); break;
             case ApplicationSchemester.CODE_THEME_DARK: setTheme(R.style.DarkTheme);break;
             case ApplicationSchemester.CODE_THEME_LIGHT:

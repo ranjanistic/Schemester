@@ -283,9 +283,8 @@ public class FullScheduleActivity extends AppCompatActivity {
                     startActivity(mode);
                 } else {
                     schemester.toasterLong(schemester.getStringResource(R.string.under_construction_message));
-/*                    Intent room = new Intent(FullScheduleActivity.this, ChatRoomActivity.class);
+                    Intent room = new Intent(FullScheduleActivity.this, ChatRoomActivity.class);
                     startActivity(room);
- */
                 }
             }
         });
