@@ -2,42 +2,47 @@
     <string name="app_name">Schemester</string>
     <string name="title_dayschedule_list">Full Schedule</string>
     <string name="title_dayschedule_detail">Day Schedule Detail</string>
-
     <string name="new_period_notification_title_template">New period: %1$s</string>
     <string name="okay">Okay</string>
     <string name="channel_name">New period notification</string>
     <string name="channel_description">To notify about next class.</string>
 
-    <string name="time1">08:30:00</string>
-    <string name="time2">09:30:00</string>
-    <string name="time3">10:30:00</string>
-    <string name="time4">11:30:00</string>
-    <string name="time5">12:30:00</string>
-    <string name="time6">13:30:00</string>
-    <string name="time7">14:30:00</string>
-    <string name="time8">15:30:00</string>
-    <string name="time9">16:30:00</string>
-    <string name="time10">17:30:00</string>
+    <string-array name="hh_mm_ss_array">
+        <item>08:30:00</item>
+        <item>09:30:00</item>
+        <item>10:30:00</item>
+        <item>11:30:00</item>
+        <item>12:30:00</item>
+        <item >13:30:00</item>
+        <item>14:30:00</item>
+        <item>15:30:00</item>
+        <item>16:30:00</item>
+        <item>17:30:00</item>
+    </string-array>
 
-    <string name="period1">08:30 to 09:30</string>
-    <string name="period2">09:30 to 10:30</string>
-    <string name="period3">10:30 to 11:30</string>
-    <string name="period4">11:30 to 12:30</string>
-    <string name="period5">12:30 to 13:30</string>
-    <string name="period6">13:30 to 14:30</string>
-    <string name="period7">14:30 to 15:30</string>
-    <string name="period8">15:30 to 16:30</string>
-    <string name="period9">16:30 to 17:30</string>
+    <string-array name="periods_24">
+        <item>08:30 to 09:30</item>
+        <item>09:30 to 10:30</item>
+        <item>10:30 to 11:30</item>
+        <item>11:30 to 12:30</item>
+        <item>12:30 to 13:30</item>
+        <item>13:30 to 14:30</item>
+        <item>14:30 to 15:30</item>
+        <item>15:30 to 16:30</item>
+        <item>16:30 to 17:30</item>
+    </string-array>
 
-    <string name="period112">8:30 am to 9:30 am</string>
-    <string name="period212">9:30 am to 10:30 am</string>
-    <string name="period312">10:30 am to 11:30 am</string>
-    <string name="period412">11:30 am to 12:30 pm</string>
-    <string name="period512">12:30 pm to 1:30 pm</string>
-    <string name="period612">1:30 pm to 2:30 pm</string>
-    <string name="period712">2:30 pm to 3:30 pm</string>
-    <string name="period812">3:30 pm to 4:30 pm</string>
-    <string name="period912">4:30 pm to 5:30 pm</string>
+    <string-array name="periods_12">
+        <item>8:30 am to 9:30 am</item>
+        <item>9:30 am to 10:30 am</item>
+        <item>10:30 am to 11:30 am</item>
+        <item>11:30 am to 12:30 pm</item>
+        <item>12:30 pm to 1:30 pm</item>
+        <item>1:30 pm to 2:30 pm</item>
+        <item>2:30 pm to 3:30 pm</item>
+        <item>3:30 pm to 4:30 pm</item>
+        <item>4:30 pm to 5:30 pm</item>
+    </string-array>
 
     <string-array name="weekdays">
         <item>Sunday</item>
@@ -49,38 +54,42 @@
         <item>Saturday</item>
     </string-array>
 
-    <string name="mon">Mon</string>
-    <string name="tue">Tue</string>
-    <string name="wed">Wed</string>
-    <string name="thu">Thu</string>
-    <string name="fri">Fri</string>
-    <string name="sat">Sat</string>
-    <string name="sun">Sun</string>
-    
+    <string-array name="weekdays_trimmed">
+        <item>Sun</item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+    </string-array>
+
     <string-array name="months">
-    <item>January</item>
-    <item>February</item>
-    <item>March</item>
-    <item>April</item>
-    <item>May</item>
-    <item>June</item>
-    <item>July</item>
-    <item>August</item>
-    <item>September</item>
-    <item>October</item>
-    <item>November</item>
-    <item>December</item>
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
     </string-array>
     
-    <string name="p1">p1</string>
-    <string name="p2">p2</string>
-    <string name="p3">p3</string>
-    <string name="p4">p4</string>
-    <string name="p5">p5</string>
-    <string name="p6">p6</string>
-    <string name="p7">p7</string>
-    <string name="p8">p8</string>
-    <string name="p9">p9</string>
+    <string-array name="period_key_array">
+        <item>p1</item>
+        <item>p2</item>
+        <item>p3</item>
+        <item>p4</item>
+        <item>p5</item>
+        <item>p6</item>
+        <item>p7</item>
+        <item>p8</item>
+        <item>p9</item>
+    </string-array>
 
     <string name="send">Send</string>
     <string name="valid">Valid</string>
@@ -96,7 +105,6 @@
     <string name="no_classes_today_enjoy">No classes today.\nEnjoy!</string>
     <string name="class_">Class</string>
     <string name="delete_account">Delete Account</string>
-    <string name="logout">Logout</string>
     <string name="setting_background">setting background</string>
     <string name="app_version">version-1.2-infant-stage2</string>
     <string name="version">Version</string>
@@ -257,7 +265,7 @@
     <string name="incorrect_roll">Incorrect roll number</string>
     <string name="enter_previous_roll">Enter previous roll number</string>
     <string name="confirm_to_send_email_link">Shall I send a link to your email address for this?</string>
-    <string name="sending">Sending...</string>
+    <string name="sending">Sending…</string>
     <string name="network_error_occurred">A network error occurred.</string>
     <string name="restarting">Restarting</string>
     <string name="requires_restart">Requires restart</string>
@@ -268,6 +276,7 @@
     <string name="marked_read">Marked Read</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="time_format_hhmmss_ampm">hh:mm:ss a</string>
     <string name="time_format_hhmm_ampm">hh:mm a</string>
     <string name="time_format_hhmm">HH:mm</string>
     <string name="service_options">Service options</string>
@@ -278,6 +287,8 @@
     <string name="result_button">Result button</string>
     <string name="check_your_result">Check your result</string>
     <string name="error">Error</string>
+    <string name="logout">Logout</string>
+    <string name="confirm_logout_text">Sure to log out?</string>
     <string-array name="college_array">
         <item>Deshbandhu College</item>
     </string-array>

@@ -30,6 +30,20 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0">
 
+                <View
+                    android:id="@+id/translucent_layer"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/toproundview"
+                    android:backgroundTint="?attr/base_text_color"
+                    android:alpha="0"
+                    android:elevation="8dp"
+                    android:translationZ="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/linearLayout"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
                 <LinearLayout
                     android:id="@+id/linearLayout7"
                     android:layout_width="wrap_content"
@@ -84,7 +98,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:background="@android:color/transparent"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:foregroundGravity="right"
                             android:gravity="bottom"
                             android:paddingStart="8dp"
@@ -100,7 +114,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:background="@android:color/transparent"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:gravity="top|end"
                             android:paddingStart="8dp"
                             android:paddingEnd="8dp"
@@ -114,7 +128,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:gravity="center"
                             android:paddingStart="8dp"
                             android:paddingEnd="8dp"
@@ -267,12 +281,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
                             android:paddingBottom="18dp"
-                            android:text="@string/period1"
                             android:textColor="?attr/foreground_text_color"
                             android:textSize="18sp" />
                         <View
@@ -286,7 +299,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:gravity="center"
                             android:paddingTop="18dp"
@@ -321,12 +334,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
                             android:paddingBottom="18dp"
-                            android:text="@string/period2"
                             android:textColor="?attr/foreground_text_color"
                             android:textSize="18sp" />
                         <View
@@ -340,7 +352,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
@@ -375,15 +387,13 @@
                             android:id="@+id/periodMain3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
                             android:paddingBottom="18dp"
-                            android:text="@string/period3"
                             android:textSize="18sp" />
                         <View
                             android:layout_width="0dp"
@@ -396,7 +406,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
@@ -434,12 +444,11 @@ android:gravity="center"/>
 
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
                             android:paddingBottom="18dp"
-                            android:text="@string/period4"
                             android:textSize="18sp" />
                         <View
                             android:layout_width="0dp"
@@ -452,7 +461,7 @@ android:gravity="center"/>
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
@@ -489,12 +498,11 @@ android:gravity="center"/>
 
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
                             android:paddingBottom="18dp"
-                            android:text="@string/period5"
                             android:textSize="18sp" />
 
                         <View
@@ -507,7 +515,7 @@ android:gravity="center"/>
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
@@ -545,12 +553,11 @@ android:gravity="center"/>
 
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
                             android:paddingBottom="18dp"
-                            android:text="@string/period6"
                             android:textSize="18sp" />
 
                         <View
@@ -563,7 +570,7 @@ android:gravity="center"/>
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
@@ -601,12 +608,12 @@ android:gravity="center"/>
 
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
                             android:paddingBottom="18dp"
-                            android:text="@string/period7"
+                            
                             android:textSize="18sp" />
                         <View
                             android:layout_width="0dp"
@@ -619,7 +626,7 @@ android:gravity="center"/>
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
@@ -658,12 +665,11 @@ android:gravity="center"/>
 
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
                             android:paddingBottom="18dp"
-                            android:text="@string/period8"
                             android:textSize="18sp" />
                         <View
                             android:layout_width="0dp"
@@ -676,7 +682,7 @@ android:gravity="center"/>
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
@@ -714,12 +720,11 @@ android:gravity="center"/>
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
                             android:paddingBottom="18dp"
-                            android:text="@string/period9"
                             android:textSize="18sp" />
                         <View
                             android:layout_width="0dp"
@@ -732,7 +737,7 @@ android:gravity="center"/>
                             android:layout_height="wrap_content"
                             android:background="@drawable/roundcontainerbox"
                             android:textColor="?attr/foreground_text_color"
-                            android:fontFamily="@font/montserrat"
+                            
                             android:paddingStart="8dp"
                             android:paddingTop="18dp"
                             android:paddingEnd="8dp"
@@ -750,8 +755,8 @@ android:gravity="center"/>
 
             </ScrollView>
         </LinearLayout>
-
     </LinearLayout>
+
     <ImageView
         android:id="@+id/noclassImage"
         android:layout_width="wrap_content"

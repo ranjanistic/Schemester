@@ -137,9 +137,7 @@ public class PermanentActionActivity extends AppCompatActivity {
                         output.close();
                     if (input != null)
                         input.close();
-                } catch (IOException ignored) {
-                    ignored.printStackTrace();
-                }
+                } catch (IOException ignored) {}
                 if (connection != null)
                     connection.disconnect();
             }
@@ -174,12 +172,11 @@ public class PermanentActionActivity extends AppCompatActivity {
     }
 
     public void setAppTheme() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
-        switch (mSharedPreferences.getInt(schemester.getPREF_KEY_THEME(), 0)) {
+        switch (getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
+                .getInt(schemester.getPREF_KEY_THEME(), 0)) {
             case ApplicationSchemester.CODE_THEME_INCOGNITO: setTheme(R.style.IncognitoTheme); break;
             case ApplicationSchemester.CODE_THEME_DARK: setTheme(R.style.DarkTheme);break;
-            case ApplicationSchemester.CODE_THEME_LIGHT:
-            default:setTheme(R.style.AppTheme);
+            case ApplicationSchemester.CODE_THEME_LIGHT: default:setTheme(R.style.AppTheme);
         }
     }
 }

@@ -2,6 +2,7 @@ package org.timetable.schemester;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
@@ -16,11 +17,6 @@ public class ApplicationSchemester  extends Application {
     public static final int versionCode = BuildConfig.VERSION_CODE;
     public static final String versionName = BuildConfig.VERSION_NAME,
     applicationId = BuildConfig.APPLICATION_ID;
-    String[] pKey = {"p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8", "p9"},
-    workDayString = {"monday", "tuesday", "wednesday", "thursday", "friday"};
-
-    public String[] getPKey(){ return pKey; }
-    public String[] getWorkDayString(){return workDayString;}
 
     String COLLECTION_GLOBAL_INFO = "global_info", DOCUMENT_GLOBAL_SEMESTER = "semester",
     DOCUMENT_LOCAL_INFO = "local_info", DOCUMENT_HOLIDAY_INFO = "holiday_info",
@@ -100,28 +96,10 @@ public class ApplicationSchemester  extends Application {
         this.COLLECTION_YEAR_CODE = year;
     }
 
-    int[] periodStringResource12 = {
-            R.string.period112, R.string.period212, R.string.period312, R.string.period412, R.string.period512,
-            R.string.period612, R.string.period712, R.string.period812, R.string.period912
-    }, periodStringResource24 = {
-            R.string.period1, R.string.period2, R.string.period3, R.string.period4,
-            R.string.period5, R.string.period6, R.string.period7, R.string.period8, R.string.period9
-    }, timeStringResource = {
-            R.string.time1, R.string.time2, R.string.time3, R.string.time4, R.string.time5,
-            R.string.time6, R.string.time7, R.string.time8, R.string.time9, R.string.time10,
-    };
-    public int[] getPeriodStringResource12(){
-        return periodStringResource12;
+    public String getStringResource(int resID){
+        return getResources().getString(resID);
     }
-    public int[] getPeriodStringResource24(){
-        return periodStringResource24;
-    }
-    public int[] getTimeStringResource(){
-        return timeStringResource;
-    }
-    public String getStringResource(int resId){
-        return getResources().getString(resId);
-    }
+    public int getColorResource(int resID){ return getResources().getColor(resID);}
 
     @Override
     public void onCreate() {

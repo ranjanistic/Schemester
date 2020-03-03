@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -14,6 +16,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -87,12 +90,6 @@ public class MainActivity extends AppCompatActivity{
             R.id.duration1,R.id.duration2,R.id.duration3,R.id.duration4,R.id.duration5,
             R.id.duration6,R.id.duration7,R.id.duration8,R.id.duration9,
     };
-    int[] timeStringResource = {
-        R.string.time1, R.string.time2, R.string.time3, R.string.time4, R.string.time5,
-                R.string.time6, R.string.time7, R.string.time8, R.string.time9, R.string.time10,
-    }, pkeyResource = {R.string.p1,R.string.p2,R.string.p3,R.string.p4
-            ,R.string.p5,R.string.p6,R.string.p7,R.string.p8,R.string.p9
-    };
     private LinearLayout bottomDrawer;
     private checkUpdate update;     //update checker asyncTask class
     private Window window;
@@ -101,6 +98,7 @@ public class MainActivity extends AppCompatActivity{
             COLLECTION_COLLEGE_CODE , DOCUMENT_COURSE_CODE , COLLECTION_YEAR_CODE;
     private DurationDetailsDialog durationDetailsDialog;
     private Boolean localHoliday = false;
+    View layer;
     CheckHolidayOtherThanWeekend checkHolidayOtherThanWeekend;
     @SuppressLint("SimpleDateFormat")
     @Override
@@ -270,10 +268,13 @@ public class MainActivity extends AppCompatActivity{
         window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
+        window.setNavigationBarColor(this.schemester.getColorResource(R.color.dull_white));
     }
 
     private void setViews(){
+        layer = findViewById(R.id.translucent_layer);
+        layer.setClickable(false);
+        layer.setVisibility(View.GONE);
         scrollView = findViewById(R.id.scrollView);
         headingView = findViewById(R.id.period_view);
         noClassText = findViewById(R.id.noclasstext);
@@ -288,6 +289,7 @@ public class MainActivity extends AppCompatActivity{
         int k = 0;
         while(k<9) {
             p[k] = findViewById(periodView[k]);
+            p[k].setText(getResources().getStringArray(R.array.periods_24)[k]);
             c[k] = findViewById(classView[k]);
             duration[k] = findViewById(durationView[k]);
             ++k;
@@ -304,47 +306,75 @@ public class MainActivity extends AppCompatActivity{
 
     private void setBottomSheetFeature(){
         bottomSheetBehavior = BottomSheetBehavior.from(bottomDrawer);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         bottomSheetBehavior.setHideable(false);
         LinearLayout drawerPeek = findViewById(R.id.drawerarrowHolder);
         drawerPeek.measure(View.MeasureSpec.UNSPECIFIED,View.MeasureSpec.UNSPECIFIED);
         bottomSheetBehavior.setPeekHeight(drawerPeek.getMeasuredHeight());
+
         drawerArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    drawerArrow.setRotation(-90);
                 } else if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                    drawerArrow.setRotation(90);
                 }
+            }
+        });
+        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                 if(newState == BottomSheetBehavior.STATE_DRAGGING || newState == BottomSheetBehavior.STATE_EXPANDED){
+                    layer.setClickable(true);
+                }
+            }
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                if(slideOffset == 0){
+                    layer.setVisibility(View.GONE);
+                    layer.setClickable(false);
+                } else { layer.setVisibility(View.VISIBLE); }
+                layer.setAlpha(2 * (slideOffset / 3));
+                drawerArrow.setRotation((slideOffset*180)+90);
+                switchThemeBtn.setRotation((slideOffset*360));
+                scheduleTab.setTranslationX(slideOffset);
             }
         });
 
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO){
             loginIdOnDrawer.setText(schemester.getStringResource(R.string.anonymous));
-            loginIdOnDrawer.setTextColor(getResources().getColor(R.color.blue));
+            loginIdOnDrawer.setTextColor(schemester.getColorResource(R.color.blue));
         } else loginIdOnDrawer.setText(getCredentials()[0]);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+                    if(bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED) {
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    }
+                }
+            });
+        }
     }
+
     private String[] getCredentials(){
         String[] cred = new String[2];
         SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE);
-        cred[0] =  mSharedPreferences.getString(schemester.getPREF_KEY_EMAIL(), "");
-        cred[1] =  mSharedPreferences.getString(schemester.getPREF_KEY_ROLL(), "");
+        cred[0] =  mSharedPreferences.getString(schemester.getPREF_KEY_EMAIL(), null);
+        cred[1] =  mSharedPreferences.getString(schemester.getPREF_KEY_ROLL(), null);
         return cred;
     }
-    @SuppressLint("SimpleDateFormat")
     private void runTimeDisplayOnBottomSheet(){
         final Handler timeHandler = new Handler(getMainLooper());
         timeHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if(getTimeFormat() == 12) {
-                    time.setText(new SimpleDateFormat(getStringResource(R.string.time_format_hhmm_ampm)).format(new Date()));
+                    time.setText(new SimpleDateFormat(getStringResource(R.string.time_format_hhmm_ampm), Locale.getDefault()).format(new Date()));
                 } else{
-                    time.setText(new SimpleDateFormat(getStringResource(R.string.time_format_hhmm)).format(new Date()));
+                    time.setText(new SimpleDateFormat(getStringResource(R.string.time_format_hhmm), Locale.getDefault()).format(new Date()));
                 }
                 timeHandler.postDelayed(this, 10);
             }
@@ -358,14 +388,14 @@ public class MainActivity extends AppCompatActivity{
 
         if(isLandscape()){
             if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK)
-                window.setNavigationBarColor(this.getResources().getColor(R.color.charcoal));
+                window.setNavigationBarColor(this.schemester.getColorResource(R.color.charcoal));
             else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO)
-                window.setNavigationBarColor(this.getResources().getColor(R.color.black_overlay));
-            else    window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
+                window.setNavigationBarColor(this.schemester.getColorResource(R.color.black_overlay));
+            else    window.setNavigationBarColor(this.schemester.getColorResource(R.color.dull_white));
         } else {
             if(getThemeStatus() == ApplicationSchemester.CODE_THEME_LIGHT)
-                window.setNavigationBarColor(this.getResources().getColor(R.color.dull_white));
-            else window.setNavigationBarColor(this.getResources().getColor(R.color.black_overlay));
+                window.setNavigationBarColor(this.schemester.getColorResource(R.color.dull_white));
+            else window.setNavigationBarColor(this.schemester.getColorResource(R.color.black_overlay));
         }
         if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
             switchThemeBtn.setBackgroundResource(R.drawable.ic_moonsmallicon);
@@ -381,6 +411,14 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void setButtonClickListeners(){
+        layer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            }
+        });
         final Intent restart = new Intent(MainActivity.this, MainActivity.class);
         switchThemeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -467,7 +505,12 @@ public class MainActivity extends AppCompatActivity{
                 }
             });
         }
-        d=0;
+        loginIdOnDrawer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ModeOfConduct.class));
+            }
+        });
     }
 
 
@@ -697,12 +740,12 @@ public class MainActivity extends AppCompatActivity{
         int i = 0;
         if(tFormat == 12)
             while (i < 9) {
-                p[i].setText(schemester.getStringResource(schemester.getPeriodStringResource12()[i]));
+                p[i].setText(getResources().getStringArray(R.array.periods_12)[i]);
                 ++i;
             }
         else
             while (i < 9) {
-                p[i].setText(schemester.getStringResource(schemester.getPeriodStringResource24()[i]));
+                p[i].setText(getResources().getStringArray(R.array.periods_24)[i]);
                 ++i;
             }
     }
@@ -813,31 +856,31 @@ public class MainActivity extends AppCompatActivity{
     //highlights current time period in main view
     private void highlightCurrentPeriod(){
         int i = 0, s = 0;
-        if(checkPeriod(getStringResource(timeStringResource[0]), getStringResource(timeStringResource[1]))){
-            p[i].setTextColor(getResources().getColor(R.color.white));
+        if(checkPeriod(getResources().getStringArray(R.array.hh_mm_ss_array)[0], getResources().getStringArray(R.array.hh_mm_ss_array)[1])){
+            p[i].setTextColor(schemester.getColorResource(R.color.white));
             p[i].setBackgroundResource(R.drawable.roundactivetimecontainer);
             return;
         }
-        else if(checkPeriod(getStringResource(timeStringResource[9]),getStringResource(R.string.one_second_before_new_day))) {     //after day is over
+        else if(checkPeriod(getResources().getStringArray(R.array.hh_mm_ss_array)[9],getStringResource(R.string.one_second_before_new_day))) {     //after day is over
             int d = 0;
             while (d<9) {
-                p[d].setTextColor(getResources().getColor(R.color.white));
+                p[d].setTextColor(schemester.getColorResource(R.color.white));
                 p[d].setBackgroundResource(R.drawable.roundtimeovercontainer);
                 ++d;
             }
             return;
-        } else if(checkPeriod(getStringResource(R.string.zero_seconds_after_new_day),getStringResource(timeStringResource[0]))) {   //during night
+        } else if(checkPeriod(getStringResource(R.string.zero_seconds_after_new_day),getResources().getStringArray(R.array.hh_mm_ss_array)[0])) {   //during night
             int n = 0;
             while (n<9) {
                 p[n].setBackgroundResource(R.drawable.roundcontainerbox);
-                p[n].setTextColor(getResources().getColor(R.color.white));
+                p[n].setTextColor(schemester.getColorResource(R.color.white));
                 ++n;
             }
             return;
         } else {      //checking period during work hours and assigning 's'
             int k = 0;
             while (k<9){
-                if(checkPeriod(getStringResource(timeStringResource[k]),getStringResource(timeStringResource[k+1]))){
+                if(checkPeriod(getResources().getStringArray(R.array.hh_mm_ss_array)[k],getResources().getStringArray(R.array.hh_mm_ss_array)[k+1])){
                     s = k; k=9;
                 } else {
                     ++k;
@@ -846,16 +889,16 @@ public class MainActivity extends AppCompatActivity{
         }
         if(s>i) {
             while (i < s) {     //work hours highlighter
-                p[i].setTextColor(getResources().getColor(R.color.white));
+                p[i].setTextColor(schemester.getColorResource(R.color.white));
                 p[i].setBackgroundResource(R.drawable.roundtimeovercontainer);
                 p[s].setBackgroundResource(R.drawable.roundactivetimecontainer);
-                p[s].setTextColor(getResources().getColor(R.color.white));
+                p[s].setTextColor(schemester.getColorResource(R.color.white));
                 ++i;
             }
         }
         i=i+1;
         while (i<9){    //upcoming period highlighter
-            p[i].setTextColor(getResources().getColor(R.color.white));
+            p[i].setTextColor(schemester.getColorResource(R.color.white));
             p[i].setBackgroundResource(R.drawable.roundcontainerbox);
             ++i;
         }
@@ -905,9 +948,9 @@ public class MainActivity extends AppCompatActivity{
                                 if (Objects.requireNonNull(document).exists()) {
                                     int i = 0;
                                     while(i<9) {
-                                        if(Objects.equals(document.getString(getStringResource(pkeyResource[i])),"Nothing"))
+                                        if(Objects.equals(document.getString(getResources().getStringArray(R.array.period_key_array)[i]),"Nothing"))
                                             duration[i].setVisibility(View.GONE);
-                                        else c[i].setText(document.getString(getStringResource(pkeyResource[i])));
+                                        else c[i].setText(document.getString(getResources().getStringArray(R.array.period_key_array)[i]));
                                         ++i;
                                     }
                                 }
@@ -981,11 +1024,8 @@ public class MainActivity extends AppCompatActivity{
                 .getInt(schemester.getPREF_KEY_TIME_FORMAT(), 24);
     }
     private boolean isInternetAvailable() {
-        Runtime runtime = Runtime.getRuntime();
         try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int exitValue = ipProcess.waitFor();
-            return exitValue == 0;
+            return Runtime.getRuntime().exec("/system/bin/ping -c 1 8.8.8.8").waitFor() == 0;
         }
         catch (IOException | InterruptedException e) { e.printStackTrace(); }
         return false;

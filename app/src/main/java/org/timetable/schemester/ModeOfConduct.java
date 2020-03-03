@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -20,51 +19,23 @@ public class ModeOfConduct extends AppCompatActivity {
     TextView cCaption, cLoginPath, cMessage;
     ImageView cBackImg;
     Window window;
-
+    View activityFull;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         schemester = (ApplicationSchemester) this.getApplication();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mode_of_conduct);
-        continueBtn = findViewById(R.id.continueConduct);
-        continueBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(getThemeStatus() != ApplicationSchemester.CODE_THEME_INCOGNITO) {
-                    storeThemeStatus(ApplicationSchemester.CODE_THEME_INCOGNITO);
-                } else {
-                    storeThemeStatus(ApplicationSchemester.CODE_THEME_LIGHT);
-                }
-                Intent i = new Intent(ModeOfConduct.this, MainActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-                finish();
+        setWindowDecorDefaults();
+        setViewsAndInitials();
+        setListeners();
 
-            }
-        });
-        cancel = findViewById(R.id.cancelConduct);
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        View activityFull = findViewById(R.id.confirmationActivity);
-        window = this.getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-        cCaption = findViewById(R.id.continueTitle);
-        cLoginPath = findViewById(R.id.continueAs);
-        cMessage = findViewById(R.id.continueInfo);
-        cBackImg = findViewById(R.id.continueBackImage);
         String returnUserMsg = schemester.getStringResource(R.string.returning_as)+" " +getCredentials()[0]+" "
                 + schemester.getStringResource(R.string.return_as_user_message)
                 + "Are you in as\n " + getCredentials()[0]+"?",
                 anonymUserMsg = schemester.getStringResource(R.string.continue_as) +" " + schemester.getStringResource(R.string.anonymous)+" "
                         +  schemester.getStringResource(R.string.continue_as_user_message) +
                         "Are you in as anonymous?";
-        if (getThemeStatus() == 103) {
+        if (getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO) {
             window.setStatusBarColor(this.getResources().getColor(R.color.white));
             window.setNavigationBarColor(this.getResources().getColor(R.color.white));
             cMessage.setTypeface(Typeface.DEFAULT_BOLD);
@@ -89,24 +60,55 @@ public class ModeOfConduct extends AppCompatActivity {
             cMessage.setText(anonymUserMsg);
         }
     }
+    private void setWindowDecorDefaults(){
+        window = this.getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    }
+    private void setViewsAndInitials(){
+        activityFull = findViewById(R.id.confirmationActivity);
+        continueBtn = findViewById(R.id.continueConduct);
+        cancel = findViewById(R.id.cancelConduct);
+        cCaption = findViewById(R.id.continueTitle);
+        cLoginPath = findViewById(R.id.continueAs);
+        cMessage = findViewById(R.id.continueInfo);
+        cBackImg = findViewById(R.id.continueBackImage);
+    }
+    private void setListeners(){
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        continueBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(getThemeStatus() != ApplicationSchemester.CODE_THEME_INCOGNITO) {
+                    storeThemeStatus(ApplicationSchemester.CODE_THEME_INCOGNITO);
+                } else { storeThemeStatus(ApplicationSchemester.CODE_THEME_LIGHT); }
+                startActivity(new Intent(ModeOfConduct.this, MainActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                finish();
+            }
+        });
+    }
     private String[] getCredentials(){
-        String[] cred = {"",""};
-        SharedPreferences mSharedPreferences = getSharedPreferences("credentials", MODE_PRIVATE);
-        cred[0] =  mSharedPreferences.getString("email", "");
-        cred[1] =  mSharedPreferences.getString("roll", "");
+        String[] cred = new String[2];
+        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE);
+        cred[0] =  mSharedPreferences.getString(schemester.getPREF_KEY_EMAIL(), null);
+        cred[1] =  mSharedPreferences.getString(schemester.getPREF_KEY_ROLL(), null);
         return cred;
     }
 
-    private void storeThemeStatus(int themechoice){
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
-        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putInt("themeCode", themechoice);
-        mEditor.apply();
+    private void storeThemeStatus(int themeChoice){
+        getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE).edit()
+                .putInt(schemester.getPREF_KEY_THEME(), themeChoice).apply();
     }
 
     private int getThemeStatus(){
-        SharedPreferences mSharedPreferences = this.getSharedPreferences("schemeTheme", MODE_PRIVATE);
-        return mSharedPreferences.getInt("themeCode", 0);
+        return getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
+                .getInt(schemester.getPREF_KEY_THEME(), 0);
     }
 
 }

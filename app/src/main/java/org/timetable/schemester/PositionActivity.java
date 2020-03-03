@@ -2,7 +2,6 @@ package org.timetable.schemester;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -30,11 +29,8 @@ public class PositionActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_position);
-        hide = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.gone_centrally);
-        show = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.emerge_centrally);
-        fadeon = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fadeliton);
-        fadeoff= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fadelitoff);
-        modeSwitch = findViewById(R.id.modeSwitchBtnInitial);
+        setViewAndDefaults();
+
         schemester.imageButtonLongPressToast(modeSwitch,"Touch to renovate");
         if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
             modeSwitch.setImageResource(R.drawable.ic_moonsmallicon);
@@ -75,8 +71,6 @@ public class PositionActivity extends AppCompatActivity {
                 }
             }
         });
-        teacher = findViewById(R.id.teacherbtn);
-        student = findViewById(R.id.studentbtn);
 
         final Intent login = new Intent(PositionActivity.this, LoginActivity.class);
         teacher.setOnClickListener(new View.OnClickListener() {
@@ -95,35 +89,37 @@ public class PositionActivity extends AppCompatActivity {
         });
     }
 
+    private void setViewAndDefaults(){
+        hide = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.gone_centrally);
+        show = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.emerge_centrally);
+        fadeon = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fadeliton);
+        fadeoff= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fadelitoff);
+        modeSwitch = findViewById(R.id.modeSwitchBtnInitial);
+        teacher = findViewById(R.id.teacherbtn);
+        student = findViewById(R.id.studentbtn);
+    }
+
     protected void onResume(){
         user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user!=null){
-            finish();
-        }
+        if(user!=null) finish();
         super.onResume();
     }
     private void storeUserPosition(String pos){
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE);
-        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putString(schemester.getPREF_KEY_USER_DEF(), pos);
-        mEditor.apply();
+        getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE).edit()
+                .putString(schemester.getPREF_KEY_USER_DEF(), pos).apply();
     }
-
-    private void storeThemeStatus(int themechoice){
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
-        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putInt(schemester.getPREF_KEY_THEME(), themechoice);
-        mEditor.apply();
+    private void storeThemeStatus(int themeChoice){
+        getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE).edit()
+                .putInt(schemester.getPREF_KEY_THEME(), themeChoice).apply();
     }
     public void setAppTheme(int code) {
         switch (code) {
             case ApplicationSchemester.CODE_THEME_DARK: setTheme(R.style.BlueDarkTheme);break;
-            case ApplicationSchemester.CODE_THEME_LIGHT:
-            default:setTheme(R.style.BlueLightTheme);
+            case ApplicationSchemester.CODE_THEME_LIGHT: default:setTheme(R.style.BlueLightTheme);
         }
     }
     private int getThemeStatus() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
-        return mSharedPreferences.getInt(schemester.getPREF_KEY_THEME(), 0);
+        return getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
+                .getInt(schemester.getPREF_KEY_THEME(), 0);
     }
 }

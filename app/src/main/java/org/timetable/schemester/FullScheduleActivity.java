@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,37 +51,32 @@ import java.util.TimeZone;
 
 
 public class FullScheduleActivity extends AppCompatActivity {
-    ApplicationSchemester schemester;
-    TextView email, roll, semester, courseText, collegeText, yearText;
-    Button  logoutbtn;
-    TextView[] p = new TextView[9],       //period objects
-                c = new TextView[9];        //class name text view objects
-    Button[] dayBtn = new Button[5];
+    private ApplicationSchemester schemester;
+    TextView email, roll, semester, versionNameText;
+    private Button logoutBtn;
+    private TextView[] p = new TextView[9],       //period objects
+                c = new TextView[9],    //class name text view objects
+            ccyTextView = new TextView[3];
+    private Button[] dayBtn = new Button[5];
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    View settingsview, aboutview;
-    ImageButton setting, about, git, dml, webbtn, fullsetting, updatecheck, noticebtn;
-    NestedScrollView dayschedulePortrait;       //common view for both orientations
-    HorizontalScrollView horizontalScrollView;
-    TextView versionNameView;
-    ImageButton chatbtn, incognito;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    CustomLoadDialogClass customLoadDialogClass;
+    private View settingsView, aboutView;
+    private ImageButton setting, about, git, dml, website, fullSettings, updateCheck, notice,chat, incognito;
+    private NestedScrollView dayScheduleNested;       //common view for both orientations
+    HorizontalScrollView horizontalScrollView;
+    private CustomLoadDialogClass customLoadDialogClass;
     CustomDownloadLoadDialog customDownloadLoadDialog;
-    Window window;
     CustomConfirmDialogClass customConfirmDialogClassVerification;
+    Window window;
     Calendar calendar;
      String websiteLink;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         schemester = (ApplicationSchemester) this.getApplication();
         super.onCreate(savedInstanceState);
-        setAppTheme(getThemeStatus());
+        setAppTheme();
         setContentView(R.layout.activity_full_schedule);
         storeLoginStatus(true);
-        /*
-         * sequence of functions called one by, names are self explanatory.
-         * The order of function call can be important, for initialization of any object is followed by its utilization (for example).
-         */
         alertForInternetDisability();
         setWindowDecorDefaults();
         findViewsAndAssignObjects();
@@ -101,14 +97,14 @@ public class FullScheduleActivity extends AppCompatActivity {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
     }
     private void findViewsAndAssignObjects(){
-        dayschedulePortrait= findViewById(R.id.weekdayplanview);
+        dayScheduleNested= findViewById(R.id.weekdayplanview);
         incognito = findViewById(R.id.incognitoBtn);
-        versionNameView = findViewById(R.id.versionCodeName);
+        versionNameText = findViewById(R.id.versionCodeName);
         about = findViewById(R.id.aboutbtn);
-        settingsview = findViewById(R.id.settingview);
-        aboutview = findViewById(R.id.aboutview);
-        noticebtn = findViewById(R.id.noticebutton);
-        chatbtn = findViewById(R.id.chatButton);
+        settingsView = findViewById(R.id.settingview);
+        aboutView = findViewById(R.id.aboutview);
+        notice = findViewById(R.id.noticebutton);
+        chat = findViewById(R.id.chatButton);
 
         int[] periodView = {R.id.period1, R.id.period2, R.id.period3, R.id.period4, R.id.period5, R.id.period6, R.id.period7, R.id.period8, R.id.period9,
         }, classView = {R.id.class1, R.id.class2, R.id.class3, R.id.class4, R.id.class5, R.id.class6, R.id.class7, R.id.class8, R.id.class9,
@@ -127,48 +123,52 @@ public class FullScheduleActivity extends AppCompatActivity {
             ++w;
         }
         semester = findViewById(R.id.semtextsetting);
-        courseText = findViewById(R.id.courseTextSetting);
-        collegeText = findViewById(R.id.collegeTextSetting);
-        yearText = findViewById(R.id.yearTextSetting);
+        ccyTextView[0] = findViewById(R.id.collegeTextSetting);
+        ccyTextView[1] = findViewById(R.id.courseTextSetting);
+        ccyTextView[2] = findViewById(R.id.yearTextSetting);
         email = findViewById(R.id.emailtextsetting);
         roll = findViewById(R.id.rolltextsetting);
         setting = findViewById(R.id.settingbtn);
-        logoutbtn = findViewById(R.id.logout);
-        fullsetting = findViewById(R.id.fullsettingsbtn);
+        logoutBtn = findViewById(R.id.logout);
+        fullSettings = findViewById(R.id.fullsettingsbtn);
         git = findViewById(R.id.githubbtn);
-        updatecheck = findViewById(R.id.checkupdateBtn);
-        webbtn = findViewById(R.id.websiteBtn);
-
-        schemester.imageButtonLongPressToast(noticebtn,"Notices from authority");
-        schemester.imageButtonLongPressToast(chatbtn,"Chat with others!");
+        updateCheck = findViewById(R.id.checkupdateBtn);
+        website = findViewById(R.id.websiteBtn);
+        dml = findViewById(R.id.dmlabs);
+        schemester.imageButtonLongPressToast(notice,"Notice board");
+        schemester.imageButtonLongPressToast(chat,"Chat Room");
         schemester.imageButtonLongPressToast(setting,"Quick settings");
         schemester.imageButtonLongPressToast(about,"About");
         schemester.imageButtonLongPressToast(incognito,"Go anonymous");
-        schemester.imageButtonLongPressToast(fullsetting, "Full settings");
-        schemester.imageButtonLongPressToast(updatecheck,"Check for updates");
-        schemester.imageButtonLongPressToast(webbtn,"Visit online");
+        schemester.imageButtonLongPressToast(fullSettings, "Full settings");
+        schemester.imageButtonLongPressToast(updateCheck,"Check for updates");
+        schemester.imageButtonLongPressToast(website,"Visit online");
     }
 
     private void setThemeConsequences(){
         if (getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO) {
-            window.setStatusBarColor(this.getResources().getColor(R.color.black));
-            window.setNavigationBarColor(this.getResources().getColor(R.color.black));
+            window.setStatusBarColor(schemester.getColorResource(R.color.black));
+            window.setNavigationBarColor(schemester.getColorResource(R.color.black));
+            setIncognitoMode(true);
+        } else if (getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK) {
+            window.setStatusBarColor(schemester.getColorResource(R.color.spruce));
+            window.setNavigationBarColor(schemester.getColorResource(R.color.spruce));
+            setIncognitoMode(false);
+        } else {
+            window.setStatusBarColor(schemester.getColorResource(R.color.blue));
+            window.setNavigationBarColor(schemester.getColorResource(R.color.blue));
+            setIncognitoMode(false);
+        }
+    }
+    private void setIncognitoMode(Boolean isIncognito){
+        if(isIncognito){
             incognito.setImageResource(R.drawable.ic_usericon);
-            logoutbtn.setVisibility(View.GONE);
+            logoutBtn.setVisibility(View.GONE);
             email.setText(schemester.getStringResource(R.string.anonymous));
             roll.setText(schemester.getStringResource(R.string.anonymous));
-        } else if (getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK) {
-            window.setStatusBarColor(this.getResources().getColor(R.color.spruce));
-            window.setNavigationBarColor(this.getResources().getColor(R.color.spruce));
-            incognito.setImageResource(R.drawable.ic_icognitoman);
-            logoutbtn.setVisibility(View.VISIBLE);
         } else {
-            window.setStatusBarColor(this.getResources().getColor(R.color.blue));
-            window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
             incognito.setImageResource(R.drawable.ic_icognitoman);
-            logoutbtn.setVisibility(View.VISIBLE);
-        }
-        if(getThemeStatus() != ApplicationSchemester.CODE_THEME_INCOGNITO) {
+            logoutBtn.setVisibility(View.VISIBLE);
             email.setText(getCredentials()[0]);
             roll.setText(getCredentials()[1]);
         }
@@ -176,37 +176,39 @@ public class FullScheduleActivity extends AppCompatActivity {
 
     private void setListenersAndDefaultViews(){
         schemester.setCollegeCourseYear(getAdditionalInfo()[0], getAdditionalInfo()[1], getAdditionalInfo()[2]);
-        versionNameView.setText(ApplicationSchemester.versionName);
+        versionNameText.setText(ApplicationSchemester.versionName);
         calendar = Calendar.getInstance(TimeZone.getDefault());
         //by default, settings and about pages not shown
-        settingsview.setVisibility(View.GONE);
-        aboutview.setVisibility(View.GONE);
-        int i = 0;
-        while(i<getResources().getStringArray(R.array.college_code_array).length) {
-            if (Objects.equals(getAdditionalInfo()[0], getResources().getStringArray(R.array.college_code_array)[i])) {
-                collegeText.setText(getResources().getStringArray(R.array.college_array)[i]);
+        settingsView.setVisibility(View.GONE);
+        aboutView.setVisibility(View.GONE);
+
+        String[][] ccyArray = new String[][]{getResources().getStringArray(R.array.college_array),
+                getResources().getStringArray(R.array.course_array),
+                getResources().getStringArray(R.array.year_array)},
+                ccyCodeArray = new String[][]{
+                        getResources().getStringArray(R.array.college_code_array),
+                        getResources().getStringArray(R.array.course_code_array),
+                        getResources().getStringArray(R.array.year_code_array)
+                };
+
+        int j = 0;
+        while(j<3) {
+            int i = 0;
+            while (i < ccyArray[j].length) {
+                if (Objects.equals(getAdditionalInfo()[j], ccyCodeArray[j][i])) {
+                    ccyTextView[j].setText(ccyArray[j][i]);
+                }
+                ++i;
             }
-            ++i;
-        }
-        i = 0;
-        while(i<getResources().getStringArray(R.array.course_code_array).length) {
-            if (Objects.equals(getAdditionalInfo()[1], getResources().getStringArray(R.array.course_code_array)[i])) {
-                courseText.setText(getResources().getStringArray(R.array.course_array)[i]);
-            }
-            ++i;
-        }
-        i=0;
-        while(i<getResources().getStringArray(R.array.year_code_array).length) {
-            if (Objects.equals(getAdditionalInfo()[2], getResources().getStringArray(R.array.year_code_array)[i])) {
-                yearText.setText(getResources().getStringArray(R.array.year_array)[i]);
-            }
-            ++i;
+            ++j;
         }
         if(isLandscape()) {
-            int d = 0;
-            while (d<5) {
+            for (int d = 0;d<5;++d) {
                 dayBtn[d].setText(getResources().getStringArray(R.array.weekdays)[d+1]);
-                ++d;
+            }
+        } else {
+            for (int d = 0;d<5;++d) {
+                dayBtn[d].setText(getResources().getStringArray(R.array.weekdays_trimmed)[d+1]);
             }
         }
         getWebsiteLinkFromDatabase();
@@ -214,57 +216,51 @@ public class FullScheduleActivity extends AppCompatActivity {
         incognito.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(FullScheduleActivity.this, ModeOfConduct.class);
-                startActivity(i);
+                startActivity(new Intent(FullScheduleActivity.this, ModeOfConduct.class));
             }
         });
 
         git.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri uri = Uri.parse(schemester.getStringResource(R.string.ranjanistic_github));
-                Intent web = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(web);
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(schemester.getStringResource(R.string.ranjanistic_github))));
             }
         });
 
-        webbtn.setOnClickListener(new View.OnClickListener() {
+        website.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri uri = Uri.parse(websiteLink);
-                Intent web = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(web);
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(websiteLink)));
             }
         });
-        dml = findViewById(R.id.dmlabs);
+
         dml.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Uri uri = Uri.parse(schemester.getStringResource(R.string.darkmodelabs_github));
-                Intent web = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(web);
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(schemester.getStringResource(R.string.darkmodelabs_github))));
             }
         });
 
-        fullsetting.setOnClickListener(new View.OnClickListener() {
+        fullSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(FullScheduleActivity.this, Preferences.class);
-                startActivity(intent);
+                startActivity(new Intent(FullScheduleActivity.this, Preferences.class));
             }
         });
 
 
-        updatecheck.setOnClickListener(new View.OnClickListener() {
+        updateCheck.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view){
                 customLoadDialogClass.show();
                 readVersionCheckUpdate();
             }
         });
 
         //TODO: Notice board  and chat room feature
-        noticebtn.setOnClickListener(new View.OnClickListener() {
+        notice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 schemester.toasterLong(schemester.getStringResource(R.string.under_construction_message));
@@ -273,57 +269,52 @@ public class FullScheduleActivity extends AppCompatActivity {
  */
             }
         });
-        chatbtn.setOnClickListener(new View.OnClickListener() {
+        chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!checkIfEmailVerified()) {
                     customConfirmDialogClassVerification.show();
                 }else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO){
-                    Intent mode = new Intent(FullScheduleActivity.this, ModeOfConduct.class);
-                    startActivity(mode);
+                    startActivity(new Intent(FullScheduleActivity.this, ModeOfConduct.class));
                 } else {
-                    schemester.toasterLong(schemester.getStringResource(R.string.under_construction_message));
-                    Intent room = new Intent(FullScheduleActivity.this, ChatRoomActivity.class);
-                    startActivity(room);
+//                    schemester.toasterLong(schemester.getStringResource(R.string.under_construction_message));
+                    startActivity( new Intent(FullScheduleActivity.this, ChatRoomActivity.class));
                 }
             }
         });
-
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 clearAllWeekDayButtonSelection();
                 readAndSetSemesterFromDatabase(schemester.getCOLLECTION_GLOBAL_INFO(),schemester.getDOCUMENT_GLOBAL_SEMESTER(),schemester.getCOLLECTION_YEAR_CODE());
-                dayschedulePortrait.setVisibility(View.GONE);
-                settingsview.setVisibility(View.VISIBLE);
-                aboutview.setVisibility(View.GONE);
+                dayScheduleNested.setVisibility(View.GONE);
+                settingsView.setVisibility(View.VISIBLE);
+                aboutView.setVisibility(View.GONE);
             }
         });
-
         about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 clearAllWeekDayButtonSelection();
-                dayschedulePortrait.setVisibility(View.GONE);
-                settingsview.setVisibility(View.GONE);
-                aboutview.setVisibility(View.VISIBLE);
+                dayScheduleNested.setVisibility(View.GONE);
+                settingsView.setVisibility(View.GONE);
+                aboutView.setVisibility(View.VISIBLE);
             }
         });
-        logoutbtn.setOnClickListener(new View.OnClickListener() {
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Snackbar snackbar
-                = Snackbar.make(view, "Sure to log out?", 7000);
-                        snackbar.setBackgroundTint(getResources().getColor(R.color.dead_blue))
-                        .setTextColor(getResources().getColor(R.color.white))
-                        .setAction("Logout", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                storeLoginStatus(false);
-                                logoutCurrentUser();
-                            }
-                        }).setActionTextColor(getResources().getColor(R.color.yellow))
-                        .show();
+             Snackbar.make(view, schemester.getStringResource(R.string.confirm_logout_text), 5000)
+                    .setBackgroundTint(schemester.getColorResource(R.color.dead_blue))
+                    .setTextColor(schemester.getColorResource(R.color.white))
+                    .setAction(schemester.getStringResource(R.string.logout), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            storeLoginStatus(false);
+                            logoutCurrentUser();
+                        }
+                    }).setActionTextColor(schemester.getColorResource(R.color.yellow))
+                    .show();
             }
         });
 
@@ -355,56 +346,57 @@ public class FullScheduleActivity extends AppCompatActivity {
         int[] dayValues = {Calendar.MONDAY,Calendar.TUESDAY,Calendar.WEDNESDAY,Calendar.THURSDAY,Calendar.FRIDAY};
         int k =0;
         while(k<5){
+            //noinspection MagicConstant
             if(dayValues[k] == calendar.get(Calendar.DAY_OF_WEEK)){
-                readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),schemester.getCOLLECTION_YEAR_CODE(),schemester.getWorkDayString()[k]);
+                readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),schemester.getCOLLECTION_YEAR_CODE(),
+                        getResources().getStringArray(R.array.weekdays)[k+1].toLowerCase());
                 dayBtn[k].setBackgroundResource(R.drawable.leftroundbtnselected);
-                dayBtn[k].setTextColor(getResources().getColor(R.color.blue));
+                dayBtn[k].setTextColor(schemester.getColorResource(R.color.blue));
             }
             ++k;
         }
         if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ||calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ){
-            readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),schemester.getCOLLECTION_YEAR_CODE(),schemester.getWorkDayString()[0]);
+            readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),
+                    schemester.getCOLLECTION_YEAR_CODE(),getResources().getStringArray(R.array.weekdays)[1].toLowerCase());
             dayBtn[0].setBackgroundResource(R.drawable.leftroundbtnselected);
-            dayBtn[0].setTextColor(getResources().getColor(R.color.blue));
+            dayBtn[0].setTextColor(schemester.getColorResource(R.color.blue));
         }
     }
 
-    int di = 0;
     private void setWeekDayBtnClickListener() {
-        for (di = 0; di < 5; di++) {
+        for (int di = 0; di < 5; di++) {
             final int finalDI = di;
             dayBtn[di].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    setLoadingTextView();
                     alertForInternetDisability();
                     scrollTop();
-                    setLoadingTextView();
-                    dayschedulePortrait.setVisibility(View.VISIBLE);
-                    settingsview.setVisibility(View.GONE);
-                    aboutview.setVisibility(View.GONE);
+                    dayScheduleNested.setVisibility(View.VISIBLE);
+                    settingsView.setVisibility(View.GONE);
+                    aboutView.setVisibility(View.GONE);
                     readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(), schemester.getDOCUMENT_COURSE_CODE(),
-                            schemester.getCOLLECTION_YEAR_CODE(), schemester.getWorkDayString()[finalDI]);
+                            schemester.getCOLLECTION_YEAR_CODE(), getResources().getStringArray(R.array.weekdays)[finalDI+1].toLowerCase());
                     int j = 0;
                     while(j<5) {
                         if(finalDI == j) {
                             dayBtn[j].setBackgroundResource(R.drawable.leftroundbtnselected);
-                            dayBtn[j].setTextColor(getResources().getColor(R.color.blue));
+                            dayBtn[j].setTextColor(schemester.getColorResource(R.color.blue));
                         } else {
                             dayBtn[j].setBackgroundResource(R.drawable.leftroundbtn);
-                            dayBtn[j].setTextColor(getResources().getColor(R.color.white));
+                            dayBtn[j].setTextColor(schemester.getColorResource(R.color.white));
                         }
                         ++j;
                     }
                 }
             });
         }
-        di = 0;
     }
     private void clearAllWeekDayButtonSelection(){
         int i = 0;
         while(i<5) {
             dayBtn[i].setBackgroundResource(R.drawable.leftroundbtn);
-            dayBtn[i].setTextColor(getResources().getColor(R.color.white));
+            dayBtn[i].setTextColor(schemester.getColorResource(R.color.white));
             ++i;
         }
     }
@@ -428,9 +420,9 @@ public class FullScheduleActivity extends AppCompatActivity {
     private String[] getAdditionalInfo() {
         String[] CCY = new String[3];
         SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_ADDITIONAL_INFO(), MODE_PRIVATE);
-        CCY[0] = mSharedPreferences.getString(schemester.getPREF_KEY_COLLEGE(), "");
-        CCY[1] = mSharedPreferences.getString(schemester.getPREF_KEY_COURSE(), "");
-        CCY[2] = mSharedPreferences.getString(schemester.getPREF_KEY_YEAR(), "");
+        CCY[0] = mSharedPreferences.getString(schemester.getPREF_KEY_COLLEGE(), null);
+        CCY[1] = mSharedPreferences.getString(schemester.getPREF_KEY_COURSE(), null);
+        CCY[2] = mSharedPreferences.getString(schemester.getPREF_KEY_YEAR(), null);
         return CCY;
     }
 
@@ -445,29 +437,37 @@ public class FullScheduleActivity extends AppCompatActivity {
                             logoutCurrentUser();
                         }
                     }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        schemester.toasterLong(schemester.getStringResource(R.string.check_connection_try_again));
+                    }
                 });
     }
-    private Boolean checkIfEmailVerified() { return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).isEmailVerified(); }
+    private Boolean checkIfEmailVerified() {
+        return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).isEmailVerified();
+    }
     
     //to set time display of period according to chosen format
     private void setTimeFormat(int tFormat){
         int i = 0;
         if(tFormat == 12) {
             while (i < 9) {
-                p[i].setText(schemester.getStringResource(schemester.getPeriodStringResource12()[i]));
+                p[i].setText(getResources().getStringArray(R.array.periods_12)[i]);
                 ++i;
             }
         } else {
             while (i < 9) {
-                p[i].setText(schemester.getStringResource(schemester.getPeriodStringResource24()[i]));
+                p[i].setText(getResources().getStringArray(R.array.periods_24)[i]);
                 ++i;
             }
         }
     }
 
     private int getTimeFormat() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_TIME_FORMAT(), MODE_PRIVATE);
-        return mSharedPreferences.getInt(schemester.getPREF_KEY_TIME_FORMAT(), 24);
+        return getSharedPreferences(schemester.getPREF_HEAD_TIME_FORMAT(), MODE_PRIVATE)
+                .getInt(schemester.getPREF_KEY_TIME_FORMAT(), 24);
     }
 
     //this reads semester name from database and sets in semester text view
@@ -491,8 +491,8 @@ public class FullScheduleActivity extends AppCompatActivity {
     private String[] getCredentials(){
         String[] cred = new String[2];
         SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE);
-        cred[0] =  mSharedPreferences.getString(schemester.getPREF_KEY_EMAIL(), "");
-        cred[1] =  mSharedPreferences.getString(schemester.getPREF_KEY_ROLL(), "");
+        cred[0] =  mSharedPreferences.getString(schemester.getPREF_KEY_EMAIL(), null);
+        cred[1] =  mSharedPreferences.getString(schemester.getPREF_KEY_ROLL(), null);
         return cred;
     }
     
@@ -504,12 +504,13 @@ public class FullScheduleActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
+                            int i = 0;
                             DocumentSnapshot document = task.getResult();
                             if (Objects.requireNonNull(document).exists()) {
-                                int i = 0;
                                 while(i<9) {
-                                    c[i].setText(document.getString(schemester.getPKey()[i]));
-                                    i++; } 
+                                    c[i].setText(document.getString(getResources().getStringArray(R.array.period_key_array)[i]));
+                                    ++i;
+                                }
                             } else schemester.toasterLong(schemester.getStringResource(R.string.server_error_try_reinstall));
                         } else { schemester.toasterLong(schemester.getStringResource(R.string.internet_error)); }
                     }
@@ -521,24 +522,22 @@ public class FullScheduleActivity extends AppCompatActivity {
         if(isNetworkConnected()) {
             FirebaseAuth.getInstance().signOut();
             schemester.toasterLong(schemester.getStringResource(R.string.logged_out));
-            Intent i = new Intent(FullScheduleActivity.this, PositionActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP); // To clean up all activities
-            startActivity(i);
+            startActivity(new Intent(FullScheduleActivity.this, PositionActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            );
             overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
             finish();
         } else { schemester.toasterShort(schemester.getStringResource(R.string.connect_to_internet)); }
     }
     
     private void storeLoginStatus(Boolean logged){
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_LOGIN_STAT(), MODE_PRIVATE);
-        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putBoolean(schemester.getPREF_KEY_LOGIN_STAT(), logged);
-        mEditor.apply();
+        getSharedPreferences(schemester.getPREF_HEAD_LOGIN_STAT(), MODE_PRIVATE).edit()
+                .putBoolean(schemester.getPREF_KEY_LOGIN_STAT(), logged).apply();
     }
 
     private void scrollTop(){
         if(!isLandscape()) {
-            dayschedulePortrait.smoothScrollTo(0,View.FOCUS_UP);
+            dayScheduleNested.smoothScrollTo(0,View.FOCUS_UP);
         } else{
             horizontalScrollView = findViewById(R.id.horizontalScrollLand);
             horizontalScrollView.smoothScrollTo(View.FOCUS_LEFT,0);
@@ -627,86 +626,74 @@ public class FullScheduleActivity extends AppCompatActivity {
             schemester.toasterLong(schemester.getStringResource(R.string.network_problem));
         }
     }
-
- private void downloader(final String link,final  String version){
-     customDownloadLoadDialog = new CustomDownloadLoadDialog(FullScheduleActivity.this, new OnDialogDownloadLoadListener() {
-         @Override
-         public String getLink() {
+    private void downloader(final String link,final  String version){
+        customDownloadLoadDialog = new CustomDownloadLoadDialog(FullScheduleActivity.this, new OnDialogDownloadLoadListener() {
+            @Override
+            public String getLink() {
              return link;
          }
-         @Override
-         public String getVersion() {
+            @Override
+            public String getVersion() {
              return version;
          }
-         @Override
-         public void afterFinish(Boolean isCompleted) {
-             if (isCompleted) {
-                 showPackageAlert();
-             } else {
-                 customLoadDialogClass.hide();
-                 schemester.toasterShort(schemester.getStringResource(R.string.download_interrupted));
-             }
-         }
-     });
-     customDownloadLoadDialog.show();
- }
- private void setLoadingTextView() {
-     int i = 0;
-     while (i < 9) {
-         c[i].setText(getResources().getString(R.string.loading));
-         i++;
-     }
- }
-
- private void showPackageAlert(){
-     CustomAlertDialog downloadFinishAlert = new CustomAlertDialog(FullScheduleActivity.this, new OnDialogAlertListener() {
-         @Override
-         public void onDismiss() {}
-         @Override
-         public String onCallText() {
-             return schemester.getStringResource(R.string.download_completed);
-         }
-         @Override
-         public String onCallSub() {
-             return "Latest version is downloaded. \n\nGo to File manager > Internal Storage > Schemester\n\nHere you'll find the latest package to install.\n\n(Delete that file if it is causing problems)";
-         }
-     });downloadFinishAlert.show();
- }
- 
-private boolean storagePermissionGranted(){ return (ContextCompat.checkSelfPermission(FullScheduleActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED)); }
-
-private void requestStoragePermission(){
-    ActivityCompat.requestPermissions(FullScheduleActivity.this,
-            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-            1);
-    customLoadDialogClass.hide();
-}
-    public void setAppTheme(int code) {
-        switch (code) {
-            case ApplicationSchemester.CODE_THEME_INCOGNITO:
-                setTheme(R.style.IncognitoTheme);
-                break;
-            case ApplicationSchemester.CODE_THEME_DARK:
-                setTheme(R.style.BlueDarkTheme);
-                break;
+            @Override
+            public void afterFinish(Boolean isCompleted) {
+                if (isCompleted)
+                    showPackageAlert();
+                else {
+                    customLoadDialogClass.hide();
+                    schemester.toasterShort(schemester.getStringResource(R.string.download_interrupted));
+                }
+            }
+        });
+        customDownloadLoadDialog.show();
+    }
+    private void setLoadingTextView() {
+         int i = 0;
+         while (i < 9) { c[i].setText(getResources().getString(R.string.loading));i++; }
+    }
+    private void showPackageAlert(){
+        CustomAlertDialog downloadFinishAlert = new CustomAlertDialog(FullScheduleActivity.this, new OnDialogAlertListener() {
+            @Override
+            public void onDismiss() {}
+            @Override
+            public String onCallText() { return schemester.getStringResource(R.string.download_completed); }
+            @Override
+            public String onCallSub() {
+                return "Latest version is downloaded. \n\nGo to File manager > Internal Storage > Schemester\n\nHere you'll find the latest package to install.\n\n(Delete that file if it is causing problems)";
+            }
+        });
+        downloadFinishAlert.show();
+    }
+    private boolean storagePermissionGranted(){
+        return (ContextCompat.checkSelfPermission(FullScheduleActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == (PackageManager.PERMISSION_GRANTED));
+    }
+    private void requestStoragePermission(){
+        ActivityCompat.requestPermissions(FullScheduleActivity.this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                1);
+        customLoadDialogClass.hide();
+    }
+    public void setAppTheme() {
+        switch (getApplication().getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
+                .getInt(schemester.getPREF_KEY_THEME(), 0)) {
+            case ApplicationSchemester.CODE_THEME_INCOGNITO: setTheme(R.style.IncognitoTheme);break;
+            case ApplicationSchemester.CODE_THEME_DARK: setTheme(R.style.BlueDarkTheme);break;
             case ApplicationSchemester.CODE_THEME_LIGHT:
-            default:setTheme(R.style.BlueLightTheme);
+                default:setTheme(R.style.BlueLightTheme);
         }
     }
     private int getThemeStatus() {
-        SharedPreferences mSharedPreferences = getApplication().getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
-        return mSharedPreferences.getInt(schemester.getPREF_KEY_THEME(), 0);
+        return getApplication().getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
+                .getInt(schemester.getPREF_KEY_THEME(), 0);
     }
     private boolean isLandscape() { return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE; }
-    
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return (cm != null ? cm.getActiveNetworkInfo() : null) != null && cm.getActiveNetworkInfo().isConnected();
     }
-
     private void alertForInternetDisability() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = Objects.requireNonNull(connectivityManager).getActiveNetworkInfo();
         if(!(activeNetworkInfo != null && activeNetworkInfo.isConnected())){
             schemester.toasterLong(schemester.getStringResource(R.string.internet_error));

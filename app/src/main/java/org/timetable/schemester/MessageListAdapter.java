@@ -13,15 +13,15 @@ public class MessageListAdapter extends ArrayAdapter<ChatRoomModel> {
     TextView id, msg, time;
     private int type,
     USER_OTHER = 201, USER_ME = 202;
-    MessageListAdapter(Context context, ArrayList<ChatRoomModel> users, int type) {
+    MessageListAdapter(Context context, ArrayList<ChatRoomModel> users) {
         super(context, 0, users);
-        this.type  = type;
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             ChatRoomModel model = getItem(position);
-            if(type ==USER_ME){
+            assert model != null;
+            if(model.getUserType() == USER_ME){
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.message_sent_bubble, parent, false);
                 msg = convertView.findViewById(R.id.myMsg);
                 time = convertView.findViewById(R.id.my_message_time);

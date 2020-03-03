@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
@@ -43,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     Button login, forgot;
     EditText emailid, roll, bdate, bmonth, byear;
     TextView emailValid, rollValid;
-    FirebaseAuth mAuth;
+    FirebaseAuth mAuth =  FirebaseAuth.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String dob;
     TextInputLayout collegeRollInputLayout;
@@ -60,29 +59,52 @@ public class LoginActivity extends AppCompatActivity {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setAppTheme();
         setContentView(R.layout.activity_login);
-        mAuth = FirebaseAuth.getInstance();
-        collegeRollInputLayout = findViewById(R.id.collegeRollLayout);
-        if(readUserPosition().equals(schemester.getStringResource(R.string.teacher))){
-            isTeacher = true;
-            collegeRollInputLayout.setVisibility(View.GONE);
-        }
+        setLoadingClass();
+        setViewsAndInitials();
+        setListeners();
+        dob = bdate.getText().toString()+  bmonth.getText().toString() + byear.getText().toString();
+    }
+    private void setLoadingClass(){
         customLoadDialogClass = new CustomLoadDialogClass(this, new OnDialogLoadListener() {
             @Override
             public void onLoad() {}
             @Override
-            public String onLoadText() {
-                return schemester.getStringResource(R.string.need_few_moments);
-            }
+            public String onLoadText() { return schemester.getStringResource(R.string.need_few_moments); }
         });
+    }
+    private void setViewsAndInitials(){
+        collegeRollInputLayout = findViewById(R.id.collegeRollLayout);
+        if(readUserPosition().equals(schemester.getStringResource(R.string.teacher))){
+            isTeacher = true;
+            collegeRollInputLayout.setVisibility(View.GONE);
+        } else {
+            isTeacher = false;
+            roll = findViewById(R.id.rollpass);
+            rollValid = findViewById(R.id.rollValidityText);
+        }
+        bdate = findViewById(R.id.birthdate);
+        bmonth = findViewById(R.id.birthmonth);
+        byear = findViewById(R.id.birthyear);
         login = findViewById(R.id.registerbtn);
         emailid = findViewById(R.id.emailId);
         emailValid = findViewById(R.id.emailValidityText);
+        forgot = findViewById(R.id.forgotBtn);
+    }
+
+    private void setListeners(){
         emailid.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) { checkEmailValidity(emailid.getText().toString().trim(),s); }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int count, int after) {}
         });
-        forgot = findViewById(R.id.forgotBtn);
+        if(!isTeacher) {
+            roll.addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) { checkRollNumValidity(roll.getText().toString().trim(), s); }
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void onTextChanged(CharSequence s, int start, int count, int after) {}
+            });
+        } else { isRollValid = true; }
+
         forgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,19 +147,6 @@ public class LoginActivity extends AppCompatActivity {
                 customLoadDialogClass.hide();
             }
         });
-        if(!isTeacher) {
-            roll = findViewById(R.id.rollpass);
-            rollValid = findViewById(R.id.rollValidityText);
-            roll.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) { checkRollNumValidity(roll.getText().toString().trim(), s); }
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                public void onTextChanged(CharSequence s, int start, int count, int after) {}
-            });
-        } else { isRollValid = true; }
-
-        bdate = findViewById(R.id.birthdate);
-        bmonth = findViewById(R.id.birthmonth);
-        byear = findViewById(R.id.birthyear);
         bdate.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 if(s.length()!=0) {
@@ -174,8 +183,6 @@ public class LoginActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int count, int after) {}
         });
-
-        dob = bdate.getText().toString()+  bmonth.getText().toString() + byear.getText().toString();
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -183,7 +190,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
     @Override
     protected void onResume() {
         if(user!=null && userHasProvidedAdditionalInfo()) { finish(); }
@@ -193,8 +199,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         if(user!=null && userHasProvidedAdditionalInfo()){
-            Intent passToMain = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(passToMain);
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         } else if(user!=null && !userHasProvidedAdditionalInfo()){
             FirebaseAuth.getInstance().signOut();
@@ -202,10 +207,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
     }
     private void registerInit(){
-        final String email, rollnum, dd, mm, yyyy;
+        final String email, rollNum, dd, mm, yyyy;
         email = emailid.getText().toString();
-        if(Objects.equals(readUserPosition(),schemester.getStringResource(R.string.student))) rollnum = roll.getText().toString();
-        else rollnum = "0";
+        if(Objects.equals(readUserPosition(),schemester.getStringResource(R.string.student))) rollNum = roll.getText().toString();
+        else rollNum = null;
         dd = bdate.getText().toString();
         mm = bmonth.getText().toString();
         yyyy = byear.getText().toString();
@@ -214,7 +219,7 @@ public class LoginActivity extends AppCompatActivity {
             schemester.toasterLong(schemester.getStringResource(R.string.email_id_required));
             return;
         }
-        if (!isTeacher&&TextUtils.isEmpty(rollnum)) {
+        if (!isTeacher&&TextUtils.isEmpty(rollNum)) {
             schemester.toasterLong(schemester.getStringResource(R.string.college_roll_required_text));
             return;
         }
@@ -253,33 +258,25 @@ public class LoginActivity extends AppCompatActivity {
             confirmEmailDialog = new CustomConfirmDialogClass(LoginActivity.this, new OnDialogConfirmListener() {
                 @Override
                 public void onApply(Boolean confirm) {
-                    dob = dd+mm+yyyy;
-                    new registerLoginTask().execute(email, dob);
+                    new registerLoginTask().execute(email, dd+mm+yyyy);
                 }
                 @Override
-                public String onCallText() {
-                    return schemester.getStringResource(R.string.important);
-                }
-
+                public String onCallText() { return schemester.getStringResource(R.string.important); }
                 @Override
-                public String onCallSub() {
-                    return schemester.getStringResource(R.string.email_ID_provision_disclaimer);
-                }
+                public String onCallSub() { return schemester.getStringResource(R.string.email_ID_provision_disclaimer); }
             });
             confirmEmailDialog.show();
             confirmEmailDialog.setCanceledOnTouchOutside(false);
         }
     }
 
-    public class registerLoginTask extends AsyncTask<String,String,Boolean> {
+    private class registerLoginTask extends AsyncTask<String,String,Boolean> {
         @Override
         protected Boolean doInBackground(String... creds){
             if(!isInternetAvailable()){
                 return false;
             } else {
-                String emailCred = creds[0];
-                String passCred = creds[1];
-                register(emailCred, passCred);
+                register(creds[0], creds[1]);
                 return true;
             }
         }
@@ -301,15 +298,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private String[] getAdditionalInfo() {
-        String[] CCY = {null, null, null};
+        String[] CCY = new String[3];
         SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_ADDITIONAL_INFO(), MODE_PRIVATE);
-        CCY[0] = mSharedPreferences.getString(schemester.getPREF_KEY_COLLEGE(), "");
-        CCY[1] = mSharedPreferences.getString(schemester.getPREF_KEY_COURSE(), "");
-        CCY[2] = mSharedPreferences.getString(schemester.getPREF_KEY_YEAR(), "");
+        CCY[0] = mSharedPreferences.getString(schemester.getPREF_KEY_COLLEGE(), null);
+        CCY[1] = mSharedPreferences.getString(schemester.getPREF_KEY_COURSE(), null);
+        CCY[2] = mSharedPreferences.getString(schemester.getPREF_KEY_YEAR(), null);
         return CCY;
     }
     private Boolean userHasProvidedAdditionalInfo(){
-        String[] addInfo = getAdditionalInfo(), nullArray = {"","",""};
+        //noinspection MismatchedReadAndWriteOfArray
+        String[] addInfo = getAdditionalInfo(), nullArray = new String[3];
         return !Arrays.equals(addInfo, nullArray);
     }
     private void loginUser(final String emailIdFinalLogin, final String passwordFinalLogin){
@@ -320,20 +318,17 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             storeLoginStatus(true);
 
-                            //storeUserDefinition(readUserPosition(), emailIdFinalLogin);
                             if(!isTeacher) { storeCredentials(emailIdFinalLogin, roll.getText().toString()); }
-                            else { storeCredentials(emailIdFinalLogin, ""); }
+                            else { storeCredentials(emailIdFinalLogin, null); }
 
                             if(userHasProvidedAdditionalInfo()) {
                                 schemester.toasterLong(schemester.getStringResource(R.string.logged_in_as)+"\n"+ emailIdFinalLogin);
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_from_top);
                                 finish();
                             } else {
                                 schemester.toasterLong(schemester.getStringResource(R.string.complete_your_profile));
-                                Intent intent = new Intent(LoginActivity.this, AdditionalLoginInfo.class);
-                                startActivity(intent);
+                                startActivity(new Intent(LoginActivity.this, AdditionalLoginInfo.class));
                                 customLoadDialogClass.hide();
                             }
                         }
@@ -355,14 +350,11 @@ public class LoginActivity extends AppCompatActivity {
                         user = FirebaseAuth.getInstance().getCurrentUser();
                         if (task.isSuccessful()) {
                             storeLoginStatus(true);
-
                             //storeUserDefinition(readUserPosition(), uid);
                             if(!isTeacher) { storeCredentials(uid, roll.getText().toString()); }
-                            else { storeCredentials(uid, ""); }
-
-                            Intent intent = new Intent(LoginActivity.this, AdditionalLoginInfo.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY);
-                            startActivity(intent);
+                            else { storeCredentials(uid, null); }
+                            startActivity(new Intent(LoginActivity.this, AdditionalLoginInfo.class)
+                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY));
                             customLoadDialogClass.hide();
                             finish();
                             sendVerificationEmail();
@@ -376,26 +368,19 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void storeLoginStatus(Boolean logged){
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_LOGIN_STAT(), MODE_PRIVATE);
-        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putBoolean(schemester.getPREF_KEY_LOGIN_STAT(), logged);
-        mEditor.apply();
+        getSharedPreferences(schemester.getPREF_HEAD_LOGIN_STAT(), MODE_PRIVATE).edit()
+                .putBoolean(schemester.getPREF_KEY_LOGIN_STAT(), logged).apply();
     }
 
-    private void storeCredentials(String mail, String rollnum){
+    private void storeCredentials(String mail, String roll){
         SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
         mEditor.putString(schemester.getPREF_KEY_EMAIL(), mail);
-        mEditor.putString(schemester.getPREF_KEY_ROLL(), rollnum);
+        mEditor.putString(schemester.getPREF_KEY_ROLL(), roll);
         mEditor.apply();
     }
     private boolean isInternetAvailable() {
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
-            return (exitValue == 0);
-        }
+        try { return Runtime.getRuntime().exec("/system/bin/ping -c 1 8.8.8.8").waitFor() == 0; }
         catch (IOException | InterruptedException e){ e.printStackTrace(); }
         return false;
     }
@@ -447,15 +432,16 @@ public class LoginActivity extends AppCompatActivity {
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) { schemester.toasterLong(schemester.getStringResource(R.string.confirmation_email_sent_text)); }
+                            if (task.isSuccessful())
+                                schemester.toasterLong(schemester.getStringResource(R.string.confirmation_email_sent_text));
                         }
                     });
         }
     }
 
     private String readUserPosition(){
-        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE);
-        return mSharedPreferences.getString(schemester.getPREF_KEY_USER_DEF(), "");
+        return getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE)
+                .getString(schemester.getPREF_KEY_USER_DEF(), null);
     }
 
     private void resetLinkSender(final String email){
@@ -478,13 +464,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void setAppTheme() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
-        switch (mSharedPreferences.getInt(schemester.getPREF_KEY_THEME(), 0)) {
-            case 102:
-                setTheme(R.style.BlueDarkTheme);
-                break;
-            case 101:
-            default:setTheme(R.style.BlueLightTheme);
+        switch (getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
+                .getInt(schemester.getPREF_KEY_THEME(), 0)) {
+            case ApplicationSchemester.CODE_THEME_DARK: setTheme(R.style.BlueDarkTheme);break;
+            case ApplicationSchemester.CODE_THEME_LIGHT: default:setTheme(R.style.BlueLightTheme);
         }
     }
 }

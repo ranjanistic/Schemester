@@ -15,6 +15,7 @@ import org.timetable.schemester.ApplicationSchemester;
 import org.timetable.schemester.MainActivity;
 import org.timetable.schemester.R;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class AdditionalLoginInfo extends AppCompatActivity {
@@ -64,38 +65,27 @@ public class AdditionalLoginInfo extends AppCompatActivity {
                 finish();
             }
         });
-        int i = 0;
-        while(i<getResources().getStringArray(R.array.college_code_array).length) {
-            if (Objects.equals(getAdditionalInfo()[0], getResources().getStringArray(R.array.college_code_array)[i])) {
-                collegeSpin.setSelection(colAdapter.getPosition(getResources().getStringArray(R.array.college_array)[i]),true);
-                break;
-            }
-            ++i;
-        }
-        i = 0;
-        while(i<getResources().getStringArray(R.array.course_code_array).length) {
-            if (Objects.equals(getAdditionalInfo()[1], getResources().getStringArray(R.array.course_code_array)[i])) {
-                courseSpin.setSelection(couAdapter.getPosition(getResources().getStringArray(R.array.course_array)[i]),true);
-                break;
-            }
-            ++i;
-        }
-        i = 0;
-        while(i<getResources().getStringArray(R.array.year_code_array).length) {
-            if (Objects.equals(getAdditionalInfo()[1], getResources().getStringArray(R.array.year_code_array)[i])) {
-                yearSpin.setSelection(yeaAdapter.getPosition(getResources().getStringArray(R.array.year_array)[i]));
-                break;
-            }
-            ++i;
-        }
 
+        String[][] ccyArray = new String[][]{collegeArray, courseArray, yearArray},
+                ccyCodeArray = new String[][]{collegeCode, courseCode, yearCode};
+        int j = 0;
+        while(j<3) {
+            int i = 0;
+            while (i < ccyArray[j].length) {
+                if (Objects.equals(getAdditionalInfo()[j], ccyCodeArray[j][i])) {
+                    collegeSpin.setSelection(colAdapter.getPosition(ccyArray[j][i]), true);
+                    break;
+                } else ++i;
+            }
+            ++j;
+        }
     }
     private String[] getAdditionalInfo() {
         String[] CCY = new String[3];
         SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_ADDITIONAL_INFO(), MODE_PRIVATE);
-        CCY[0] = mSharedPreferences.getString(schemester.getPREF_KEY_COLLEGE(), "");
-        CCY[1] = mSharedPreferences.getString(schemester.getPREF_KEY_COURSE(), "");
-        CCY[2] = mSharedPreferences.getString(schemester.getPREF_KEY_YEAR(), "");
+        CCY[0] = mSharedPreferences.getString(schemester.getPREF_KEY_COLLEGE(), null);
+        CCY[1] = mSharedPreferences.getString(schemester.getPREF_KEY_COURSE(), null);
+        CCY[2] = mSharedPreferences.getString(schemester.getPREF_KEY_YEAR(), null);
         return CCY;
     }
     String colC, couC, yC;
@@ -140,10 +130,9 @@ public class AdditionalLoginInfo extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                schemester.toasterShort("Welcome");
+                schemester.toasterShort(schemester.getStringResource(R.string.welcome_back));
                 schemester.setCollegeCourseYear(colC, couC, yC);
                 saveAdditionalInfo(colC, couC, yC);
-                //Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_LONG).show();
                 Intent i = new Intent(AdditionalLoginInfo.this, MainActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
@@ -163,12 +152,11 @@ public class AdditionalLoginInfo extends AppCompatActivity {
     }
 
     public void setAppTheme() {
-        SharedPreferences mSharedPreferences = this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE);
-        switch (mSharedPreferences.getInt(schemester.getPREF_KEY_THEME(), 0)) {
+        switch (getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
+        .getInt(schemester.getPREF_KEY_THEME(), 0)) {
             case ApplicationSchemester.CODE_THEME_INCOGNITO: setTheme(R.style.IncognitoTheme); break;
             case ApplicationSchemester.CODE_THEME_DARK: setTheme(R.style.BlueDarkTheme);break;
-            case ApplicationSchemester.CODE_THEME_LIGHT:
-            default:setTheme(R.style.BlueLightTheme);
+            case ApplicationSchemester.CODE_THEME_LIGHT: default:setTheme(R.style.BlueLightTheme);
         }
     }
 }

@@ -61,7 +61,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|center_horizontal"
                         android:layout_marginBottom="4dp"
-                        android:text="@string/period1"
                         android:textColor="?attr/foreground_text_color"
                         android:textSize="18sp" />
 
@@ -101,8 +100,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|center_horizontal"
-                        
-                        android:text="@string/period2"
                         android:textColor="?attr/foreground_text_color"
                         android:textSize="18sp" />
 
@@ -143,8 +140,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|center_horizontal"
-                        
-                        android:text="@string/period3"
                         android:textColor="?attr/foreground_text_color"
                         android:textSize="18sp" />
 
@@ -185,9 +180,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|center_horizontal"
-                        
-
-                        android:text="@string/period4"
                         android:textColor="?attr/foreground_text_color"
                         android:textSize="18sp" />
 
@@ -228,10 +220,7 @@
                         android:id="@+id/period5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:layout_gravity="top|center_horizontal"
-                        
-                        android:text="@string/period5"
                         android:textColor="?attr/foreground_text_color"
                         android:textSize="20sp" />
 
@@ -273,9 +262,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|center_horizontal"
-                        
-
-                        android:text="@string/period6"
                         android:textColor="?attr/foreground_text_color"
                         android:textSize="18sp" />
 
@@ -315,10 +301,7 @@
                         android:id="@+id/period7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:layout_gravity="top|center_horizontal"
-                        
-                        android:text="@string/period7"
                         android:textColor="?attr/foreground_text_color"
                         android:textSize="18sp" />
 
@@ -359,10 +342,7 @@
                         android:id="@+id/period8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:layout_gravity="top|center_horizontal"
-                        
-                        android:text="@string/period8"
                         android:textColor="?attr/foreground_text_color"
                         android:textSize="18sp" />
 
@@ -403,10 +383,7 @@
                         android:id="@+id/period9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:layout_gravity="top|center_horizontal"
-                        
-                        android:text="@string/period9"
                         android:textColor="?attr/foreground_text_color"
                         android:textSize="18sp" />
 

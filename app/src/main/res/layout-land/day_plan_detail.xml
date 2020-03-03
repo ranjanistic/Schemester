@@ -56,8 +56,7 @@ android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|center_horizontal"
                         android:layout_marginBottom="4dp"
-                        android:fontFamily="@font/montserrat"
-                        android:text="@string/period1"
+                        
                         android:textColor="@color/white"
                         android:textSize="18sp" />
                     <TextView
@@ -97,8 +96,7 @@ android:layout_width="match_parent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|center_horizontal"
-                        android:fontFamily="@font/montserrat"
-                        android:text="@string/period2"
+                        
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -140,8 +138,7 @@ android:layout_width="match_parent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|center_horizontal"
-                        android:fontFamily="@font/montserrat"
-                        android:text="@string/period3"
+                        
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -182,9 +179,7 @@ android:layout_width="match_parent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|center_horizontal"
-                        android:fontFamily="@font/montserrat"
-
-                        android:text="@string/period4"
+                        
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -228,8 +223,7 @@ android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
                         android:layout_gravity="top|center_horizontal"
-                        android:fontFamily="@font/montserrat"
-                        android:text="@string/period5"
+                        
                         android:textColor="@color/white"
                         android:textSize="20sp" />
 
@@ -272,9 +266,7 @@ android:layout_width="match_parent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|center_horizontal"
-                        android:fontFamily="@font/montserrat"
-
-                        android:text="@string/period6"
+                        
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -317,8 +309,7 @@ android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
                         android:layout_gravity="top|center_horizontal"
-                        android:fontFamily="@font/montserrat"
-                        android:text="@string/period7"
+                        
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -362,8 +353,7 @@ android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
                         android:layout_gravity="top|center_horizontal"
-                        android:fontFamily="@font/montserrat"
-                        android:text="@string/period8"
+                        
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -407,8 +397,7 @@ android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
                         android:layout_gravity="top|center_horizontal"
-                        android:fontFamily="@font/montserrat"
-                        android:text="@string/period9"
+                        
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 

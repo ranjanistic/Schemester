@@ -204,16 +204,13 @@ public class NoticeBoard extends AppCompatActivity implements SwipeRefreshLayout
 
     public void setAppTheme(int code) {
         switch (code) {
-            case ApplicationSchemester.CODE_THEME_DARK:
-                setTheme(R.style.DarkTheme);
-                break;
-            case ApplicationSchemester.CODE_THEME_LIGHT:
-            default:setTheme(R.style.AppTheme);
+            case ApplicationSchemester.CODE_THEME_DARK: setTheme(R.style.DarkTheme);break;
+            case ApplicationSchemester.CODE_THEME_LIGHT: default:setTheme(R.style.AppTheme);
         }
     }
 
     private int getThemeStatus() {
-         return  this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
+         return  getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
                  .getInt(schemester.getPREF_KEY_THEME(), 0);
     }
 }
