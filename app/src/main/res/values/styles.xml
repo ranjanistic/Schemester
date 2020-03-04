@@ -2,19 +2,11 @@
 
     <style name="splashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:background">@drawable/splash</item>
-        <item name="android:navigationBarColor">@color/blue</item>
-        <item name="android:statusBarColor">@color/blue</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="p">false</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="p">false</item>
+        <item name="android:navigationBarColor" tools:targetApi="q">@color/blue</item>
+        <item name="android:statusBarColor" tools:targetApi="q">@color/blue</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="q">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="q">false</item>
         <item name="base_background">@color/blue</item>
-    </style>
-    <style name="splashThemeDark" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:background">@drawable/splashdark</item>
-        <item name="android:navigationBarColor">@color/charcoal</item>
-        <item name="android:statusBarColor">@color/charcoal</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="p">true</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="p">true</item>
-        <item name="base_background">@color/charcoal</item>
     </style>
 
     <!-- Base application theme. -->
@@ -23,8 +15,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@color/white</item>
-        <item name="android:navigationBarColor">@color/blue</item>
+        <item name="android:statusBarColor" tools:targetApi="q">@color/white</item>
+        <item name="android:navigationBarColor" tools:targetApi="q">@color/blue</item>
         <item name="android:windowLightStatusBar" tools:targetApi="q">true</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="q">true</item>
         <item name="base_background">@color/white</item>
@@ -49,9 +41,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@color/charcoal</item>
-        <item name="android:navigationBarColor">@color/charcoal</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="p">false</item>
+        <item name="android:statusBarColor" tools:targetApi="q">@color/charcoal</item>
+        <item name="android:navigationBarColor" tools:targetApi="q">@color/charcoal</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="q">false</item>
         <item name="base_background">@color/charcoal</item>
         <item name="display_foreground">@color/spruce</item>
         <item name="base_text_color">@color/dull_white</item>
@@ -72,9 +64,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@color/black_overlay</item>
-        <item name="android:navigationBarColor">@color/black_overlay</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="p">false</item>
+        <item name="android:statusBarColor" tools:targetApi="q">@color/black_overlay</item>
+        <item name="android:navigationBarColor" tools:targetApi="q">@color/black_overlay</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="q">false</item>
         <item name="base_background">@color/black_overlay</item>
         <item name="display_foreground">@color/black</item>
         <item name="base_text_color">@color/dull_white</item>
@@ -92,28 +84,28 @@
     </style>
 
     <style name="BlueLightTheme" parent="AppTheme">
-        <item name="android:statusBarColor">@color/blue</item>
-        <item name="android:navigationBarColor">@color/blue</item>
+        <item name="android:statusBarColor" tools:targetApi="q">@color/blue</item>
+        <item name="android:navigationBarColor" tools:targetApi="q">@color/blue</item>
         <item name="android:windowLightStatusBar" tools:targetApi="q">false</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="q">false</item>
     </style>
 
     <style name="BlueDarkTheme" parent="DarkTheme">
-        <item name="android:statusBarColor">@color/spruce</item>
-        <item name="android:navigationBarColor">@color/spruce</item>
+        <item name="android:statusBarColor" tools:targetApi="q">@color/spruce</item>
+        <item name="android:navigationBarColor" tools:targetApi="q">@color/spruce</item>
         <item name="android:windowLightStatusBar" tools:targetApi="q">false</item>
     </style>
 
     <style name="BlueWhiteThemeLight" parent="AppTheme">
-        <item name="android:statusBarColor">@color/white</item>
-        <item name="android:navigationBarColor">@color/blue</item>
+        <item name="android:statusBarColor" tools:targetApi="q">@color/white</item>
+        <item name="android:navigationBarColor" tools:targetApi="q">@color/blue</item>
         <item name="android:windowLightStatusBar" tools:targetApi="q">true</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="q">false</item>
     </style>
 
     <style name="BlueWhiteThemeDark" parent="DarkTheme">
-        <item name="android:statusBarColor">@color/charcoal</item>
-        <item name="android:navigationBarColor">@color/spruce</item>
+        <item name="android:statusBarColor" tools:targetApi="q">@color/charcoal</item>
+        <item name="android:navigationBarColor" tools:targetApi="q">@color/spruce</item>
         <item name="android:windowLightStatusBar" tools:targetApi="q">false</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="q">false</item>
     </style>

@@ -3,6 +3,7 @@
     android:layout_width="350dp"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:targetApi="q"
     android:layout_gravity="center"
 
     android:background="@drawable/roundcontainerbox"

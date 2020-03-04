@@ -6,7 +6,8 @@
     android:backgroundTint="?attr/base_background"
     android:background="?attr/base_background"
     android:layout_height="match_parent"
-    tools:context=".ChatRoomActivity">
+    tools:targetApi="q"
+    tools:context=".chat.ChatRoomActivity">
     <LinearLayout
         android:id="@+id/chatRoomTopBar"
         android:layout_width="0dp"

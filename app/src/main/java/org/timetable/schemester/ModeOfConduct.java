@@ -2,9 +2,11 @@ package org.timetable.schemester;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -12,7 +14,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+@TargetApi(Build.VERSION_CODES.Q)
 public class ModeOfConduct extends AppCompatActivity {
     ApplicationSchemester schemester;
     Button continueBtn, cancel;

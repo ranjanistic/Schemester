@@ -289,6 +289,7 @@
     <string name="error">Error</string>
     <string name="logout">Logout</string>
     <string name="confirm_logout_text">Sure to log out?</string>
+    <string name="provide_valid_email_text">Provide a valid email address</string>
     <string-array name="college_array">
         <item>Deshbandhu College</item>
     </string-array>

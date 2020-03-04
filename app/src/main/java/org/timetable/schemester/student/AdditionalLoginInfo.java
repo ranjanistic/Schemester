@@ -2,13 +2,19 @@ package org.timetable.schemester.student;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import org.timetable.schemester.ApplicationSchemester;
@@ -17,7 +23,7 @@ import org.timetable.schemester.R;
 
 import java.util.ArrayList;
 import java.util.Objects;
-
+@TargetApi(Build.VERSION_CODES.Q)
 public class AdditionalLoginInfo extends AppCompatActivity {
     ApplicationSchemester schemester;
     Spinner collegeSpin,courseSpin,yearSpin;
@@ -31,11 +37,18 @@ public class AdditionalLoginInfo extends AppCompatActivity {
         setContentView(R.layout.activity_additional_login_info);
         done = findViewById(R.id.additionalConfirmed);
         Button back = findViewById(R.id.reloginBtn);
-
         collegeSpin = findViewById(R.id.spinnerCollege);
         courseSpin = findViewById(R.id.spinnerCourse);
         yearSpin = findViewById(R.id.spinnerYear);
-
+        ImageView displayImage;
+        displayImage = findViewById(R.id.imageOnlogin);
+        if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
+            displayImage.setImageResource(R.drawable.ic_moonsmallicon);
+        } else {
+            displayImage.setImageResource(R.drawable.ic_suniconsmall);
+        }
+        Animation animation = AnimationUtils.loadAnimation(this,R.anim.rotate_clock_faster);
+        displayImage.startAnimation(animation);
         collegeCode = getResources().getStringArray(R.array.college_code_array);
         courseCode = getResources().getStringArray(R.array.course_code_array);
         yearCode = getResources().getStringArray(R.array.year_code_array);
@@ -63,6 +76,7 @@ public class AdditionalLoginInfo extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
@@ -80,6 +94,13 @@ public class AdditionalLoginInfo extends AppCompatActivity {
             ++j;
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
     private String[] getAdditionalInfo() {
         String[] CCY = new String[3];
         SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_ADDITIONAL_INFO(), MODE_PRIVATE);
@@ -158,6 +179,10 @@ public class AdditionalLoginInfo extends AppCompatActivity {
             case ApplicationSchemester.CODE_THEME_DARK: setTheme(R.style.BlueDarkTheme);break;
             case ApplicationSchemester.CODE_THEME_LIGHT: default:setTheme(R.style.BlueLightTheme);
         }
+    }
+    private int getThemeStatus(){
+        return getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
+                .getInt(schemester.getPREF_KEY_THEME(), 0);
     }
 }
 

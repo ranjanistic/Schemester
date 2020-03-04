@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:backgroundTint="?attr/base_background"
     android:background="?attr/base_background"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    tools:targetApi="q">
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
@@ -17,6 +18,7 @@
                 android:paddingEnd="12dp"
                 android:paddingBottom="18dp"
                 android:paddingTop="18dp"
+                android:translationZ="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -83,25 +85,21 @@
                         android:paddingEnd="8dp"
                         android:text="@string/weekday"
                         android:textAllCaps="false"
-                        android:textColor="@color/linktextcolor"
+                        android:textColor="?attr/action_text_color"
                         android:textSize="18sp" />
-
                     <TextView
                         android:id="@+id/month_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:background="@android:color/transparent"
-                        
                         android:gravity="top|end"
                         android:paddingStart="8dp"
                         android:paddingEnd="8dp"
                         android:text="@string/month"
                         android:textAllCaps="false"
-                        android:textColor="@color/linktextcolor"
+                        android:textColor="?attr/action_text_color"
                         android:textSize="16sp" />
-
-
                 </LinearLayout>
 
                 <Button
@@ -693,15 +691,31 @@
         android:visibility="gone"
         android:text="@string/no_classes_today_enjoy"
         android:textAllCaps="true"
-        android:textSize="22sp"
+        android:textSize="26sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="?attr/heading_text_color"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.75"
+        app:layout_constraintVertical_bias="0.65"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/noclassreason"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:textColor="?attr/group_card_text_color"
+        android:layout_marginTop="22dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/noclasstext"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/noclasstext"
+        app:layout_constraintTop_toBottomOf="@id/noclasstext" />
 
     <View
         android:id="@+id/translucent_layer"

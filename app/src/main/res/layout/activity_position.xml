@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/display_foreground"
     android:backgroundTint="?attr/display_foreground"
+    tools:targetApi="q"
     tools:context=".PositionActivity">
 
     <ImageButton
@@ -14,6 +15,7 @@
         android:layout_height="50dp"
         android:background="@drawable/round_btn"
         android:backgroundTint="?attr/display_foreground"
+        android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_suniconsmall"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

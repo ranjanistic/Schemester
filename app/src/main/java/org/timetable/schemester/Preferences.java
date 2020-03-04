@@ -1,16 +1,19 @@
 package org.timetable.schemester;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -54,8 +57,9 @@ import org.timetable.schemester.student.AdditionalLoginInfo;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;;
+import java.util.Objects;
 
+@TargetApi(Build.VERSION_CODES.Q)
 public class Preferences extends AppCompatActivity {
     ApplicationSchemester schemester;
     Switch timeFormatSwitch;
@@ -71,13 +75,15 @@ public class Preferences extends AppCompatActivity {
     Window window;
     int CODE_DELETE_ACCOUNT = 102, CODE_CHANGE_EMAIL = 101;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         schemester = (ApplicationSchemester) this.getApplication();
         setAppTheme();
         setContentView(R.layout.activity_preferences);
-
+        storeLoginStatus(true);
         window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -93,7 +99,11 @@ public class Preferences extends AppCompatActivity {
         super.onStart();
         setAllActivityStarterButtonsDisabled(false);
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setAllActivityStarterButtonsDisabled(false);
+    }
     //Startup functions
     private void findViewsAndSetObjects(){
         anonymOps = findViewById(R.id.anonymousOptions);
@@ -117,6 +127,7 @@ public class Preferences extends AppCompatActivity {
         appUpdateNotif = findViewById(R.id.automaticAppUpdatePrefer);
         appUpdateNotifCheck = findViewById(R.id.appUpdateNotificationCheckbox);
     }
+
     private void setThemeConsequences(){
         if(getThemeStatus() == ApplicationSchemester.CODE_THEME_LIGHT) {
             window.setStatusBarColor(this.getResources().getColor(R.color.white));
@@ -152,13 +163,6 @@ public class Preferences extends AppCompatActivity {
             }
         });
 
-        customVerificationDialogEmailChange = new CustomVerificationDialog(Preferences.this, new OnDialogApplyListener() {
-            @Override
-            public void onApply(String email, String password) {
-                customLoadDialogClass.show();
-                authenticate(email, password, CODE_CHANGE_EMAIL);
-            }
-        });
     }
     private void setListenersAndInitialize(){
         appUpdateNotifCheck.setChecked(userWantsUpdateNotification());
@@ -192,14 +196,14 @@ public class Preferences extends AppCompatActivity {
         deleteAcc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                customVerificationDialogDeleteAccount = new CustomVerificationDialog(Preferences.this, new OnDialogApplyListener() {
+                    @Override
+                    public void onApply(String email, String password) {
+                        customLoadDialogClass.show();
+                        authenticate(email, password, CODE_DELETE_ACCOUNT);
+                    }
+                });
                 customVerificationDialogDeleteAccount.show();
-            }
-        });
-        customVerificationDialogDeleteAccount = new CustomVerificationDialog(Preferences.this, new OnDialogApplyListener() {
-            @Override
-            public void onApply(String email, String password) {
-                customLoadDialogClass.show();
-                authenticate(email, password, CODE_DELETE_ACCOUNT);
             }
         });
 
@@ -240,10 +244,16 @@ public class Preferences extends AppCompatActivity {
             }
         });
 
-
         emailChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+            customVerificationDialogEmailChange = new CustomVerificationDialog(Preferences.this, new OnDialogApplyListener() {
+                @Override
+                public void onApply(String email, String password) {
+                    customLoadDialogClass.show();
+                    authenticate(email, password, CODE_CHANGE_EMAIL);
+                }
+            });
                 customVerificationDialogEmailChange.show();
                 customLoadDialogClass.hide();
             }
@@ -295,14 +305,9 @@ public class Preferences extends AppCompatActivity {
         timeFormatSwitch.setChecked(getTimeFormat() == 12);
         clockTypeSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if (timeFormatSwitch.isChecked()){
-                    timeFormatSwitch.setChecked(false);
-                } else {
-                    timeFormatSwitch.setChecked(true);
-                }
-            }
+            public void onClick(View view) { timeFormatSwitch.setChecked(!timeFormatSwitch.isChecked()); }
         });
+
         if(timeFormatSwitch.isChecked()) {
             timetext.setText(getResources().getString(R.string.time_format_12_hours));
         } else {
@@ -480,7 +485,7 @@ public class Preferences extends AppCompatActivity {
                         @Override
                         public void onApply(String text) {
                             if(text.matches("[0-9]+/[0-9]+")) {
-                                storeCredentials("", text);
+                                storeCredentials(null, text);
                                 schemester.toasterLong(schemester.getStringResource(R.string.roll_num_updated));
                             } else { schemester.toasterLong(schemester.getStringResource(R.string.invalid_roll)); }
                         }
@@ -539,7 +544,7 @@ public class Preferences extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     migrateDataAtEmailChange(getCredentials()[0], newMail);
                                     customLoadDialogClass.hide();
-                                    storeCredentials(newMail, "");
+                                    storeCredentials(newMail, null);
                                     setEmailChangedAlert("Your new login ID aka email ID is \'" + updateMail + "\'. You'll need to login again with new email ID.");
                                 } else {
                                     customLoadDialogClass.hide();
@@ -743,8 +748,8 @@ public class Preferences extends AppCompatActivity {
     //Stored preference dependent functions
     private void storeCredentials(String mail, String roll){
         SharedPreferences.Editor mEditor = getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE).edit();
-        if(!mail.equals("")) mEditor.putString(schemester.getPREF_KEY_EMAIL(), mail).apply();
-        if(!roll.equals("")) mEditor.putString(schemester.getPREF_KEY_ROLL(), roll).apply();
+        if(mail != null) mEditor.putString(schemester.getPREF_KEY_EMAIL(), mail).apply();
+        if(roll != null) mEditor.putString(schemester.getPREF_KEY_ROLL(), roll).apply();
     }
     private String[] getCredentials(){
         String[] cred = new String[2];
@@ -759,8 +764,7 @@ public class Preferences extends AppCompatActivity {
     }
     private void storeUpdateNotificationPreference(Boolean getUpdateNotification){
         getSharedPreferences(schemester.getPREF_HEAD_UPDATE_NOTIFY(), MODE_PRIVATE).edit()
-                .putBoolean(schemester.getPREF_KEY_UPDATE_NOTIFY(),getUpdateNotification)
-                .apply();
+                .putBoolean(schemester.getPREF_KEY_UPDATE_NOTIFY(),getUpdateNotification).apply();
     }
     private Boolean userWantsUpdateNotification(){
         return this.getSharedPreferences(schemester.getPREF_HEAD_UPDATE_NOTIFY(), MODE_PRIVATE)
@@ -768,8 +772,7 @@ public class Preferences extends AppCompatActivity {
     }
     private void storeTimeFormat(int format){
         getSharedPreferences(schemester.getPREF_HEAD_TIME_FORMAT(), MODE_PRIVATE).edit()
-                .putInt(schemester.getPREF_KEY_TIME_FORMAT(), format)
-                .apply();
+                .putInt(schemester.getPREF_KEY_TIME_FORMAT(), format).apply();
     }
     private int getTimeFormat() {
         return this.getSharedPreferences(schemester.getPREF_HEAD_TIME_FORMAT(), MODE_PRIVATE)
@@ -788,8 +791,7 @@ public class Preferences extends AppCompatActivity {
                 .getInt(schemester.getPREF_KEY_THEME(), 0)) {
             case ApplicationSchemester.CODE_THEME_INCOGNITO: setTheme(R.style.IncognitoTheme);break;
             case ApplicationSchemester.CODE_THEME_DARK: setTheme(R.style.BlueWhiteThemeDark);break;
-            case ApplicationSchemester.CODE_THEME_LIGHT:
-            default:setTheme(R.style.BlueWhiteThemeLight);
+            case ApplicationSchemester.CODE_THEME_LIGHT: default:setTheme(R.style.BlueWhiteThemeLight);
         }
     }
     private int getThemeStatus() {
@@ -802,9 +804,8 @@ public class Preferences extends AppCompatActivity {
         return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).isEmailVerified();
     }
     private void restartApplication(){
-        Intent splash = new Intent(Preferences.this, Splash.class);
-        splash.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);  // To clean up all activities
-        startActivity(splash);
+        startActivity(new Intent(Preferences.this, Splash.class)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
     }
     private void setAllActivityStarterButtonsDisabled(Boolean state){

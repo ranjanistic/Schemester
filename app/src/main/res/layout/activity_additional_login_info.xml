@@ -6,8 +6,20 @@
     android:layout_height="match_parent"
     android:padding="12dp"
     android:background="?attr/display_foreground"
+    android:backgroundTint="?attr/display_foreground"
+    tools:targetApi="q"
     tools:context=".student.AdditionalLoginInfo">
-
+    <ImageView
+        android:id="@+id/imageOnlogin"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_margin="10dp"
+        app:srcCompat="@drawable/ic_suniconsmall"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintHorizontal_bias="1"/>
     <TextView
         android:id="@+id/loginheading"
         android:layout_width="match_parent"

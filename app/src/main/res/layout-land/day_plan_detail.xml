@@ -8,6 +8,7 @@ android:layout_width="match_parent"
     android:backgroundTint="?attr/base_background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="@layout/activity_full_schedule"
+    tools:targetApi="q"
     xmlns:tools="http://schemas.android.com/tools">
 <HorizontalScrollView
     android:id="@+id/horizontalScrollLand"

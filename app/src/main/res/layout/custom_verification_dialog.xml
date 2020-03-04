@@ -9,7 +9,8 @@
     android:paddingBottom="12dp"
     android:layout_marginEnd="0dp"
     android:layout_marginStart="0dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:targetApi="q">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -57,10 +58,12 @@
             android:layout_height="80dp"
             android:textSize="18sp"
             android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:focusedByDefault="true"
-            android:backgroundTint="@color/blue"
+            android:singleLine="true"
+            android:autofillHints=""
             android:inputType="textEmailAddress"
+            android:paddingEnd="12dp"
+            android:backgroundTint="@color/blue"
+            android:importantForAutofill="no"
             android:nextFocusDown="@id/cred_pass"
             android:hint="@string/email_id"
             tools:targetApi="q" />
@@ -85,7 +88,7 @@
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
             android:textSize="18sp"
-            android:inputType="number"
+            android:inputType="numberPassword"
             android:hint="@string/ddmmyyyy"/>
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>

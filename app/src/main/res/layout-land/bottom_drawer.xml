@@ -1,114 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:backgroundTint="?attr/group_card_color"
-    android:background="@drawable/toproundview"
-    android:layout_width="match_parent"
-    android:gravity="center"
-    app:layout_behavior="@string/bottom_sheet_behavior"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_drawer"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:id="@+id/bottom_drawer">
+    android:background="@drawable/toproundview"
+    android:backgroundTint="?attr/group_card_color"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:targetApi="q"
+    app:layout_behavior="@string/bottom_sheet_behavior">
+
     <LinearLayout
         android:id="@+id/drawerarrowHolder"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
         android:paddingStart="8dp"
+        android:paddingTop="4dp"
         android:paddingEnd="8dp"
-        android:layout_height="wrap_content">
+        android:paddingBottom="4dp">
+
         <ImageButton
             android:id="@+id/switchThemeMain"
             android:layout_width="30dp"
-            android:contentDescription="@string/choose_a_theme"
             android:layout_height="30dp"
             android:layout_marginEnd="12dp"
             android:background="@drawable/ic_suniconsmall"
-            />
+            android:contentDescription="@string/choose_a_theme" />
 
-    <ImageButton
-        android:id="@+id/drawerarrow"
-        android:contentDescription="@string/drawer_indicator"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:rotation="90"
-        android:layout_marginStart="12dp"
-        android:background="@drawable/ic_halfarrow"
-        android:backgroundTint="@color/blue"
-        />
+        <ImageButton
+            android:id="@+id/drawerarrow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/ic_halfarrow"
+            android:backgroundTint="@color/blue"
+            android:contentDescription="@string/drawer_indicator"
+            android:rotation="90" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/fullScheduleTab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:gravity="center"
         android:background="@drawable/square_edgy_btn"
+        android:backgroundTint="@android:color/transparent"
         android:clickable="true"
         android:focusable="true"
-        android:padding="16dp"
-        android:backgroundTint="@android:color/transparent"
-        android:orientation="horizontal">
-        <TextView
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?attr/action_text_color"
-            android:textSize="18sp"
-            android:text="@string/full_week_schedule"/>
+            android:background="@drawable/ic_menuactionicon"
+            android:contentDescription="@string/full_schedule_image" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/resultTab"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/square_edgy_btn"
+        android:backgroundTint="@android:color/transparent"
         android:clickable="true"
         android:focusable="true"
-        android:layout_height="wrap_content"
         android:gravity="center"
-        android:background="@drawable/square_edgy_btn"
-        android:padding="16dp"
-        android:backgroundTint="@android:color/transparent"
-        android:orientation="horizontal">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="?attr/action_text_color"
-        android:textSize="18sp"
-        android:text="@string/check_your_result"/>
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/result_button"
+            app:srcCompat="@drawable/ic_marksheeticonforschemester" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/settingTab"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/square_edgy_btn"
+        android:backgroundTint="@android:color/transparent"
         android:clickable="true"
         android:focusable="true"
-        android:layout_height="wrap_content"
         android:gravity="center"
-        android:background="@drawable/square_edgy_btn"
-        android:padding="16dp"
-        android:backgroundTint="@android:color/transparent"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?attr/action_text_color"
-            android:textSize="18sp"
-            android:text="@string/settings"/>
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/open_settings_button"
+            app:srcCompat="@drawable/ic_settingico_mini" />
     </LinearLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="false"
-        android:textColor="?attr/base_text_color"
         android:text="@string/logged_in_as"
-        android:textSize="14sp"/>
+        android:textColor="?attr/base_text_color"
+        android:textSize="14sp" />
+
     <TextView
         android:id="@+id/drawerLoginID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:singleLine="false"
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
-        android:textColor="?attr/action_text_color"
+        android:gravity="center"
         android:paddingBottom="4dp"
+        android:singleLine="false"
         android:text="@string/n_a"
-        android:textSize="14sp"/>
+        android:textColor="?attr/action_text_color"
+        android:textSize="14sp" />
 </LinearLayout>

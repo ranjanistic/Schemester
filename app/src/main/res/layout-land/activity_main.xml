@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:backgroundTint="?attr/base_background"
     android:background="?attr/base_background"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    tools:targetApi="Q">
     <LinearLayout
         android:id="@+id/mainLinearlayoutLandscape"
         android:layout_width="match_parent"
@@ -98,14 +99,12 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:background="@android:color/transparent"
-                            
-                            android:foregroundGravity="right"
                             android:gravity="bottom"
                             android:paddingStart="8dp"
                             android:paddingEnd="8dp"
                             android:text="@string/weekday"
                             android:textAllCaps="false"
-                            android:textColor="@color/linktextcolor"
+                            android:textColor="?attr/action_text_color"
                             android:textSize="18sp" />
 
                         <TextView
@@ -114,13 +113,12 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:background="@android:color/transparent"
-                            
                             android:gravity="top|end"
                             android:paddingStart="8dp"
                             android:paddingEnd="8dp"
                             android:text="@string/month"
                             android:textAllCaps="false"
-                            android:textColor="@color/linktextcolor"
+                            android:textColor="?attr/action_text_color"
                             android:textSize="16sp" />
 
                         <TextView
@@ -128,7 +126,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@android:color/transparent"
-                            
                             android:gravity="center"
                             android:paddingStart="8dp"
                             android:paddingEnd="8dp"
@@ -153,7 +150,8 @@
                         android:textAlignment="center"
                         android:textColor="?attr/foreground_text_color"
                         android:textSize="36sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        tools:targetApi="q" />
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
@@ -163,16 +161,16 @@
 
                 <androidx.coordinatorlayout.widget.CoordinatorLayout
                     android:id="@+id/coordinator"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:elevation="12dp"
                     android:translationZ="12dp"
+                    android:layout_margin="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintVertical_bias="1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="@id/linearLayout"
-                    app:layout_constraintTop_toTopOf="@id/linearLayout7"
-                    tools:targetApi="q">
+                    app:layout_constraintTop_toTopOf="@id/linearLayout7">
 
                     <include layout="@layout/bottom_drawer" />
                 </androidx.coordinatorlayout.widget.CoordinatorLayout>
@@ -180,15 +178,16 @@
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:background="@drawable/toproundview"
             android:backgroundTint="?attr/display_foreground"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/period_view"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:elevation="12dp"
@@ -788,5 +787,22 @@ android:gravity="center"/>
         app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
+    <TextView
+        android:id="@+id/noclassreason"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="@string/no_classes_today_enjoy"
+        android:textAllCaps="true"
+        android:textSize="20sp"
+        android:textColor="?attr/heading_text_color"
+        android:textStyle="bold"
+        android:layout_marginTop="22dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/noclasstext"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/noclasstext"
+        app:layout_constraintTop_toBottomOf="@id/noclasstext" />
 </androidx.constraintlayout.widget.ConstraintLayout>

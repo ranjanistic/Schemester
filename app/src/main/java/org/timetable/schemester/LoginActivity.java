@@ -2,10 +2,13 @@ package org.timetable.schemester;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -13,9 +16,12 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -36,10 +42,11 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Objects;
 import java.util.TimeZone;
-
+@TargetApi(Build.VERSION_CODES.Q)
 public class LoginActivity extends AppCompatActivity {
     ApplicationSchemester schemester;
     Button login, forgot;
+    ImageView displayImage;
     EditText emailid, roll, bdate, bmonth, byear;
     TextView emailValid, rollValid;
     FirebaseAuth mAuth =  FirebaseAuth.getInstance();
@@ -62,6 +69,11 @@ public class LoginActivity extends AppCompatActivity {
         setLoadingClass();
         setViewsAndInitials();
         setListeners();
+        if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
+            displayImage.setImageResource(R.drawable.ic_moonsmallicon);
+        } else {
+            displayImage.setImageResource(R.drawable.ic_suniconsmall);
+        }
         dob = bdate.getText().toString()+  bmonth.getText().toString() + byear.getText().toString();
     }
     private void setLoadingClass(){
@@ -87,8 +99,12 @@ public class LoginActivity extends AppCompatActivity {
         byear = findViewById(R.id.birthyear);
         login = findViewById(R.id.registerbtn);
         emailid = findViewById(R.id.emailId);
+        emailid.requestFocus();
         emailValid = findViewById(R.id.emailValidityText);
         forgot = findViewById(R.id.forgotBtn);
+        displayImage = findViewById(R.id.imageOnlogin);
+        Animation animation = AnimationUtils.loadAnimation(this,R.anim.rotate_clock);
+        displayImage.startAnimation(animation);
     }
 
     private void setListeners(){
@@ -99,7 +115,12 @@ public class LoginActivity extends AppCompatActivity {
         });
         if(!isTeacher) {
             roll.addTextChangedListener(new TextWatcher() {
-                public void afterTextChanged(Editable s) { checkRollNumValidity(roll.getText().toString().trim(), s); }
+                public void afterTextChanged(Editable s) {
+                    if(s.length()==0){
+                        emailid.requestFocus();
+                    }
+                    checkRollNumValidity(roll.getText().toString().trim(), s);
+                }
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                 public void onTextChanged(CharSequence s, int start, int count, int after) {}
             });
@@ -125,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
                                             customLoadDialogClass.show();
                                             resetLinkSender(emailid.getText().toString());
                                         } else{
-                                            Snackbar.make(view, schemester.getStringResource(R.string.internet_problem), 5000)
+                                            Snackbar.make(view, schemester.getStringResource(R.string.internet_problem), 3000)
                                                     .setTextColor(getResources().getColor(R.color.white))
                                                     .setBackgroundTint(getResources().getColor(R.color.dark_red))
                                                     .show();
@@ -136,11 +157,11 @@ public class LoginActivity extends AppCompatActivity {
                                 .setBackgroundTint(getResources().getColor(R.color.dead_blue))
                                 .setActionTextColor(getResources().getColor(R.color.yellow))
                                 .show();
-                    } else { Snackbar.make(view, schemester.getStringResource(R.string.request_email_text), 5000)
+                    } else { Snackbar.make(view, schemester.getStringResource(R.string.request_email_text), 4000)
                             .setTextColor(getResources().getColor(R.color.white))
                             .setBackgroundTint(getResources().getColor(R.color.dark_red))
                             .show(); }
-                } else { Snackbar.make(view, schemester.getStringResource(R.string.request_email_text), 5000)
+                } else { Snackbar.make(view, schemester.getStringResource(R.string.provide_valid_email_text), 4000)
                         .setTextColor(getResources().getColor(R.color.white))
                         .setBackgroundTint(getResources().getColor(R.color.dark_red))
                         .show(); }
@@ -161,6 +182,9 @@ public class LoginActivity extends AppCompatActivity {
                     bdate.setTextColor(getResources().getColor(R.color.light_red));
                     isDateValid = false;
                 }
+                if(s.length()==0){
+                    roll.requestFocus();
+                }
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int count, int after) {}
@@ -176,12 +200,27 @@ public class LoginActivity extends AppCompatActivity {
                         isDateValid = true;
                     }
                 } else{
-                    bmonth.setTextColor(getResources().getColor(R.color.dark_red));
+                    bmonth.setTextColor(getResources().getColor(R.color.light_red));
                     isDateValid = false;
+                }
+                if(s.length()==0){
+                    bdate.requestFocus();
                 }
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int count, int after) {}
+        });
+        byear.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.length()==0){
+                    bmonth.requestFocus();
+                }
+            }
         });
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,40 +258,54 @@ public class LoginActivity extends AppCompatActivity {
             schemester.toasterLong(schemester.getStringResource(R.string.email_id_required));
             return;
         }
+        if(!isEmailValid) {
+            schemester.toasterLong(schemester.getStringResource(R.string.invalid_email_address));
+            emailid.requestFocus();
+            return;
+        }
         if (!isTeacher&&TextUtils.isEmpty(rollNum)) {
             schemester.toasterLong(schemester.getStringResource(R.string.college_roll_required_text));
+            roll.requestFocus();
+            return;
+        }
+        if(!isRollValid &&!isTeacher){
+            schemester.toasterLong(schemester.getStringResource(R.string.invalid_roll));
+            roll.requestFocus();
             return;
         }
         if (TextUtils.isEmpty(dd)) {
             schemester.toasterLong(schemester.getStringResource(R.string.we_need_your_birthdate));
+            bdate.requestFocus();
             return;
         }
         if(Integer.parseInt(dd)<1||Integer.parseInt(dd)>31){
             schemester.toasterLong(schemester.getStringResource(R.string.invalid_bdate));
+            bdate.requestFocus();
             return;
         }
         if (TextUtils.isEmpty(mm)) {
             schemester.toasterLong(schemester.getStringResource(R.string.we_need_your_bmonth));
+            bmonth.requestFocus();
             return;
         }
         if(Integer.parseInt(mm)<1||Integer.parseInt(mm)>12){
             schemester.toasterLong(schemester.getStringResource(R.string.invalid_bmonth));
+            bmonth.requestFocus();
             return;
         }
         if (TextUtils.isEmpty(yyyy)) {
             schemester.toasterLong(schemester.getStringResource(R.string.we_need_byear));
+            byear.requestFocus();
             return;
         }
         if(Integer.parseInt(yyyy)>calendar.get(Calendar.YEAR)){
             schemester.toasterLong(schemester.getStringResource(R.string.future_year_entry_warning));
-            return;
-        }
-        if(!isEmailValid || !isRollValid &&!isTeacher){
-            schemester.toasterLong(schemester.getStringResource(R.string.invalid_details));
+            byear.requestFocus();
             return;
         }
         if(!isDateValid){
             schemester.toasterLong(schemester.getStringResource(R.string.invalid_date_format));
+            bdate.requestFocus();
         }
         else {
             confirmEmailDialog = new CustomConfirmDialogClass(LoginActivity.this, new OnDialogConfirmListener() {
@@ -329,6 +382,7 @@ public class LoginActivity extends AppCompatActivity {
                             } else {
                                 schemester.toasterLong(schemester.getStringResource(R.string.complete_your_profile));
                                 startActivity(new Intent(LoginActivity.this, AdditionalLoginInfo.class));
+                                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                                 customLoadDialogClass.hide();
                             }
                         }
@@ -353,11 +407,12 @@ public class LoginActivity extends AppCompatActivity {
                             //storeUserDefinition(readUserPosition(), uid);
                             if(!isTeacher) { storeCredentials(uid, roll.getText().toString()); }
                             else { storeCredentials(uid, null); }
+                            sendVerificationEmail();
                             startActivity(new Intent(LoginActivity.this, AdditionalLoginInfo.class)
                                     .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY));
                             customLoadDialogClass.hide();
                             finish();
-                            sendVerificationEmail();
+                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                         } else {
                             storeLoginStatus(false);
                             loginUser(uid,passphrase);
@@ -392,6 +447,7 @@ public class LoginActivity extends AppCompatActivity {
             emailValid.setText(getResources().getString(R.string.valid));
             emailValid.setTextColor(getResources().getColor(R.color.white));
             emailValid.setBackgroundResource(R.drawable.topleftsharpboxgreen);
+            emailid.setBackgroundColor(schemester.getColorResource(R.color.blue));
             isEmailValid = true;
         }
         else if(s.length()==0){
@@ -401,6 +457,7 @@ public class LoginActivity extends AppCompatActivity {
             emailValid.setText(getResources().getString(R.string.invalidtext));
             emailValid.setTextColor(getResources().getColor(R.color.white));
             emailValid.setBackgroundResource(R.drawable.topleftsharpboxred);
+            emailid.setBackgroundColor(schemester.getColorResource(R.color.dark_red));
             isEmailValid = false;
         }
     }
@@ -469,5 +526,9 @@ public class LoginActivity extends AppCompatActivity {
             case ApplicationSchemester.CODE_THEME_DARK: setTheme(R.style.BlueDarkTheme);break;
             case ApplicationSchemester.CODE_THEME_LIGHT: default:setTheme(R.style.BlueLightTheme);
         }
+    }
+    private int getThemeStatus(){
+        return getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
+                .getInt(schemester.getPREF_KEY_THEME(), 0);
     }
 }

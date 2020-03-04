@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -61,10 +62,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
 
-
+@TargetApi(Build.VERSION_CODES.Q)
 public class MainActivity extends AppCompatActivity{
     ApplicationSchemester schemester;
-    private TextView semesterText, noClassText, day, month, time;
+    private TextView semesterText, noClassText, noClassReason, day, month, time;
     private TextView[] c = new TextView[9], p = new TextView[9];
     private TextView loginIdOnDrawer;
     private Button date;
@@ -118,6 +119,7 @@ public class MainActivity extends AppCompatActivity{
         runTimeDisplayOnBottomSheet();      //display current time
         setThemeConsequencesAndActions();      //set navigation bar color and theme button listener
         setButtonClickListeners();
+        setHolidayViewIfHoliday(isWeekendToday(), "It's weekend!");
         //initializing main schedule update task
         mReadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
         mHighlighterTask = new HighlighterTask();
@@ -158,7 +160,7 @@ public class MainActivity extends AppCompatActivity{
                         }
                     }, 2000);
                 } else{
-                    setHolidayViewIfHoliday(isWeekendToday());
+                    setHolidayViewIfHoliday(isWeekendToday(), "It's weekend!");
                 }
             }
             super.onPostExecute(aBoolean);
@@ -194,14 +196,15 @@ public class MainActivity extends AppCompatActivity{
                             DocumentSnapshot document = task.getResult();
                             if (Objects.requireNonNull(document).exists()) {
                                 Boolean temp = document.getBoolean("holiday");
+                                String reason =  document.getString("reason");
                                 if(temp!=null && !temp){
                                     isCollegeHoliday(COLLECTION_COLLEGE_CODE,schemester.getDOCUMENT_LOCAL_INFO());
                                 } else {
                                     localHoliday = true;
-                                    setHolidayViewIfHoliday(true);
+                                    setHolidayViewIfHoliday(true,reason);
                                 }
                             } else {
-                                setHolidayViewIfHoliday(false);
+                                setHolidayViewIfHoliday(false, null);
                                 localHoliday = false;
                             }
                         }
@@ -219,14 +222,15 @@ public class MainActivity extends AppCompatActivity{
                             DocumentSnapshot document = task.getResult();
                             if (Objects.requireNonNull(document).exists()) {
                                 Boolean temp = document.getBoolean("holiday");
+                                String reason = document.getString("reason");
                                 if(!temp){
                                     isCourseHoliday(COLLECTION_COLLEGE_CODE,DOCUMENT_COURSE_CODE);
                                 } else {
                                     localHoliday = true;
-                                    setHolidayViewIfHoliday(true);
+                                    setHolidayViewIfHoliday(true, reason);
                                 }
                             } else {
-                                setHolidayViewIfHoliday(false);
+                                setHolidayViewIfHoliday(false, null);
                                 localHoliday = false;
                             }
                         }
@@ -244,10 +248,12 @@ public class MainActivity extends AppCompatActivity{
                             DocumentSnapshot document = task.getResult();
                             if (Objects.requireNonNull(document).exists()) {
                                 Boolean temp = document.getBoolean("holiday");
-                                    localHoliday = temp;
-                                    setHolidayViewIfHoliday(temp);
+                                String reason = document.getString("reason");
+                                localHoliday = temp;
+                                assert temp != null;
+                                setHolidayViewIfHoliday(localHoliday,reason);
                             } else {
-                                setHolidayViewIfHoliday(false);
+                                setHolidayViewIfHoliday(false,null);
                                 localHoliday = false;
                             }
                         }
@@ -279,6 +285,7 @@ public class MainActivity extends AppCompatActivity{
         headingView = findViewById(R.id.period_view);
         noClassText = findViewById(R.id.noclasstext);
         noClassImage = findViewById(R.id.noclassImage);
+        noClassReason = findViewById(R.id.noclassreason);
         settingTab = findViewById(R.id.settingTab);
         scheduleTab = findViewById(R.id.fullScheduleTab);
         resultTab = findViewById(R.id.resultTab);
@@ -440,8 +447,7 @@ public class MainActivity extends AppCompatActivity{
                     switchThemeBtn.startAnimation(show);
                     switchThemeBtn.startAnimation(fadeOn);
                 }else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO){
-                    Intent mode = new Intent(MainActivity.this, ModeOfConduct.class);
-                    startActivity(mode);
+                    startActivity( new Intent(MainActivity.this, ModeOfConduct.class));
                 } else {
                     storeThemeStatus(ApplicationSchemester.CODE_THEME_DARK);
                     startActivity(restart);
@@ -457,8 +463,7 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View view) {
                 setActivityChangerButtonsDisabled(true);
                 mReadClassFromDatabaseTask.cancel(true);
-                Intent i = new Intent(MainActivity.this, FullScheduleActivity.class);
-                startActivity(i);
+                startActivity(new Intent(MainActivity.this, FullScheduleActivity.class));
             }
         });
         settingTab.setOnClickListener(new View.OnClickListener() {
@@ -467,8 +472,7 @@ public class MainActivity extends AppCompatActivity{
                 setActivityChangerButtonsDisabled(true);
                 mReadClassFromDatabaseTask.cancel(true);
                 mHighlighterTask.cancel(true);
-                Intent i = new Intent(MainActivity.this, Preferences.class);
-                startActivity(i);
+                startActivity(new Intent(MainActivity.this, Preferences.class));
             }
         });
         resultTab.setOnClickListener(new View.OnClickListener() {
@@ -550,12 +554,6 @@ public class MainActivity extends AppCompatActivity{
                                                             showPackageAlert(vname);
                                                         } else {
                                                             downloader(link, vname);
-/*                                                            testing
-                                                            Intent down = new Intent(MainActivity.this, PermanentActionActivity.class);
-                                                            down.putExtra("link", link);
-                                                            down.putExtra("vname", vname);
-                                                            startActivity(down);
- */
                                                         }
                                                     }
                                                 } else {
@@ -792,16 +790,19 @@ public class MainActivity extends AppCompatActivity{
     }
 
     //check holiday and set view accordingly
-    private void setHolidayViewIfHoliday(Boolean todayIsHoliday){
+    private void setHolidayViewIfHoliday(Boolean todayIsHoliday, String reason){
+        noClassReason.setText(reason);
         if (todayIsHoliday) {
             scrollView.setVisibility(View.GONE);
             headingView.setVisibility(View.GONE);
             noClassText.setVisibility(View.VISIBLE);
+            noClassReason.setVisibility(View.VISIBLE);
             noClassImage.setVisibility(View.VISIBLE);
         } else {
             scrollView.setVisibility(View.VISIBLE);
             headingView.setVisibility(View.VISIBLE);
             noClassText.setVisibility(View.GONE);
+            noClassReason.setVisibility(View.GONE);
             noClassImage.setVisibility(View.GONE);
         }
     }

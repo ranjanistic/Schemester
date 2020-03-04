@@ -7,7 +7,7 @@
     android:gravity="center"
     android:background="@drawable/roundcontainerbox"
     android:backgroundTint="?attr/base_background"
-
+    tools:targetApi="q"
     android:orientation="horizontal">
     <ImageView
         android:id="@+id/choice_dialog_image"

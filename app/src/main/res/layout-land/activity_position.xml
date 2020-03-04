@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/display_foreground"
     android:backgroundTint="?attr/display_foreground"
+    tools:targetApi="Q"
     tools:context=".PositionActivity">
 
     <ImageButton

@@ -8,6 +8,7 @@
     android:layout_width="match_parent"
     app:layout_behavior="@string/bottom_sheet_behavior"
     android:layout_height="wrap_content"
+    tools:targetApi="q"
     android:id="@+id/bottom_drawer">
     <LinearLayout
         android:id="@+id/drawerarrowHolder"

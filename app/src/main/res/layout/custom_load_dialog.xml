@@ -2,10 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center"
     android:background="@drawable/roundcontainerbox"
     android:backgroundTint="?attr/display_foreground"
     android:gravity="center"
+    tools:targetApi="q"
     android:orientation="vertical"
     android:padding="12dp">
 

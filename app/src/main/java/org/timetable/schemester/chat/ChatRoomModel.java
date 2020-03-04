@@ -1,8 +1,8 @@
-package org.timetable.schemester;
+package org.timetable.schemester.chat;
 
 import java.util.ArrayList;
 
-public class ChatRoomModel {
+class ChatRoomModel {
     private String message;
     private String user;
     private String timeStamp;

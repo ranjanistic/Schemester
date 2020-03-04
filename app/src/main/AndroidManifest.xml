@@ -15,9 +15,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".PermanentActionActivity"/>
-        <activity android:name=".ChatRoomActivity" />
+        android:extractNativeLibs="false"
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:targetApi="q">
+        <activity android:name=".chat.ChatRoomActivity" />
         <activity android:name=".ModeOfConduct" />
         <activity
             android:name=".student.AdditionalLoginInfo"
@@ -46,8 +47,5 @@
             android:name=".LoginActivity"
             android:theme="@style/BlueLightTheme" />
         <activity android:name=".MainActivity" />
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
     </application>
 </manifest>

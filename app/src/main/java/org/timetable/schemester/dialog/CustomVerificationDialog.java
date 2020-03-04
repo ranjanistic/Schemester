@@ -19,11 +19,13 @@ import org.timetable.schemester.R;
 import java.util.Objects;
 
 public class CustomVerificationDialog extends AppCompatDialog {
-    OnDialogApplyListener onDialogApplyListener;
+    private OnDialogApplyListener onDialogApplyListener;
     public CustomVerificationDialog(Context context, OnDialogApplyListener onDialogApplyListener){
         super(context);
         this.onDialogApplyListener = onDialogApplyListener;
     }
+    private EditText etmail, etpass;
+    private Button cancel,submit;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -31,18 +33,17 @@ public class CustomVerificationDialog extends AppCompatDialog {
         setContentView(R.layout.custom_verification_dialog);
         Objects.requireNonNull(this.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        final EditText etmail = findViewById(R.id.cred_email);
-        final EditText etpass = findViewById(R.id.cred_pass);
-        Button cancel = findViewById(R.id.cred_no);
-        Button submit = findViewById(R.id.cred_yes);
-        assert cancel != null;
+        etmail = findViewById(R.id.cred_email);
+        etpass = findViewById(R.id.cred_pass);
+        etmail.requestFocus();
+        cancel = findViewById(R.id.cred_no);
+        submit = findViewById(R.id.cred_yes);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 cancel();
             }
         });
-        assert submit != null;
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,11 +52,9 @@ public class CustomVerificationDialog extends AppCompatDialog {
                     pass = etpass.getText().toString();
                 if (TextUtils.isEmpty(email)) {
                     Toast.makeText(getContext(), "Email ID is required.", Toast.LENGTH_LONG).show();
-     //               return;
                 }
                 else if (TextUtils.isEmpty(pass)) {
                     Toast.makeText(getContext(), "Date of birth is necessary.", Toast.LENGTH_LONG).show();
-//                    return;
                 }
                 else{
                     onDialogApplyListener.onApply(email,pass);

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:backgroundTint="?attr/display_foreground"
     android:background="?attr/display_foreground"
+    tools:targetApi="q"
     android:layout_height="match_parent"
     tools:context=".NoticeBoard">
     <ImageView
@@ -42,7 +43,7 @@
             android:padding="12dp"
             android:scaleType="centerInside"
             android:background="@drawable/round_btn"
-            app:srcCompat="@drawable/ic_arrowleft"/>
+            app:srcCompat="@drawable/ic_halfarrow"/>
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"

@@ -16,6 +16,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDialog;
@@ -79,100 +80,87 @@ public class CustomDownloadLoadDialog extends AppCompatDialog {
         private downloadUpdateApk(Context context) {
             this.context = context;
         }
+
         @Override
         protected void onPreExecute() {
             PowerManager pm = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
-            mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                    getClass().getName());
+            if (pm != null) {
+                mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                        getClass().getName());
+            }
             mWakeLock.acquire(5000);
             progressBar.setProgress(1);
             pathToFile = Environment.getExternalStorageDirectory()+"/Schemester";
-            File dir = new File(pathToFile);
             try{
-                if(dir.mkdir()) {
-                    System.out.println("Directory created");
-                } else {
-                    System.out.println("Directory is not created");
-                }
+                boolean mkdir = new File(pathToFile).mkdir();
             }catch(Exception e){
                 e.printStackTrace();
             }
             super.onPreExecute();
         }
+
         @Override
         protected Boolean doInBackground(String... furl) {
             int count;
-            //Toast.makeText(getContext(), "In background", Toast.LENGTH_SHORT).show();
-                InputStream input = null;
-                OutputStream output = null;
-                HttpURLConnection connection = null;
-                try {
-                    URL url = new URL(furl[0]);
-                    connection = (HttpURLConnection) url.openConnection();
-                    connection.connect();
-                    if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                        Log.println( Log.WARN, "tag:","Server returned HTTP " + connection.getResponseCode()
-                                + " " + connection.getResponseMessage());
-                    }
-                    int fileLength = connection.getContentLength();
-
-                    // download the file
-                    input = connection.getInputStream();
-                    output = new FileOutputStream(pathToFile+"/org.timetable.schemester-"+onDialogDownloadLoadListener.getVersion()+".apk");
-                    byte data[] = new byte[4096];
-                    long total = 0;
-                    while ((count = input.read(data)) != -1) {
-                        if (isCancelled()) {
-                            File file = new File(pathToFile+"/org.timetable.schemester-"+onDialogDownloadLoadListener.getVersion()+".apk");
-                            file.delete();
-                            input.close();
-                            isCompleted = false;
-                            return false;
-                        }
-                        total += count;
-                        // publishing the progress....
-                        if (fileLength > 0) // only if total length is known
-                            publishProgress((int) (total * 100 / fileLength), fileLength);
-                        output.write(data, 0, count);
-                    }
-                    isCompleted = true;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    isCompleted = false;
-                } finally {
-                    try {
-                        if (output != null)
-                            output.close();
-                        if (input != null)
-                            input.close();
-                    } catch (IOException ignored) {
-                        ignored.printStackTrace();
-                    }
-                    if (connection != null)
-                        connection.disconnect();
+            InputStream input = null;
+            OutputStream output = null;
+            HttpURLConnection connection = null;
+            try {
+                connection = (HttpURLConnection) new URL(furl[0]).openConnection();
+                connection.connect();
+                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    Toast.makeText(getContext(),"Some internal error (it's not you, it's us)",Toast.LENGTH_SHORT).show();
                 }
+                int fileLength = connection.getContentLength();
+                input = connection.getInputStream();
+                output = new FileOutputStream(pathToFile+"/org.timetable.schemester-"+onDialogDownloadLoadListener.getVersion()+".apk");
+                byte[] data = new byte[4096];
+                long total = 0;
+                while ((count = input.read(data)) != -1) {
+                    if (isCancelled()) {
+                         isCompleted = (!new File(pathToFile+"/org.timetable.schemester-"+onDialogDownloadLoadListener.getVersion()+".apk")
+                                 .delete());
+                        input.close();
+                        return false;
+                    }
+                    total += count;
+                    if (fileLength > 0)
+                        publishProgress((int) (total * 100 / fileLength), fileLength);
+                    output.write(data, 0, count);
+                }
+                isCompleted = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                isCompleted = false;
+            } finally {
+                try {
+                    if (output != null && input != null) {
+                        output.close();
+                        input.close();
+                    }
+                } catch (IOException ignored) {}
+                if (connection != null)
+                    connection.disconnect();
+            }
             return isCompleted;
         }
+
         @Override
         protected void onProgressUpdate(Integer... progress) {
-            float sizeMB =  progress[1]/1000000;
-            String pc = progress[0].toString()+"%", size =" of "+ sizeMB + " MB";
+            String pc = progress[0].toString()+"% ",
+                    size ="of "+ progress[1]/1000000 + " MB";
             downsize.setText(size);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                //Toast.makeText(getContext(), "progress update", Toast.LENGTH_SHORT).show();
                 progressBar.setProgress(progress[0], true);
-            } else {
-                //Toast.makeText(getContext(), "progress update", Toast.LENGTH_SHORT).show();
-                progressBar.setProgress(progress[0]);
-            }
+            } else { progressBar.setProgress(progress[0]); }
             percentage.setText(pc);
         }
 
         @Override
         protected void onCancelled(Boolean aBoolean) {
-            File file = new File(pathToFile+"/org.timetable.schemester-"+onDialogDownloadLoadListener.getVersion()+".apk");
-            file.delete();
             super.onCancelled(aBoolean);
+            aBoolean = new File(pathToFile + "/org.timetable.schemester-" + onDialogDownloadLoadListener.getVersion() + ".apk")
+                    .delete();
         }
 
         @Override
@@ -186,9 +174,9 @@ public class CustomDownloadLoadDialog extends AppCompatDialog {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             mdownloadUpdateApk.cancel(true);
-            File file = new File(Environment.getExternalStorageDirectory()+"/Schemester/org.timetable.schemester-"+onDialogDownloadLoadListener.getVersion()+".apk");
-            file.delete();
-            onDialogDownloadLoadListener.afterFinish(false);
+            boolean res = new File(Environment.getExternalStorageDirectory()+"/Schemester/org.timetable.schemester-"+onDialogDownloadLoadListener.getVersion()+".apk")
+                    .delete();
+            onDialogDownloadLoadListener.afterFinish(!res);
         }
         return super.onKeyDown(keyCode, event);
     }

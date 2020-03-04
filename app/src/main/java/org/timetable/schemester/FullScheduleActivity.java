@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -35,6 +37,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.timetable.schemester.chat.ChatRoomActivity;
 import org.timetable.schemester.dialog.CustomAlertDialog;
 import org.timetable.schemester.dialog.CustomConfirmDialogClass;
 import org.timetable.schemester.dialog.CustomDownloadLoadDialog;
@@ -49,7 +52,7 @@ import java.util.Calendar;
 import java.util.Objects;
 import java.util.TimeZone;
 
-
+@TargetApi(Build.VERSION_CODES.Q)
 public class FullScheduleActivity extends AppCompatActivity {
     private ApplicationSchemester schemester;
     TextView email, roll, semester, versionNameText;
@@ -277,8 +280,8 @@ public class FullScheduleActivity extends AppCompatActivity {
                 }else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO){
                     startActivity(new Intent(FullScheduleActivity.this, ModeOfConduct.class));
                 } else {
-//                    schemester.toasterLong(schemester.getStringResource(R.string.under_construction_message));
-                    startActivity( new Intent(FullScheduleActivity.this, ChatRoomActivity.class));
+                    schemester.toasterLong(schemester.getStringResource(R.string.under_construction_message));
+//                    startActivity( new Intent(FullScheduleActivity.this, ChatRoomActivity.class));
                 }
             }
         });

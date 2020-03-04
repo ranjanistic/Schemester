@@ -7,6 +7,7 @@
     android:gravity="center"
     android:backgroundTint="?attr/base_background"
     android:background="@drawable/roundcontainerbox"
+    tools:targetApi="q"
     android:layout_gravity="center">
 
 <LinearLayout

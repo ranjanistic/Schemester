@@ -196,8 +196,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_teachingtutorialforschemester" />
-                            <entry key="sourceFile" value="C:\Users\hp\Downloads\teachingtutorialforschemester.xml" />
+                            <entry key="outputName" value="ic_trashico" />
+                            <entry key="sourceFile" value="E:\myprojects\AndroidProject\Schedule\app\src\main\res\drawable\ic_trashico.xml" />
                           </map>
                         </option>
                       </PersistentState>
