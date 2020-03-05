@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true" android:color="@color/white"/>
+    <item android:state_pressed="true" android:color="@color/purple"/>
 
-    <item android:state_enabled="true" android:color="?attr/display_foreground"/>
-    <item android:state_activated="true" android:color="?attr/display_foreground"/>
+    <item android:state_enabled="true" android:color="?attr/action_text_color"/>
+    <item android:state_activated="true" android:color="?attr/action_text_color"/>
 </selector>

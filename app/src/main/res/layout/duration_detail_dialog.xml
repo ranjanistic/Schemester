@@ -118,7 +118,7 @@
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-            style="?attr/buttonBarStyle"
+
             android:padding="4dp"
             android:elevation="0dp"
             android:text="@string/okay"
