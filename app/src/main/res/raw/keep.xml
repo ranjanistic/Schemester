@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:discard="@layout/activity_chat_room,@layout_activity_notice_board,@layout/message_received_bubble,
+@layout/message_sent_bubble" />
