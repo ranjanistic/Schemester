@@ -13,12 +13,13 @@ gradle-app.setting
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
 .idea/workspace.xml
-.idea/workspace.xml
+
 local.properties
 *.apk
 *.ser
 *.json
 app/google-services.json
-app/google-services.json
+
 *.gradle
 app/build.gradle
+*.pro
