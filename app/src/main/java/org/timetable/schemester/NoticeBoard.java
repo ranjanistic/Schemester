@@ -28,7 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
-
+@TargetApi(Build.VERSION_CODES.Q)
 public class NoticeBoard extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     ApplicationSchemester schemester;
     TextView head,body,signedby;

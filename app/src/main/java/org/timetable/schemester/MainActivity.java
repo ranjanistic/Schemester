@@ -4,6 +4,7 @@ package org.timetable.schemester;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -55,7 +56,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TimeZone;
-
+@TargetApi(Build.VERSION_CODES.Q)
 public class MainActivity extends AppCompatActivity{
     ApplicationSchemester schemester;
     private TextView semesterText, noClassText, noClassReason, day, month, time;

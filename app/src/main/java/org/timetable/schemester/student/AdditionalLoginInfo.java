@@ -1,7 +1,9 @@
 package org.timetable.schemester.student;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -19,7 +21,7 @@ import org.timetable.schemester.MainActivity;
 import org.timetable.schemester.R;
 
 import java.util.Objects;
-
+@TargetApi(Build.VERSION_CODES.Q)
 public class AdditionalLoginInfo extends AppCompatActivity {
     ApplicationSchemester schemester;
     Spinner collegeSpin,courseSpin,yearSpin;

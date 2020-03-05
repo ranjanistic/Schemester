@@ -1,11 +1,7 @@
 package org.timetable.schemester;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
-
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +10,7 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -24,6 +21,11 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,7 +47,7 @@ import java.util.Calendar;
 import java.util.Objects;
 import java.util.TimeZone;
 
-
+@TargetApi(Build.VERSION_CODES.Q)
 public class FullScheduleActivity extends AppCompatActivity {
     private ApplicationSchemester schemester;
     TextView email, roll, semester, versionNameText;
@@ -140,6 +142,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         schemester.imageButtonLongPressToast(updateCheck,"Check for updates");
         schemester.imageButtonLongPressToast(website,"Visit online");
     }
+
 
     private void setThemeConsequences(){
         if (getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO) {
