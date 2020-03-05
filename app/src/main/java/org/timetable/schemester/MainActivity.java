@@ -2,15 +2,8 @@ package org.timetable.schemester;
 
 // The homepage of the application. Only logged in user should reach here.
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,10 +25,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -51,7 +46,6 @@ import org.timetable.schemester.listener.OnDialogDownloadLoadListener;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.ref.Reference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -188,24 +182,21 @@ public class MainActivity extends AppCompatActivity{
         localHoliday=false;
         db.collection(collector).document(doc)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (Objects.requireNonNull(document).exists()) {
-                                Boolean temp = document.getBoolean("holiday");
-                                String reason =  document.getString("reason");
-                                if(temp!=null && !temp){
-                                    isCollegeHoliday(COLLECTION_COLLEGE_CODE,schemester.getDOCUMENT_LOCAL_INFO());
-                                } else {
-                                    localHoliday = true;
-                                    setHolidayViewIfHoliday(true,reason);
-                                }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (Objects.requireNonNull(document).exists()) {
+                            Boolean temp = document.getBoolean("holiday");
+                            String reason =  document.getString("reason");
+                            if(temp!=null && !temp){
+                                isCollegeHoliday(COLLECTION_COLLEGE_CODE,schemester.getDOCUMENT_LOCAL_INFO());
                             } else {
-                                setHolidayViewIfHoliday(false, null);
-                                localHoliday = false;
+                                localHoliday = true;
+                                setHolidayViewIfHoliday(true,reason);
                             }
+                        } else {
+                            setHolidayViewIfHoliday(false, null);
+                            localHoliday = false;
                         }
                     }
                 });
@@ -214,24 +205,21 @@ public class MainActivity extends AppCompatActivity{
         localHoliday=false;
         db.collection(collector).document(doc)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (Objects.requireNonNull(document).exists()) {
-                                Boolean temp = document.getBoolean("holiday");
-                                String reason = document.getString("reason");
-                                if(!temp){
-                                    isCourseHoliday(COLLECTION_COLLEGE_CODE,DOCUMENT_COURSE_CODE);
-                                } else {
-                                    localHoliday = true;
-                                    setHolidayViewIfHoliday(true, reason);
-                                }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (Objects.requireNonNull(document).exists()) {
+                            Boolean temp = document.getBoolean("holiday");
+                            String reason = document.getString("reason");
+                            if(temp!=null && !temp){
+                                isCourseHoliday(COLLECTION_COLLEGE_CODE,DOCUMENT_COURSE_CODE);
                             } else {
-                                setHolidayViewIfHoliday(false, null);
-                                localHoliday = false;
+                                localHoliday = true;
+                                setHolidayViewIfHoliday(true, reason);
                             }
+                        } else {
+                            setHolidayViewIfHoliday(false, null);
+                            localHoliday = false;
                         }
                     }
                 });
@@ -240,21 +228,18 @@ public class MainActivity extends AppCompatActivity{
         localHoliday=false;
         db.collection(collector).document(doc)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (Objects.requireNonNull(document).exists()) {
-                                Boolean temp = document.getBoolean("holiday");
-                                String reason = document.getString("reason");
-                                localHoliday = temp;
-                                assert temp != null;
-                                setHolidayViewIfHoliday(localHoliday,reason);
-                            } else {
-                                setHolidayViewIfHoliday(false,null);
-                                localHoliday = false;
-                            }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (Objects.requireNonNull(document).exists()) {
+                            Boolean temp = document.getBoolean("holiday");
+                            String reason = document.getString("reason");
+                            localHoliday = temp;
+                            assert temp != null;
+                            setHolidayViewIfHoliday(localHoliday,reason);
+                        } else {
+                            setHolidayViewIfHoliday(false,null);
+                            localHoliday = false;
                         }
                     }
                 });
@@ -318,14 +303,11 @@ public class MainActivity extends AppCompatActivity{
         drawerPeek.measure(View.MeasureSpec.UNSPECIFIED,View.MeasureSpec.UNSPECIFIED);
         bottomSheetBehavior.setPeekHeight(drawerPeek.getMeasuredHeight());
 
-        drawerArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                } else if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
+        drawerArrow.setOnClickListener(view -> {
+            if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            } else if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -354,12 +336,9 @@ public class MainActivity extends AppCompatActivity{
             loginIdOnDrawer.setTextColor(schemester.getColorResource(R.color.blue));
         } else loginIdOnDrawer.setText(getCredentials()[0]);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-                @Override
-                public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-                    if(bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED) {
-                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                    }
+            scrollView.setOnScrollChangeListener((view, i, i1, i2, i3) -> {
+                if(bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
             });
         }
@@ -417,103 +396,75 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void setButtonClickListeners(){
-        layer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
+        layer.setOnClickListener(view -> {
+            if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             }
         });
         final Intent restart = new Intent(MainActivity.this, MainActivity.class);
-        switchThemeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switchThemeBtn.startAnimation(hide);
-                switchThemeBtn.startAnimation(fadeOff);
-                if(getThemeStatus() == ApplicationSchemester.CODE_THEME_LIGHT){
-                    storeThemeStatus(ApplicationSchemester.CODE_THEME_DARK);
-                    startActivity(restart);
-                    finish();
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    switchThemeBtn.startAnimation(show);
-                    switchThemeBtn.startAnimation(fadeOn);
-                } else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
-                    storeThemeStatus(ApplicationSchemester.CODE_THEME_LIGHT);
-                    startActivity(restart);
-                    finish();
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    switchThemeBtn.startAnimation(show);
-                    switchThemeBtn.startAnimation(fadeOn);
-                }else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO){
-                    startActivity( new Intent(MainActivity.this, ModeOfConduct.class));
-                } else {
-                    storeThemeStatus(ApplicationSchemester.CODE_THEME_DARK);
-                    startActivity(restart);
-                    finish();
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    switchThemeBtn.startAnimation(show);
-                    switchThemeBtn.startAnimation(fadeOn);
-                }
+        switchThemeBtn.setOnClickListener(view -> {
+            switchThemeBtn.startAnimation(hide);
+            switchThemeBtn.startAnimation(fadeOff);
+            if(getThemeStatus() == ApplicationSchemester.CODE_THEME_LIGHT){
+                storeThemeStatus(ApplicationSchemester.CODE_THEME_DARK);
+                startActivity(restart);
+                finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                switchThemeBtn.startAnimation(show);
+                switchThemeBtn.startAnimation(fadeOn);
+            } else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
+                storeThemeStatus(ApplicationSchemester.CODE_THEME_LIGHT);
+                startActivity(restart);
+                finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                switchThemeBtn.startAnimation(show);
+                switchThemeBtn.startAnimation(fadeOn);
+            }else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO){
+                startActivity( new Intent(MainActivity.this, ModeOfConduct.class));
+            } else {
+                storeThemeStatus(ApplicationSchemester.CODE_THEME_DARK);
+                startActivity(restart);
+                finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                switchThemeBtn.startAnimation(show);
+                switchThemeBtn.startAnimation(fadeOn);
             }
         });
-        scheduleTab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setActivityChangerButtonsDisabled(true);
-                mReadClassFromDatabaseTask.cancel(true);
-                startActivity(new Intent(MainActivity.this, FullScheduleActivity.class));
-            }
+        scheduleTab.setOnClickListener(view -> {
+            setActivityChangerButtonsDisabled(true);
+            mReadClassFromDatabaseTask.cancel(true);
+            startActivity(new Intent(MainActivity.this, FullScheduleActivity.class));
         });
-        settingTab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setActivityChangerButtonsDisabled(true);
-                mReadClassFromDatabaseTask.cancel(true);
-                mHighlighterTask.cancel(true);
-                startActivity(new Intent(MainActivity.this, Preferences.class));
-            }
+        settingTab.setOnClickListener(view -> {
+            setActivityChangerButtonsDisabled(true);
+            mReadClassFromDatabaseTask.cancel(true);
+            mHighlighterTask.cancel(true);
+            startActivity(new Intent(MainActivity.this, Preferences.class));
         });
-        resultTab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                schemester.toasterShort(schemester.getStringResource(R.string.under_construction_message));
-            }
-        });
-        date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED) {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                } else bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            }
+        resultTab.setOnClickListener(view -> schemester.toasterShort(schemester.getStringResource(R.string.under_construction_message)));
+        date.setOnClickListener(view -> {
+            if(bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            } else bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
         int d;
         for(d = 0;d<9;++d) {
             final int finalD = d;
-            duration[d].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    durationDetailsDialog = new DurationDetailsDialog(MainActivity.this, new DurationDetailDialogListener() {
-                        @Override
-                        public String onCallClassName() { return c[finalD].getText().toString(); }
-                        @Override
-                        public String onCallClassDuration() { return p[finalD].getText().toString(); }
-                        @Override
-                        public String classLocation() { return getStringResource(R.string.n_a); }
-                        @Override
-                        public Boolean classIsOn() { return null; }
-                    });
-                    durationDetailsDialog.show();
-                }
+            duration[d].setOnClickListener(view -> {
+                durationDetailsDialog = new DurationDetailsDialog(MainActivity.this, new DurationDetailDialogListener() {
+                    @Override
+                    public String onCallClassName() { return c[finalD].getText().toString(); }
+                    @Override
+                    public String onCallClassDuration() { return p[finalD].getText().toString(); }
+                    @Override
+                    public String classLocation() { return getStringResource(R.string.n_a); }
+                    @Override
+                    public Boolean classIsOn() { return null; }
+                });
+                durationDetailsDialog.show();
             });
         }
-        loginIdOnDrawer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ModeOfConduct.class));
-            }
-        });
+        loginIdOnDrawer.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, ModeOfConduct.class)));
     }
 
 
@@ -532,64 +483,61 @@ public class MainActivity extends AppCompatActivity{
     private void checkUpdateThenNotify(){
             db.collection(schemester.getCOLLECTION_APP_CONFIGURATION()).document(schemester.getDOCUMENT_VERSION_CURRENT())
                     .get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (Objects.requireNonNull(document).exists()) {
-                                    int vcode = Integer.parseInt(Objects.toString(document.get(schemester.getFIELD_VERSION_CODE())));
-                                    final String vname = document.getString(schemester.getFIELD_VERSION_NAME());
-                                    final String link = document.getString(schemester.getFIELD_DOWNLOAD_LINK());
-                                    if (vcode != ApplicationSchemester.versionCode || !Objects.equals(vname, ApplicationSchemester.versionName)) {
-                                        schemester.toasterLong(getStringResource(R.string.update_available));
-                                        final CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(MainActivity.this, new OnDialogConfirmListener() {
-                                            @Override
-                                            public void onApply(Boolean confirm) {
-                                                if (storagePermissionGranted()){
-                                                    if(isInternetAvailable()) {
-                                                        File file = new File(Environment.getExternalStorageDirectory() +"/Schemester/org.timetable.schemester-"+vname+".apk");
-                                                        if(file.exists()){
-                                                            showPackageAlert(vname);
-                                                        } else {
-                                                            downloader(link, vname);
-                                                        }
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (Objects.requireNonNull(document).exists()) {
+                                int vcode = Integer.parseInt(Objects.toString(document.get(schemester.getFIELD_VERSION_CODE())));
+                                final String vname = document.getString(schemester.getFIELD_VERSION_NAME());
+                                final String link = document.getString(schemester.getFIELD_DOWNLOAD_LINK());
+                                if (vcode != ApplicationSchemester.versionCode || !Objects.equals(vname, ApplicationSchemester.versionName)) {
+                                    schemester.toasterLong(getStringResource(R.string.update_available));
+                                    final CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(MainActivity.this, new OnDialogConfirmListener() {
+                                        @Override
+                                        public void onApply(Boolean confirm) {
+                                            if (storagePermissionGranted()){
+                                                if(isInternetAvailable()) {
+                                                    File file = new File(Environment.getExternalStorageDirectory() +"/Schemester/org.timetable.schemester-"+vname+".apk");
+                                                    if(file.exists()){
+                                                        showPackageAlert(vname);
+                                                    } else {
+                                                        downloader(link, vname);
                                                     }
-                                                } else {
-                                                    CustomConfirmDialogClass permissionDialog = new CustomConfirmDialogClass(MainActivity.this, new OnDialogConfirmListener() {
-                                                        @Override
-                                                        public void onApply(Boolean confirm) {
-                                                            requestStoragePermission();
-                                                            update.cancel(true);
-                                                            new checkUpdate().execute();
-                                                        }
-                                                        @Override
-                                                        public String onCallText() {
-                                                            return getStringResource(R.string.storage_permit_required);
-                                                        }
-                                                        @Override
-                                                        public String onCallSub() {
-                                                            return getStringResource(R.string.storage_permit_request_text);
-                                                        }
-                                                    });
-                                                    permissionDialog.show();
                                                 }
+                                            } else {
+                                                CustomConfirmDialogClass permissionDialog = new CustomConfirmDialogClass(MainActivity.this, new OnDialogConfirmListener() {
+                                                    @Override
+                                                    public void onApply(Boolean confirm) {
+                                                        requestStoragePermission();
+                                                        update.cancel(true);
+                                                        new checkUpdate().execute();
+                                                    }
+                                                    @Override
+                                                    public String onCallText() {
+                                                        return getStringResource(R.string.storage_permit_required);
+                                                    }
+                                                    @Override
+                                                    public String onCallSub() {
+                                                        return getStringResource(R.string.storage_permit_request_text);
+                                                    }
+                                                });
+                                                permissionDialog.show();
                                             }
-                                            @Override
-                                            public String onCallText() {
-                                                return getStringResource(R.string.an_update_is_available);
-                                            }
-                                            @Override
-                                            public String onCallSub() {
-                                                return getStringResource(R.string.your_app_ver_colon) +
-                                                        ApplicationSchemester.versionName + "\n"+
-                                                        getStringResource(R.string.new_ver_colon) + vname +"\n\n"+
-                                                        getStringResource(R.string.update_persuade_text) +"\n"+ 
-                                                        getStringResource(R.string.confirm_to_download); }
-                                        });
-                                        customConfirmDialogClass.setCanceledOnTouchOutside(false);
-                                        customConfirmDialogClass.show();
-                                    }
+                                        }
+                                        @Override
+                                        public String onCallText() {
+                                            return getStringResource(R.string.an_update_is_available);
+                                        }
+                                        @Override
+                                        public String onCallSub() {
+                                            return getStringResource(R.string.your_app_ver_colon) +
+                                                    ApplicationSchemester.versionName + "\n"+
+                                                    getStringResource(R.string.new_ver_colon) + vname +"\n\n"+
+                                                    getStringResource(R.string.update_persuade_text) +"\n"+
+                                                    getStringResource(R.string.confirm_to_download); }
+                                    });
+                                    customConfirmDialogClass.setCanceledOnTouchOutside(false);
+                                    customConfirmDialogClass.show();
                                 }
                             }
                         }
@@ -687,12 +635,7 @@ public class MainActivity extends AppCompatActivity{
             highlightCurrentPeriod();
             super.onPostExecute(aVoid);
             final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    new HighlighterTask().execute();
-                }
-            }, 100);
+            handler.postDelayed(() -> new HighlighterTask().execute(), 100);
         }
     }
 
@@ -771,12 +714,9 @@ public class MainActivity extends AppCompatActivity{
         @Override
         protected void onPostExecute(Void aVoid) {
             final Handler handler = new Handler(getMainLooper());
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mReadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
-                    mReadClassFromDatabaseTask.execute();
-                }
+            handler.postDelayed(() -> {
+                mReadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
+                mReadClassFromDatabaseTask.execute();
             }, 1500);
             super.onPostExecute(aVoid);
         }
@@ -837,16 +777,13 @@ public class MainActivity extends AppCompatActivity{
         if (getLoginStatus()) {
             db.collection(source).document(doc)
                     .get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (Objects.requireNonNull(document).exists()) {
-                                    semesterText.setText(Objects.requireNonNull(document.get(year)).toString());
-                                } else {
-                                    schemester.toasterShort(getStringResource(R.string.unable_to_read));
-                                }
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (Objects.requireNonNull(document).exists()) {
+                                semesterText.setText(Objects.requireNonNull(document.get(year)).toString());
+                            } else {
+                                schemester.toasterShort(getStringResource(R.string.unable_to_read));
                             }
                         }
                     });
@@ -940,19 +877,16 @@ public class MainActivity extends AppCompatActivity{
     private void readDatabase(String source, String course, String year, String weekday){
             db.collection(source).document(course).collection(year).document(weekday.toLowerCase())
                     .get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (Objects.requireNonNull(document).exists()) {
-                                    int i = 0;
-                                    while(i<9) {
-                                        if(Objects.equals(document.getString(getResources().getStringArray(R.array.period_key_array)[i]),"Nothing"))
-                                            duration[i].setVisibility(View.GONE);
-                                        else c[i].setText(document.getString(getResources().getStringArray(R.array.period_key_array)[i]));
-                                        ++i;
-                                    }
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (Objects.requireNonNull(document).exists()) {
+                                int i = 0;
+                                while(i<9) {
+                                    if(Objects.equals(document.getString(getResources().getStringArray(R.array.period_key_array)[i]),"Nothing"))
+                                        duration[i].setVisibility(View.GONE);
+                                    else c[i].setText(document.getString(getResources().getStringArray(R.array.period_key_array)[i]));
+                                    ++i;
                                 }
                             }
                         }

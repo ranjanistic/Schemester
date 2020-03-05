@@ -4,15 +4,14 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatDialog;
 
-import org.timetable.schemester.listener.OnDialogConfirmListener;
 import org.timetable.schemester.R;
+import org.timetable.schemester.listener.OnDialogConfirmListener;
 
 import java.util.Objects;
 
@@ -43,19 +42,11 @@ public class CustomConfirmDialogClass extends AppCompatDialog {
         diacont.setText(head);
         diasubcont.setText(subhead);
 
-        dianeg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cancel();
-            }
-        });
+        dianeg.setOnClickListener(view -> cancel());
 
-        diapos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onDialogConfirmListener.onApply(true);
-                    dismiss();
-            }
+        diapos.setOnClickListener(view -> {
+            onDialogConfirmListener.onApply(true);
+                dismiss();
         });
     }
 }

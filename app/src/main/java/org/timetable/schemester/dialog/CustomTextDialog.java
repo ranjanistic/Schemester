@@ -61,25 +61,17 @@ public class CustomTextDialog extends AppCompatDialog {
             }
         });
         
-        textCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cancel();
-            }
-        });
+        textCancel.setOnClickListener(view -> cancel());
 
-        textSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String entryTxt = text.getText().toString();
-                if ( TextUtils.isEmpty(entryTxt)){
-                    Toast.makeText(getContext(),"This field can\'t be empty.",Toast.LENGTH_LONG).show();
-                } else if(!isValid){
-                    Toast.makeText(getContext(),"Invalid details",Toast.LENGTH_LONG).show();
-                }else{
-                    onDialogTextListener.onApply(entryTxt);
-                    dismiss();
-                }
+        textSubmit.setOnClickListener(view -> {
+            String entryTxt = text.getText().toString();
+            if ( TextUtils.isEmpty(entryTxt)){
+                Toast.makeText(getContext(),"This field can\'t be empty.",Toast.LENGTH_LONG).show();
+            } else if(!isValid){
+                Toast.makeText(getContext(),"Invalid details",Toast.LENGTH_LONG).show();
+            }else{
+                onDialogTextListener.onApply(entryTxt);
+                dismiss();
             }
         });
     }

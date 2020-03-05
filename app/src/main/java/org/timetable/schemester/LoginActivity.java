@@ -1,14 +1,9 @@
 package org.timetable.schemester;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -23,11 +18,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -126,47 +121,41 @@ public class LoginActivity extends AppCompatActivity {
             });
         } else { isRollValid = true; }
 
-        forgot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                customLoadDialogClass.show();
-                if(isEmailValid) {
-                    if(!(emailid.getText().toString().length() == 0)) {
-                        Snackbar.make(view,
-                                "Get a link on provided email to reset your date of birth.", 10000)
-                                .setAction(schemester.getStringResource(R.string.send), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        if(isInternetAvailable()) {
-                                            Snackbar.make(view, schemester.getStringResource(R.string.sending), Snackbar.LENGTH_INDEFINITE)
-                                                    .setTextColor(getResources().getColor(R.color.white))
-                                                    .setBackgroundTint(getResources().getColor(R.color.deep_blue))
-                                                    .show();
-                                            forgot.setVisibility(View.GONE);
-                                            customLoadDialogClass.show();
-                                            resetLinkSender(emailid.getText().toString());
-                                        } else{
-                                            Snackbar.make(view, schemester.getStringResource(R.string.internet_problem), 3000)
-                                                    .setTextColor(getResources().getColor(R.color.white))
-                                                    .setBackgroundTint(getResources().getColor(R.color.dark_red))
-                                                    .show();
-                                        }
-                                    }
-                                })
-                                .setTextColor(getResources().getColor(R.color.white))
-                                .setBackgroundTint(getResources().getColor(R.color.dead_blue))
-                                .setActionTextColor(getResources().getColor(R.color.yellow))
-                                .show();
-                    } else { Snackbar.make(view, schemester.getStringResource(R.string.request_email_text), 4000)
+        forgot.setOnClickListener(view -> {
+            customLoadDialogClass.show();
+            if(isEmailValid) {
+                if(!(emailid.getText().toString().length() == 0)) {
+                    Snackbar.make(view,
+                            "Get a link on provided email to reset your date of birth.", 10000)
+                            .setAction(schemester.getStringResource(R.string.send), view1 -> {
+                                if(isInternetAvailable()) {
+                                    Snackbar.make(view1, schemester.getStringResource(R.string.sending), Snackbar.LENGTH_INDEFINITE)
+                                            .setTextColor(getResources().getColor(R.color.white))
+                                            .setBackgroundTint(getResources().getColor(R.color.deep_blue))
+                                            .show();
+                                    forgot.setVisibility(View.GONE);
+                                    customLoadDialogClass.show();
+                                    resetLinkSender(emailid.getText().toString());
+                                } else{
+                                    Snackbar.make(view1, schemester.getStringResource(R.string.internet_problem), 3000)
+                                            .setTextColor(getResources().getColor(R.color.white))
+                                            .setBackgroundTint(getResources().getColor(R.color.dark_red))
+                                            .show();
+                                }
+                            })
                             .setTextColor(getResources().getColor(R.color.white))
-                            .setBackgroundTint(getResources().getColor(R.color.dark_red))
-                            .show(); }
-                } else { Snackbar.make(view, schemester.getStringResource(R.string.provide_valid_email_text), 4000)
+                            .setBackgroundTint(getResources().getColor(R.color.dead_blue))
+                            .setActionTextColor(getResources().getColor(R.color.yellow))
+                            .show();
+                } else { Snackbar.make(view, schemester.getStringResource(R.string.request_email_text), 4000)
                         .setTextColor(getResources().getColor(R.color.white))
                         .setBackgroundTint(getResources().getColor(R.color.dark_red))
                         .show(); }
-                customLoadDialogClass.hide();
-            }
+            } else { Snackbar.make(view, schemester.getStringResource(R.string.provide_valid_email_text), 4000)
+                    .setTextColor(getResources().getColor(R.color.white))
+                    .setBackgroundTint(getResources().getColor(R.color.dark_red))
+                    .show(); }
+            customLoadDialogClass.hide();
         });
         bdate.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
@@ -222,12 +211,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                registerInit();
-            }
-        });
+        login.setOnClickListener(view -> registerInit());
     }
     @Override
     protected void onResume() {
@@ -365,58 +349,52 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void loginUser(final String emailIdFinalLogin, final String passwordFinalLogin){
         mAuth.signInWithEmailAndPassword(emailIdFinalLogin, passwordFinalLogin)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            storeLoginStatus(true);
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        storeLoginStatus(true);
 
-                            if(!isTeacher) { storeCredentials(emailIdFinalLogin, roll.getText().toString()); }
-                            else { storeCredentials(emailIdFinalLogin, null); }
+                        if(!isTeacher) { storeCredentials(emailIdFinalLogin, roll.getText().toString()); }
+                        else { storeCredentials(emailIdFinalLogin, null); }
 
-                            if(userHasProvidedAdditionalInfo()) {
-                                schemester.toasterLong(schemester.getStringResource(R.string.logged_in_as)+"\n"+ emailIdFinalLogin);
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_from_top);
-                                finish();
-                            } else {
-                                schemester.toasterLong(schemester.getStringResource(R.string.complete_your_profile));
-                                startActivity(new Intent(LoginActivity.this, AdditionalLoginInfo.class));
-                                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                                customLoadDialogClass.hide();
-                            }
+                        if(userHasProvidedAdditionalInfo()) {
+                            schemester.toasterLong(schemester.getStringResource(R.string.logged_in_as)+"\n"+ emailIdFinalLogin);
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_from_top);
+                            finish();
+                        } else {
+                            schemester.toasterLong(schemester.getStringResource(R.string.complete_your_profile));
+                            startActivity(new Intent(LoginActivity.this, AdditionalLoginInfo.class));
+                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                            customLoadDialogClass.hide();
                         }
-                        else {
-                            storeLoginStatus(false);
-                            schemester.toasterLong(schemester.getStringResource(R.string.incorrect_credentials));
-                            forgot.setVisibility(View.VISIBLE);
-                            customLoadDialogClass.dismiss();
-                        }
+                    }
+                    else {
+                        storeLoginStatus(false);
+                        schemester.toasterLong(schemester.getStringResource(R.string.incorrect_credentials));
+                        forgot.setVisibility(View.VISIBLE);
+                        customLoadDialogClass.dismiss();
                     }
                 });
     }
 
     private void register(final String uid, final String passphrase){
         mAuth.createUserWithEmailAndPassword(uid, passphrase)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        user = FirebaseAuth.getInstance().getCurrentUser();
-                        if (task.isSuccessful()) {
-                            storeLoginStatus(true);
-                            //storeUserDefinition(readUserPosition(), uid);
-                            if(!isTeacher) { storeCredentials(uid, roll.getText().toString()); }
-                            else { storeCredentials(uid, null); }
-                            sendVerificationEmail();
-                            startActivity(new Intent(LoginActivity.this, AdditionalLoginInfo.class)
-                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY));
-                            customLoadDialogClass.hide();
-                            finish();
-                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                        } else {
-                            storeLoginStatus(false);
-                            loginUser(uid,passphrase);
-                        }
+                .addOnCompleteListener(task -> {
+                    user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (task.isSuccessful()) {
+                        storeLoginStatus(true);
+                        //storeUserDefinition(readUserPosition(), uid);
+                        if(!isTeacher) { storeCredentials(uid, roll.getText().toString()); }
+                        else { storeCredentials(uid, null); }
+                        sendVerificationEmail();
+                        startActivity(new Intent(LoginActivity.this, AdditionalLoginInfo.class)
+                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY));
+                        customLoadDialogClass.hide();
+                        finish();
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    } else {
+                        storeLoginStatus(false);
+                        loginUser(uid,passphrase);
                     }
                 });
     }
@@ -486,12 +464,9 @@ public class LoginActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             user.sendEmailVerification()
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful())
-                                schemester.toasterLong(schemester.getStringResource(R.string.confirmation_email_sent_text));
-                        }
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful())
+                            schemester.toasterLong(schemester.getStringResource(R.string.confirmation_email_sent_text));
                     });
         }
     }
@@ -503,19 +478,16 @@ public class LoginActivity extends AppCompatActivity {
 
     private void resetLinkSender(final String email){
             FirebaseAuth.getInstance().sendPasswordResetEmail(email)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Snackbar.make(findViewById(R.id.loginActivityID), schemester.getStringResource(R.string.email_sent_notif), 5000)
-                                        .setTextColor(getResources().getColor(R.color.white))
-                                        .setBackgroundTint(getResources().getColor(R.color.dead_blue))
-                                        .show();
-                            } else {Snackbar.make(findViewById(R.id.loginActivityID), schemester.getStringResource(R.string.network_error_occurred), 5000)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Snackbar.make(findViewById(R.id.loginActivityID), schemester.getStringResource(R.string.email_sent_notif), 5000)
                                     .setTextColor(getResources().getColor(R.color.white))
-                                    .setBackgroundTint(getResources().getColor(R.color.dark_red))
-                                    .show();}
-                        }
+                                    .setBackgroundTint(getResources().getColor(R.color.dead_blue))
+                                    .show();
+                        } else {Snackbar.make(findViewById(R.id.loginActivityID), schemester.getStringResource(R.string.network_error_occurred), 5000)
+                                .setTextColor(getResources().getColor(R.color.white))
+                                .setBackgroundTint(getResources().getColor(R.color.dark_red))
+                                .show();}
                     });
             customLoadDialogClass.hide();
     }

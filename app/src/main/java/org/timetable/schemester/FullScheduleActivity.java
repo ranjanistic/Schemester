@@ -1,13 +1,11 @@
 package org.timetable.schemester;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 
 import android.Manifest;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,7 +14,6 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -28,16 +25,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.timetable.schemester.chat.ChatRoomActivity;
 import org.timetable.schemester.dialog.CustomAlertDialog;
 import org.timetable.schemester.dialog.CustomConfirmDialogClass;
 import org.timetable.schemester.dialog.CustomDownloadLoadDialog;
@@ -216,110 +209,62 @@ public class FullScheduleActivity extends AppCompatActivity {
         }
         getWebsiteLinkFromDatabase();
 
-        incognito.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(FullScheduleActivity.this, ModeOfConduct.class));
-            }
-        });
+        incognito.setOnClickListener(view -> startActivity(new Intent(FullScheduleActivity.this, ModeOfConduct.class)));
 
-        git.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(schemester.getStringResource(R.string.ranjanistic_github))));
-            }
-        });
+        git.setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW,
+                Uri.parse(schemester.getStringResource(R.string.ranjanistic_github)))));
 
-        website.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(websiteLink)));
-            }
-        });
+        website.setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(websiteLink))));
 
-        dml.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(schemester.getStringResource(R.string.darkmodelabs_github))));
-            }
-        });
+        dml.setOnClickListener(view -> startActivity(new Intent(Intent.ACTION_VIEW,
+                Uri.parse(schemester.getStringResource(R.string.darkmodelabs_github)))));
 
-        fullSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(FullScheduleActivity.this, Preferences.class));
-            }
-        });
+        fullSettings.setOnClickListener(view -> startActivity(new Intent(FullScheduleActivity.this, Preferences.class)));
 
 
-        updateCheck.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                customLoadDialogClass.show();
-                readVersionCheckUpdate();
-            }
+        updateCheck.setOnClickListener(view -> {
+            customLoadDialogClass.show();
+            readVersionCheckUpdate();
         });
 
         //TODO: Notice board  and chat room feature
-        notice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                schemester.toasterLong(schemester.getStringResource(R.string.under_construction_message));
+        notice.setOnClickListener(view -> {
+            schemester.toasterLong(schemester.getStringResource(R.string.under_construction_message));
 /*                Intent nIntent = new Intent(FullScheduleActivity.this, NoticeBoard.class);
-                startActivity(nIntent);
- */
-            }
+            startActivity(nIntent);
+*/
         });
-        chat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!checkIfEmailVerified()) {
-                    customConfirmDialogClassVerification.show();
-                }else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO){
-                    startActivity(new Intent(FullScheduleActivity.this, ModeOfConduct.class));
-                } else {
-                    schemester.toasterLong(schemester.getStringResource(R.string.under_construction_message));
+        chat.setOnClickListener(view -> {
+            if(!checkIfEmailVerified()) {
+                customConfirmDialogClassVerification.show();
+            }else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO){
+                startActivity(new Intent(FullScheduleActivity.this, ModeOfConduct.class));
+            } else {
+                schemester.toasterLong(schemester.getStringResource(R.string.under_construction_message));
 //                    startActivity( new Intent(FullScheduleActivity.this, ChatRoomActivity.class));
-                }
             }
         });
-        setting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clearAllWeekDayButtonSelection();
-                readAndSetSemesterFromDatabase(schemester.getCOLLECTION_GLOBAL_INFO(),schemester.getDOCUMENT_GLOBAL_SEMESTER(),schemester.getCOLLECTION_YEAR_CODE());
-                dayScheduleNested.setVisibility(View.GONE);
-                settingsView.setVisibility(View.VISIBLE);
-                aboutView.setVisibility(View.GONE);
-            }
+        setting.setOnClickListener(view -> {
+            clearAllWeekDayButtonSelection();
+            readAndSetSemesterFromDatabase(schemester.getCOLLECTION_GLOBAL_INFO(),schemester.getDOCUMENT_GLOBAL_SEMESTER(),schemester.getCOLLECTION_YEAR_CODE());
+            dayScheduleNested.setVisibility(View.GONE);
+            settingsView.setVisibility(View.VISIBLE);
+            aboutView.setVisibility(View.GONE);
         });
-        about.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clearAllWeekDayButtonSelection();
-                dayScheduleNested.setVisibility(View.GONE);
-                settingsView.setVisibility(View.GONE);
-                aboutView.setVisibility(View.VISIBLE);
-            }
+        about.setOnClickListener(view -> {
+            clearAllWeekDayButtonSelection();
+            dayScheduleNested.setVisibility(View.GONE);
+            settingsView.setVisibility(View.GONE);
+            aboutView.setVisibility(View.VISIBLE);
         });
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-             Snackbar.make(view, schemester.getStringResource(R.string.confirm_logout_text), 5000)
-                    .setBackgroundTint(schemester.getColorResource(R.color.dead_blue))
-                    .setTextColor(schemester.getColorResource(R.color.white))
-                    .setAction(schemester.getStringResource(R.string.logout), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            storeLoginStatus(false);
-                            logoutCurrentUser();
-                        }
-                    }).setActionTextColor(schemester.getColorResource(R.color.yellow))
-                    .show();
-            }
-        });
+        logoutBtn.setOnClickListener(view -> Snackbar.make(view, schemester.getStringResource(R.string.confirm_logout_text), 5000)
+               .setBackgroundTint(schemester.getColorResource(R.color.dead_blue))
+               .setTextColor(schemester.getColorResource(R.color.white))
+               .setAction(schemester.getStringResource(R.string.logout), view1 -> {
+                   storeLoginStatus(false);
+                   logoutCurrentUser();
+               }).setActionTextColor(schemester.getColorResource(R.color.yellow))
+               .show());
 
     }
 
@@ -369,28 +314,25 @@ public class FullScheduleActivity extends AppCompatActivity {
     private void setWeekDayBtnClickListener() {
         for (int di = 0; di < 5; di++) {
             final int finalDI = di;
-            dayBtn[di].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    setLoadingTextView();
-                    alertForInternetDisability();
-                    scrollTop();
-                    dayScheduleNested.setVisibility(View.VISIBLE);
-                    settingsView.setVisibility(View.GONE);
-                    aboutView.setVisibility(View.GONE);
-                    readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(), schemester.getDOCUMENT_COURSE_CODE(),
-                            schemester.getCOLLECTION_YEAR_CODE(), getResources().getStringArray(R.array.weekdays)[finalDI+1].toLowerCase());
-                    int j = 0;
-                    while(j<5) {
-                        if(finalDI == j) {
-                            dayBtn[j].setBackgroundResource(R.drawable.leftroundbtnselected);
-                            dayBtn[j].setTextColor(schemester.getColorResource(R.color.blue));
-                        } else {
-                            dayBtn[j].setBackgroundResource(R.drawable.leftroundbtn);
-                            dayBtn[j].setTextColor(schemester.getColorResource(R.color.white));
-                        }
-                        ++j;
+            dayBtn[di].setOnClickListener(view -> {
+                setLoadingTextView();
+                alertForInternetDisability();
+                scrollTop();
+                dayScheduleNested.setVisibility(View.VISIBLE);
+                settingsView.setVisibility(View.GONE);
+                aboutView.setVisibility(View.GONE);
+                readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(), schemester.getDOCUMENT_COURSE_CODE(),
+                        schemester.getCOLLECTION_YEAR_CODE(), getResources().getStringArray(R.array.weekdays)[finalDI+1].toLowerCase());
+                int j = 0;
+                while(j<5) {
+                    if(finalDI == j) {
+                        dayBtn[j].setBackgroundResource(R.drawable.leftroundbtnselected);
+                        dayBtn[j].setTextColor(schemester.getColorResource(R.color.blue));
+                    } else {
+                        dayBtn[j].setBackgroundResource(R.drawable.leftroundbtn);
+                        dayBtn[j].setTextColor(schemester.getColorResource(R.color.white));
                     }
+                    ++j;
                 }
             });
         }
@@ -406,14 +348,11 @@ public class FullScheduleActivity extends AppCompatActivity {
     private void getWebsiteLinkFromDatabase(){
         db.collection(schemester.getCOLLECTION_APP_CONFIGURATION()).document(schemester.getDOCUMENT_LINKS())
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (Objects.requireNonNull(document).exists()) {
-                                websiteLink = document.getString(schemester.getFIELD_WEBSITE());
-                            }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (Objects.requireNonNull(document).exists()) {
+                            websiteLink = document.getString(schemester.getFIELD_WEBSITE());
                         }
                     }
                 });
@@ -432,21 +371,13 @@ public class FullScheduleActivity extends AppCompatActivity {
     private void sendVerificationEmail() {
         user = FirebaseAuth.getInstance().getCurrentUser();
         Objects.requireNonNull(user).sendEmailVerification()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            schemester.toasterLong(schemester.getStringResource(R.string.confirmation_email_sent_text));
-                            logoutCurrentUser();
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        schemester.toasterLong(schemester.getStringResource(R.string.confirmation_email_sent_text));
+                        logoutCurrentUser();
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        schemester.toasterLong(schemester.getStringResource(R.string.check_connection_try_again));
-                    }
-                });
+                .addOnFailureListener(e -> schemester.toasterLong(schemester.getStringResource(R.string.check_connection_try_again)));
     }
     private Boolean checkIfEmailVerified() {
         return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).isEmailVerified();
@@ -477,15 +408,12 @@ public class FullScheduleActivity extends AppCompatActivity {
     private void readAndSetSemesterFromDatabase(String source, String course,final String year) {
         db.collection(source).document(course)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (Objects.requireNonNull(document).exists()) {
-                                semester.setText(Objects.requireNonNull(document.get(year)).toString());
-                            } else { schemester.toasterLong(schemester.getStringResource(R.string.unable_to_read)); }
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (Objects.requireNonNull(document).exists()) {
+                            semester.setText(Objects.requireNonNull(document.get(year)).toString());
+                        } else { schemester.toasterLong(schemester.getStringResource(R.string.unable_to_read)); }
                     }
                 });
     }
@@ -503,20 +431,17 @@ public class FullScheduleActivity extends AppCompatActivity {
     private void readDatabase(String source, String course, String year, String weekday){
         db.collection(source).document(course).collection(year).document(weekday)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            int i = 0;
-                            DocumentSnapshot document = task.getResult();
-                            if (Objects.requireNonNull(document).exists()) {
-                                while(i<9) {
-                                    c[i].setText(document.getString(getResources().getStringArray(R.array.period_key_array)[i]));
-                                    ++i;
-                                }
-                            } else schemester.toasterLong(schemester.getStringResource(R.string.server_error_try_reinstall));
-                        } else { schemester.toasterLong(schemester.getStringResource(R.string.internet_error)); }
-                    }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        int i = 0;
+                        DocumentSnapshot document = task.getResult();
+                        if (Objects.requireNonNull(document).exists()) {
+                            while(i<9) {
+                                c[i].setText(document.getString(getResources().getStringArray(R.array.period_key_array)[i]));
+                                ++i;
+                            }
+                        } else schemester.toasterLong(schemester.getStringResource(R.string.server_error_try_reinstall));
+                    } else { schemester.toasterLong(schemester.getStringResource(R.string.internet_error)); }
                 });
     }
 
@@ -552,76 +477,73 @@ public class FullScheduleActivity extends AppCompatActivity {
         if(isNetworkConnected()) {
             db.collection(schemester.getCOLLECTION_APP_CONFIGURATION()).document(schemester.getDOCUMENT_VERSION_CURRENT())
                     .get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (Objects.requireNonNull(document).exists()) {
-                                    int vcode = Integer.parseInt(Objects.toString(document.get(schemester.getFIELD_VERSION_CODE())));
-                                    final String vname = document.getString(schemester.getFIELD_VERSION_NAME());
-                                    final String link = document.getString(schemester.getFIELD_DOWNLOAD_LINK());
-                                    final String pathName = Environment.getExternalStorageDirectory() +"/" +schemester.getStringResource(R.string.app_name)+"/"+
-                                            ApplicationSchemester.applicationId+"-"+vname+".apk";
-                                    customLoadDialogClass.hide();
-                                    if (vcode != ApplicationSchemester.versionCode || !Objects.equals(vname,ApplicationSchemester.versionName)) {
-                                        Toast.makeText(getApplicationContext(), schemester.getStringResource(R.string.update_available), Toast.LENGTH_LONG).show();
-                                        final CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(FullScheduleActivity.this, new OnDialogConfirmListener() {
-                                            @Override
-                                            public void onApply(Boolean confirm) {
-                                                if (!storagePermissionGranted()) {
-                                                    CustomConfirmDialogClass permissionDialog = new CustomConfirmDialogClass(FullScheduleActivity.this, new OnDialogConfirmListener() {
-                                                        @Override
-                                                        public void onApply(Boolean confirm) {
-                                                            customLoadDialogClass.dismiss();
-                                                            requestStoragePermission();
-                                                            if (storagePermissionGranted()){
-                                                                if(isNetworkConnected()) {
-                                                                    File file = new File(pathName);
-                                                                    if(file.exists()){
-                                                                        showPackageAlert();
-                                                                    } else { downloader(link, vname); }
-                                                                } else { schemester.toasterLong(schemester.getStringResource(R.string.internet_problem)); }
-                                                            } else { customLoadDialogClass.dismiss(); }
-                                                        }
-                                                        @Override
-                                                        public String onCallText() {
-                                                            return schemester.getStringResource(R.string.storage_permit_required);
-                                                        }
-                                                        @Override
-                                                        public String onCallSub() {
-                                                            return "To download and save the latest version on your device, we need your storage permission. Confirm?";
-                                                        }
-                                                    });
-                                                    permissionDialog.show();
-                                                } else {
-                                                    File file = new File(pathName);
-                                                    if(file.exists()){ showPackageAlert(); }
-                                                    else { downloader(link,vname); }
-                                                }
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (Objects.requireNonNull(document).exists()) {
+                                int vcode = Integer.parseInt(Objects.toString(document.get(schemester.getFIELD_VERSION_CODE())));
+                                final String vname = document.getString(schemester.getFIELD_VERSION_NAME());
+                                final String link = document.getString(schemester.getFIELD_DOWNLOAD_LINK());
+                                final String pathName = Environment.getExternalStorageDirectory() +"/" +schemester.getStringResource(R.string.app_name)+"/"+
+                                        ApplicationSchemester.applicationId+"-"+vname+".apk";
+                                customLoadDialogClass.hide();
+                                if (vcode != ApplicationSchemester.versionCode || !Objects.equals(vname,ApplicationSchemester.versionName)) {
+                                    Toast.makeText(getApplicationContext(), schemester.getStringResource(R.string.update_available), Toast.LENGTH_LONG).show();
+                                    final CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(FullScheduleActivity.this, new OnDialogConfirmListener() {
+                                        @Override
+                                        public void onApply(Boolean confirm) {
+                                            if (!storagePermissionGranted()) {
+                                                CustomConfirmDialogClass permissionDialog = new CustomConfirmDialogClass(FullScheduleActivity.this, new OnDialogConfirmListener() {
+                                                    @Override
+                                                    public void onApply(Boolean confirm) {
+                                                        customLoadDialogClass.dismiss();
+                                                        requestStoragePermission();
+                                                        if (storagePermissionGranted()){
+                                                            if(isNetworkConnected()) {
+                                                                File file = new File(pathName);
+                                                                if(file.exists()){
+                                                                    showPackageAlert();
+                                                                } else { downloader(link, vname); }
+                                                            } else { schemester.toasterLong(schemester.getStringResource(R.string.internet_problem)); }
+                                                        } else { customLoadDialogClass.dismiss(); }
+                                                    }
+                                                    @Override
+                                                    public String onCallText() {
+                                                        return schemester.getStringResource(R.string.storage_permit_required);
+                                                    }
+                                                    @Override
+                                                    public String onCallSub() {
+                                                        return "To download and save the latest version on your device, we need your storage permission. Confirm?";
+                                                    }
+                                                });
+                                                permissionDialog.show();
+                                            } else {
+                                                File file = new File(pathName);
+                                                if(file.exists()){ showPackageAlert(); }
+                                                else { downloader(link,vname); }
                                             }
-                                            @Override
-                                            public String onCallText() {
-                                                return schemester.getStringResource(R.string.an_update_is_available);
-                                            }
-                                            @Override
-                                            public String onCallSub() {
-                                                return schemester.getStringResource(R.string.your_app_ver_colon) +
-                                                        ApplicationSchemester.versionName + "\n"+schemester.getStringResource(R.string.new_ver_colon)+
-                                                        vname + "\n\nUpdate to get the latest features and bug fixes. Download will start automatically. \nConfirm to download from website?";
-                                            }
-                                        });
-                                        customConfirmDialogClass.setCanceledOnTouchOutside(false);
-                                        customConfirmDialogClass.show();
-                                    } else { schemester.toasterLong(schemester.getStringResource(R.string.app_uptodate_check_later)); }
-                                } else {
-                                    customLoadDialogClass.hide();
-                                    schemester.toasterLong(schemester.getStringResource(R.string.server_error));
-                                }
+                                        }
+                                        @Override
+                                        public String onCallText() {
+                                            return schemester.getStringResource(R.string.an_update_is_available);
+                                        }
+                                        @Override
+                                        public String onCallSub() {
+                                            return schemester.getStringResource(R.string.your_app_ver_colon) +
+                                                    ApplicationSchemester.versionName + "\n"+schemester.getStringResource(R.string.new_ver_colon)+
+                                                    vname + "\n\nUpdate to get the latest features and bug fixes. Download will start automatically. \nConfirm to download from website?";
+                                        }
+                                    });
+                                    customConfirmDialogClass.setCanceledOnTouchOutside(false);
+                                    customConfirmDialogClass.show();
+                                } else { schemester.toasterLong(schemester.getStringResource(R.string.app_uptodate_check_later)); }
                             } else {
                                 customLoadDialogClass.hide();
-                                schemester.toasterLong(schemester.getStringResource(R.string.network_problem));
+                                schemester.toasterLong(schemester.getStringResource(R.string.server_error));
                             }
+                        } else {
+                            customLoadDialogClass.hide();
+                            schemester.toasterLong(schemester.getStringResource(R.string.network_problem));
                         }
                     });
         } else {

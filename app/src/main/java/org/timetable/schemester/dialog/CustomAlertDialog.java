@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
@@ -44,12 +43,9 @@ public class CustomAlertDialog extends AppCompatDialog {
         alsubcont.setText(subhead);
 
         assert dismiss != null;
-        dismiss.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onDialogAlertListener.onDismiss();
-                dismiss();
-            }
+        dismiss.setOnClickListener(view -> {
+            onDialogAlertListener.onDismiss();
+            dismiss();
         });
     }
 

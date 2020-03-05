@@ -59,13 +59,10 @@ public class CustomDownloadLoadDialog extends AppCompatDialog {
         mdownloadUpdateApk = new downloadUpdateApk(getContext());
         Button cancel = findViewById(R.id.cancelDownload);
         assert cancel != null;
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mdownloadUpdateApk.cancel(true);
-                onDialogDownloadLoadListener.afterFinish(false);
-                dismiss();
-            }
+        cancel.setOnClickListener(view -> {
+            mdownloadUpdateApk.cancel(true);
+            onDialogDownloadLoadListener.afterFinish(false);
+            dismiss();
         });
 
         mdownloadUpdateApk.execute(onDialogDownloadLoadListener.getLink());

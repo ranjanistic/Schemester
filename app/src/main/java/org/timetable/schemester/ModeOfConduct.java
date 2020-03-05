@@ -1,12 +1,8 @@
 package org.timetable.schemester;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -14,6 +10,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class ModeOfConduct extends AppCompatActivity {
     ApplicationSchemester schemester;
@@ -77,22 +75,14 @@ public class ModeOfConduct extends AppCompatActivity {
         cBackImg = findViewById(R.id.continueBackImage);
     }
     private void setListeners(){
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        continueBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(getThemeStatus() != ApplicationSchemester.CODE_THEME_INCOGNITO) {
-                    storeThemeStatus(ApplicationSchemester.CODE_THEME_INCOGNITO);
-                } else { storeThemeStatus(ApplicationSchemester.CODE_THEME_LIGHT); }
-                startActivity(new Intent(ModeOfConduct.this, MainActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                finish();
-            }
+        cancel.setOnClickListener(view -> finish());
+        continueBtn.setOnClickListener(view -> {
+            if(getThemeStatus() != ApplicationSchemester.CODE_THEME_INCOGNITO) {
+                storeThemeStatus(ApplicationSchemester.CODE_THEME_INCOGNITO);
+            } else { storeThemeStatus(ApplicationSchemester.CODE_THEME_LIGHT); }
+            startActivity(new Intent(ModeOfConduct.this, MainActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            finish();
         });
     }
     private String[] getCredentials(){

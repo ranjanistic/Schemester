@@ -1,12 +1,7 @@
 package org.timetable.schemester.student;
 
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
@@ -17,13 +12,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.timetable.schemester.ApplicationSchemester;
 import org.timetable.schemester.MainActivity;
 import org.timetable.schemester.R;
 
-import java.util.ArrayList;
 import java.util.Objects;
-@TargetApi(Build.VERSION_CODES.Q)
+
 public class AdditionalLoginInfo extends AppCompatActivity {
     ApplicationSchemester schemester;
     Spinner collegeSpin,courseSpin,yearSpin;
@@ -72,12 +68,9 @@ public class AdditionalLoginInfo extends AppCompatActivity {
         yeaAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
         yearSpin.setAdapter(yeaAdapter);
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
+        back.setOnClickListener(view -> {
+            finish();
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         });
 
         String[][] ccyArray = new String[][]{collegeArray, courseArray, yearArray},
@@ -148,18 +141,15 @@ public class AdditionalLoginInfo extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
 
-        done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                schemester.toasterShort(schemester.getStringResource(R.string.welcome_back));
-                schemester.setCollegeCourseYear(colC, couC, yC);
-                saveAdditionalInfo(colC, couC, yC);
-                Intent i = new Intent(AdditionalLoginInfo.this, MainActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-                finish();
-                overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_from_top);
-            }
+        done.setOnClickListener(view -> {
+            schemester.toasterShort(schemester.getStringResource(R.string.welcome_back));
+            schemester.setCollegeCourseYear(colC, couC, yC);
+            saveAdditionalInfo(colC, couC, yC);
+            Intent i = new Intent(AdditionalLoginInfo.this, MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+            overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_from_top);
         });
     }
 

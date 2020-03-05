@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,8 +14,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatDialog;
 
-import org.timetable.schemester.listener.OnOptionChosenListener;
 import org.timetable.schemester.R;
+import org.timetable.schemester.listener.OnOptionChosenListener;
 
 import java.util.Objects;
 
@@ -25,7 +24,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class CustomOnOptListener extends AppCompatDialog {
     private OnOptionChosenListener onOptionChosenListener;
-    private  Button set;
+    private  Button set, cancel;
     public CustomOnOptListener(Context context, OnOptionChosenListener onOptionChosenListener) {
         super(context);
         this.onOptionChosenListener = onOptionChosenListener;
@@ -40,7 +39,7 @@ public class CustomOnOptListener extends AppCompatDialog {
         final TextView choiceHead;
         RadioGroup radioGroup;
         set = findViewById(R.id.choice_submit);
-        Button cancel = findViewById(R.id.choice_cancel);
+        cancel = findViewById(R.id.choice_cancel);
         choiceimg = findViewById(R.id.choice_dialog_image);
         radioGroup = findViewById(R.id.radiogroup);
         RadioButton r102 = findViewById(R.id.radio2);
@@ -60,43 +59,32 @@ public class CustomOnOptListener extends AppCompatDialog {
             choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterlightmockup));
         }
 
-        Objects.requireNonNull(cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
+        Objects.requireNonNull(cancel).setOnClickListener(view -> dismiss());
         
         if (radioGroup != null) {
-            radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup rGroup, final int radioid) {
+            radioGroup.setOnCheckedChangeListener((rGroup, radioid) -> {
+                switch (radioid) {
+                    case R.id.radio1:
+                        choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterlightmockup));
+                        break;
+                    case R.id.radio2:
+                        choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterdarkmockup));
+                        break;
+                        default:choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterlightmockup));
+                }
+                set.setOnClickListener(view -> {
                     switch (radioid) {
                         case R.id.radio1:
-                            choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterlightmockup));
+                            storeThemeStatus(101);
+                            onOptionChosenListener.onChoice(101);
                             break;
                         case R.id.radio2:
-                            choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterdarkmockup));
+                            storeThemeStatus(102);
+                            onOptionChosenListener.onChoice(102);
                             break;
-                            default:choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterlightmockup));
                     }
-                    set.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            switch (radioid) {
-                                case R.id.radio1:
-                                    storeThemeStatus(101);
-                                    onOptionChosenListener.onChoice(101);
-                                    break;
-                                case R.id.radio2:
-                                    storeThemeStatus(102);
-                                    onOptionChosenListener.onChoice(102);
-                                    break;
-                            }
-                            dismiss();
-                        }
-                    });
-                }
+                    dismiss();
+                });
             });
         }
     }

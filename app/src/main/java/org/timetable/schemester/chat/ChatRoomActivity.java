@@ -1,24 +1,17 @@
 package org.timetable.schemester.chat;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.TargetApi;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,7 +28,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -119,31 +111,18 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
     String time;
     private void setClickListeners(){
-        exit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        exit.setOnClickListener(view -> finish());
 
         //TODO: menu
-        menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new readMessageAsync().execute();
-            }
-        });
+        menu.setOnClickListener(view -> new readMessageAsync().execute());
 
         //TODO: send to server --> read from server -->check if same message -->if not-->populate local storage old-->else-->append local storage-->populate local storage new
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                time = new SimpleDateFormat(timeFormat, Locale.getDefault()).format(new Date());
-                if(messageIsEligible(myTypedMsg.getText().toString())) {
-                    new checkNetAsync().execute();
-                } else{
-                    schemester.toasterLong("no");
-                }
+        send.setOnClickListener(view -> {
+            time = new SimpleDateFormat(timeFormat, Locale.getDefault()).format(new Date());
+            if(messageIsEligible(myTypedMsg.getText().toString())) {
+                new checkNetAsync().execute();
+            } else{
+                schemester.toasterLong("no");
             }
         });
     }
@@ -178,19 +157,11 @@ public class ChatRoomActivity extends AppCompatActivity {
                 .collection(schemester.getCOLLECTION_YEAR_CODE())
                 .document("currentmsg")
                 .update(mut)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        myTypedMsg.setText("");
-                        mut.clear();
-                    }
+                .addOnSuccessListener(aVoid -> {
+                    myTypedMsg.setText("");
+                    mut.clear();
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        schemester.toasterShort("Server write error");
-                    }
-                });
+                .addOnFailureListener(e -> schemester.toasterShort("Server write error"));
     }
 
     private boolean readMessageFromDatabase(){
@@ -200,31 +171,28 @@ public class ChatRoomActivity extends AppCompatActivity {
                 .collection(schemester.getCOLLECTION_YEAR_CODE())
                 .document("currentmsg")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        String[] serverMUT = new String[3];
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (Objects.requireNonNull(document).exists()) {
-                                serverMUT[0] = document.getString("text");
-                                serverMUT[1] = document.getString("uid");
-                                serverMUT[2] = document.getString("time");
-                                String[][] set = getMessageSetFromLocalStorage();
-                                if(!Arrays.equals(serverMUT, getLastMUT())){
-                                    setLastMUT(serverMUT);
-                                    schemester.toasterLong("new new");
-                                    newmessage[0] = true;
-                                    deviceMessageCount(1);
-                                    appendMessageSetToLocalStorage(serverMUT[0],serverMUT[1],serverMUT[2]);
-                                    appendUserTypeSetToLocalStorage(serverMUT[1].equals(getStoredEmail())?USER_ME:USER_OTHER);
-                                    populateChatRoomMessagesView(set[0], set[1], set[2], getUserTypeSetFromLocalStorage());
-                                    //TODO: appendLocalFile(serverMUT[0], serverMUT[1], serverMUT[2], serverMUT[1].equals(getStoredEmail())?USER_ME:USER_OTHER);
-                                } else {
-                                    newmessage[0]  = false;
-                                    schemester.toasterLong("Nothing new");
-                                    setLocalAvailableMessages(set[0], set[1], set[2], getUserTypeSetFromLocalStorage());
-                                }
+                .addOnCompleteListener(task -> {
+                    String[] serverMUT = new String[3];
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (Objects.requireNonNull(document).exists()) {
+                            serverMUT[0] = document.getString("text");
+                            serverMUT[1] = document.getString("uid");
+                            serverMUT[2] = document.getString("time");
+                            String[][] set = getMessageSetFromLocalStorage();
+                            if(!Arrays.equals(serverMUT, getLastMUT())){
+                                setLastMUT(serverMUT);
+                                schemester.toasterLong("new new");
+                                newmessage[0] = true;
+                                deviceMessageCount(1);
+                                appendMessageSetToLocalStorage(serverMUT[0],serverMUT[1],serverMUT[2]);
+                                appendUserTypeSetToLocalStorage(serverMUT[1].equals(getStoredEmail())?USER_ME:USER_OTHER);
+                                populateChatRoomMessagesView(set[0], set[1], set[2], getUserTypeSetFromLocalStorage());
+                                //TODO: appendLocalFile(serverMUT[0], serverMUT[1], serverMUT[2], serverMUT[1].equals(getStoredEmail())?USER_ME:USER_OTHER);
+                            } else {
+                                newmessage[0]  = false;
+                                schemester.toasterLong("Nothing new");
+                                setLocalAvailableMessages(set[0], set[1], set[2], getUserTypeSetFromLocalStorage());
                             }
                         }
                     }

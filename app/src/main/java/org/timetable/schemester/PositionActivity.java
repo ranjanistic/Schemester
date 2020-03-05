@@ -1,10 +1,6 @@
 package org.timetable.schemester;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -13,6 +9,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -42,53 +41,44 @@ public class PositionActivity extends AppCompatActivity {
             storeThemeStatus(ApplicationSchemester.CODE_THEME_LIGHT);
         }
         final Intent restart = new Intent(PositionActivity.this,PositionActivity.class);
-        modeSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                modeSwitch.startAnimation(hide);
-                modeSwitch.startAnimation(fadeoff);
-                if(getThemeStatus() == ApplicationSchemester.CODE_THEME_LIGHT){
-                    modeSwitch.setImageResource(R.drawable.ic_moonsmallicon);
-                    storeThemeStatus(ApplicationSchemester.CODE_THEME_DARK);
-                    startActivity(restart);
-                    finish();
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    modeSwitch.startAnimation(show);
-                    modeSwitch.startAnimation(fadeon);
-                } else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
-                    modeSwitch.setImageResource(R.drawable.ic_suniconsmall);
-                    storeThemeStatus(ApplicationSchemester.CODE_THEME_LIGHT);
-                    startActivity(restart);
-                    finish();
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    modeSwitch.startAnimation(show);
-                    modeSwitch.startAnimation(fadeon);
-                } else {
-                    modeSwitch.setImageResource(R.drawable.ic_moonsmallicon);
-                    storeThemeStatus(ApplicationSchemester.CODE_THEME_DARK);
-                    startActivity(restart);
-                    finish();
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    modeSwitch.startAnimation(show);
-                    modeSwitch.startAnimation(fadeon);
-                }
+        modeSwitch.setOnClickListener(view -> {
+            modeSwitch.startAnimation(hide);
+            modeSwitch.startAnimation(fadeoff);
+            if(getThemeStatus() == ApplicationSchemester.CODE_THEME_LIGHT){
+                modeSwitch.setImageResource(R.drawable.ic_moonsmallicon);
+                storeThemeStatus(ApplicationSchemester.CODE_THEME_DARK);
+                startActivity(restart);
+                finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                modeSwitch.startAnimation(show);
+                modeSwitch.startAnimation(fadeon);
+            } else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
+                modeSwitch.setImageResource(R.drawable.ic_suniconsmall);
+                storeThemeStatus(ApplicationSchemester.CODE_THEME_LIGHT);
+                startActivity(restart);
+                finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                modeSwitch.startAnimation(show);
+                modeSwitch.startAnimation(fadeon);
+            } else {
+                modeSwitch.setImageResource(R.drawable.ic_moonsmallicon);
+                storeThemeStatus(ApplicationSchemester.CODE_THEME_DARK);
+                startActivity(restart);
+                finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                modeSwitch.startAnimation(show);
+                modeSwitch.startAnimation(fadeon);
             }
         });
 
         final Intent login = new Intent(PositionActivity.this, LoginActivity.class);
-        teacher.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                storeUserPosition(schemester.getStringResource(R.string.teacher));
-                schemester.toasterLong(schemester.getStringResource(R.string.under_construction_message));
-            }
+        teacher.setOnClickListener(view -> {
+            storeUserPosition(schemester.getStringResource(R.string.teacher));
+            schemester.toasterLong(schemester.getStringResource(R.string.under_construction_message));
         });
-        student.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                storeUserPosition(schemester.getStringResource(R.string.student));
-                startActivity(login);
-            }
+        student.setOnClickListener(view -> {
+            storeUserPosition(schemester.getStringResource(R.string.student));
+            startActivity(login);
         });
     }
 
