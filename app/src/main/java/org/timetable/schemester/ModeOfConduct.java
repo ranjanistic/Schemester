@@ -14,7 +14,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-@TargetApi(Build.VERSION_CODES.Q)
+
 public class ModeOfConduct extends AppCompatActivity {
     ApplicationSchemester schemester;
     Button continueBtn, cancel;

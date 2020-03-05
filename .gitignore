@@ -20,3 +20,5 @@ local.properties
 *.json
 app/google-services.json
 app/google-services.json
+*.gradle
+app/build.gradle

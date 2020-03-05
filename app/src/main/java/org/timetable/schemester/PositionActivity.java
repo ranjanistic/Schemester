@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-@TargetApi(Build.VERSION_CODES.Q)
+
 public class PositionActivity extends AppCompatActivity {
     ApplicationSchemester schemester;
     Button teacher, student;

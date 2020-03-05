@@ -59,7 +59,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-@TargetApi(Build.VERSION_CODES.Q)
 public class Preferences extends AppCompatActivity {
     ApplicationSchemester schemester;
     Switch timeFormatSwitch;

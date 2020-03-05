@@ -52,7 +52,7 @@ import java.util.Calendar;
 import java.util.Objects;
 import java.util.TimeZone;
 
-@TargetApi(Build.VERSION_CODES.Q)
+
 public class FullScheduleActivity extends AppCompatActivity {
     private ApplicationSchemester schemester;
     TextView email, roll, semester, versionNameText;
