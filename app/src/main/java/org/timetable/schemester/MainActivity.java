@@ -443,7 +443,8 @@ public class MainActivity extends AppCompatActivity{
         });
         resultTab.setOnClickListener(view -> schemester.toasterShort(schemester.getStringResource(R.string.under_construction_message)));
         date.setOnClickListener(view -> {
-            if(bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED) {
+            int state = bottomSheetBehavior.getState();
+            if(state != BottomSheetBehavior.STATE_COLLAPSED) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             } else bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         });
