@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity{
     private Button date;
     private ImageView noClassImage;
     private ImageButton drawerArrow, switchThemeBtn;
-    private LinearLayout headingView, settingTab, scheduleTab, resultTab;
+    private LinearLayout headingView, settingTab, scheduleTab, resultTab, scheduleLayout;
     private LinearLayout[] duration = new LinearLayout[9];
     private ScrollView scrollView;
     private Calendar calendar;
@@ -268,6 +268,7 @@ public class MainActivity extends AppCompatActivity{
         layer.setVisibility(View.GONE);
         scrollView = findViewById(R.id.scrollView);
         headingView = findViewById(R.id.period_view);
+        if(isLandscape()) scheduleLayout = findViewById(R.id.scheduleLayout);
         noClassText = findViewById(R.id.noclasstext);
         noClassImage = findViewById(R.id.noclassImage);
         noClassReason = findViewById(R.id.noclassreason);
@@ -736,12 +737,14 @@ public class MainActivity extends AppCompatActivity{
         if (todayIsHoliday) {
             scrollView.setVisibility(View.GONE);
             headingView.setVisibility(View.GONE);
+            if(isLandscape()) scheduleLayout.setVisibility(View.VISIBLE);
             noClassText.setVisibility(View.VISIBLE);
             noClassReason.setVisibility(View.VISIBLE);
             noClassImage.setVisibility(View.VISIBLE);
         } else {
             scrollView.setVisibility(View.VISIBLE);
             headingView.setVisibility(View.VISIBLE);
+            if(isLandscape()) scheduleLayout.setVisibility(View.VISIBLE);
             noClassText.setVisibility(View.GONE);
             noClassReason.setVisibility(View.GONE);
             noClassImage.setVisibility(View.GONE);

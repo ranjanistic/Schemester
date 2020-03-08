@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -18,6 +19,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.timetable.schemester.ApplicationSchemester;
 import org.timetable.schemester.R;
 
@@ -138,10 +142,16 @@ public class ChatRoomActivity extends AppCompatActivity {
 
             if(aBoolean) {
                 schemester.toasterShort("populate appended");
-                //TODO:display messages from local file ,appended--> populateChatRoomMessagesView(localFileMessageArray, localFileUIDArray ,localFileTimeArray, LocalFileUserTypeArray);
+                populateChatRoomMessagesView(getMessageSetFromLocalStorage()[0],
+                        getMessageSetFromLocalStorage()[1],
+                        getMessageSetFromLocalStorage()[2],
+                        getUserTypeSetFromLocalStorage());
             } else {
                 schemester.toasterShort("populate old");
-
+                setLocalAvailableMessages(getMessageSetFromLocalStorage()[0],
+                        getMessageSetFromLocalStorage()[1],
+                        getMessageSetFromLocalStorage()[2],
+                        getUserTypeSetFromLocalStorage());
                 //TODO:display messages from local file ,!appended--> setLocalAvailableMessages(localFileMessageArray, localFileUIDArray ,localFileTimeArray, LocalFileUserTypeArray);
             }
             super.onPostExecute(aBoolean);
@@ -185,10 +195,8 @@ public class ChatRoomActivity extends AppCompatActivity {
                                 schemester.toasterLong("new new");
                                 newmessage[0] = true;
                                 deviceMessageCount(1);
-                                appendMessageSetToLocalStorage(serverMUT[0],serverMUT[1],serverMUT[2]);
+                                appendMessageSetToLocalStorage(serverMUT[0],serverMUT[1],serverMUT[2],serverMUT[1].equals(getStoredEmail())?USER_ME:USER_OTHER);
                                 appendUserTypeSetToLocalStorage(serverMUT[1].equals(getStoredEmail())?USER_ME:USER_OTHER);
-                                populateChatRoomMessagesView(set[0], set[1], set[2], getUserTypeSetFromLocalStorage());
-                                //TODO: appendLocalFile(serverMUT[0], serverMUT[1], serverMUT[2], serverMUT[1].equals(getStoredEmail())?USER_ME:USER_OTHER);
                             } else {
                                 newmessage[0]  = false;
                                 schemester.toasterLong("Nothing new");
@@ -261,9 +269,19 @@ public class ChatRoomActivity extends AppCompatActivity {
         return new String[][]{message, uid,time};
     }
 
-    private void appendMessageSetToLocalStorage(String message, String uid, String time){
-        File file = new File(MUTFile,"/MUT.txt");
-        String set = message+"|"+uid+"|"+time+"\n";
+    private void appendMessageSetToLocalStorage(String message, String uid, String time, int type){
+        String set = null;
+        try {
+            set = new JSONObject()
+                    .put("text", message)
+                    .put("uid", uid)
+                    .put("time",time)
+                    .put("type",type)
+                    .toString();
+        } catch (JSONException ex) {
+            Log.e("jsonExcep", Objects.requireNonNull(ex.getMessage()));
+        }
+        File file = new File(MUTFile,"/MUT.json");
         if(!file.exists()){
             try {
                 final boolean newFile = file.createNewFile();
@@ -274,7 +292,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         try {
             FileOutputStream outputStream = new FileOutputStream(file,true);
             try {
-                outputStream.write(set.getBytes());
+                outputStream.write(set != null ? set.getBytes() : new byte[0]);
                 outputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
