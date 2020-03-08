@@ -12,6 +12,6 @@
         <bitmap
             android:gravity="center"
             android:tint="@android:color/white"
-            android:src="@drawable/schemesterTyped"/>
+            android:src="@drawable/schemester_typed"/>
     </item>
 </layer-list>

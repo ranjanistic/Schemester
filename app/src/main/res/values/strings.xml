@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">Schemester</string>
     <string name="title_dayschedule_list">Full Schedule</string>
-    <string name="title_dayschedule_detail">Day Schedule Detail</string>
-    <string name="new_period_notification_title_template">New period: %1$s</string>
+    <string name="title_dayschedule_detail">Day Schedule Details</string>
+    <string name="new_period_notification_title_template" translatable="false">New period: %1$s</string>
     <string name="okay">Okay</string>
-    <string name="channel_name">New period notification</string>
-    <string name="channel_description">To notify about next class.</string>
+    <string name="channel_name" translatable="false">New period notification</string>
+    <string name="channel_description" translatable="false">To notify about next class.</string>
 
     <string-array name="hh_mm_ss_array">
         <item>08:30:00</item>
@@ -97,57 +97,55 @@
     <string name="not_verified">Not verified</string>
     <string name="loading">Loading.</string>
     <string name="semester">Semester</string>
-    <string name="weekday">WeekDay</string>
+    <string name="weekday" translatable="false">WeekDay</string>
     <string name="month">Month</string>
-    <string name="_0">0</string>
+    <string name="_0" translatable="false">0</string>
     <string name="duration">Duration</string>
     <string name="view_full_week_schedule">Full week schedule</string>
     <string name="no_classes_today_enjoy">No classes today.\nEnjoy!</string>
     <string name="class_">Class</string>
     <string name="delete_account">Delete Account</string>
-    <string name="setting_background">setting background</string>
-    <string name="app_version">version-1.2-infant-stage2</string>
+    <string name="setting_background" translatable="false">setting background</string>
+    <string name="app_version" translatable="false">version-1.2-infant-stage2</string>
     <string name="version">Version</string>
     <string name="roll_number">Roll number</string>
-    <string name="logged_in_as">Logged in as</string>
     <string name="check_for_updates">Check for updates</string>
     <string name="major_settings">Major settings</string>
     <string name="type_here">Type here</string>
     <string name="submit">Submit</string>
 
-    <string name="info_button">info button</string>
-    <string name="setting_button">setting button</string>
+    <string name="info_button" translatable="false">info button</string>
+    <string name="setting_button" translatable="false">setting button</string>
 
-    <string name="update_check_button">update check button</string>
-    <string name="open_settings_button">Open settings button</string>
+    <string name="update_check_button" translatable="false">update check button</string>
+    <string name="open_settings_button" translatable="false">Open settings button</string>
     <string name="verification_required">Verification required</string>
     <string name="email_id">Email ID</string>
     <string name="ddmmyyyy">DDMMYYYY</string>
     <string name="proceed">Proceed</string>
     <string name="cancel">Cancel</string>
-    <string name="selected_choice_preview">selected choice preview</string>
+    <string name="selected_choice_preview" translatable="false">selected choice preview</string>
     <string name="choose_a_theme">Choose a theme</string>
     <string name="light_theme">Light theme</string>
     <string name="dark_theme">Dark theme</string>
     <string name="save">Save</string>
     <string name="just_a_moment">Just a moment</string>
     <string name="downloading_latest_version">Downloading latest version</string>
-    <string name="of_0_mb">of 0 MB</string>
-    <string name="_0_percent">0%</string>
+    <string name="of_0_mb" translatable="false">of 0 MB</string>
+    <string name="_0_percent" translatable="false">0%</string>
     <string name="confirm">Confirm</string>
     <string name="settings">Settings</string>
     <string name="full_week_schedule">Full week schedule</string>
-    <string name="drawer_indicator">Drawer indicator</string>
-    <string name="full_schedule_image">full schedule image</string>
+    <string name="drawer_indicator" translatable="false">Drawer indicator</string>
+    <string name="full_schedule_image" translatable="false">full schedule image</string>
     <string name="change_email_id">Change email ID</string>
-    <string name="get_a_link_to_change_email_id">Get a link to change email ID.</string>
     <string name="developer_options">Developer options</string>
     <string name="try_restarting_if_there_s_any_glitch">Try restarting if there\'s any glitch.</string>
     <string name="restart_application">Restart application</string>
     <string name="check_for_app_updates">Check for app updates.</string>
     <string name="app_update">App update</string>
-    <string name="_24">24</string>
-    <string name="_12">12</string>
+    <string name="_24" translatable="false">24</string>
+    <string name="_12" translatable="false">12</string>
     <string name="switch_time_format_in_the_app">Switch time format in the app.</string>
     <string name="time_format_24_hours">Time format : 24 hours</string>
     <string name="time_format_12_hours">Time format : 12 hours</string>
@@ -162,37 +160,34 @@
     <string name="feedback_query_problems_need_new_features_tell_us">Feedback? Query? Problems? Need new features? Tell us.</string>
     <string name="contact_developers">Contact developers</string>
     <string name="app_options">App Options</string>
-    <string name="what_defines_you_better">What  \ndefines you  \nbetter?</string>
+    <string name="what_defines_you_better">What \ndefines you \nbetter?</string>
     <string name="i_m_a_teacher">I\'m a teacher</string>
     <string name="or">Or</string>
     <string name="i_m_a_student">I\'m a student</string>
-    <string name="fill_up_your_credentials">Fill up  \nyour \ncredentials.</string>
+    <string name="fill_up_your_credentials">Fill up\nyour\ncredentials.</string>
     <string name="done">Done</string>
     <string name="today">Today</string>
-    <string name="theme_changer">theme changer</string>
+    <string name="theme_changer" translatable="false">theme changer</string>
     <string name="course">Course</string>
     <string name="college">College</string>
     <string name="year">Year</string>
     <string name="dbc_du">Deshbandhu College</string>
-    <string name="phy_h">Physics Honours</string>
+    <string name="phy_h" translatable="false">Physics Honours</string>
     <string name="second">Second</string>
-    <string name="n_a">N/A</string>
+    <string name="n_a" translatable="false">N/A</string>
     <string name="anonymous">Anonymous</string>
     <string name="returning_as">Returning as</string>
-    <string name="return_as_user_message"> will allow you to access the forbidden features requiring non-anonymous user like messaging,
-        account settings, and many others.\n\nThis will make you no longer anonymous, and normal data collection will resume as is.\n\n</string>
+    <string name="return_as_user_message">" will allow you to access the forbidden features requiring non-anonymous user like messaging,         account settings, and many others.  This will make you no longer anonymous, and normal data collection will resume as is.  "</string>
     <string name="continue_as">Continuing as </string>
-    <string name="continue_as_user_message"> will ensure that no data is being collected while you remain anonymous in the app.
-        \n\nHowever, this will disable the features which require user to be identified, such as messaging, sending notifications, changing account settings, and many others.
-        \n\nBasic functionality of this app will continue to work as is.\n\n</string>
+    <string name="continue_as_user_message">" will ensure that no data is being collected while you remain anonymous in the app.           However, this will disable the features which require user to be identified, such as messaging, sending notifications, changing account settings, and many others.           Basic functionality of this app will continue to work as is.  "</string>
     <string name="internet_error">For latest details, connect to internet</string>
     <string name="back">Back</string>
-    <string name="some_crucial_information">Some\ncrucial\ninformation.</string>
+    <string name="some_crucial_information">Some crucial information.</string>
     <string name="other">Other</string>
     <string name="update_source">Update source</string>
     <string name="use_this_to_update_your_college_course_or_year">Use this to update your college, course or year.</string>
-    <string name="ranjanistic_github">https://www.github.com/ranjanistic</string>
-    <string name="darkmodelabs_github">https://www.github.com/darkmodelabs</string>
+    <string name="ranjanistic_github" translatable="false">https://www.github.com/ranjanistic</string>
+    <string name="darkmodelabs_github" translatable="false">https://www.github.com/darkmodelabs</string>
     <string name="mm">MM</string>
     <string name="dd">DD</string>
     <string name="yyyy">YYYY</string>
@@ -214,9 +209,9 @@
     <string name="download_interrupted">Download interrupted</string>
     <string name="download_completed">Download completed</string>
     <string name="unable_to_read">Unable to read</string>
-    <string name="one_second_before_new_day">23:59:59</string>
-    <string name="zero_seconds_after_new_day">00:00:00</string>
-    <string name="time_pattern_hhmmss">HH:mm:ss</string>
+    <string name="one_second_before_new_day" translatable="false">23:59:59</string>
+    <string name="zero_seconds_after_new_day" translatable="false">00:00:00</string>
+    <string name="time_pattern_hhmmss" translatable="false">HH:mm:ss</string>
     <string name="checking">Checking</string>
     <string name="email_not_verified">Email not verified</string>
     <string name="under_construction_message">Under Construction, will be available soon!</string>
@@ -228,13 +223,11 @@
     <string name="app_uptodate_check_later">App is up to date. Check again later.</string>
     <string name="server_error">Server error</string>
     <string name="network_problem">Network problem?</string>
-    <string name="email_verification_persuade_text">You need to verify your email ID to enter the chat room,
-        because authenticity is important while interaction with others.\n\nConfirm to receive a verification link to your provided email ID
-        and verify yourself there?\n(You can also change your email ID in settings, if you don\'t have access to your current email ID.)</string>
-    <string name="teacher">teacher</string>
+    <string name="email_verification_persuade_text">You need to verify your email ID to enter the chat room,         because authenticity is important while interaction with others.  Confirm to receive a verification link to your provided email ID         and verify yourself there? (You can also change your email ID in settings, if you don\'t have access to your current email ID.)</string>
+    <string name="teacher" translatable="false">teacher</string>
     <string name="need_few_moments">Need few moments</string>
     <string name="request_email_text">Please provide an email ID</string>
-    <string name="student">student</string>
+    <string name="student" translatable="false">student</string>
     <string name="email_id_required">Email ID required</string>
     <string name="college_roll_required_text">Your college roll number required.</string>
     <string name="we_need_your_birthdate">We need your birth date.</string>
@@ -246,15 +239,14 @@
     <string name="invalid_details">Invalid details</string>
     <string name="invalid_date_format">Invalid format (DD or MM or YYYY)</string>
     <string name="important">Important</string>
-    <string name="email_ID_provision_disclaimer">You should proceed only if your details are correct, and you take full responsibility of providing your email ID.
-        \nAn email will be sent to your provided email ID to confirm your authenticity, so it should be really yours.\nBe assured that your credentials are safe with us.\nConfirm?</string>
+    <string name="email_ID_provision_disclaimer">You should proceed only if your details are correct, and you take full responsibility of providing your email ID.          An email will be sent to your provided email ID to confirm your authenticity, so it should be really yours. Be assured that your credentials are safe with us. Confirm?</string>
     <string name="complete_your_profile">Complete your profile</string>
     <string name="incorrect_credentials">Some of your credentials were incorrect.</string>
     <string name="a_link_has_been_sent_at">A link has been sent at</string>
     <string name="check_your_connection">Check your connection</string>
     <string name="time_format_12_notify">Time format set to AM/PM.</string>
     <string name="time_format_24_notify">Time format set to 24 hours.</string>
-    <string name="user_feedback_mail_text"><![CDATA[mailto:darkmodelabs@gmail.com?cc=priyanshuranjan88@gmail.com&subject=Schemester%20User%20Feedback&body=Dear%20developers,%20]]></string>
+    <string name="user_feedback_mail_text" translatable="false"><![CDATA[mailto:darkmodelabs@gmail.com?cc=priyanshuranjan88@gmail.com&subject=Schemester%20User%20Feedback&body=Dear%20developers,%20]]></string>
     <string name="email_sent_notif">Email has been sent. Check your mailbox.</string>
     <string name="error_occurred_try_later">An error occurred. Try again later.</string>
     <string name="authentication_passed">Authentication passed</string>
@@ -279,15 +271,15 @@
     <string name="marked_read">Marked Read</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="time_format_hhmmss_ampm">hh:mm:ss a</string>
-    <string name="time_format_hhmm_ampm">hh:mm a</string>
-    <string name="time_format_hhmm">HH:mm</string>
+    <string name="time_format_hhmmss_ampm" translatable="false">hh:mm:ss a</string>
+    <string name="time_format_hhmm_ampm" translatable="false">hh:mm a</string>
+    <string name="time_format_hhmm" translatable="false">HH:mm</string>
     <string name="service_options">Service options</string>
     <string name="update_notification_enabled_text">I\'ll notify you if update is available. Relax.</string>
     <string name="update_notification_disabled_text">You\'ll have to check for updates manually from settings.</string>
     <string name="app_update_notification">App update notification</string>
     <string name="check_this_to_get_notification_as_soon_as_app_update_is_available">Check this to get notification as soon as app update is available.</string>
-    <string name="result_button">Result button</string>
+    <string name="result_button" translatable="false">Result button</string>
     <string name="check_your_result">Check your result</string>
     <string name="error">Error</string>
     <string name="logout">Logout</string>
@@ -317,4 +309,6 @@
         <item>Y2</item>
         <item>Y3</item>
     </string-array>
+    <string name="get_a_link_to_change_email_id">Get a link to change email ID.</string>
+    <string name="logged_in_as">Logged in as</string>
 </resources>

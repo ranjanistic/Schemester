@@ -270,17 +270,18 @@ public class Preferences extends AppCompatActivity {
                         .show();
             }
         });
-        appUpdateNotifyCheck.setOnClickListener(view -> {
+
+        appUpdateNotifyCheck.setOnClickListener(view -> {       //if check is clicked
             storeUpdateNotificationPreference(!userWantsUpdateNotification());
             appUpdateNotifyCheck.setChecked(userWantsUpdateNotification());
         });
         appUpdateNotifyCheck.setOnCheckedChangeListener((compoundButton, b) -> {
-            if(b) {
+            if(b) {         //if checked
                 Snackbar.make(compoundButton, schemester.getStringResource(R.string.update_notification_enabled_text), 5000)
                         .setBackgroundTint(getResources().getColor(R.color.dead_blue))
                         .setTextColor(getResources().getColor(R.color.white))
                         .show();
-            } else {
+            } else {        //if unchecked
                 Snackbar.make(compoundButton, schemester.getStringResource(R.string.update_notification_disabled_text), 7000)
                         .setBackgroundTint(getResources().getColor(R.color.dark_red))
                         .setTextColor(getResources().getColor(R.color.white))
@@ -292,6 +293,7 @@ public class Preferences extends AppCompatActivity {
                         .show();
             }
         });
+        
         appUpdateNotifyBtn.setOnClickListener(view -> {
             storeUpdateNotificationPreference(!userWantsUpdateNotification());
             appUpdateNotifyCheck.setChecked(userWantsUpdateNotification());
