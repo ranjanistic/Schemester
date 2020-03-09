@@ -8,10 +8,4 @@
             android:gravity="center"
             android:src="@drawable/splashico" />
     </item>
-    <item android:bottom="60dp">
-        <bitmap
-            android:gravity="center"
-            android:tint="@android:color/white"
-            android:src="@drawable/schemester_typed"/>
-    </item>
 </layer-list>

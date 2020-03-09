@@ -17,7 +17,11 @@
         android:theme="@style/AppTheme"
         android:testOnly="false"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".chat.ChatRoomActivity" />
+        <activity android:name=".chat.ChatRoomActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ModeOfConduct" />
         <activity
             android:name=".student.AdditionalLoginInfo"

@@ -18,6 +18,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -123,11 +126,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         //TODO: send to server --> read from server -->check if same message -->if not-->populate local storage old-->else-->append local storage-->populate local storage new
         send.setOnClickListener(view -> {
             time = new SimpleDateFormat(timeFormat, Locale.getDefault()).format(new Date());
-            if(messageIsEligible(myTypedMsg.getText().toString())) {
-                new checkNetAsync().execute();
-            } else{
-                schemester.toasterLong("no");
-            }
+                new checkNetAsync().execute(messageIsEligible(myTypedMsg.getText().toString()));
         });
     }
 
@@ -139,7 +138,6 @@ public class ChatRoomActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             schemester.toasterShort("read database");
-
             if(aBoolean) {
                 schemester.toasterShort("populate appended");
                 populateChatRoomMessagesView(getMessageSetFromLocalStorage()[0],
@@ -182,25 +180,22 @@ public class ChatRoomActivity extends AppCompatActivity {
                 .document("currentmsg")
                 .get()
                 .addOnCompleteListener(task -> {
-                    String[] serverMUT = new String[3];
+                    String[] serverMUT;
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (Objects.requireNonNull(document).exists()) {
-                            serverMUT[0] = document.getString("text");
-                            serverMUT[1] = document.getString("uid");
-                            serverMUT[2] = document.getString("time");
-                            String[][] set = getMessageSetFromLocalStorage();
+                            serverMUT = new String[]{document.getString("text"),
+                                    document.getString("uid"),
+                                    document.getString("time")};
                             if(!Arrays.equals(serverMUT, getLastMUT())){
                                 setLastMUT(serverMUT);
                                 schemester.toasterLong("new new");
                                 newmessage[0] = true;
-                                deviceMessageCount(1);
                                 appendMessageSetToLocalStorage(serverMUT[0],serverMUT[1],serverMUT[2],serverMUT[1].equals(getStoredEmail())?USER_ME:USER_OTHER);
                                 appendUserTypeSetToLocalStorage(serverMUT[1].equals(getStoredEmail())?USER_ME:USER_OTHER);
                             } else {
                                 newmessage[0]  = false;
                                 schemester.toasterLong("Nothing new");
-                                setLocalAvailableMessages(set[0], set[1], set[2], getUserTypeSetFromLocalStorage());
                             }
                         }
                     }
@@ -210,77 +205,46 @@ public class ChatRoomActivity extends AppCompatActivity {
 
 
     private String[][] getMessageSetFromLocalStorage(){
-        String[] message = new String[(int)deviceMessageCount(0)],
-                uid = new String[(int)deviceMessageCount(0)],
-                time = new String[(int)deviceMessageCount(0)];
-        String[] set = new String[(int)deviceMessageCount(0)];
-
-        File file = new File(MUTFile, "/MUT.txt");
+        long total = deviceMessageCount(0);
+        JSONObject data =  new JSONObject();
+        String[] message = new String[(int)total],
+                uid = new String[(int)total],
+                time = new String[(int)total];
+        int[] type = new int[(int)total];
+        File file = new File(MUTFile, "/MUT.json");
         if(file.exists()) {
+            String string = file.toString();
             try {
-                int i = 0;
-                while (i < deviceMessageCount(0)) {
-                    BufferedReader br = new BufferedReader(new FileReader(file));
-                    try {
-                        set[i] = br.readLine();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    ++i;
+                JSONObject jsonObject = new JSONObject(string);
+                JSONArray jsonArray = jsonObject.getJSONArray("schemeChat");
+                for (int i = 0; i < total; ++i) {
+                    JSONObject messageSet = jsonArray.getJSONObject(i);
+                    message[i] = messageSet.getString("text");
+                    uid[i] = messageSet.getString("uid");
+                    time[i] = messageSet.getString("time");
+                    type[i] = messageSet.getInt("type");
                 }
-            } catch (FileNotFoundException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
-            int k = 0;
-            while (k < set.length) {
-                char[] line = set[k].toCharArray();              // a b c : d e f : g h
-                int c = 0;
-                int count = 0;
-                int m = 0;
-                while (c < line.length) {
-                    while (count < 2) {
-                        if (line[c] == '|') {
-                            while (m < c) {
-                                if (count == 0) {
-                                    message[k] += line[m];          //abc
-                                } else if (count == 1) {
-                                    uid[k] += line[m];
-                                }
-                                ++m;
-                            }
-                            ++count;
-                        } else if(line[c] == '\n'){
-                            count = 3;
-                        }
-                    }
-                    m = c + 1;
-                    ++c;
-                    if (count == 2) {
-                        time[k] += line[c];
-                    } else {
-                        c = line.length;
-                    }
-                }
-                ++k;
-            }
-        } else {
-            schemester.toasterShort("no MUT");
         }
         return new String[][]{message, uid,time};
     }
 
     private void appendMessageSetToLocalStorage(String message, String uid, String time, int type){
-        String set = null;
+        JSONArray jsonArray = new JSONArray();
+        JSONObject set = null;
         try {
             set = new JSONObject()
                     .put("text", message)
                     .put("uid", uid)
                     .put("time",time)
-                    .put("type",type)
-                    .toString();
+                    .put("type",type);
+            jsonArray.put(set);
         } catch (JSONException ex) {
             Log.e("jsonExcep", Objects.requireNonNull(ex.getMessage()));
         }
+        jsonArray[0] = set;
         File file = new File(MUTFile,"/MUT.json");
         if(!file.exists()){
             try {
@@ -292,7 +256,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         try {
             FileOutputStream outputStream = new FileOutputStream(file,true);
             try {
-                outputStream.write(set != null ? set.getBytes() : new byte[0]);
+                outputStream.write(set != null ? set : new byte[0]);
                 outputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -397,20 +361,24 @@ public class ChatRoomActivity extends AppCompatActivity {
         return mSharedPreferences.getLong(schemester.getPREF_KEY_MESSAGE_COUNT(),0);
     }
 
-    private class checkNetAsync extends AsyncTask<Void,Void,Boolean> {
+    private class checkNetAsync extends AsyncTask<Boolean,Void,Boolean> {
         @Override
-        protected Boolean doInBackground(Void... voids) {
-            if(isInternetAvailable()){
-                setMessageToDatabase(new String[]{myTypedMsg.getText().toString(), getStoredEmail(), time});
-                return true;
+        protected Boolean doInBackground(Boolean... param) {
+            if(param[0]) {
+                return isInternetAvailable();
+            } else {
+                schemester.toasterLong("no");
+                return false;
             }
-            return false;
         }
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             if (!aBoolean) {
                 schemester.toasterLong(schemester.getStringResource(R.string.internet_error));
-            } else new readMessageAsync().execute();
+            } else{
+                setMessageToDatabase(new String[]{myTypedMsg.getText().toString(), getStoredEmail(), time});
+                new readMessageAsync().execute();
+            }
         }
     }
     private String getStoredEmail(){
