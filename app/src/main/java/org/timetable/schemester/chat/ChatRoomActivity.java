@@ -244,7 +244,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         } catch (JSONException ex) {
             Log.e("jsonExcep", Objects.requireNonNull(ex.getMessage()));
         }
-        jsonArray[0] = set;
+        //jsonArray[0] = set;
         File file = new File(MUTFile,"/MUT.json");
         if(!file.exists()){
             try {
@@ -256,7 +256,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         try {
             FileOutputStream outputStream = new FileOutputStream(file,true);
             try {
-                outputStream.write(set != null ? set : new byte[0]);
+                //outputStream.write(set != null ? set : new byte[0]);
                 outputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();

@@ -1,6 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Schemester</string>
+    <string name="app_name">शे़मेस्टर</string>
+
+
+    <string-array name="periods_24">
+        <item>08:30 से 09:30</item>
+        <item>09:30 से 10:30</item>
+        <item>10:30 से 11:30</item>
+        <item>11:30 से 12:30</item>
+        <item>12:30 से 13:30</item>
+        <item>13:30 से 14:30</item>
+        <item>14:30 से 15:30</item>
+        <item>15:30 से 16:30</item>
+        <item>16:30 से 17:30</item>
+    </string-array>
+
+    <string-array name="periods_12">
+        <item>8:30 am से 9:30 am</item>
+        <item>9:30 am से 10:30 am</item>
+        <item>10:30 am से 11:30 am</item>
+        <item>11:30 am से 12:30 pm</item>
+        <item>12:30 pm से 1:30 pm</item>
+        <item>1:30 pm से 2:30 pm</item>
+        <item>2:30 pm से 3:30 pm</item>
+        <item>3:30 pm से 4:30 pm</item>
+        <item>4:30 pm से 5:30 pm</item>
+    </string-array>
+
+    <string-array name="weekdays">
+        <item>रविवार</item>
+        <item>सोमवार</item>
+        <item>मंगलवार</item>
+        <item>बुधवार</item>
+        <item>गुरूवार</item>
+        <item>शुक्रवार</item>
+        <item>शनिवार</item>
+    </string-array>
+    <string-array name="weekdays_trimmed">
+        <item>रवि</item>
+        <item>सोम</item>
+        <item>मंगल</item>
+        <item>बुध</item>
+        <item>गुरू</item>
+        <item>शुक्र</item>
+        <item>शनि</item>
+    </string-array>
+
+
+    <string-array name="months">
+        <item>जनवरी</item>
+        <item>फरवरी</item>
+        <item>मार्च</item>
+        <item>अप्रैल</item>
+        <item>मई</item>
+        <item>जून</item>
+        <item>जुलाई</item>
+        <item>अगस्त</item>
+        <item>सितंबर</item>
+        <item>अक्टूबर</item>
+        <item>नवंबर</item>
+        <item>दिसंबर</item>
+    </string-array>
+
     <string name="title_dayschedule_list">पूरी अनुसूची</string>
     <string name="title_dayschedule_detail">दिन अनुसूची विवरण</string>
     <string name="okay">ठीक है</string>
@@ -13,7 +74,7 @@
     <string name="duration">अवधि</string>
     <string name="loading">धैर्य रखें</string>
     <string name="view_full_week_schedule">पूरे हफ़ते की अनुसूची</string>
-    <string name="no_classes_today_enjoy">कोई क्लास नही। \\nमज़े कीजिए!</string>
+    <string name="no_classes_today_enjoy">कोई क्लास नही।\nमज़े कीजिए!</string>
     <string name="class_">कक्षा</string>
     <string name="delete_account">खाता मिटाएँ</string>
     <string name="roll_number">पंजीक्रम</string>
@@ -147,7 +208,7 @@
     <string name="incorrect_roll">गलत रोल नंबर</string>
     <string name="enter_previous_roll">पिछला रोल नंबर दर्ज करें</string>
     <string name="confirm_to_send_email_link">क्या मैं इसके लिए आपके ईमेल पते का लिंक भेजूं?</string>
-    <string name="sending">भेजा जा रहा है...</string>
+    <string name="sending">भेजा जा रहा है…</string>
     <string name="network_error_occurred">नेटवर्क त्रुटि हुई।</string>
     <string name="restarting">पुन: प्रारंभ हो</string>
     <string name="requires_restart">पुनरारंभ की आवश्यकता है</string>

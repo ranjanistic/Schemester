@@ -43,6 +43,15 @@
         <item>3:30 pm to 4:30 pm</item>
         <item>4:30 pm to 5:30 pm</item>
     </string-array>
+    <string-array name="weekday_key">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
 
     <string-array name="weekdays">
         <item>Sunday</item>

@@ -710,7 +710,7 @@ public class MainActivity extends AppCompatActivity{
                 readDatabase(COLLECTION_COLLEGE_CODE,
                         DOCUMENT_COURSE_CODE,
                         COLLECTION_YEAR_CODE,
-                        getWeekdayFromCode(calendar.get(Calendar.DAY_OF_WEEK))
+                        getWeekdayKeyFromCode(calendar.get(Calendar.DAY_OF_WEEK))
                 );
             return null;
         }
@@ -733,11 +733,11 @@ public class MainActivity extends AppCompatActivity{
 
     //check holiday and set view accordingly
     private void setHolidayViewIfHoliday(Boolean todayIsHoliday, String reason){
-        noClassReason.setText(reason);
         if (todayIsHoliday) {
+            noClassReason.setText(reason);
             scrollView.setVisibility(View.GONE);
             headingView.setVisibility(View.GONE);
-            if(isLandscape()) scheduleLayout.setVisibility(View.VISIBLE);
+            if(isLandscape()) scheduleLayout.setVisibility(View.INVISIBLE);
             noClassText.setVisibility(View.VISIBLE);
             noClassReason.setVisibility(View.VISIBLE);
             noClassImage.setVisibility(View.VISIBLE);
@@ -756,11 +756,16 @@ public class MainActivity extends AppCompatActivity{
         return (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ||
                 calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY);
     }
-
     private String getWeekdayFromCode(int dayCode){
         for(int m = 1;m<=getResources().getStringArray(R.array.weekdays).length;++m)
             if (m==dayCode)
                 return getResources().getStringArray(R.array.weekdays)[m-1];
+        return getStringResource(R.string.error);
+    }
+    private String getWeekdayKeyFromCode(int dayCode){
+        for(int m = 1;m<=getResources().getStringArray(R.array.weekday_key).length;++m)
+            if (m==dayCode)
+                return getResources().getStringArray(R.array.weekday_key)[m-1];
         return getStringResource(R.string.error);
     }
 

@@ -300,7 +300,7 @@ public class FullScheduleActivity extends AppCompatActivity {
             //noinspection MagicConstant
             if(dayValues[k] == calendar.get(Calendar.DAY_OF_WEEK)){
                 readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),schemester.getCOLLECTION_YEAR_CODE(),
-                        getResources().getStringArray(R.array.weekdays)[k+1].toLowerCase());
+                        getResources().getStringArray(R.array.weekday_key)[k+1].toLowerCase());
                 dayBtn[k].setBackgroundResource(R.drawable.leftroundbtnselected);
                 dayBtn[k].setTextColor(schemester.getColorResource(R.color.blue));
             }
@@ -308,7 +308,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         }
         if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ||calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ){
             readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(),schemester.getDOCUMENT_COURSE_CODE(),
-                    schemester.getCOLLECTION_YEAR_CODE(),getResources().getStringArray(R.array.weekdays)[1].toLowerCase());
+                    schemester.getCOLLECTION_YEAR_CODE(),getResources().getStringArray(R.array.weekday_key)[1].toLowerCase());
             dayBtn[0].setBackgroundResource(R.drawable.leftroundbtnselected);
             dayBtn[0].setTextColor(schemester.getColorResource(R.color.blue));
         }
@@ -325,7 +325,7 @@ public class FullScheduleActivity extends AppCompatActivity {
                 settingsView.setVisibility(View.GONE);
                 aboutView.setVisibility(View.GONE);
                 readDatabase(schemester.getCOLLECTION_COLLEGE_CODE(), schemester.getDOCUMENT_COURSE_CODE(),
-                        schemester.getCOLLECTION_YEAR_CODE(), getResources().getStringArray(R.array.weekdays)[finalDI+1].toLowerCase());
+                        schemester.getCOLLECTION_YEAR_CODE(), getResources().getStringArray(R.array.weekday_key)[finalDI+1].toLowerCase());
                 int j = 0;
                 while(j<5) {
                     if(finalDI == j) {

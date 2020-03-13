@@ -8,54 +8,39 @@
     android:background="?attr/base_background"
     tools:context=".MainActivity"
     tools:targetApi="Q">
-    <LinearLayout
-        android:id="@+id/mainLinearlayoutLandscape"
+    <View
+        android:id="@+id/translucent_layer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/toproundview"
+        android:backgroundTint="?attr/base_text_color"
+        android:alpha="0.7"
+        android:elevation="8dp"
+        android:translationZ="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:orientation="horizontal">
-            <androidx.constraintlayout.widget.ConstraintLayout
+        app:layout_constraintTop_toTopOf="parent"/>
+            <LinearLayout
                 android:id="@+id/linearLayout"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:gravity="end"
+                android:gravity="center_horizontal"
                 android:orientation="vertical"
                 android:paddingTop="18dp"
                 android:paddingBottom="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0">
 
-                <View
-                    android:id="@+id/translucent_layer"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/toproundview"
-                    android:backgroundTint="?attr/base_text_color"
-                    android:alpha="0"
-                    android:elevation="8dp"
-                    android:translationZ="8dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="@id/linearLayout"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <LinearLayout
                     android:id="@+id/linearLayout7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_gravity="start|center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:gravity="center"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@id/linearLayout"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/sem_text"
@@ -82,10 +67,6 @@
                         android:textColor="?attr/base_text_color"
                         android:textSize="16sp"
                         android:textStyle="bold" />
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"/>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -152,39 +133,37 @@
                         android:textSize="36sp"
                         android:textStyle="bold"
                         tools:targetApi="q" />
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"/>
 
                 </LinearLayout>
 
-                <androidx.coordinatorlayout.widget.CoordinatorLayout
-                    android:id="@+id/coordinator"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:elevation="12dp"
-                    android:translationZ="12dp"
-                    android:layout_margin="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintVertical_bias="1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="@id/linearLayout"
-                    app:layout_constraintTop_toTopOf="@id/linearLayout7">
+            </LinearLayout>
 
-                    <include layout="@layout/bottom_drawer" />
-                </androidx.coordinatorlayout.widget.CoordinatorLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:elevation="12dp"
+        android:translationZ="22dp"
+        android:layout_margin="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent">
 
+        <include layout="@layout/bottom_drawer" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <LinearLayout
             android:id="@+id/scheduleLayout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:background="@drawable/toproundview"
             android:backgroundTint="?attr/display_foreground"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/linearLayout"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <LinearLayout
                 android:id="@+id/period_view"
@@ -195,12 +174,7 @@
                 android:orientation="horizontal"
                 android:paddingStart="22dp"
                 android:paddingTop="8dp"
-                android:paddingEnd="22dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-                app:layout_constraintVertical_bias="0.0">
+                android:paddingEnd="22dp">
 
                 <View
                     android:layout_width="0dp"
@@ -755,7 +729,6 @@ android:gravity="center"/>
 
             </ScrollView>
         </LinearLayout>
-    </LinearLayout>
 
     <ImageView
         android:id="@+id/noclassImage"
@@ -785,7 +758,7 @@ android:gravity="center"/>
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.8"
-        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <TextView
