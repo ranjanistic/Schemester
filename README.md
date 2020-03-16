@@ -1,9 +1,10 @@
 # Schemester
-Android application focused on time table schedule.
+Android application focussed on time table schedule, and other helpful side features.
 
 ## Contribution Guidelines
 Create your own branch from master to contribute in any way. Directly commiting and pushing changes to branch-master isn't recommended and your commits might get reverted. It is safe to create own branch and then contribute.
-
+## Configuration
+The configuration (build configuration, proguard rules, etc.) files are not being checked in the repo, and therefore, may cause problems. Simply ask for configuration files, or check them in previous available releases (though outdated).
 ### Try NOT to:
 ```
 - Edit instances of Firebase
