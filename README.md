@@ -25,5 +25,4 @@ Create your own branch from master to contribute in any way. Directly commiting 
 - Built on stable version of [Android Studio](https://developer.android.com/studio/).
 
 ### Top contributors
-- **Website Courtesy (index) -** [Dark Mode Labs](https://github.com/darkmodelabs) (Link in description)
 - **Icon design -** [Dark Mode Labs](https://github.com/darkmodelabs)
