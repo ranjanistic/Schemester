@@ -229,4 +229,7 @@
     <string name="logout">लॉग आउट</string>
     <string name="confirm_logout_text">लॉग आउट जरूर करें?</string>
     <string name="provide_valid_email_text">मान्य ईमेल पता प्रदान करें</string>
+    <string name="weekend_reason">आज सप्ताहांत है!</string>
+    <string name="results">परिणाम</string>
+    <string name="schedule">अनुसूची</string>
 </resources>

@@ -320,4 +320,7 @@
     </string-array>
     <string name="get_a_link_to_change_email_id">Get a link to change email ID.</string>
     <string name="logged_in_as">Logged in as</string>
+    <string name="weekend_reason">It\'s weekend!</string>
+    <string name="results">Results</string>
+    <string name="schedule">Schedule</string>
 </resources>

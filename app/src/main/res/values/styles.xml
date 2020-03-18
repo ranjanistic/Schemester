@@ -25,6 +25,7 @@
         <item name="foreground_text_color">@color/white</item>
         <item name="group_card_color">@color/dull_white</item>
         <item name="group_card_text_color">@color/dark_grey</item>
+        <item name="tabular_buttons">@color/lighter_grey</item>
         <item name="heading_text_color">@color/blue</item>
         <item name="action_button_color">@color/deep_blue</item>
         <item name="button_text_color">@color/white</item>
@@ -50,6 +51,7 @@
         <item name="foreground_text_color">@color/dull_white</item>
         <item name="group_card_color">@color/black_overlay</item>
         <item name="group_card_text_color">@color/white</item>
+        <item name="tabular_buttons">@color/charcoal</item>
         <item name="heading_text_color">@color/blue</item>
         <item name="action_button_color">@color/dull_blue</item>
         <item name="button_text_color">@color/dull_white</item>
@@ -73,6 +75,7 @@
         <item name="foreground_text_color">@color/dull_white</item>
         <item name="group_card_color">@color/black_overlay</item>
         <item name="group_card_text_color">@color/white</item>
+        <item name="tabular_buttons">@color/charcoal</item>
         <item name="heading_text_color">@color/dull_white</item>
         <item name="action_button_color">@color/charcoal</item>
         <item name="button_text_color">@color/dull_white</item>

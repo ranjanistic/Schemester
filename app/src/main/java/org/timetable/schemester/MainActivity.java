@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity{
             R.id.duration1,R.id.duration2,R.id.duration3,R.id.duration4,R.id.duration5,
             R.id.duration6,R.id.duration7,R.id.duration8,R.id.duration9,
     };
-    private LinearLayout bottomDrawer;
+    private View bottomDrawer;
     private checkUpdate update;     //update checker asyncTask class
     private Window window;
     private BottomSheetBehavior bottomSheetBehavior;
@@ -104,16 +104,13 @@ public class MainActivity extends AppCompatActivity{
         isCreated = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
         assignDefaultValues();
         setWindowDecorDefaults();
-        storeUserDefinition(readUserPosition(),getStoredEmail());
         setViews();         //assigning all views to their respective objects
         setBottomSheetFeature();            //setting bottom drawer behaviour
         runTimeDisplayOnBottomSheet();      //display current time
         setThemeConsequencesAndActions();      //set navigation bar color and theme button listener
         setButtonClickListeners();
-        setHolidayViewIfHoliday(isWeekendToday(), "It's weekend!");
         //initializing main schedule update task
         mReadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
         mHighlighterTask = new HighlighterTask();
@@ -125,127 +122,6 @@ public class MainActivity extends AppCompatActivity{
         super.onBackPressed();
     }
 
-    private class checkNetAsync extends AsyncTask<Void,Void,Boolean> {
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            return isInternetAvailable();
-        }
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            if(!aBoolean) {
-                schemester.toasterLong(schemester.getStringResource(R.string.internet_error));
-            }
-            else {
-                if(userWantsUpdateNotification()) {
-                    //check for updates task
-                    update = new checkUpdate();
-                    update.execute();
-                }
-                if(!isWeekendToday()){
-                    mReadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
-                    mReadClassFromDatabaseTask.execute();
-                    final Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            checkHolidayOtherThanWeekend = new CheckHolidayOtherThanWeekend();
-                            checkHolidayOtherThanWeekend.execute();
-                            handler.postDelayed(this,1500);
-                        }
-                    }, 2000);
-                } else{
-                    setHolidayViewIfHoliday(isWeekendToday(), "It's weekend!");
-                }
-            }
-            super.onPostExecute(aBoolean);
-        }
-    }
-
-    private class CheckHolidayOtherThanWeekend extends AsyncTask<Void,Void,Void> {
-        private String globe, holiday;
-        @Override
-        protected void onPreExecute() {
-            globe = COLLECTION_GLOBAL_INFO;
-            holiday = schemester.getDOCUMENT_HOLIDAY_INFO();
-            super.onPreExecute();
-        }
-        @Override
-        protected Void doInBackground(Void... voids) {
-            isGlobalHoliday(globe, holiday);
-            return null;
-        }
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
-    }
-    private void  isGlobalHoliday(String collector, String doc){
-        localHoliday=false;
-        db.collection(collector).document(doc)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (Objects.requireNonNull(document).exists()) {
-                            Boolean temp = document.getBoolean("holiday");
-                            String reason =  document.getString("reason");
-                            if(temp!=null && !temp){
-                                isCollegeHoliday(COLLECTION_COLLEGE_CODE,schemester.getDOCUMENT_LOCAL_INFO());
-                            } else {
-                                localHoliday = true;
-                                setHolidayViewIfHoliday(true,reason);
-                            }
-                        } else {
-                            setHolidayViewIfHoliday(false, null);
-                            localHoliday = false;
-                        }
-                    }
-                });
-    }
-    private void  isCollegeHoliday(String collector, String doc){
-        localHoliday=false;
-        db.collection(collector).document(doc)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (Objects.requireNonNull(document).exists()) {
-                            Boolean temp = document.getBoolean("holiday");
-                            String reason = document.getString("reason");
-                            if(temp!=null && !temp){
-                                isCourseHoliday(COLLECTION_COLLEGE_CODE,DOCUMENT_COURSE_CODE);
-                            } else {
-                                localHoliday = true;
-                                setHolidayViewIfHoliday(true, reason);
-                            }
-                        } else {
-                            setHolidayViewIfHoliday(false, null);
-                            localHoliday = false;
-                        }
-                    }
-                });
-    }
-    private void isCourseHoliday(String collector, String doc){
-        localHoliday=false;
-        db.collection(collector).document(doc)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (Objects.requireNonNull(document).exists()) {
-                            Boolean temp = document.getBoolean("holiday");
-                            String reason = document.getString("reason");
-                            localHoliday = temp;
-                            assert temp != null;
-                            setHolidayViewIfHoliday(localHoliday,reason);
-                        } else {
-                            setHolidayViewIfHoliday(false,null);
-                            localHoliday = false;
-                        }
-                    }
-                });
-    }
-
     private void assignDefaultValues(){
         schemester.setCollegeCourseYear(getAdditionalInfo()[0],getAdditionalInfo()[1],getAdditionalInfo()[2]);
         COLLECTION_GLOBAL_INFO = schemester.getCOLLECTION_GLOBAL_INFO();
@@ -254,21 +130,21 @@ public class MainActivity extends AppCompatActivity{
         DOCUMENT_COURSE_CODE = getAdditionalInfo()[1];
         COLLECTION_YEAR_CODE = getAdditionalInfo()[2];
         calendar = Calendar.getInstance(TimeZone.getDefault());
+        storeUserDefinition(readUserPosition(),getStoredEmail());
     }
+
     private void setWindowDecorDefaults(){
         window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.setNavigationBarColor(this.schemester.getColorResource(R.color.dull_white));
     }
-
     private void setViews(){
         layer = findViewById(R.id.translucent_layer);
         layer.setClickable(false);
         layer.setVisibility(View.GONE);
         scrollView = findViewById(R.id.scrollView);
         headingView = findViewById(R.id.period_view);
-        if(isLandscape()) scheduleLayout = findViewById(R.id.scheduleLayout);
         noClassText = findViewById(R.id.noclasstext);
         noClassImage = findViewById(R.id.noclassImage);
         noClassReason = findViewById(R.id.noclassreason);
@@ -325,10 +201,12 @@ public class MainActivity extends AppCompatActivity{
                     layer.setVisibility(View.GONE);
                     layer.setClickable(false);
                 } else { layer.setVisibility(View.VISIBLE); }
-                layer.setAlpha(2 * (slideOffset / 3));
+                layer.setAlpha((float)0.8* (slideOffset));
                 drawerArrow.setRotation((slideOffset*180)+90);
                 switchThemeBtn.setRotation((slideOffset*360));
-                scheduleTab.setTranslationX(slideOffset);
+                scheduleTab.setAlpha(slideOffset);
+                resultTab.setAlpha(slideOffset);
+                settingTab.setAlpha(slideOffset);
             }
         });
 
@@ -353,6 +231,7 @@ public class MainActivity extends AppCompatActivity{
         cred[1] =  mSharedPreferences.getString(schemester.getPREF_KEY_ROLL(), null);
         return cred;
     }
+
     private void runTimeDisplayOnBottomSheet(){
         final Handler timeHandler = new Handler(getMainLooper());
         timeHandler.postDelayed(new Runnable() {
@@ -578,7 +457,6 @@ public class MainActivity extends AppCompatActivity{
     /**
      * @param newVname: shows local package availability alert to user
      */
-
     private void showPackageAlert(final String newVname){
         CustomAlertDialog downloadFinishAlert = new CustomAlertDialog(MainActivity.this, new OnDialogAlertListener() {
             @Override
@@ -598,6 +476,7 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onStart() {
+        setHolidayViewIfHoliday(isWeekendToday(), getStringResource(R.string.weekend_reason));
         setActivityChangerButtonsDisabled(false);
         new checkNetAsync().execute();
         setSemester(schemester.getCOLLECTION_GLOBAL_INFO(),
@@ -626,6 +505,127 @@ public class MainActivity extends AppCompatActivity{
               }
           }
         super.onStart();
+    }
+    private class checkNetAsync extends AsyncTask<Void,Void,Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            return isInternetAvailable();
+        }
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            if(!aBoolean) {
+                schemester.toasterLong(schemester.getStringResource(R.string.internet_error));
+            }
+            else {
+                if(userWantsUpdateNotification()) {
+                    //check for updates task
+                    update = new checkUpdate();
+                    update.execute();
+                }
+                if(!isWeekendToday()){
+                    mReadClassFromDatabaseTask = new ReadClassFromDatabaseTask();
+                    mReadClassFromDatabaseTask.execute();
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            checkHolidayOtherThanWeekend = new CheckHolidayOtherThanWeekend();
+                            checkHolidayOtherThanWeekend.execute();
+                            handler.postDelayed(this,1500);
+                        }
+                    }, 2000);
+                } else{
+                    setHolidayViewIfHoliday(isWeekendToday(), getStringResource(R.string.weekend_reason));
+                }
+            }
+            super.onPostExecute(aBoolean);
+        }
+    }
+
+    private class CheckHolidayOtherThanWeekend extends AsyncTask<Void,Void,Void> {
+        private String globe, holiday;
+        @Override
+        protected void onPreExecute() {
+            globe = COLLECTION_GLOBAL_INFO;
+            holiday = schemester.getDOCUMENT_HOLIDAY_INFO();
+            super.onPreExecute();
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            isGlobalHoliday(globe, holiday);
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
+    }
+
+    private void  isGlobalHoliday(String collector, String doc){
+        localHoliday=false;
+        db.collection(collector).document(doc)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (Objects.requireNonNull(document).exists()) {
+                            Boolean temp = document.getBoolean("holiday");
+                            String reason =  document.getString("reason");
+                            if(temp!=null && !temp){
+                                isCollegeHoliday(COLLECTION_COLLEGE_CODE,schemester.getDOCUMENT_LOCAL_INFO());
+                            } else {
+                                localHoliday = true;
+                                setHolidayViewIfHoliday(true,reason);
+                            }
+                        } else {
+                            setHolidayViewIfHoliday(false, null);
+                            localHoliday = false;
+                        }
+                    }
+                });
+    }
+    private void  isCollegeHoliday(String collector, String doc){
+        localHoliday=false;
+        db.collection(collector).document(doc)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (Objects.requireNonNull(document).exists()) {
+                            Boolean temp = document.getBoolean("holiday");
+                            String reason = document.getString("reason");
+                            if(temp!=null && !temp){
+                                isCourseHoliday(COLLECTION_COLLEGE_CODE,DOCUMENT_COURSE_CODE);
+                            } else {
+                                localHoliday = true;
+                                setHolidayViewIfHoliday(true, reason);
+                            }
+                        } else {
+                            setHolidayViewIfHoliday(false, null);
+                            localHoliday = false;
+                        }
+                    }
+                });
+    }
+    private void isCourseHoliday(String collector, String doc){
+        localHoliday=false;
+        db.collection(collector).document(doc)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (Objects.requireNonNull(document).exists()) {
+                            Boolean temp = document.getBoolean("holiday");
+                            String reason = document.getString("reason");
+                            localHoliday = temp;
+                            assert temp != null;
+                            setHolidayViewIfHoliday(localHoliday,reason);
+                        } else {
+                            setHolidayViewIfHoliday(false,null);
+                            localHoliday = false;
+                        }
+                    }
+                });
     }
 
     private class HighlighterTask extends AsyncTask<Void,Void,Void>{
@@ -733,6 +733,7 @@ public class MainActivity extends AppCompatActivity{
 
     //check holiday and set view accordingly
     private void setHolidayViewIfHoliday(Boolean todayIsHoliday, String reason){
+        scheduleLayout = findViewById(R.id.scheduleLayout);
         if (todayIsHoliday) {
             noClassReason.setText(reason);
             scrollView.setVisibility(View.GONE);
@@ -744,7 +745,6 @@ public class MainActivity extends AppCompatActivity{
         } else {
             scrollView.setVisibility(View.VISIBLE);
             headingView.setVisibility(View.VISIBLE);
-            if(isLandscape()) scheduleLayout.setVisibility(View.VISIBLE);
             noClassText.setVisibility(View.GONE);
             noClassReason.setVisibility(View.GONE);
             noClassImage.setVisibility(View.GONE);
@@ -948,17 +948,15 @@ public class MainActivity extends AppCompatActivity{
                 .putInt(schemester.getPREF_KEY_THEME(), themeChoice).apply();
     }
     public void setAppTheme() {
-        switch (this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
-                .getInt(schemester.getPREF_KEY_THEME(), 0)) {
+        switch (getThemeStatus()) {
             case ApplicationSchemester.CODE_THEME_INCOGNITO: setTheme(R.style.IncognitoTheme); break;
             case ApplicationSchemester.CODE_THEME_DARK: setTheme(R.style.DarkTheme);break;
-            case ApplicationSchemester.CODE_THEME_LIGHT:
-            default:setTheme(R.style.AppTheme);
+            case ApplicationSchemester.CODE_THEME_LIGHT: default:setTheme(R.style.AppTheme);
         }
     }
     public int getThemeStatus(){
         return getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
-                .getInt(schemester.getPREF_KEY_THEME(), 0);
+                .getInt(schemester.getPREF_KEY_THEME(), 101);
     }
     private boolean isLandscape() {
         return getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
@@ -968,9 +966,7 @@ public class MainActivity extends AppCompatActivity{
                 .getInt(schemester.getPREF_KEY_TIME_FORMAT(), 24);
     }
     private boolean isInternetAvailable() {
-        try {
-            return Runtime.getRuntime().exec("/system/bin/ping -c 1 8.8.8.8").waitFor() == 0;
-        }
+        try { return Runtime.getRuntime().exec("/system/bin/ping -c 1 8.8.8.8").waitFor() == 0; }
         catch (IOException | InterruptedException e) { e.printStackTrace(); }
         return false;
     }
