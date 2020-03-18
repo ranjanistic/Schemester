@@ -33,14 +33,15 @@ public class ApplicationSchemester  extends Application {
     PREF_HEAD_TIME_FORMAT = "schemeTime", PREF_KEY_TIME_FORMAT = "format",
     PREF_HEAD_USER_DEF = "userDefinition",PREF_KEY_USER_DEF = "position",
     PREF_HEAD_UPDATE_NOTIFY = "schemeUpdateNotification", PREF_KEY_UPDATE_NOTIFY = "getSchemeUpdateNotification",
-    PREF_HEAD_MESSAGE_DATA = "schemeChat", PREF_KEY_MESSAGE_COUNT = "chatCount";
-
+    PREF_HEAD_MESSAGE_DATA = "schemeChat", PREF_KEY_MESSAGE_COUNT = "chatCount",
+    PREF_KEY_STUDENT_CR = "CRStat";
     public String getPREF_HEAD_MESSAGE_DATA(){return PREF_HEAD_MESSAGE_DATA;}
     public String getPREF_KEY_MESSAGE_COUNT(){return PREF_KEY_MESSAGE_COUNT;}
     public String getPREF_HEAD_UPDATE_NOTIFY(){ return PREF_HEAD_UPDATE_NOTIFY;}
     public String getPREF_KEY_UPDATE_NOTIFY(){ return PREF_KEY_UPDATE_NOTIFY;}
     public String getPREF_HEAD_USER_DEF(){return PREF_HEAD_USER_DEF;}
     public String getPREF_KEY_USER_DEF(){ return PREF_KEY_USER_DEF;}
+    public String getPREF_KEY_STUDENT_CR(){ return  PREF_KEY_STUDENT_CR;}
     public String getPREF_HEAD_TIME_FORMAT(){return PREF_HEAD_TIME_FORMAT;}
     public String getPREF_KEY_TIME_FORMAT(){return PREF_KEY_TIME_FORMAT;}
     public String getPREF_HEAD_LOGIN_STAT(){return PREF_HEAD_LOGIN_STAT;}

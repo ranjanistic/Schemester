@@ -714,6 +714,7 @@ public class MainActivity extends AppCompatActivity{
                 );
             return null;
         }
+        //TODO: replace with manual/auto synchronization
         @Override
         protected void onPostExecute(Void aVoid) {
             final Handler handler = new Handler(getMainLooper());

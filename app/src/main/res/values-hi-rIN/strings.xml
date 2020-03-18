@@ -232,4 +232,15 @@
     <string name="weekend_reason">आज सप्ताहांत है!</string>
     <string name="results">परिणाम</string>
     <string name="schedule">अनुसूची</string>
+    <string name="your_new_login_ID_is">आपकी नई लाॅगिन अथवा ईमेल आई.डी. है \'</string>
+    <string name="need_to_login_again">\'. आपको अपनी नई ईमेल आई.डी. से दोबारा प्रवेश करना होगा।</string>
+    <string name="email_to_be_verified">ईमेल सत्यापित किया जाएगा</string>
+    <string name="confirm_this_is_yours">\'. पक्का ये आपका ही है?</string>
+    <string name="verification_will_be_sent_to">इस ईमेल पर एक सत्यापक ईमेल भेजा जाएगा \'</string>
+    <string name="email_change_success_text">ईमेल सफ़लतापूर्वक बदला गया</string>
+    <string name="undo">रहने दें</string>
+    <string name="claim_your_cr_status">कक्षा प्रतिनिधि का दर्जा हासिल करें</string>
+    <string name="class_representative">कक्षा प्रतिनिधि</string>
+    <string name="delete_account_warning_text">खाता स्थाई रुप से मिटने के बाद वापस नही आ पाएगा। आपका सारा निजी डेटा भी स्थाई रुप से मिट जाएगा।
+        यदि आप इसके बाद भी एप का उपयोग करना चाहेंगे, तो आपको नया खाता बनाना पड़ेगा। \n\nक्या आप सचमुच यह खाता मिटाना चाहते हैं \'</string>
 </resources>

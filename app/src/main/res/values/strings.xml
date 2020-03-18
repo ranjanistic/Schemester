@@ -323,4 +323,15 @@
     <string name="weekend_reason">It\'s weekend!</string>
     <string name="results">Results</string>
     <string name="schedule">Schedule</string>
+    <string name="your_new_login_ID_is">Your new login ID aka email ID is \'</string>
+    <string name="need_to_login_again">\'. You\'ll need to login again with new email ID.</string>
+    <string name="email_to_be_verified">Email to be verified</string>
+    <string name="confirm_this_is_yours">\'. Confirm this is yours?</string>
+    <string name="verification_will_be_sent_to">A verification email will be sent to \'</string>
+    <string name="email_change_success_text">Email successfully changed</string>
+    <string name="undo">Undo</string>
+    <string name="claim_your_cr_status">Claim your CR status.</string>
+    <string name="class_representative">Class representative</string>
+    <string name="delete_account_warning_text">You cannot recover an account once it is deleted. All of your personal data will be deleted.
+        If you want to use the app after that, then you\'ll have to create a new account, again after deletion. \n\nAre you sure to delete this account \'</string>
 </resources>
