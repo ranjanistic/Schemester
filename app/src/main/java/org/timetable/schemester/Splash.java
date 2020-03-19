@@ -4,8 +4,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.AdditionalUserInfo;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import org.timetable.schemester.student.AdditionalLoginInfo;
+
 import java.util.Objects;
 
 public class Splash extends AppCompatActivity {
@@ -16,15 +21,17 @@ public class Splash extends AppCompatActivity {
         schemester = (ApplicationSchemester) this.getApplication();
         super.onCreate(savedInstanceState);
         if(user!=null) {
-            if(!(Objects.equals(getAdditionalInfo()[0],null)
+            if(!user.isEmailVerified()){
+                startActivity(new Intent(this, PositionActivity.class));
+                finish();
+            } else if(Objects.equals(getAdditionalInfo()[0],null)
                     &&Objects.equals(getAdditionalInfo()[1],null)
-                    &&Objects.equals(getAdditionalInfo()[2],null))) {
-                schemester.setCollegeCourseYear(getAdditionalInfo()[0], getAdditionalInfo()[1], getAdditionalInfo()[2]);
-                startActivity(new Intent(this, MainActivity.class));
+                    &&Objects.equals(getAdditionalInfo()[2],null)) {
+                startActivity( new Intent(this, AdditionalLoginInfo.class));
                 finish();
             } else {
-                FirebaseAuth.getInstance().signOut();
-                startActivity( new Intent(this, PositionActivity.class));
+                schemester.setCollegeCourseYear(getAdditionalInfo()[0], getAdditionalInfo()[1], getAdditionalInfo()[2]);
+                startActivity(new Intent(this, LoginActivity.class));
                 finish();
             }
         } else {

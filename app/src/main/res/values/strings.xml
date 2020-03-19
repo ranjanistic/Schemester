@@ -334,4 +334,14 @@
     <string name="class_representative">Class representative</string>
     <string name="delete_account_warning_text">You cannot recover an account once it is deleted. All of your personal data will be deleted.
         If you want to use the app after that, then you\'ll have to create a new account, again after deletion. \n\nAre you sure to delete this account \'</string>
+    <string name="get_link_to_reset_email">Get a link on provided email to reset your date of birth.</string>
+    <string name="email_sent_drawer_text">A confirmation email has been sent to the provided email id. Check your email inbox, click the link and then confirm here.</string>
+    <string name="email_to_be_sent_drawer_text">A confirmation email will be sent to the provided email id. You will click the link and then confirm here.\nTouch \'Send link\' to continue.</string>
+    <string name="check_your_mailbox_at">Check your mailbox at</string>
+    <string name="waiting_for_verification">Waiting for verification</string>
+    <string name="get_link_verfication">Get link for verification</string>
+    <string name="will_send_link_at">An email will be sent at</string>
+    <string name="change_id">Change ID</string>
+    <string name="resend">Resend</string>
+    <string name="send_link">Send link</string>
 </resources>

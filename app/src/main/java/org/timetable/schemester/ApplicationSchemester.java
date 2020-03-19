@@ -22,6 +22,7 @@ public class ApplicationSchemester  extends Application {
     DOCUMENT_LOCAL_INFO = "local_info", DOCUMENT_HOLIDAY_INFO = "holiday_info",
     DOCUMENT_NOTICE = "notice",
     FIELD_HOLIDAY = "holiday",
+    DOCUMENT_YEAR_AUTHORITY = "authority", FIELD_CR_CODE = "CRCode",
     COLLECTION_COLLEGE_CODE , DOCUMENT_COURSE_CODE , COLLECTION_YEAR_CODE,
     COLLECTION_APP_CONFIGURATION = "appConfig",DOCUMENT_VERSION_CURRENT = "verCurrent", DOCUMENT_LINKS = "links",
     FIELD_VERSION_NAME = "verName", FIELD_DOWNLOAD_LINK = "downlink", FIELD_VERSION_CODE = "verCode", FIELD_WEBSITE = "website",
@@ -34,7 +35,7 @@ public class ApplicationSchemester  extends Application {
     PREF_HEAD_USER_DEF = "userDefinition",PREF_KEY_USER_DEF = "position",
     PREF_HEAD_UPDATE_NOTIFY = "schemeUpdateNotification", PREF_KEY_UPDATE_NOTIFY = "getSchemeUpdateNotification",
     PREF_HEAD_MESSAGE_DATA = "schemeChat", PREF_KEY_MESSAGE_COUNT = "chatCount",
-    PREF_KEY_STUDENT_CR = "CRStat";
+    PREF_KEY_STUDENT_CR = "CRStat", PREF_KEY_CR_CODE = "crCode";
     public String getPREF_HEAD_MESSAGE_DATA(){return PREF_HEAD_MESSAGE_DATA;}
     public String getPREF_KEY_MESSAGE_COUNT(){return PREF_KEY_MESSAGE_COUNT;}
     public String getPREF_HEAD_UPDATE_NOTIFY(){ return PREF_HEAD_UPDATE_NOTIFY;}
@@ -42,6 +43,7 @@ public class ApplicationSchemester  extends Application {
     public String getPREF_HEAD_USER_DEF(){return PREF_HEAD_USER_DEF;}
     public String getPREF_KEY_USER_DEF(){ return PREF_KEY_USER_DEF;}
     public String getPREF_KEY_STUDENT_CR(){ return  PREF_KEY_STUDENT_CR;}
+    public String getPREF_KEY_CR_CODE(){ return PREF_KEY_CR_CODE;}
     public String getPREF_HEAD_TIME_FORMAT(){return PREF_HEAD_TIME_FORMAT;}
     public String getPREF_KEY_TIME_FORMAT(){return PREF_KEY_TIME_FORMAT;}
     public String getPREF_HEAD_LOGIN_STAT(){return PREF_HEAD_LOGIN_STAT;}
@@ -65,6 +67,8 @@ public class ApplicationSchemester  extends Application {
     public String getDOCUMENT_LOCAL_INFO(){ return DOCUMENT_LOCAL_INFO;}
     public String getDOCUMENT_HOLIDAY_INFO(){ return DOCUMENT_HOLIDAY_INFO;}
     public String getCOLLECTION_COLLEGE_CODE(){ return COLLECTION_COLLEGE_CODE; }
+    public String getDOCUMENT_YEAR_AUTHORITY(){ return DOCUMENT_YEAR_AUTHORITY;}
+    public String getFIELD_CR_CODE(){ return FIELD_CR_CODE;}
     public String getDOCUMENT_COURSE_CODE(){
         return DOCUMENT_COURSE_CODE;
     }

@@ -45,6 +45,7 @@ import org.timetable.schemester.listener.OnDialogDownloadLoadListener;
 import org.timetable.schemester.listener.OnDialogLoadListener;
 import org.timetable.schemester.listener.OnDialogTextListener;
 import org.timetable.schemester.student.AdditionalLoginInfo;
+import org.w3c.dom.Document;
 
 import java.io.File;
 import java.util.HashMap;
@@ -159,9 +160,7 @@ public class Preferences extends AppCompatActivity {
     private void setListenersAndInitialize(){
         appUpdateNotifyCheck.setChecked(userWantsUpdateNotification());
         returnBtn.setOnClickListener(view -> finish());
-
         loginAgain.setOnClickListener(view -> startActivity(new Intent(Preferences.this, ModeOfConduct.class)));
-
         ccySwitch.setOnClickListener(view -> {
             if(checkIfEmailVerified()) {
                 setAllActivityStarterButtonsDisabled(true);
@@ -176,7 +175,27 @@ public class Preferences extends AppCompatActivity {
             CustomTextDialog customTextDialog = new CustomTextDialog(Preferences.this, new OnDialogTextListener() {
                 @Override
                 public void onApply(String text) {
-                    schemester.toasterLong("Couldn't verify you. Try again later");
+                    customLoadDialogClass.show();
+                    db.collection(schemester.getCOLLECTION_COLLEGE_CODE())
+                            .document(schemester.getDOCUMENT_COURSE_CODE())
+                            .collection(schemester.getCOLLECTION_YEAR_CODE())
+                            .document(schemester.getDOCUMENT_YEAR_AUTHORITY())
+                            .get()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (Objects.requireNonNull(document).exists()) {
+                                        String code = document.getString(schemester.getFIELD_CR_CODE());
+                                        storeCRStatus(Objects.equals(text,code),code);
+                                        customLoadDialogClass.hide();
+                                    }
+                                }
+                            });
+                    if(studentIsCR()){
+                        schemester.toasterLong("Welcome, class representative!");
+                    } else {
+                        schemester.toasterLong("Problem in authentication, contact your authority");
+                    }
                 }
                 @Override
                 public String onCallText() {
@@ -197,7 +216,6 @@ public class Preferences extends AppCompatActivity {
             });
             customVerificationDialogDeleteAccount.show();
         });
-
 
         appUpdate.setOnClickListener(view -> {
             customLoadDialogClass.show();
@@ -283,7 +301,6 @@ public class Preferences extends AppCompatActivity {
                         .setBackgroundTint(getResources().getColor(R.color.dead_blue))
                         .setTextColor(getResources().getColor(R.color.white))
                         .show();
-                setNavbarColor(R.color.dead_blue);
             } else {
                 timeText.setText(getResources().getString(R.string.time_format_24_hours));
                 storeTimeFormat(24);
@@ -291,7 +308,6 @@ public class Preferences extends AppCompatActivity {
                         .setBackgroundTint(getResources().getColor(R.color.dead_blue))
                         .setTextColor(getResources().getColor(R.color.white))
                         .show();
-                setNavbarColor(R.color.dead_blue);
             }
         });
 
@@ -305,7 +321,6 @@ public class Preferences extends AppCompatActivity {
                         .setBackgroundTint(getResources().getColor(R.color.dead_blue))
                         .setTextColor(getResources().getColor(R.color.white))
                         .show();
-                setNavbarColor(R.color.dead_blue);
             } else {        //if unchecked
                 Snackbar.make(compoundButton, schemester.getStringResource(R.string.update_notification_disabled_text), 7000)
                         .setBackgroundTint(getResources().getColor(R.color.dark_red))
@@ -316,7 +331,6 @@ public class Preferences extends AppCompatActivity {
                         })
                         .setActionTextColor(getResources().getColor(R.color.yellow))
                         .show();
-                setNavbarColor(R.color.dark_red);
             }
         });
         
@@ -527,9 +541,8 @@ public class Preferences extends AppCompatActivity {
             @Override
             public void onDismiss(){
                 FirebaseAuth.getInstance().signOut();
-                Intent i=new Intent(Preferences.this, LoginActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); // To clean up all activities
-                startActivity(i);
+                startActivity(new Intent(Preferences.this, LoginActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                 overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
             }
             @Override
@@ -691,9 +704,11 @@ public class Preferences extends AppCompatActivity {
         cred[1] =  mSharedPreferences.getString(schemester.getPREF_KEY_ROLL(), null);
         return cred;
     }
-    private void storeCRStatus(Boolean isCR){
+    private void storeCRStatus(Boolean isCR, String code){
         getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE).edit()
-                .putBoolean(schemester.getPREF_KEY_STUDENT_CR(), isCR).apply();
+                .putBoolean(schemester.getPREF_KEY_STUDENT_CR(), isCR)
+                .putString(schemester.getPREF_KEY_CR_CODE(), code)
+                .apply();
     }
     private boolean studentIsCR(){
         return getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE)

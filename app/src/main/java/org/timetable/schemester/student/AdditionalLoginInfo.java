@@ -147,21 +147,19 @@ public class AdditionalLoginInfo extends AppCompatActivity {
             schemester.toasterShort(schemester.getStringResource(R.string.welcome_back));
             schemester.setCollegeCourseYear(colC, couC, yC);
             saveAdditionalInfo(colC, couC, yC);
-            Intent i = new Intent(AdditionalLoginInfo.this, MainActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(i);
+            startActivity(new Intent(AdditionalLoginInfo.this, MainActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
             finish();
             overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_from_top);
         });
     }
 
     private void saveAdditionalInfo(String college, String course, String year){
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_ADDITIONAL_INFO(), MODE_PRIVATE);
-        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putString(schemester.getPREF_KEY_COLLEGE(), college);
-        mEditor.putString(schemester.getPREF_KEY_COURSE(), course);
-        mEditor.putString(schemester.getPREF_KEY_YEAR(), year);
-        mEditor.apply();
+        getSharedPreferences(schemester.getPREF_HEAD_ADDITIONAL_INFO(), MODE_PRIVATE).edit()
+            .putString(schemester.getPREF_KEY_COLLEGE(), college)
+            .putString(schemester.getPREF_KEY_COURSE(), course)
+            .putString(schemester.getPREF_KEY_YEAR(), year)
+            .apply();
     }
 
     public void setAppTheme() {

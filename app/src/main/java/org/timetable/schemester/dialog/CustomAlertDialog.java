@@ -17,12 +17,10 @@ import java.util.Objects;
 
 public class CustomAlertDialog extends AppCompatDialog {
     private OnDialogAlertListener onDialogAlertListener;
-
     public CustomAlertDialog(Context context, OnDialogAlertListener onDialogAlertListener) {
         super(context);
         this.onDialogAlertListener = onDialogAlertListener;
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

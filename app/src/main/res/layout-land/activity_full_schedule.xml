@@ -47,6 +47,16 @@
             android:background="@drawable/square_round_btn"
             app:srcCompat="@drawable/ic_messageiconfill"/>
         </LinearLayout>
+        <ImageButton
+            android:id="@+id/crOptions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:padding="4dp"
+            android:backgroundTint="?attr/display_foreground"
+            android:background="@drawable/square_round_btn"
+            app:srcCompat="@drawable/ic_teacher_face_mini"/>
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -34,28 +34,20 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="6dp"
-                app:srcCompat="@drawable/drawer_slider"/>
+
         <TextView
             android:id="@+id/present_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="top|end"
+            android:gravity="center"
+            android:drawableTop="@drawable/drawer_slider"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:text="@string/n_a"
             android:textAllCaps="false"
             android:textColor="?attr/base_text_color"
             android:textSize="14sp" />
-        </LinearLayout>
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -73,8 +65,8 @@
 
     <LinearLayout
         android:id="@+id/fullScheduleTab"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
@@ -108,8 +100,8 @@
 
     <LinearLayout
         android:id="@+id/resultTab"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
@@ -141,8 +133,8 @@
 
     <LinearLayout
         android:id="@+id/settingTab"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"

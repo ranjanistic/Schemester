@@ -95,8 +95,6 @@ public class PositionActivity extends AppCompatActivity {
     }
 
     protected void onResume(){
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user!=null) finish();
         super.onResume();
     }
     private void storeUserPosition(String pos){

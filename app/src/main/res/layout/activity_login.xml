@@ -16,7 +16,7 @@
         android:layout_height="0dp"
         android:layout_gravity="center"
         android:alpha="1"
-        android:elevation="12dp"
+        android:elevation="0dp"
         android:fontFamily="@font/reem_kufi"
         android:gravity="bottom|start"
         android:paddingStart="32dp"
@@ -39,6 +39,7 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_margin="22dp"
+        android:translationZ="8dp"
         app:srcCompat="@drawable/ic_suniconsmall"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -259,4 +260,35 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
         app:layout_constraintVertical_bias="1.0" />
 
+    <View
+        android:id="@+id/translucent_layerLogin"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/toproundview"
+        android:backgroundTint="@color/black"
+        android:alpha="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintVertical_weight="1" />
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLoginDrawer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="1"
+        android:translationZ="8dp"
+        android:elevation="12dp"
+        android:outlineAmbientShadowColor="@color/black"
+        android:outlineSpotShadowColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:targetApi="q">
+        <include
+            layout="@layout/bottom_drawer_login"
+            />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

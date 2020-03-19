@@ -33,6 +33,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity{
     public static boolean isCreated = false;
     private HighlighterTask mHighlighterTask;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private int[]  periodView = {
             R.id.periodMain1, R.id.periodMain2, R.id.periodMain3, R.id.periodMain4, R.id.periodMain5,
             R.id.periodMain6, R.id.periodMain7, R.id.periodMain8, R.id.periodMain9,
@@ -103,6 +106,7 @@ public class MainActivity extends AppCompatActivity{
         mainact = this;
         isCreated = true;
         super.onCreate(savedInstanceState);
+        if(!user.isEmailVerified()){ finish(); }
         setContentView(R.layout.activity_main);
         assignDefaultValues();
         setWindowDecorDefaults();

@@ -59,7 +59,7 @@ public class FullScheduleActivity extends AppCompatActivity {
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private View settingsView, aboutView;
-    private ImageButton setting, about, git, dml, website, fullSettings, updateCheck, notice,chat, incognito;
+    private ImageButton setting, about, git, dml, website, fullSettings, updateCheck, notice,chat, incognito, crModebtn;
     private NestedScrollView dayScheduleNested;       //common view for both orientations
     HorizontalScrollView horizontalScrollView;
     private CustomLoadDialogClass customLoadDialogClass;
@@ -103,7 +103,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         aboutView = findViewById(R.id.aboutview);
         notice = findViewById(R.id.noticebutton);
         chat = findViewById(R.id.chatButton);
-
+        crModebtn = findViewById(R.id.crOptions);
         int[] periodView = {R.id.period1, R.id.period2, R.id.period3, R.id.period4, R.id.period5, R.id.period6, R.id.period7, R.id.period8, R.id.period9,
         }, classView = {R.id.class1, R.id.class2, R.id.class3, R.id.class4, R.id.class5, R.id.class6, R.id.class7, R.id.class8, R.id.class9,
         };
@@ -141,6 +141,7 @@ public class FullScheduleActivity extends AppCompatActivity {
         schemester.imageButtonLongPressToast(fullSettings, "Full settings");
         schemester.imageButtonLongPressToast(updateCheck,"Check for updates");
         schemester.imageButtonLongPressToast(website,"Visit online");
+        schemester.imageButtonLongPressToast(crModebtn,"Options for class representative");
     }
 
 

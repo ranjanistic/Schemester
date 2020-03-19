@@ -243,4 +243,14 @@
     <string name="class_representative">कक्षा प्रतिनिधि</string>
     <string name="delete_account_warning_text">खाता स्थाई रुप से मिटने के बाद वापस नही आ पाएगा। आपका सारा निजी डेटा भी स्थाई रुप से मिट जाएगा।
         यदि आप इसके बाद भी एप का उपयोग करना चाहेंगे, तो आपको नया खाता बनाना पड़ेगा। \n\nक्या आप सचमुच यह खाता मिटाना चाहते हैं \'</string>
+    <string name="get_link_to_reset_email">अपनी जन्मतिथि को रीसेट करने के लिए प्रदान किए गए ईमेल पर एक लिंक प्राप्त करें</string>
+    <string name="email_sent_drawer_text">प्रदान की गई ईमेल आईडी पर एक पुष्टिकरण ईमेल भेजा गया है। अपना ईमेल इनबॉक्स जांचें, लिंक पर क्लिक करें और फिर यहां पुष्टि करें।</string>
+    <string name="email_to_be_sent_drawer_text">प्रदान किए गए ईमेल आईडी पर एक पुष्टिकरण ईमेल भेजा जाएगा। आप उसमे लिंक पर क्लिक करेंगे और फिर यहां पुष्टि करेंगे।जारी रखने के लिए \'लिंक भेजें\' स्पर्श करें.</string>
+    <string name="check_your_mailbox_at">अपने मेलबॉक्स की जाँच करें</string>
+    <string name="waiting_for_verification">सत्यापन की प्रतीक्षा की जा रही है</string>
+    <string name="get_link_verfication">सत्यापन के लिए लिंक प्राप्त करें</string>
+    <string name="will_send_link_at">एक ईमेल पर लिंक भेजा जाएगा</string>
+    <string name="change_id">आईडी बदलें</string>
+    <string name="resend">पुन: भेजें</string>
+    <string name="send_link">लिंक भेजें</string>
 </resources>

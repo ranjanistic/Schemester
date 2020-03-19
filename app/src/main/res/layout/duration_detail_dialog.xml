@@ -102,6 +102,17 @@
                     android:text="@string/n_a"
                     android:textColor="?attr/foreground_text_color"
                     android:textSize="14sp" />
+                <ImageButton
+                    android:id="@+id/editClassStatus"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:scaleType="fitCenter"
+                    android:padding="4dp"
+                    android:layout_marginStart="4dp"
+                    app:srcCompat="@drawable/ic_penfill"
+                    android:background="@drawable/round_btn"
+                    android:backgroundTint="?attr/colorPrimary"
+                    />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -118,7 +129,6 @@
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"
-
             android:padding="4dp"
             android:elevation="0dp"
             android:text="@string/okay"

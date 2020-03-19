@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -19,13 +21,19 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 
 import org.timetable.schemester.dialog.CustomConfirmDialogClass;
@@ -35,8 +43,11 @@ import org.timetable.schemester.listener.OnDialogLoadListener;
 import org.timetable.schemester.student.AdditionalLoginInfo;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 @TargetApi(Build.VERSION_CODES.Q)
@@ -49,11 +60,16 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mAuth =  FirebaseAuth.getInstance();
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     String dob;
+    private BottomSheetBehavior bottomSheetBehavior;
+    View bottomDrawer,layer;
     TextInputLayout collegeRollInputLayout;
     CustomLoadDialogClass customLoadDialogClass;
     CustomConfirmDialogClass confirmEmailDialog;
     Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+    Button resetmail,resendmail,checkverif;
+    TextView verificationHead, checkMailcapt,verificationBody, countdown, emailonDrawer;
     boolean isRollValid = false, isEmailValid = false, isDateValid= false, isTeacher = false;
+    InputMethodManager inputMethodManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +81,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         setLoadingClass();
         setViewsAndInitials();
+        setBottomSheetFeature();
         setListeners();
+        inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
             displayImage.setImageResource(R.drawable.ic_moonsmallicon);
         } else {
@@ -102,6 +120,18 @@ public class LoginActivity extends AppCompatActivity {
         displayImage = findViewById(R.id.imageOnlogin);
         Animation animation = AnimationUtils.loadAnimation(this,R.anim.rotate_clock);
         displayImage.startAnimation(animation);
+        bottomDrawer = findViewById(R.id.verification_drawer);
+        layer = findViewById(R.id.translucent_layerLogin);
+        layer.setClickable(false);
+        verificationHead = findViewById(R.id.VdrawerHead);
+        checkMailcapt = findViewById(R.id.checkmailcaption);
+        verificationBody = findViewById(R.id.VdrawerBody);
+        resetmail = findViewById(R.id.changeEmailID);
+        resendmail = findViewById(R.id.resendLink);
+        checkverif = findViewById(R.id.checkVerification);
+        countdown = findViewById(R.id.countdownText);
+        emailonDrawer = findViewById(R.id.mailIDonVerification);
+        setVerificationDrawerDefaults();
     }
 
     private void setListeners(){
@@ -128,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
             if(isEmailValid) {
                 if(!(emailid.getText().toString().length() == 0)) {
                     Snackbar.make(view,
-                            "Get a link on provided email to reset your date of birth.", 10000)
+                            R.string.get_link_to_reset_email, 4000)
                             .setAction(schemester.getStringResource(R.string.send), view1 -> {
                                 if(isInternetAvailable()) {
                                     Snackbar.make(view1, schemester.getStringResource(R.string.sending), Snackbar.LENGTH_INDEFINITE)
@@ -213,21 +243,61 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
         login.setOnClickListener(view -> registerInit());
+        resendmail.setOnClickListener(view -> {
+            sendVerificationEmail();
+        });
+        resetmail.setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut();
+            bottomSheetBehavior.setHideable(true);
+            bottomSheetBehavior.setSkipCollapsed(false);
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            layer.setVisibility(View.GONE);
+            layer.setClickable(false);
+            emailid.setText("");
+            emailid.requestFocus();
+            inputMethodManager.toggleSoftInputFromWindow(emailid.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
+        });
+        checkverif.setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut();
+            silentLogin(emailid.getText().toString(),bdate.getText().toString()+bmonth.getText().toString()+byear.getText().toString());
+        });
+    }
+    private void setTimerOnResendButton(){
+        resendmail.setClickable(false);
+        resendmail.setFocusable(false);
+        resendmail.setAlpha((float)0.2);
+        countdown.setVisibility(View.VISIBLE);
+        new CountDownTimer(60000, 1000) {
+            public void onTick(long millis) {
+                String string = millis/1000 + " secs";
+                countdown.setText(string);
+            }
+            public void onFinish() {
+                resendmail.setClickable(true);
+                resendmail.setFocusable(true);
+                resendmail.setAlpha(1);
+                countdown.setVisibility(View.GONE);
+            }
+        }.start();
     }
     @Override
     protected void onResume() {
-        if(user!=null && userHasProvidedAdditionalInfo()) { finish(); }
         super.onResume();
     }
-
     @Override
     protected void onStart() {
-        if(user!=null && userHasProvidedAdditionalInfo()){
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            finish();
-        } else if(user!=null && !userHasProvidedAdditionalInfo()){
-            FirebaseAuth.getInstance().signOut();
+        if(user!=null){
+            if(user.isEmailVerified()) {
+                if (userHasProvidedAdditionalInfo()) {
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
+                } else {
+                    startActivity(new Intent(LoginActivity.this, AdditionalLoginInfo.class));
+                    finish();
+                }
+            }
         }
         super.onStart();
     }
@@ -239,64 +309,76 @@ public class LoginActivity extends AppCompatActivity {
         dd = bdate.getText().toString();
         mm = bmonth.getText().toString();
         yyyy = byear.getText().toString();
-
         if (TextUtils.isEmpty(email)) {
             schemester.toasterLong(schemester.getStringResource(R.string.email_id_required));
+            emailid.requestFocus();
+            inputMethodManager.toggleSoftInputFromWindow(emailid.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
             return;
         }
         if(!isEmailValid) {
             schemester.toasterLong(schemester.getStringResource(R.string.invalid_email_address));
             emailid.requestFocus();
+            inputMethodManager.toggleSoftInputFromWindow(emailid.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
             return;
         }
         if (!isTeacher&&TextUtils.isEmpty(rollNum)) {
             schemester.toasterLong(schemester.getStringResource(R.string.college_roll_required_text));
             roll.requestFocus();
+            inputMethodManager.toggleSoftInputFromWindow(emailid.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
             return;
         }
         if(!isRollValid &&!isTeacher){
             schemester.toasterLong(schemester.getStringResource(R.string.invalid_roll));
             roll.requestFocus();
+            inputMethodManager.toggleSoftInputFromWindow(emailid.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
             return;
         }
         if (TextUtils.isEmpty(dd)) {
             schemester.toasterLong(schemester.getStringResource(R.string.we_need_your_birthdate));
             bdate.requestFocus();
+            inputMethodManager.toggleSoftInputFromWindow(emailid.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
             return;
         }
         if(Integer.parseInt(dd)<1||Integer.parseInt(dd)>31){
             schemester.toasterLong(schemester.getStringResource(R.string.invalid_bdate));
             bdate.requestFocus();
+            inputMethodManager.toggleSoftInputFromWindow(emailid.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
             return;
         }
         if (TextUtils.isEmpty(mm)) {
             schemester.toasterLong(schemester.getStringResource(R.string.we_need_your_bmonth));
             bmonth.requestFocus();
+            inputMethodManager.toggleSoftInputFromWindow(emailid.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
             return;
         }
         if(Integer.parseInt(mm)<1||Integer.parseInt(mm)>12){
             schemester.toasterLong(schemester.getStringResource(R.string.invalid_bmonth));
             bmonth.requestFocus();
+            inputMethodManager.toggleSoftInputFromWindow(emailid.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
             return;
         }
         if (TextUtils.isEmpty(yyyy)) {
             schemester.toasterLong(schemester.getStringResource(R.string.we_need_byear));
             byear.requestFocus();
+            inputMethodManager.toggleSoftInputFromWindow(emailid.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
             return;
         }
         if(Integer.parseInt(yyyy)>calendar.get(Calendar.YEAR)){
             schemester.toasterLong(schemester.getStringResource(R.string.future_year_entry_warning));
             byear.requestFocus();
+            inputMethodManager.toggleSoftInputFromWindow(emailid.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
             return;
         }
         if(!isDateValid){
             schemester.toasterLong(schemester.getStringResource(R.string.invalid_date_format));
             bdate.requestFocus();
+            inputMethodManager.toggleSoftInputFromWindow(emailid.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
         }
         else {
             confirmEmailDialog = new CustomConfirmDialogClass(LoginActivity.this, new OnDialogConfirmListener() {
                 @Override
                 public void onApply(Boolean confirm) {
+                    emailonDrawer.setText(email);
                     new registerLoginTask().execute(email, dd+mm+yyyy);
                 }
                 @Override
@@ -335,6 +417,24 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+    private void silentLogin(final String emailId, final String password) {
+        mAuth.signInWithEmailAndPassword(emailId, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if(!checkIfEmailVerified()){
+                            schemester.toasterShort("Not verified");
+                        } else{
+                            startActivity(new Intent(LoginActivity.this, AdditionalLoginInfo.class)
+                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY));
+                            customLoadDialogClass.hide();
+                            finish();
+                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        }
+                    } else{
+                        schemester.toasterShort("Failed to verify");
+                    }
+                });
+    }
 
     private String[] getAdditionalInfo() {
         String[] CCY = new String[3];
@@ -353,54 +453,105 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(emailIdFinalLogin, passwordFinalLogin)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        forgot.setVisibility(View.GONE);
                         storeLoginStatus(true);
-
                         if(!isTeacher) { storeCredentials(emailIdFinalLogin, roll.getText().toString()); }
                         else { storeCredentials(emailIdFinalLogin, null); }
-
-                        if(userHasProvidedAdditionalInfo()) {
-                            schemester.toasterLong(schemester.getStringResource(R.string.logged_in_as)+"\n"+ emailIdFinalLogin);
-                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_from_top);
-                            finish();
+                        if(checkIfEmailVerified()) {
+                            if (userHasProvidedAdditionalInfo()) {
+                                schemester.toasterLong(schemester.getStringResource(R.string.logged_in_as) + "\n" + emailIdFinalLogin);
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_from_top);
+                                finish();
+                            } else {
+                                schemester.toasterLong(schemester.getStringResource(R.string.complete_your_profile));
+                                startActivity(new Intent(LoginActivity.this, AdditionalLoginInfo.class));
+                                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                                customLoadDialogClass.hide();
+                            }
                         } else {
-                            schemester.toasterLong(schemester.getStringResource(R.string.complete_your_profile));
-                            startActivity(new Intent(LoginActivity.this, AdditionalLoginInfo.class));
-                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                            customLoadDialogClass.hide();
+                            setVerificationDrawerDefaults();
+                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                         }
                     }
                     else {
-                        storeLoginStatus(false);
-                        schemester.toasterLong(schemester.getStringResource(R.string.incorrect_credentials));
-                        forgot.setVisibility(View.VISIBLE);
-                        customLoadDialogClass.dismiss();
+                        try {
+                            throw Objects.requireNonNull(task.getException());
+                        }
+                        catch(FirebaseAuthInvalidCredentialsException e) {
+                            schemester.toasterShort(schemester.getStringResource(R.string.incorrect_credentials));
+                            forgot.setVisibility(View.VISIBLE);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            storeLoginStatus(false);
+                            if(!isInternetAvailable()){
+                                schemester.toasterShort(schemester.getStringResource(R.string.network_problem));
+                            } else {
+                                schemester.toasterShort(schemester.getStringResource(R.string.error_occurred_try_later));
+                            }
+                        }
                     }
                 });
     }
 
+    private void setVerificationDrawerDefaults(){
+        verificationHead.setText(schemester.getStringResource(R.string.get_link_verfication));
+        checkMailcapt.setText(schemester.getStringResource(R.string.will_send_link_at));
+        verificationBody.setText(schemester.getStringResource(R.string.email_to_be_sent_drawer_text));
+        resendmail.setText(schemester.getStringResource(R.string.send_link));
+    }
     private void register(final String uid, final String passphrase){
         mAuth.createUserWithEmailAndPassword(uid, passphrase)
                 .addOnCompleteListener(task -> {
-                    user = FirebaseAuth.getInstance().getCurrentUser();
                     if (task.isSuccessful()) {
+                        forgot.setVisibility(View.GONE);
                         storeLoginStatus(true);
-                        //storeUserDefinition(readUserPosition(), uid);
                         if(!isTeacher) { storeCredentials(uid, roll.getText().toString()); }
                         else { storeCredentials(uid, null); }
-                        sendVerificationEmail();
-                        startActivity(new Intent(LoginActivity.this, AdditionalLoginInfo.class)
-                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NO_HISTORY));
-                        customLoadDialogClass.hide();
-                        finish();
-                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                        setVerificationDrawerDefaults();
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     } else {
-                        storeLoginStatus(false);
-                        loginUser(uid,passphrase);
+                            try {
+                                throw Objects.requireNonNull(task.getException());
+                            }  catch(FirebaseAuthUserCollisionException e) {
+                                loginUser(uid,passphrase);
+                            } catch(Exception e) {
+                                storeLoginStatus(false);
+                                if(!isInternetAvailable()){
+                                    schemester.toasterShort(schemester.getStringResource(R.string.network_problem));
+                                } else {
+                                    schemester.toasterLong(schemester.getStringResource(R.string.error_occurred_try_later));
+                                }
+                            }
                     }
+                    customLoadDialogClass.hide();
                 });
     }
 
+    private void setBottomSheetFeature(){
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomDrawer);
+        bottomSheetBehavior.setHideable(true);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if(newState == BottomSheetBehavior.STATE_DRAGGING || newState == BottomSheetBehavior.STATE_EXPANDED){
+                    layer.setClickable(true);
+                }
+                if(newState == BottomSheetBehavior.STATE_HIDDEN){
+                    FirebaseAuth.getInstance().signOut();
+                }
+            }
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                if(slideOffset == 0){
+                    layer.setVisibility(View.GONE);
+                    layer.setClickable(false);
+                } else { layer.setVisibility(View.VISIBLE); }
+                layer.setAlpha((float)0.8* (slideOffset));
+            }
+        });
+    }
 
     private void storeLoginStatus(Boolean logged){
         getSharedPreferences(schemester.getPREF_HEAD_LOGIN_STAT(), MODE_PRIVATE).edit()
@@ -408,11 +559,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void storeCredentials(String mail, String roll){
-        SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE);
-        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
-        mEditor.putString(schemester.getPREF_KEY_EMAIL(), mail);
-        mEditor.putString(schemester.getPREF_KEY_ROLL(), roll);
-        mEditor.apply();
+        getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE).edit()
+        .putString(schemester.getPREF_KEY_EMAIL(), mail)
+        .putString(schemester.getPREF_KEY_ROLL(), roll)
+        .apply();
+    }
+    private String getEmailLocally(){
+        return getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE)
+                .getString(schemester.getPREF_KEY_EMAIL(), null);
     }
     private boolean isInternetAvailable() {
         try { return Runtime.getRuntime().exec("/system/bin/ping -c 1 8.8.8.8").waitFor() == 0; }
@@ -463,16 +617,28 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void sendVerificationEmail() {
+        schemester.toasterShort("sending");
+        if(bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
         user = FirebaseAuth.getInstance().getCurrentUser();
+        customLoadDialogClass.hide();
         if (user != null) {
             user.sendEmailVerification()
                     .addOnCompleteListener(task -> {
-                        if (task.isSuccessful())
-                            schemester.toasterLong(schemester.getStringResource(R.string.confirmation_email_sent_text));
+                        if (task.isSuccessful()) {
+                            verificationHead.setText(schemester.getStringResource(R.string.waiting_for_verification));
+                            checkMailcapt.setText(schemester.getStringResource(R.string.check_your_mailbox_at));
+                            verificationBody.setText(schemester.getStringResource(R.string.email_sent_drawer_text));
+                            resendmail.setText(schemester.getStringResource(R.string.resend));
+                            setTimerOnResendButton();
+                        }
                     });
         }
     }
-
+    private Boolean checkIfEmailVerified() {
+        return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).isEmailVerified();
+    }
     private String readUserPosition(){
         return getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE)
                 .getString(schemester.getPREF_KEY_USER_DEF(), null);
