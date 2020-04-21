@@ -16,13 +16,15 @@ import org.timetable.schemester.listener.OnDialogConfirmListener;
 import java.util.Objects;
 
 public class CustomConfirmDialogClass extends AppCompatDialog {
-     OnDialogConfirmListener onDialogConfirmListener;
-    public CustomConfirmDialogClass(Context context, OnDialogConfirmListener onDialogConfirmListener){
+    OnDialogConfirmListener onDialogConfirmListener;
+
+    public CustomConfirmDialogClass(Context context, OnDialogConfirmListener onDialogConfirmListener) {
         super(context);
         this.onDialogConfirmListener = onDialogConfirmListener;
     }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.custom_confirm_dialog);
@@ -46,7 +48,7 @@ public class CustomConfirmDialogClass extends AppCompatDialog {
 
         diapos.setOnClickListener(view -> {
             onDialogConfirmListener.onApply(true);
-                dismiss();
+            dismiss();
         });
     }
 }

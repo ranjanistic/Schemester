@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/loginActivityID"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/loginActivityID"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/display_foreground"
@@ -34,18 +34,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1" />
+
     <ImageView
         android:id="@+id/imageOnlogin"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_margin="22dp"
         android:translationZ="8dp"
-        app:srcCompat="@drawable/ic_suniconsmall"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0"
-        app:layout_constraintHorizontal_bias="1"/>
+        app:srcCompat="@drawable/ic_suniconsmall" />
+
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
@@ -64,121 +66,126 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/dull_white"
-            app:hintAnimationEnabled="true"
-            app:hintTextColor="@color/dull_white"
-            android:focusedByDefault="true"
             android:focusable="true"
+            android:focusedByDefault="true"
             android:gravity="center_vertical"
-            android:paddingTop="4dp"
             android:paddingStart="8dp"
+            android:paddingTop="4dp"
             android:paddingEnd="8dp"
             android:paddingBottom="4dp"
-            app:boxStrokeColor="@color/white">
+            android:textColorHint="@color/dull_white"
+            app:boxStrokeColor="@color/white"
+            app:hintAnimationEnabled="true"
+            app:hintTextColor="@color/dull_white">
 
             <EditText
                 android:id="@+id/emailId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/email_id"
-                android:textCursorDrawable="@drawable/cursor_appearence"
-                android:inputType="textEmailAddress"
-                android:backgroundTint="?attr/display_foreground"
                 android:background="?attr/display_foreground"
-                android:padding="12dp"
-                android:textColorHint="@color/white"
-                android:focusedByDefault="true"
+                android:backgroundTint="?attr/display_foreground"
                 android:focusable="true"
+                android:focusedByDefault="true"
+                android:hint="@string/email_id"
+                android:inputType="textEmailAddress"
+                android:padding="12dp"
                 android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textCursorDrawable="@drawable/cursor_appearence"
                 android:textSize="22sp" />
+
             <TextView
                 android:id="@+id/emailValidityText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:visibility="gone"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
                 android:layout_gravity="end"
+                android:gravity="end"
+                android:paddingStart="8dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="4dp"
+                android:text=""
                 android:textSize="14sp"
-                android:gravity="end"/>
+                android:visibility="gone" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/collegeRollLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@color/dull_white"
-            app:hintTextColor="@color/dull_white"
             android:gravity="center_vertical"
             android:paddingStart="8dp"
-            android:paddingEnd="8dp">
+            android:paddingEnd="8dp"
+            android:textColorHint="@color/dull_white"
+            app:hintTextColor="@color/dull_white">
 
-        <EditText
-            android:id="@+id/rollpass"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/college_roll_number"
-            android:textCursorDrawable="@drawable/cursor_appearence"
-            android:inputType="textVisiblePassword"
-            android:padding="12dp"
-            android:backgroundTint="?attr/display_foreground"
-            android:background="?attr/display_foreground"
-            android:nextFocusDown="@id/birthdate"
-            android:textColor="@color/white"
-            android:textSize="22sp" />
+            <EditText
+                android:id="@+id/rollpass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/display_foreground"
+                android:backgroundTint="?attr/display_foreground"
+                android:hint="@string/college_roll_number"
+                android:inputType="textVisiblePassword"
+                android:nextFocusDown="@id/birthdate"
+                android:padding="12dp"
+                android:textColor="@color/white"
+                android:textCursorDrawable="@drawable/cursor_appearence"
+                android:textSize="22sp" />
+
             <TextView
                 android:id="@+id/rollValidityText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:visibility="gone"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
                 android:layout_gravity="end"
+                android:gravity="end"
+                android:paddingStart="8dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="4dp"
+                android:text=""
                 android:textSize="14sp"
-                android:gravity="end"/>
+                android:visibility="gone" />
         </com.google.android.material.textfield.TextInputLayout>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_gravity="start"
-            android:paddingStart="18dp"
             android:layout_marginTop="12dp"
             android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="18dp"
             android:paddingEnd="18dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/date_of_birth"
-            android:textAlignment="textEnd"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date_of_birth"
+                android:textAlignment="textEnd"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
             <Button
                 android:id="@+id/forgotBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_margin="0dp"
                 android:background="@android:color/transparent"
                 android:gravity="center"
                 android:paddingStart="12dp"
+                android:paddingTop="0dp"
                 android:paddingEnd="12dp"
                 android:paddingBottom="0dp"
-                android:paddingTop="0dp"
-                android:layout_margin="0dp"
-                android:visibility="gone"
                 android:text="@string/forgot"
-                android:textStyle="bold"
                 android:textAllCaps="false"
                 android:textColor="@color/linktextcolorwhite"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -190,49 +197,49 @@
                 android:id="@+id/birthdate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/dd"
+                android:backgroundTint="?attr/display_foreground"
                 android:gravity="center_horizontal"
-                android:textColorHint="@color/dull_white"
+                android:hint="@string/dd"
                 android:inputType="number"
                 android:maxLength="2"
                 android:nextFocusDown="@id/birthmonth"
                 android:padding="12dp"
-                android:backgroundTint="?attr/display_foreground"
                 android:textColor="@color/white"
-                android:textSize="22sp"
-                android:textCursorDrawable="@drawable/cursor_appearence" />
+                android:textColorHint="@color/dull_white"
+                android:textCursorDrawable="@drawable/cursor_appearence"
+                android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/birthmonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:autofillHints="false"
+                android:backgroundTint="?attr/display_foreground"
+                android:gravity="center_horizontal"
                 android:hint="@string/mm"
                 android:inputType="number"
-                android:gravity="center_horizontal"
                 android:maxLength="2"
                 android:nextFocusDown="@id/birthyear"
                 android:padding="12dp"
-                android:textColorHint="@color/dull_white"
-                android:backgroundTint="?attr/display_foreground"
                 android:textColor="@color/white"
-                android:textSize="22sp"
+                android:textColorHint="@color/dull_white"
                 android:textCursorDrawable="@drawable/cursor_appearence"
-                android:autofillHints="false" />
+                android:textSize="22sp" />
 
             <EditText
                 android:id="@+id/birthyear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="?attr/display_foreground"
+                android:gravity="center_horizontal"
                 android:hint="@string/yyyy"
                 android:inputType="number"
                 android:maxLength="4"
-                android:gravity="center_horizontal"
-                android:backgroundTint="?attr/display_foreground"
-                android:textColorHint="@color/dull_white"
                 android:padding="12dp"
                 android:textColor="@color/white"
-                android:textSize="22sp"
-                android:textCursorDrawable="@drawable/cursor_appearence"/>
+                android:textColorHint="@color/dull_white"
+                android:textCursorDrawable="@drawable/cursor_appearence"
+                android:textSize="22sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -264,31 +271,31 @@
         android:id="@+id/translucent_layerLogin"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:alpha="0"
         android:background="@drawable/toproundview"
         android:backgroundTint="@color/black"
-        android:alpha="0"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_weight="1" />
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinatorLoginDrawer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="1"
-        android:translationZ="8dp"
         android:elevation="12dp"
         android:outlineAmbientShadowColor="@color/black"
         android:outlineSpotShadowColor="@color/black"
+        android:translationZ="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1"
         tools:targetApi="q">
-        <include
-            layout="@layout/bottom_drawer_login"
-            />
+
+        <include layout="@layout/bottom_drawer_login" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

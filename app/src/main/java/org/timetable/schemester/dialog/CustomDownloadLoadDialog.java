@@ -9,9 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.PowerManager;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -21,8 +19,8 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDialog;
 
-import org.timetable.schemester.listener.OnDialogDownloadLoadListener;
 import org.timetable.schemester.R;
+import org.timetable.schemester.listener.OnDialogDownloadLoadListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,15 +33,18 @@ import java.util.Objects;
 
 public class CustomDownloadLoadDialog extends AppCompatDialog {
     OnDialogDownloadLoadListener onDialogDownloadLoadListener;
-    public CustomDownloadLoadDialog(Context context, OnDialogDownloadLoadListener onDialogDownloadLoadListener){
+
+    public CustomDownloadLoadDialog(Context context, OnDialogDownloadLoadListener onDialogDownloadLoadListener) {
         super(context);
         this.onDialogDownloadLoadListener = onDialogDownloadLoadListener;
     }
+
     private downloadUpdateApk mdownloadUpdateApk;
     PowerManager.WakeLock mWakeLock;
     Boolean isCompleted = false;
     private ProgressBar progressBar;
     TextView percentage, downsize;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,11 +69,12 @@ public class CustomDownloadLoadDialog extends AppCompatDialog {
         mdownloadUpdateApk.execute(onDialogDownloadLoadListener.getLink());
     }
 
-    public class downloadUpdateApk  extends AsyncTask<String, Integer, Boolean> {
+    public class downloadUpdateApk extends AsyncTask<String, Integer, Boolean> {
         @RequiresApi(api = Build.VERSION_CODES.N)
         private Context context;
         private PowerManager.WakeLock mWakeLock;
         String pathToFile;
+
         @TargetApi(Build.VERSION_CODES.Q)
         private downloadUpdateApk(Context context) {
             this.context = context;
@@ -87,10 +89,10 @@ public class CustomDownloadLoadDialog extends AppCompatDialog {
             }
             mWakeLock.acquire(5000);
             progressBar.setProgress(1);
-            pathToFile = Environment.getExternalStorageDirectory()+"/Schemester";
-            try{
+            pathToFile = Environment.getExternalStorageDirectory() + "/Schemester";
+            try {
                 boolean mkdir = new File(pathToFile).mkdir();
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             super.onPreExecute();
@@ -106,17 +108,17 @@ public class CustomDownloadLoadDialog extends AppCompatDialog {
                 connection = (HttpURLConnection) new URL(furl[0]).openConnection();
                 connection.connect();
                 if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                    Toast.makeText(getContext(),"Some internal error (it's not you, it's us)",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Some internal error (it's not you, it's us)", Toast.LENGTH_SHORT).show();
                 }
                 int fileLength = connection.getContentLength();
                 input = connection.getInputStream();
-                output = new FileOutputStream(pathToFile+"/org.timetable.schemester-"+onDialogDownloadLoadListener.getVersion()+".apk");
+                output = new FileOutputStream(pathToFile + "/org.timetable.schemester-" + onDialogDownloadLoadListener.getVersion() + ".apk");
                 byte[] data = new byte[4096];
                 long total = 0;
                 while ((count = input.read(data)) != -1) {
                     if (isCancelled()) {
-                         isCompleted = (!new File(pathToFile+"/org.timetable.schemester-"+onDialogDownloadLoadListener.getVersion()+".apk")
-                                 .delete());
+                        isCompleted = (!new File(pathToFile + "/org.timetable.schemester-" + onDialogDownloadLoadListener.getVersion() + ".apk")
+                                .delete());
                         input.close();
                         return false;
                     }
@@ -135,7 +137,8 @@ public class CustomDownloadLoadDialog extends AppCompatDialog {
                         output.close();
                         input.close();
                     }
-                } catch (IOException ignored) {}
+                } catch (IOException ignored) {
+                }
                 if (connection != null)
                     connection.disconnect();
             }
@@ -144,12 +147,14 @@ public class CustomDownloadLoadDialog extends AppCompatDialog {
 
         @Override
         protected void onProgressUpdate(Integer... progress) {
-            String pc = progress[0].toString()+"% ",
-                    size ="of "+ progress[1]/1000000 + " MB";
+            String pc = progress[0].toString() + "% ",
+                    size = "of " + progress[1] / 1000000 + " MB";
             downsize.setText(size);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 progressBar.setProgress(progress[0], true);
-            } else { progressBar.setProgress(progress[0]); }
+            } else {
+                progressBar.setProgress(progress[0]);
+            }
             percentage.setText(pc);
         }
 
@@ -162,16 +167,17 @@ public class CustomDownloadLoadDialog extends AppCompatDialog {
 
         @Override
         protected void onPostExecute(Boolean result) {
-                onDialogDownloadLoadListener.afterFinish(result);
-                dismiss();
-                super.onPostExecute(result);
+            onDialogDownloadLoadListener.afterFinish(result);
+            dismiss();
+            super.onPostExecute(result);
         }
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
             mdownloadUpdateApk.cancel(true);
-            boolean res = new File(Environment.getExternalStorageDirectory()+"/Schemester/org.timetable.schemester-"+onDialogDownloadLoadListener.getVersion()+".apk")
+            boolean res = new File(Environment.getExternalStorageDirectory() + "/Schemester/org.timetable.schemester-" + onDialogDownloadLoadListener.getVersion() + ".apk")
                     .delete();
             onDialogDownloadLoadListener.afterFinish(!res);
         }

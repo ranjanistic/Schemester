@@ -21,12 +21,14 @@ import org.timetable.schemester.MainActivity;
 import org.timetable.schemester.R;
 
 import java.util.Objects;
+
 @TargetApi(Build.VERSION_CODES.Q)
 public class AdditionalLoginInfo extends AppCompatActivity {
     ApplicationSchemester schemester;
-    Spinner collegeSpin,courseSpin,yearSpin;
-    String[] collegeCode, courseCode, yearCode,collegeArray, courseArray,yearArray;
+    Spinner collegeSpin, courseSpin, yearSpin;
+    String[] collegeCode, courseCode, yearCode, collegeArray, courseArray, yearArray;
     Button done;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,19 +42,19 @@ public class AdditionalLoginInfo extends AppCompatActivity {
         yearSpin = findViewById(R.id.spinnerYear);
         ImageView displayImage;
         displayImage = findViewById(R.id.imageOnlogin);
-        if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
+        if (getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK) {
             displayImage.setImageResource(R.drawable.ic_moonsmallicon);
         } else {
             displayImage.setImageResource(R.drawable.ic_suniconsmall);
         }
-        Animation animation = AnimationUtils.loadAnimation(this,R.anim.rotate_clock_faster);
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotate_clock_faster);
         displayImage.startAnimation(animation);
         collegeCode = getResources().getStringArray(R.array.college_code_array);
         courseCode = getResources().getStringArray(R.array.course_code_array);
         yearCode = getResources().getStringArray(R.array.year_code_array);
         collegeArray = getResources().getStringArray(R.array.college_array);
-        courseArray =  getResources().getStringArray(R.array.course_array);
-        yearArray =  getResources().getStringArray(R.array.year_array);
+        courseArray = getResources().getStringArray(R.array.course_array);
+        yearArray = getResources().getStringArray(R.array.year_array);
 
         ArrayAdapter<CharSequence> colAdapter = ArrayAdapter.createFromResource(this,
                 R.array.college_array, R.layout.custom_spinner_item);
@@ -78,7 +80,7 @@ public class AdditionalLoginInfo extends AppCompatActivity {
         String[][] ccyArray = new String[][]{collegeArray, courseArray, yearArray},
                 ccyCodeArray = new String[][]{collegeCode, courseCode, yearCode};
         int j = 0;
-        while(j<3) {
+        while (j < 3) {
             int i = 0;
             while (i < ccyArray[j].length) {
                 if (Objects.equals(getAdditionalInfo()[j], ccyCodeArray[j][i])) {
@@ -104,7 +106,9 @@ public class AdditionalLoginInfo extends AppCompatActivity {
         CCY[2] = mSharedPreferences.getString(schemester.getPREF_KEY_YEAR(), null);
         return CCY;
     }
+
     String colC, couC, yC;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -113,34 +117,40 @@ public class AdditionalLoginInfo extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Object o = adapterView.getItemAtPosition(i);
-                if(Objects.equals(o.toString(),collegeArray[i])){
+                if (Objects.equals(o.toString(), collegeArray[i])) {
                     colC = collegeCode[i];
                 }
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
         });
         courseSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Object o = adapterView.getItemAtPosition(i);
-                if(Objects.equals(o.toString(),courseArray[i])){
+                if (Objects.equals(o.toString(), courseArray[i])) {
                     couC = courseCode[i];
                 }
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
         });
         yearSpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Object o = adapterView.getItemAtPosition(i);
-                if(Objects.equals(o.toString(),yearArray[i])){
+                if (Objects.equals(o.toString(), yearArray[i])) {
                     yC = yearCode[i];
                 }
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
         });
 
         done.setOnClickListener(view -> {
@@ -154,23 +164,30 @@ public class AdditionalLoginInfo extends AppCompatActivity {
         });
     }
 
-    private void saveAdditionalInfo(String college, String course, String year){
+    private void saveAdditionalInfo(String college, String course, String year) {
         getSharedPreferences(schemester.getPREF_HEAD_ADDITIONAL_INFO(), MODE_PRIVATE).edit()
-            .putString(schemester.getPREF_KEY_COLLEGE(), college)
-            .putString(schemester.getPREF_KEY_COURSE(), course)
-            .putString(schemester.getPREF_KEY_YEAR(), year)
-            .apply();
+                .putString(schemester.getPREF_KEY_COLLEGE(), college)
+                .putString(schemester.getPREF_KEY_COURSE(), course)
+                .putString(schemester.getPREF_KEY_YEAR(), year)
+                .apply();
     }
 
     public void setAppTheme() {
         switch (getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
-        .getInt(schemester.getPREF_KEY_THEME(), 0)) {
-            case ApplicationSchemester.CODE_THEME_INCOGNITO: setTheme(R.style.IncognitoTheme); break;
-            case ApplicationSchemester.CODE_THEME_DARK: setTheme(R.style.BlueDarkTheme);break;
-            case ApplicationSchemester.CODE_THEME_LIGHT: default:setTheme(R.style.BlueLightTheme);
+                .getInt(schemester.getPREF_KEY_THEME(), 0)) {
+            case ApplicationSchemester.CODE_THEME_INCOGNITO:
+                setTheme(R.style.IncognitoTheme);
+                break;
+            case ApplicationSchemester.CODE_THEME_DARK:
+                setTheme(R.style.BlueDarkTheme);
+                break;
+            case ApplicationSchemester.CODE_THEME_LIGHT:
+            default:
+                setTheme(R.style.BlueLightTheme);
         }
     }
-    private int getThemeStatus(){
+
+    private int getThemeStatus() {
         return getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
                 .getInt(schemester.getPREF_KEY_THEME(), 0);
     }

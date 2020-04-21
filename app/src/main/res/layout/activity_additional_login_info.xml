@@ -4,22 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="12dp"
     android:background="?attr/display_foreground"
     android:backgroundTint="?attr/display_foreground"
-    tools:targetApi="q"
-    tools:context=".student.AdditionalLoginInfo">
+    android:padding="12dp"
+    tools:context=".student.AdditionalLoginInfo"
+    tools:targetApi="q">
+
     <ImageView
         android:id="@+id/imageOnlogin"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_margin="10dp"
-        app:srcCompat="@drawable/ic_suniconsmall"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0"
-        app:layout_constraintHorizontal_bias="1"/>
+        app:srcCompat="@drawable/ic_suniconsmall" />
+
     <TextView
         android:id="@+id/loginheading"
         android:layout_width="match_parent"
@@ -134,6 +136,7 @@
             android:padding="22dp"
             android:textAlignment="textStart" />
     </LinearLayout>
+
     <Button
         android:id="@+id/reloginBtn"
         android:layout_width="wrap_content"

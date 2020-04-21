@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:targetApi="q"
-    tools:context=".FullScheduleActivity">
+    tools:context=".FullScheduleActivity"
+    tools:targetApi="q">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,83 +17,94 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <LinearLayout
             android:id="@+id/fullScheduleSideBar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <ImageButton
                 android:id="@+id/noticebutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="8dp"
-                android:scaleType="centerInside"
-                android:backgroundTint="?attr/display_foreground"
                 android:background="@drawable/square_round_btn"
-                app:srcCompat="@drawable/ic_noticeiconfill"/>
+                android:backgroundTint="?attr/display_foreground"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/ic_noticeiconfill" />
+
             <ImageButton
                 android:id="@+id/chatButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:backgroundTint="?attr/display_foreground"
                 android:background="@drawable/square_round_btn"
-                app:srcCompat="@drawable/ic_messageiconfill"/>
+                android:backgroundTint="?attr/display_foreground"
+                app:srcCompat="@drawable/ic_messageiconfill" />
+
             <ImageButton
                 android:id="@+id/crOptions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:scaleType="fitCenter"
-                android:padding="4dp"
-                android:backgroundTint="?attr/display_foreground"
                 android:background="@drawable/square_round_btn"
-                app:srcCompat="@drawable/ic_teacher_face_mini"/>
-        <ScrollView
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:scrollbarFadeDuration="1">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:orientation="vertical">
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"/>
-            <include
-                layout="@layout/weekday_list" />
-            </LinearLayout>
-        </ScrollView>
+                android:backgroundTint="?attr/display_foreground"
+                android:padding="4dp"
+                android:scaleType="fitCenter"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_teacher_face_mini" />
+
+            <ScrollView
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:scrollbarFadeDuration="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <include layout="@layout/weekday_list" />
+                </LinearLayout>
+            </ScrollView>
         </LinearLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:backgroundTint="?attr/display_foreground"
-            android:background="?attr/display_foreground">
-                <include
-                    android:id="@+id/weekdayplanview"
-                    layout="@layout/day_plan_detail"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            android:background="?attr/display_foreground"
+            android:backgroundTint="?attr/display_foreground">
+
             <include
-                android:visibility="gone"
-                android:id="@+id/settingview"
-                layout="@layout/setting_view"
+                android:id="@+id/weekdayplanview"
+                layout="@layout/day_plan_detail"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
+
             <include
+                android:id="@+id/settingview"
+                layout="@layout/setting_view"
                 android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <include
                 android:id="@+id/aboutview"
                 layout="@layout/about_view"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

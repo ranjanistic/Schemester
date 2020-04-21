@@ -9,14 +9,15 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatDialog;
 
-import org.timetable.schemester.listener.OnDialogLoadListener;
 import org.timetable.schemester.R;
+import org.timetable.schemester.listener.OnDialogLoadListener;
 
 import java.util.Objects;
 
 public class CustomLoadDialogClass extends AppCompatDialog {
     private OnDialogLoadListener onDialogLoadListener;
-    public CustomLoadDialogClass(Context context, OnDialogLoadListener onDialogLoadListener){
+
+    public CustomLoadDialogClass(Context context, OnDialogLoadListener onDialogLoadListener) {
         super(context);
         this.onDialogLoadListener = onDialogLoadListener;
     }
@@ -28,7 +29,7 @@ public class CustomLoadDialogClass extends AppCompatDialog {
         setContentView(R.layout.custom_load_dialog);
         this.setCanceledOnTouchOutside(false);
         Objects.requireNonNull(this.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        TextView loadtext= findViewById(R.id.loadingcaption);
+        TextView loadtext = findViewById(R.id.loadingcaption);
         onDialogLoadListener.onLoad();
         String caption = onDialogLoadListener.onLoadText();
         assert loadtext != null;

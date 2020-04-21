@@ -25,23 +25,27 @@ import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.view.View.GONE;
+
 //TODO: ApplicationClass isn't working out
 public class DurationDetailsDialog extends AppCompatDialog {
     private DurationDetailDialogListener durationDetailDialogListener;
-    public DurationDetailsDialog(Context context, DurationDetailDialogListener durationDetailDialogListener){
+
+    public DurationDetailsDialog(Context context, DurationDetailDialogListener durationDetailDialogListener) {
         super(context);
         this.durationDetailDialogListener = durationDetailDialogListener;
     }
-    private TextView subject, duration,location,classOn;
+
+    private TextView subject, duration, location, classOn;
     private Button dismiss;
     private ImageView dialogImage;
     private ImageButton classStatBtn;
     ApplicationSchemester schemester;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        schemester = (ApplicationSchemester)this.getContext();
+        schemester = (ApplicationSchemester) this.getContext();
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.duration_detail_dialog);
         setCanceledOnTouchOutside(true);
@@ -56,27 +60,28 @@ public class DurationDetailsDialog extends AppCompatDialog {
         subject.setText(durationDetailDialogListener.onCallClassName());
         duration.setText(durationDetailDialogListener.onCallClassDuration());
         location.setText(durationDetailDialogListener.classLocation());
-        if(Objects.equals(durationDetailDialogListener.classIsOn(),true)){
+        if (Objects.equals(durationDetailDialogListener.classIsOn(), true)) {
             classOn.setText(R.string.yes);
             classOn.setBackgroundResource(R.drawable.roundfillboxgreen);
-        } else if(Objects.equals(durationDetailDialogListener.classIsOn(),false)){
+        } else if (Objects.equals(durationDetailDialogListener.classIsOn(), false)) {
             classOn.setText(R.string.no);
             classOn.setBackgroundResource(R.drawable.roundfillboxred);
-        } else if(Objects.equals(durationDetailDialogListener.classIsOn(),null)) {
+        } else if (Objects.equals(durationDetailDialogListener.classIsOn(), null)) {
             classOn.setText(R.string.n_a);
             classOn.setBackgroundResource(R.drawable.roundfillboxneutral);
         }
         dismiss.setOnClickListener(view -> dismiss());
-        if(isClassRepresentative()){
+        if (isClassRepresentative()) {
             dismiss.setVisibility(View.VISIBLE);
             dismiss.setOnClickListener(view -> {
 
             });
-        }else{
+        } else {
             dismiss.setVisibility(GONE);
         }
     }
-    private Boolean isClassRepresentative(){
+
+    private Boolean isClassRepresentative() {
         Boolean[] b = new Boolean[1];
         db.collection(schemester.getCOLLECTION_COLLEGE_CODE())
                 .document(schemester.getDOCUMENT_COURSE_CODE())
@@ -88,23 +93,26 @@ public class DurationDetailsDialog extends AppCompatDialog {
                         DocumentSnapshot document = task.getResult();
                         if (Objects.requireNonNull(document).exists()) {
                             String code = document.getString(schemester.getFIELD_CR_CODE());
-                            b[0] = Objects.equals(code,getLocalCrCode());
-                            storeCRStatus(b[0],b[0]?getLocalCrCode():null);
+                            b[0] = Objects.equals(code, getLocalCrCode());
+                            storeCRStatus(b[0], b[0] ? getLocalCrCode() : null);
                         }
                     }
                 });
         return b[0];
     }
-    private void storeCRStatus(Boolean isCR, String code){
+
+    private void storeCRStatus(Boolean isCR, String code) {
         getContext().getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE).edit()
                 .putBoolean(schemester.getPREF_KEY_STUDENT_CR(), isCR)
                 .putString(schemester.getPREF_KEY_CR_CODE(), code)
                 .apply();
     }
-    private String getLocalCrCode(){
+
+    private String getLocalCrCode() {
         return getContext().getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE)
                 .getString(schemester.getPREF_KEY_CR_CODE(), null);
     }
+
     private String[] getAdditionalInfo() {
         String[] CCY = new String[3];
         SharedPreferences mSharedPreferences = getContext().getSharedPreferences(

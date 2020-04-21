@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center"
     android:background="@drawable/roundcontainerbox"
     android:backgroundTint="?attr/display_foreground"
     android:gravity="center"
-    tools:targetApi="q"
     android:orientation="horizontal"
-    android:padding="12dp">
+    android:padding="12dp"
+    tools:targetApi="q">
 
     <ProgressBar
         android:id="@+id/globalprogressBar"
         style="@android:style/Widget.DeviceDefault.ProgressBar.Large"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:secondaryProgressTint="?attr/foreground_text_color"
-        android:progressBackgroundTint="?attr/foreground_text_color"
         android:indeterminateTint="@color/white"
-        android:progressTint="@color/white" />
+        android:progressBackgroundTint="?attr/foreground_text_color"
+        android:progressTint="@color/white"
+        android:secondaryProgressTint="?attr/foreground_text_color" />
 
     <TextView
         android:id="@+id/loadingcaption"

@@ -3,141 +3,142 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:backgroundTint="?attr/base_background"
-    android:background="@drawable/roundcontainerbox"
-    tools:targetApi="q"
-    android:layout_gravity="center">
-
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:paddingBottom="12dp"
-    android:layout_marginEnd="8dp"
+    android:background="@drawable/roundcontainerbox"
+    android:backgroundTint="?attr/base_background"
     android:gravity="center"
-    android:layout_marginStart="8dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:targetApi="q">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:paddingTop="22dp"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/cred_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="30dp"
-            android:layout_marginStart="30dp"
-            android:text="@string/verification_required"
-            android:textColor="?attr/base_text_color"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/cred_credview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:orientation="vertical">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:layout_margin="12dp"
-            android:gravity="center"
-            android:textColorHint="?attr/display_foreground"
-            android:padding="4dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp">
-
-            <EditText
-                android:id="@+id/cred_email"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_margin="12dp"
-                android:backgroundTint="@color/blue"
-                android:hint="@string/email_id"
-                android:focusedByDefault="true"
-                android:inputType="textEmailAddress"
-                android:nextFocusDown="@id/cred_pass"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:textColor="?attr/base_text_color"
-                tools:targetApi="q" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:layout_margin="12dp"
-            android:gravity="center"
-            android:padding="4dp"
-            android:textColorHint="?attr/display_foreground"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp">
-
-            <EditText
-                android:id="@+id/cred_pass"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_margin="12dp"
-                android:backgroundTint="@color/blue"
-                android:hint="@string/ddmmyyyy"
-                android:inputType="number"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:textColor="?attr/base_text_color" />
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="13dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:gravity="center"
-        android:layout_marginTop="18dp"
-        android:orientation="horizontal" >
+        android:orientation="vertical"
+        android:paddingBottom="12dp">
 
-        <Button
-            android:id="@+id/cred_yes"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/square_round_btn"
-            android:backgroundTint="?attr/warning_button_color"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="12dp"
-            android:textStyle="bold"
-            android:text="@string/proceed"
-            style="?attr/buttonBarStyle"
-            android:layout_marginEnd="8dp"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="?attr/button_text_color" />
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="22dp">
 
-        <Button
-            android:id="@+id/cred_no"
+            <TextView
+                android:id="@+id/cred_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:text="@string/verification_required"
+                android:textColor="?attr/base_text_color"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cred_credview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_margin="12dp"
+                android:gravity="center"
+                android:padding="4dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColorHint="?attr/display_foreground">
+
+                <EditText
+                    android:id="@+id/cred_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_margin="12dp"
+                    android:backgroundTint="@color/blue"
+                    android:focusedByDefault="true"
+                    android:hint="@string/email_id"
+                    android:inputType="textEmailAddress"
+                    android:nextFocusDown="@id/cred_pass"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:textColor="?attr/base_text_color"
+                    tools:targetApi="q" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_margin="12dp"
+                android:gravity="center"
+                android:padding="4dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColorHint="?attr/display_foreground">
+
+                <EditText
+                    android:id="@+id/cred_pass"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_margin="12dp"
+                    android:backgroundTint="@color/blue"
+                    android:hint="@string/ddmmyyyy"
+                    android:inputType="number"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:textColor="?attr/base_text_color" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/square_round_btn"
-            android:backgroundTint="?attr/neutral_button_color"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="12dp"
-            style="?attr/buttonBarStyle"
-            android:text="@string/cancel"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="?attr/button_text_color" />
+            android:layout_marginTop="18dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="13dp">
+
+            <Button
+                android:id="@+id/cred_yes"
+                style="?attr/buttonBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/square_round_btn"
+                android:backgroundTint="?attr/warning_button_color"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="12dp"
+                android:text="@string/proceed"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="?attr/button_text_color"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/cred_no"
+                style="?attr/buttonBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/square_round_btn"
+                android:backgroundTint="?attr/neutral_button_color"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="12dp"
+                android:text="@string/cancel"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="?attr/button_text_color"
+                android:textStyle="bold" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
 </ScrollView>

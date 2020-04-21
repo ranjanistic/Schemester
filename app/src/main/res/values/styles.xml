@@ -61,6 +61,7 @@
         <item name="warning_button_color">@color/dark_red</item>
         <item name="secondary_background">@color/dead_blue</item>
     </style>
+
     <style name="IncognitoTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:fontFamily">@font/montserrat</item>
         <item name="colorPrimary">@color/colorPrimary</item>

@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    android:id="@+id/detailscrollview"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-android:layout_width="match_parent"
-    android:background="@drawable/toproundview"
-    android:backgroundTint="?attr/base_background"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:showIn="@layout/activity_full_schedule"
-    tools:targetApi="q"
-    xmlns:tools="http://schemas.android.com/tools">
-<HorizontalScrollView
-    android:id="@+id/horizontalScrollLand"
-    android:fitsSystemWindows="true"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detailscrollview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:paddingStart="22dp"
-    android:paddingEnd="0dp"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    android:layout_gravity="center_vertical">
+    android:background="@drawable/toproundview"
+    android:backgroundTint="?attr/base_background"
+    tools:showIn="@layout/activity_full_schedule"
+    tools:targetApi="q">
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollLand"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:fitsSystemWindows="true"
+        android:orientation="horizontal"
+        android:paddingStart="22dp"
+        android:paddingEnd="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:layout_gravity="center_vertical"
             android:background="@drawable/toproundview"
             android:backgroundTint="@android:color/transparent"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingStart="22dp"
             android:paddingEnd="0dp">
@@ -57,9 +58,10 @@ android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|center_horizontal"
                         android:layout_marginBottom="4dp"
-                        
+
                         android:textColor="@color/white"
                         android:textSize="18sp" />
+
                     <TextView
                         android:id="@+id/class1"
                         android:layout_width="match_parent"
@@ -97,7 +99,7 @@ android:layout_width="match_parent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|center_horizontal"
-                        
+
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -139,7 +141,7 @@ android:layout_width="match_parent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|center_horizontal"
-                        
+
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -180,7 +182,7 @@ android:layout_width="match_parent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|center_horizontal"
-                        
+
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -224,7 +226,7 @@ android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
                         android:layout_gravity="top|center_horizontal"
-                        
+
                         android:textColor="@color/white"
                         android:textSize="20sp" />
 
@@ -267,7 +269,7 @@ android:layout_width="match_parent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="top|center_horizontal"
-                        
+
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -310,7 +312,7 @@ android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
                         android:layout_gravity="top|center_horizontal"
-                        
+
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -354,7 +356,7 @@ android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
                         android:layout_gravity="top|center_horizontal"
-                        
+
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -398,7 +400,7 @@ android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
                         android:layout_gravity="top|center_horizontal"
-                        
+
                         android:textColor="@color/white"
                         android:textSize="18sp" />
 
@@ -417,5 +419,5 @@ android:layout_width="match_parent"
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </LinearLayout>
-</HorizontalScrollView>
-    </androidx.core.widget.NestedScrollView>
+    </HorizontalScrollView>
+</androidx.core.widget.NestedScrollView>

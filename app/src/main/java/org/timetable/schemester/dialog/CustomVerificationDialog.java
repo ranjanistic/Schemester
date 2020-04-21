@@ -19,14 +19,17 @@ import java.util.Objects;
 
 public class CustomVerificationDialog extends AppCompatDialog {
     private OnDialogApplyListener onDialogApplyListener;
-    public CustomVerificationDialog(Context context, OnDialogApplyListener onDialogApplyListener){
+
+    public CustomVerificationDialog(Context context, OnDialogApplyListener onDialogApplyListener) {
         super(context);
         this.onDialogApplyListener = onDialogApplyListener;
     }
+
     private EditText etmail, etpass;
-    private Button cancel,submit;
+    private Button cancel, submit;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.custom_verification_dialog);
@@ -39,17 +42,15 @@ public class CustomVerificationDialog extends AppCompatDialog {
         submit = findViewById(R.id.cred_yes);
         cancel.setOnClickListener(view -> cancel());
         submit.setOnClickListener(view -> {
-            String email,pass;
-                email = etmail.getText().toString();
-                pass = etpass.getText().toString();
+            String email, pass;
+            email = etmail.getText().toString();
+            pass = etpass.getText().toString();
             if (TextUtils.isEmpty(email)) {
                 Toast.makeText(getContext(), "Email ID is required.", Toast.LENGTH_LONG).show();
-            }
-            else if (TextUtils.isEmpty(pass)) {
+            } else if (TextUtils.isEmpty(pass)) {
                 Toast.makeText(getContext(), "Date of birth is necessary.", Toast.LENGTH_LONG).show();
-            }
-            else{
-                onDialogApplyListener.onApply(email,pass);
+            } else {
+                onDialogApplyListener.onApply(email, pass);
                 dismiss();
             }
         });

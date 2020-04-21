@@ -6,24 +6,25 @@
     android:layout_height="match_parent"
     android:background="?attr/display_foreground"
     android:backgroundTint="?attr/display_foreground"
-    tools:targetApi="q"
-    tools:context=".PositionActivity">
+    tools:context=".PositionActivity"
+    tools:targetApi="q">
 
     <ImageButton
         android:id="@+id/modeSwitchBtnInitial"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_margin="12dp"
         android:background="@drawable/round_btn"
         android:backgroundTint="?attr/display_foreground"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/ic_suniconsmall"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="12dp"
         app:layout_constraintVertical_bias="0"
-        app:layout_constraintHorizontal_bias="1"/>
+        app:srcCompat="@drawable/ic_suniconsmall" />
+
     <TextView
         android:id="@+id/definesheading"
         android:layout_width="match_parent"
@@ -61,6 +62,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.8">
+
         <Button
             android:id="@+id/teacherbtn"
             android:layout_width="wrap_content"
@@ -68,20 +70,22 @@
             android:background="@drawable/square_round_btn"
             android:backgroundTint="?attr/base_background"
             android:paddingStart="12dp"
-            android:paddingEnd="12dp"
             android:paddingTop="4dp"
+            android:paddingEnd="12dp"
             android:paddingBottom="4dp"
+            android:text="@string/i_m_a_teacher"
             android:textAllCaps="false"
-            android:textSize="22sp"
             android:textColor="@color/blue"
-            android:text="@string/i_m_a_teacher"/>
+            android:textSize="22sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="?attr/foreground_text_color"
             android:padding="12dp"
-            android:textSize="32sp"
-            android:text="@string/or"/>
+            android:text="@string/or"
+            android:textColor="?attr/foreground_text_color"
+            android:textSize="32sp" />
+
         <Button
             android:id="@+id/studentbtn"
             android:layout_width="wrap_content"
@@ -89,13 +93,13 @@
             android:background="@drawable/square_round_btn"
             android:backgroundTint="?attr/base_background"
             android:paddingStart="12dp"
-            android:paddingEnd="12dp"
             android:paddingTop="4dp"
+            android:paddingEnd="12dp"
             android:paddingBottom="4dp"
+            android:text="@string/i_m_a_student"
             android:textAllCaps="false"
-            android:textSize="22sp"
             android:textColor="@color/blue"
-            android:text="@string/i_m_a_student"/>
+            android:textSize="22sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

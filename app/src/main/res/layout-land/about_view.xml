@@ -2,12 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/toproundview"
     android:backgroundTint="@color/charcoal"
-    tools:targetApi="q"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    tools:targetApi="q">
 
     <ScrollView
         android:id="@+id/aboutscroll"
@@ -156,10 +156,10 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toEndOf="@id/aboutscroll"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0"
-        app:layout_constraintHorizontal_bias="1">
+        app:layout_constraintVertical_bias="0">
 
         <ImageButton
             android:id="@+id/websiteBtn"
@@ -182,9 +182,9 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="22dp"
-                android:padding="4dp"
                 android:background="@drawable/square_round_btn"
                 android:backgroundTint="@color/white"
+                android:padding="4dp"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/ic_github" />
 

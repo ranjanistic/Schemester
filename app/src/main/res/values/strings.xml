@@ -211,10 +211,10 @@
     <string name="storage_permit_required">Storage permission required</string>
     <string name="storage_permit_request_text">To download and save the latest version on your device, we need your storage permission. Confirm?</string>
     <string name="an_update_is_available">An update is available</string>
-    <string name="update_persuade_text">Update to get the latest features and bug fixes. Download will start automatically.</string>
-    <string name="confirm_to_download">Confirm to download?</string>
+    <string name="update_persuade_text">\nUpdate to get the latest features and bug fixes. Download will start automatically.</string>
+    <string name="confirm_to_download">\nConfirm to download?</string>
     <string name="your_app_ver_colon">Your app version :</string>
-    <string name="new_ver_colon">New Version :</string>
+    <string name="new_ver_colon">\nNew Version :</string>
     <string name="download_interrupted">Download interrupted</string>
     <string name="download_completed">Download completed</string>
     <string name="unable_to_read">Unable to read</string>
@@ -344,4 +344,5 @@
     <string name="change_id">Change ID</string>
     <string name="resend">Resend</string>
     <string name="send_link">Send link</string>
+    <string name="refresh">Refresh</string>
 </resources>

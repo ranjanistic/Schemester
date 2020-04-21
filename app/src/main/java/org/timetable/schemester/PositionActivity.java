@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -14,8 +13,8 @@ import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
 @TargetApi(Build.VERSION_CODES.Q)
 public class PositionActivity extends AppCompatActivity {
     ApplicationSchemester schemester;
@@ -24,10 +23,11 @@ public class PositionActivity extends AppCompatActivity {
     ImageButton modeSwitch;
     Window window;
     Animation hide, show, fadeon, fadeoff;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        schemester = (ApplicationSchemester) this.getApplication(); 
+        schemester = (ApplicationSchemester) this.getApplication();
         setAppTheme(getThemeStatus());
         window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -35,18 +35,18 @@ public class PositionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_position);
         setViewAndDefaults();
 
-        schemester.imageButtonLongPressToast(modeSwitch,"Touch to renovate");
-        if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
+        schemester.imageButtonLongPressToast(modeSwitch, "Touch to renovate");
+        if (getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK) {
             modeSwitch.setImageResource(R.drawable.ic_moonsmallicon);
         } else {
             modeSwitch.setImageResource(R.drawable.ic_suniconsmall);
             storeThemeStatus(ApplicationSchemester.CODE_THEME_LIGHT);
         }
-        final Intent restart = new Intent(PositionActivity.this,PositionActivity.class);
+        final Intent restart = new Intent(PositionActivity.this, PositionActivity.class);
         modeSwitch.setOnClickListener(view -> {
             modeSwitch.startAnimation(hide);
             modeSwitch.startAnimation(fadeoff);
-            if(getThemeStatus() == ApplicationSchemester.CODE_THEME_LIGHT){
+            if (getThemeStatus() == ApplicationSchemester.CODE_THEME_LIGHT) {
                 modeSwitch.setImageResource(R.drawable.ic_moonsmallicon);
                 storeThemeStatus(ApplicationSchemester.CODE_THEME_DARK);
                 startActivity(restart);
@@ -54,7 +54,7 @@ public class PositionActivity extends AppCompatActivity {
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 modeSwitch.startAnimation(show);
                 modeSwitch.startAnimation(fadeon);
-            } else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK){
+            } else if (getThemeStatus() == ApplicationSchemester.CODE_THEME_DARK) {
                 modeSwitch.setImageResource(R.drawable.ic_suniconsmall);
                 storeThemeStatus(ApplicationSchemester.CODE_THEME_LIGHT);
                 startActivity(restart);
@@ -84,33 +84,41 @@ public class PositionActivity extends AppCompatActivity {
         });
     }
 
-    private void setViewAndDefaults(){
-        hide = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.gone_centrally);
-        show = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.emerge_centrally);
-        fadeon = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fadeliton);
-        fadeoff= AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fadelitoff);
+    private void setViewAndDefaults() {
+        hide = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.gone_centrally);
+        show = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.emerge_centrally);
+        fadeon = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadeliton);
+        fadeoff = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadelitoff);
         modeSwitch = findViewById(R.id.modeSwitchBtnInitial);
         teacher = findViewById(R.id.teacherbtn);
         student = findViewById(R.id.studentbtn);
     }
 
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
     }
-    private void storeUserPosition(String pos){
+
+    private void storeUserPosition(String pos) {
         getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE).edit()
                 .putString(schemester.getPREF_KEY_USER_DEF(), pos).apply();
     }
-    private void storeThemeStatus(int themeChoice){
+
+    private void storeThemeStatus(int themeChoice) {
         getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE).edit()
                 .putInt(schemester.getPREF_KEY_THEME(), themeChoice).apply();
     }
+
     public void setAppTheme(int code) {
         switch (code) {
-            case ApplicationSchemester.CODE_THEME_DARK: setTheme(R.style.BlueDarkTheme);break;
-            case ApplicationSchemester.CODE_THEME_LIGHT: default:setTheme(R.style.BlueLightTheme);
+            case ApplicationSchemester.CODE_THEME_DARK:
+                setTheme(R.style.BlueDarkTheme);
+                break;
+            case ApplicationSchemester.CODE_THEME_LIGHT:
+            default:
+                setTheme(R.style.BlueLightTheme);
         }
     }
+
     private int getThemeStatus() {
         return getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
                 .getInt(schemester.getPREF_KEY_THEME(), 0);

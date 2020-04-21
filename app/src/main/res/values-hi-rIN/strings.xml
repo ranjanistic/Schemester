@@ -156,10 +156,10 @@
     <string name="storage_permit_required">संग्रहण की अनुमति की आवश्यकता है</string>
     <string name="storage_permit_request_text">अपने डिवाइस पर नवीनतम संस्करण को डाउनलोड करने और सहेजने के लिए, हमें आपकी संग्रहण अनुमति की आवश्यकता है। पुष्टि करें?</string>
     <string name="an_update_is_available">एक अपडेट उपलब्ध है</string>
-    <string name="update_persuade_text">नवीनतम सुविधाओं और बग को ठीक करने के लिए अपडेट करें। डाउनलोड स्वचालित रूप से शुरू हो जाएगा।</string>
+    <string name="update_persuade_text">\nनवीनतम सुविधाओं और बग को ठीक करने के लिए अपडेट करें। डाउनलोड स्वचालित रूप से शुरू हो जाएगा।</string>
     <string name="confirm_to_download">डाउनलोड करने की पुष्टि करें?</string>
-    <string name="your_app_ver_colon">आपका एप्लिकेशन संस्करण:</string>
-    <string name="new_ver_colon">नया संस्करण :</string>
+    <string name="your_app_ver_colon">\nआपका एप्लिकेशन संस्करण:</string>
+    <string name="new_ver_colon">\nनया संस्करण :</string>
     <string name="download_interrupted">डाउनलोड बाधित</string>
     <string name="download_completed">डाउनलोड सम्पन्न हुआ</string>
     <string name="unable_to_read">पढ़ते नहीं बन रहा</string>
@@ -253,4 +253,5 @@
     <string name="change_id">आईडी बदलें</string>
     <string name="resend">पुन: भेजें</string>
     <string name="send_link">लिंक भेजें</string>
+    <string name="refresh">ताज़ा करें</string>
 </resources>

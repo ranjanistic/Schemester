@@ -4,745 +4,788 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="?attr/base_background"
     android:background="?attr/base_background"
+    android:backgroundTint="?attr/base_background"
     tools:context=".MainActivity"
     tools:targetApi="Q">
+
     <View
         android:id="@+id/translucent_layer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:alpha="0.7"
         android:background="@drawable/toproundview"
         android:backgroundTint="?attr/base_text_color"
-        android:alpha="0.7"
         android:elevation="8dp"
         android:translationZ="8dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="18dp"
+        android:paddingBottom="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+
+        <LinearLayout
+            android:id="@+id/linearLayout7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/sem_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/comfortaa_bold"
+                android:text="@string/loading"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="?attr/base_text_color"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/semesterTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/comfortaa_bold"
+                android:text="@string/semester"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="?attr/base_text_color"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
             <LinearLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
                 android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:paddingTop="18dp"
-                android:paddingBottom="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0">
+                android:orientation="vertical">
 
-
-                <LinearLayout
-                    android:id="@+id/linearLayout7"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/weekday_text"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@android:color/transparent"
+                    android:gravity="bottom"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:text="@string/weekday"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/action_text_color"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/month_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    android:gravity="top|end"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:text="@string/month"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/action_text_color"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/present_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
                     android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/sem_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="12dp"
-                        android:fontFamily="@font/comfortaa_bold"
-                        android:text="@string/loading"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="?attr/base_text_color"
-                        android:textSize="28sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/semesterTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="12dp"
-                        android:fontFamily="@font/comfortaa_bold"
-                        android:text="@string/semester"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="?attr/base_text_color"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/weekday_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:background="@android:color/transparent"
-                            android:gravity="bottom"
-                            android:paddingStart="8dp"
-                            android:paddingEnd="8dp"
-                            android:text="@string/weekday"
-                            android:textAllCaps="false"
-                            android:textColor="?attr/action_text_color"
-                            android:textSize="18sp" />
-
-                        <TextView
-                            android:id="@+id/month_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:background="@android:color/transparent"
-                            android:gravity="top|end"
-                            android:paddingStart="8dp"
-                            android:paddingEnd="8dp"
-                            android:text="@string/month"
-                            android:textAllCaps="false"
-                            android:textColor="?attr/action_text_color"
-                            android:textSize="16sp" />
-
-                        <TextView
-                            android:id="@+id/present_time"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@android:color/transparent"
-                            android:gravity="center"
-                            android:paddingStart="8dp"
-                            android:paddingEnd="8dp"
-                            android:text="@string/today"
-                            android:textAllCaps="false"
-                            android:textColor="?attr/base_text_color"
-                            android:textSize="16sp" />
-                    </LinearLayout>
-                    <Button
-                        android:id="@+id/present_date"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
-                        android:layout_marginTop="18dp"
-                        android:layout_marginBottom="18dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/round_btn"
-                        android:backgroundTint="?attr/action_text_color"
-                        android:fontFamily="@font/comfortaa_bold"
-                        android:foregroundGravity="center"
-                        android:gravity="center"
-                        android:text="@string/_0"
-                        android:textAlignment="center"
-                        android:textColor="?attr/foreground_text_color"
-                        android:textSize="36sp"
-                        android:textStyle="bold"
-                        tools:targetApi="q" />
-
-                </LinearLayout>
-
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:text="@string/today"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/base_text_color"
+                    android:textSize="16sp" />
             </LinearLayout>
+
+            <Button
+                android:id="@+id/present_date"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="18dp"
+                android:background="@drawable/round_btn"
+                android:backgroundTint="?attr/action_text_color"
+                android:fontFamily="@font/comfortaa_bold"
+                android:foregroundGravity="center"
+                android:gravity="center"
+                android:text="@string/_0"
+                android:textAlignment="center"
+                android:textColor="?attr/foreground_text_color"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                tools:targetApi="q" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_margin="0dp"
         android:elevation="12dp"
         android:translationZ="22dp"
-        android:layout_margin="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="@id/linearLayout"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <include layout="@layout/bottom_drawer" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+    <LinearLayout
+        android:id="@+id/scheduleLayout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/toproundview"
+        android:backgroundTint="?attr/display_foreground"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/linearLayout"
+        app:layout_constraintTop_toTopOf="parent">
+
         <LinearLayout
-            android:id="@+id/scheduleLayout"
-            android:layout_width="0dp"
+            android:id="@+id/period_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="12dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:paddingStart="22dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="22dp">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/reem_kufi"
+                android:paddingStart="22dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="22dp"
+                android:paddingBottom="12dp"
+                android:text="@string/duration"
+                android:textColor="?attr/foreground_text_color"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/reem_kufi"
+                android:gravity="center"
+                android:paddingStart="22dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="22dp"
+                android:paddingBottom="12dp"
+                android:text="@string/class_"
+                android:textColor="?attr/foreground_text_color"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/toproundview"
-            android:backgroundTint="?attr/display_foreground"
             android:orientation="vertical"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/linearLayout"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/period_view">
 
             <LinearLayout
-                android:id="@+id/period_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:elevation="12dp"
-                android:orientation="horizontal"
-                android:paddingStart="22dp"
-                android:paddingTop="8dp"
-                android:paddingEnd="22dp">
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:fontFamily="@font/reem_kufi"
-                    android:paddingStart="22dp"
-                    android:paddingEnd="22dp"
-                    android:paddingBottom="12dp"
-                    android:paddingTop="12dp"
-                    android:text="@string/duration"
-                    android:textColor="?attr/foreground_text_color"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-                <TextView
-                    android:layout_width="250dp"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/reem_kufi"
-                    android:gravity="center"
-                    android:paddingStart="22dp"
-                    android:paddingEnd="22dp"
-                    android:paddingBottom="12dp"
-                    android:paddingTop="12dp"
-                    android:text="@string/class_"
-                    android:textColor="?attr/foreground_text_color"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <ScrollView
-                android:id="@+id/scrollView"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/period_view">
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/duration1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:background="@drawable/square_edgy_btn"
+                    android:backgroundTint="@android:color/transparent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
 
-                    <LinearLayout
-                        android:id="@+id/duration1"
-                        android:background="@drawable/square_edgy_btn"
-                        android:backgroundTint="@android:color/transparent"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_width="match_parent"
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/periodMain1"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="8dp">
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-                        <TextView
-                            android:id="@+id/periodMain1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/roundcontainerbox"
-                            
-                            android:paddingStart="8dp"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            android:textColor="?attr/foreground_text_color"
-                            android:textSize="18sp" />
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
+                        android:background="@drawable/roundcontainerbox"
 
-                        <TextView
-                            android:id="@+id/classMain1"
-                            android:layout_width="250dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/roundcontainerbox"
-                            android:textColor="?attr/foreground_text_color"
-                            
-                            android:paddingStart="8dp"
-                            android:gravity="center"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            android:singleLine="false"
-                            android:text="@string/loading"
-                            android:textSize="18sp" />
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-                    </LinearLayout>
+                        android:paddingStart="8dp"
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:textColor="?attr/foreground_text_color"
+                        android:textSize="18sp" />
 
-                    <LinearLayout
-                        android:id="@+id/duration2"
-                        android:background="@drawable/square_edgy_btn"
-                        android:backgroundTint="@android:color/transparent"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_width="match_parent"
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/classMain1"
+                        android:layout_width="250dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="8dp">
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-                        <TextView
-                            android:id="@+id/periodMain2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/roundcontainerbox"
-                            
-                            android:paddingStart="8dp"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            android:textColor="?attr/foreground_text_color"
-                            android:textSize="18sp" />
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
+                        android:background="@drawable/roundcontainerbox"
+                        android:gravity="center"
 
-                        <TextView
-                            android:id="@+id/classMain2"
-                            android:layout_width="250dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/roundcontainerbox"
-                            android:textColor="?attr/foreground_text_color"
-                            
-                            android:paddingStart="8dp"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            android:singleLine="false"
-                            android:text="@string/loading"
-                            android:textSize="18sp"
-                            android:gravity="center"/>
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
+                        android:paddingStart="8dp"
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:singleLine="false"
+                        android:text="@string/loading"
+                        android:textColor="?attr/foreground_text_color"
+                        android:textSize="18sp" />
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/duration3"
-                        android:background="@drawable/square_edgy_btn"
-                        android:backgroundTint="@android:color/transparent"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="8dp">
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-                        <TextView
-                            android:id="@+id/periodMain3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/roundcontainerbox"
-                            android:textColor="?attr/foreground_text_color"
-                            
-                            android:paddingStart="8dp"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            android:textSize="18sp" />
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/classMain3"
-                            android:layout_width="250dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/roundcontainerbox"
-                            android:textColor="?attr/foreground_text_color"
-                            
-                            android:paddingStart="8dp"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            android:singleLine="false"
-                            android:text="@string/loading"
-                            android:textSize="18sp"
-android:gravity="center"/>
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/duration4"
-                        android:background="@drawable/square_edgy_btn"
-                        android:backgroundTint="@android:color/transparent"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="8dp">
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-                        <TextView
-                            android:id="@+id/periodMain4"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:background="@drawable/roundcontainerbox"
-                            android:textColor="?attr/foreground_text_color"
-                            
-                            android:paddingStart="8dp"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            android:textSize="18sp" />
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/classMain4"
-                            android:layout_width="250dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/roundcontainerbox"
-                            android:textColor="?attr/foreground_text_color"
-                            
-                            android:paddingStart="8dp"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            android:singleLine="false"
-                            android:text="@string/loading"
-                            android:textSize="18sp"
-android:gravity="center"/>
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/duration5"
-                        android:background="@drawable/square_edgy_btn"
-                        android:backgroundTint="@android:color/transparent"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="8dp">
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-                        <TextView
-                            android:id="@+id/periodMain5"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:background="@drawable/roundcontainerbox"
-                            android:textColor="?attr/foreground_text_color"
-                            
-                            android:paddingStart="8dp"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            android:textSize="18sp" />
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-                        <TextView
-                            android:id="@+id/classMain5"
-                            android:layout_width="250dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/roundcontainerbox"
-                            android:textColor="?attr/foreground_text_color"
-                            
-                            android:paddingStart="8dp"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            android:singleLine="false"
-                            android:text="@string/loading"
-                            android:textSize="18sp"
-android:gravity="center"/>
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/duration6"
-                        android:background="@drawable/square_edgy_btn"
-                        android:backgroundTint="@android:color/transparent"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="8dp">
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-                        <TextView
-                            android:id="@+id/periodMain6"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:background="@drawable/roundcontainerbox"
-                            android:textColor="?attr/foreground_text_color"
-                            
-                            android:paddingStart="8dp"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            android:textSize="18sp" />
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-                        <TextView
-                            android:id="@+id/classMain6"
-                            android:layout_width="250dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/roundcontainerbox"
-                            android:textColor="?attr/foreground_text_color"
-                            
-                            android:paddingStart="8dp"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            android:singleLine="false"
-                            android:text="@string/loading"
-                            android:textSize="18sp"
-android:gravity="center"/>
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/duration7"
-                        android:background="@drawable/square_edgy_btn"
-                        android:backgroundTint="@android:color/transparent"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="8dp">
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-                        <TextView
-                            android:id="@+id/periodMain7"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:background="@drawable/roundcontainerbox"
-                            android:textColor="?attr/foreground_text_color"
-                            
-                            android:paddingStart="8dp"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            
-                            android:textSize="18sp" />
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/classMain7"
-                            android:layout_width="250dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/roundcontainerbox"
-                            android:textColor="?attr/foreground_text_color"
-                            
-                            android:paddingStart="8dp"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            android:singleLine="false"
-                            android:text="@string/loading"
-                            android:textSize="18sp"
-android:gravity="center"/>
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/duration8"
-                        android:background="@drawable/square_edgy_btn"
-                        android:backgroundTint="@android:color/transparent"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="8dp">
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-                        <TextView
-                            android:id="@+id/periodMain8"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:background="@drawable/roundcontainerbox"
-                            android:textColor="?attr/foreground_text_color"
-                            
-                            android:paddingStart="8dp"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            android:textSize="18sp" />
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/classMain8"
-                            android:layout_width="250dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/roundcontainerbox"
-                            android:textColor="?attr/foreground_text_color"
-                            
-                            android:paddingStart="8dp"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            android:singleLine="false"
-                            android:text="@string/loading"
-                            android:textSize="18sp"
-android:gravity="center"/>
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/duration9"
-                        android:background="@drawable/square_edgy_btn"
-                        android:backgroundTint="@android:color/transparent"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="8dp">
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-                        <TextView
-                            android:id="@+id/periodMain9"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/roundcontainerbox"
-                            android:textColor="?attr/foreground_text_color"
-                            
-                            android:paddingStart="8dp"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            android:textSize="18sp" />
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                        <TextView
-                            android:id="@+id/classMain9"
-                            android:layout_width="250dp"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/roundcontainerbox"
-                            android:textColor="?attr/foreground_text_color"
-                            
-                            android:paddingStart="8dp"
-                            android:paddingTop="18dp"
-                            android:paddingEnd="8dp"
-                            android:paddingBottom="18dp"
-                            android:singleLine="false"
-                            android:text="@string/loading"
-                            android:textSize="18sp"
-android:gravity="center"/>
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-                    </LinearLayout>
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
                 </LinearLayout>
 
-            </ScrollView>
-        </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/duration2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/square_edgy_btn"
+                    android:backgroundTint="@android:color/transparent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/periodMain2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/roundcontainerbox"
+
+                        android:paddingStart="8dp"
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:textColor="?attr/foreground_text_color"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/classMain2"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/roundcontainerbox"
+                        android:gravity="center"
+
+                        android:paddingStart="8dp"
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:singleLine="false"
+                        android:text="@string/loading"
+                        android:textColor="?attr/foreground_text_color"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/duration3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/square_edgy_btn"
+                    android:backgroundTint="@android:color/transparent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/periodMain3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/roundcontainerbox"
+                        android:paddingStart="8dp"
+
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:textColor="?attr/foreground_text_color"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/classMain3"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/roundcontainerbox"
+                        android:gravity="center"
+
+                        android:paddingStart="8dp"
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:singleLine="false"
+                        android:text="@string/loading"
+                        android:textColor="?attr/foreground_text_color"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/duration4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/square_edgy_btn"
+                    android:backgroundTint="@android:color/transparent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/periodMain4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:background="@drawable/roundcontainerbox"
+                        android:paddingStart="8dp"
+
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:textColor="?attr/foreground_text_color"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/classMain4"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/roundcontainerbox"
+                        android:gravity="center"
+
+                        android:paddingStart="8dp"
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:singleLine="false"
+                        android:text="@string/loading"
+                        android:textColor="?attr/foreground_text_color"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/duration5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/square_edgy_btn"
+                    android:backgroundTint="@android:color/transparent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/periodMain5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:background="@drawable/roundcontainerbox"
+                        android:paddingStart="8dp"
+
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:textColor="?attr/foreground_text_color"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/classMain5"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/roundcontainerbox"
+                        android:gravity="center"
+
+                        android:paddingStart="8dp"
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:singleLine="false"
+                        android:text="@string/loading"
+                        android:textColor="?attr/foreground_text_color"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/duration6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/square_edgy_btn"
+                    android:backgroundTint="@android:color/transparent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/periodMain6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:background="@drawable/roundcontainerbox"
+                        android:paddingStart="8dp"
+
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:textColor="?attr/foreground_text_color"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/classMain6"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/roundcontainerbox"
+                        android:gravity="center"
+
+                        android:paddingStart="8dp"
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:singleLine="false"
+                        android:text="@string/loading"
+                        android:textColor="?attr/foreground_text_color"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/duration7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/square_edgy_btn"
+                    android:backgroundTint="@android:color/transparent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/periodMain7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:background="@drawable/roundcontainerbox"
+                        android:paddingStart="8dp"
+
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:textColor="?attr/foreground_text_color"
+
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/classMain7"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/roundcontainerbox"
+                        android:gravity="center"
+
+                        android:paddingStart="8dp"
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:singleLine="false"
+                        android:text="@string/loading"
+                        android:textColor="?attr/foreground_text_color"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/duration8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/square_edgy_btn"
+                    android:backgroundTint="@android:color/transparent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/periodMain8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:background="@drawable/roundcontainerbox"
+                        android:paddingStart="8dp"
+
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:textColor="?attr/foreground_text_color"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/classMain8"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/roundcontainerbox"
+                        android:gravity="center"
+
+                        android:paddingStart="8dp"
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:singleLine="false"
+                        android:text="@string/loading"
+                        android:textColor="?attr/foreground_text_color"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/duration9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/square_edgy_btn"
+                    android:backgroundTint="@android:color/transparent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/periodMain9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/roundcontainerbox"
+                        android:paddingStart="8dp"
+
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:textColor="?attr/foreground_text_color"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:id="@+id/classMain9"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/roundcontainerbox"
+                        android:gravity="center"
+
+                        android:paddingStart="8dp"
+                        android:paddingTop="18dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="18dp"
+                        android:singleLine="false"
+                        android:text="@string/loading"
+                        android:textColor="?attr/foreground_text_color"
+                        android:textSize="18sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </ScrollView>
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/noclassImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_redsunsetbeachgradient"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="@id/noclasstext"
-        app:layout_constraintEnd_toEndOf="@id/noclasstext"
         android:layout_marginBottom="22dp"
         android:visibility="gone"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintBottom_toTopOf="@id/noclasstext"
-        app:layout_constraintVertical_bias="1"/>
+        app:layout_constraintEnd_toEndOf="@id/noclasstext"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/noclasstext"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1"
+        app:srcCompat="@drawable/ic_redsunsetbeachgradient" />
+
     <TextView
         android:id="@+id/noclasstext"
         android:layout_width="wrap_content"
@@ -750,33 +793,34 @@ android:gravity="center"/>
         android:gravity="center"
         android:text="@string/no_classes_today_enjoy"
         android:textAllCaps="true"
-        android:textSize="22sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="?attr/heading_text_color"
+        android:textSize="22sp"
         android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.8"
         app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8" />
+
     <TextView
         android:id="@+id/noclassreason"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
         android:gravity="center"
-        android:visibility="gone"
         android:text="@string/no_classes_today_enjoy"
         android:textAllCaps="true"
-        android:textSize="20sp"
         android:textColor="?attr/heading_text_color"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginTop="22dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/noclasstext"
-        app:layout_constraintVertical_bias="0"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@id/noclasstext"
-        app:layout_constraintTop_toBottomOf="@id/noclasstext" />
+        app:layout_constraintTop_toBottomOf="@id/noclasstext"
+        app:layout_constraintVertical_bias="0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

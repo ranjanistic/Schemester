@@ -4,140 +4,144 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="?attr/base_background"
     android:background="?attr/base_background"
+    android:backgroundTint="?attr/base_background"
     tools:context=".MainActivity"
     tools:targetApi="q">
-            <LinearLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="match_parent"
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingTop="18dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="18dp"
+        android:translationZ="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:gravity="start"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/sem_text"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:paddingBottom="18dp"
-                android:paddingTop="18dp"
-                android:translationZ="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0">
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/comfortaa_bold"
+                android:gravity="start"
+                android:text="@string/loading"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="?attr/base_text_color"
+                android:textSize="28sp"
+                android:textStyle="bold" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:gravity="start"
-                    android:orientation="vertical">
+            <TextView
+                android:id="@+id/semesterTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/comfortaa_bold"
+                android:gravity="top"
+                android:text="@string/semester"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="?attr/base_text_color"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/sem_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="12dp"
-                        android:fontFamily="@font/comfortaa_bold"
-                        android:gravity="start"
-                        android:text="@string/loading"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="?attr/base_text_color"
-                        android:textSize="28sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/semesterTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginEnd="12dp"
-                        android:fontFamily="@font/comfortaa_bold"
-                        android:text="@string/semester"
-                        android:gravity="top"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="?attr/base_text_color"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                </LinearLayout>
+        </LinearLayout>
 
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/weekday_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:background="@android:color/transparent"
-                        android:foregroundGravity="right"
-                        android:gravity="bottom|end"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:text="@string/weekday"
-                        android:textAllCaps="false"
-                        android:textColor="?attr/action_text_color"
-                        android:textSize="18sp" />
-                    <TextView
-                        android:id="@+id/month_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:background="@android:color/transparent"
-                        android:gravity="top|end"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:text="@string/month"
-                        android:textAllCaps="false"
-                        android:textColor="?attr/action_text_color"
-                        android:textSize="16sp" />
-                </LinearLayout>
+            <TextView
+                android:id="@+id/weekday_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@android:color/transparent"
+                android:foregroundGravity="right"
+                android:gravity="bottom|end"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:text="@string/weekday"
+                android:textAllCaps="false"
+                android:textColor="?attr/action_text_color"
+                android:textSize="18sp" />
 
-                <Button
-                    android:id="@+id/present_date"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/round_btn"
-                    android:backgroundTint="?action_text_color"
-                    android:fontFamily="@font/comfortaa_bold"
-                    android:gravity="center"
-                    android:text="@string/_0"
-                    android:textAlignment="center"
-                    android:textColor="?attr/foreground_text_color"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+            <TextView
+                android:id="@+id/month_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@android:color/transparent"
+                android:gravity="top|end"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:text="@string/month"
+                android:textAllCaps="false"
+                android:textColor="?attr/action_text_color"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/present_date"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:background="@drawable/round_btn"
+            android:backgroundTint="?action_text_color"
+            android:fontFamily="@font/comfortaa_bold"
+            android:gravity="center"
+            android:text="@string/_0"
+            android:textAlignment="center"
+            android:textColor="?attr/foreground_text_color"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/period_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:backgroundTint="?attr/display_foreground"
         android:background="@drawable/toproundview"
+        android:backgroundTint="?attr/display_foreground"
+        android:orientation="horizontal"
         android:paddingStart="22dp"
+        android:paddingTop="22dp"
         android:paddingEnd="22dp"
         android:paddingBottom="8dp"
-        android:paddingTop="22dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         app:layout_constraintVertical_bias="0.0">
+
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -148,35 +152,37 @@
             android:text="@string/duration"
             android:textColor="?attr/foreground_text_color"
             android:textSize="30sp" />
+
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <TextView
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:paddingStart="18dp"
-            android:paddingEnd="18dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:gravity="center"
             android:fontFamily="@font/reem_kufi"
+            android:gravity="center"
+            android:paddingStart="18dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="18dp"
+            android:paddingBottom="8dp"
             android:text="@string/class_"
             android:textColor="?attr/foreground_text_color"
             android:textSize="30sp" />
+
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
     </LinearLayout>
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:backgroundTint="?attr/display_foreground"
         android:background="?attr/display_foreground"
+        android:backgroundTint="?attr/display_foreground"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -192,31 +198,34 @@
 
             <LinearLayout
                 android:id="@+id/duration1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/square_edgy_btn"
                 android:backgroundTint="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="8dp">
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
+
                 <TextView
                     android:id="@+id/periodMain1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
-                    
+
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:textColor="?attr/foreground_text_color"
                     android:textSize="16sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -227,15 +236,16 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
-                    android:textColor="?attr/foreground_text_color"
-                    
                     android:paddingStart="8dp"
+
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:text="@string/loading"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="18sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -244,31 +254,34 @@
 
             <LinearLayout
                 android:id="@+id/duration2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/square_edgy_btn"
                 android:backgroundTint="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="8dp">
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
+
                 <TextView
                     android:id="@+id/periodMain2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
-                    
+
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:textColor="?attr/foreground_text_color"
                     android:textSize="16sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -279,15 +292,16 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
-                    android:textColor="?attr/foreground_text_color"
-                    
                     android:paddingStart="8dp"
+
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:text="@string/loading"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="18sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -297,32 +311,35 @@
 
             <LinearLayout
                 android:id="@+id/duration3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/square_edgy_btn"
                 android:backgroundTint="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="8dp">
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
+
                 <TextView
                     android:id="@+id/periodMain3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    
+
                     android:background="@drawable/roundcontainerbox"
-                    android:textColor="?attr/foreground_text_color"
-                    
                     android:paddingStart="8dp"
+
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="16sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -333,15 +350,16 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
-                    android:textColor="?attr/foreground_text_color"
-                    
                     android:paddingStart="8dp"
+
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:text="@string/loading"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="18sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -351,31 +369,34 @@
 
             <LinearLayout
                 android:id="@+id/duration4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/square_edgy_btn"
                 android:backgroundTint="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="8dp">
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
+
                 <TextView
                     android:id="@+id/periodMain4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
-                    android:textColor="?attr/foreground_text_color"
-                    
                     android:paddingStart="8dp"
+
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="16sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -386,15 +407,16 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
-                    android:textColor="?attr/foreground_text_color"
-                    
                     android:paddingStart="8dp"
+
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:text="@string/loading"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="18sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -403,49 +425,53 @@
 
             <LinearLayout
                 android:id="@+id/duration5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/square_edgy_btn"
                 android:backgroundTint="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="8dp">
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
+
                 <TextView
                     android:id="@+id/periodMain5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
-                    android:textColor="?attr/foreground_text_color"
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="16sp" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
+
                 <TextView
                     android:id="@+id/classMain5"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
-                    android:textColor="?attr/foreground_text_color"
-                    
                     android:paddingStart="8dp"
+
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:text="@string/loading"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="18sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -455,52 +481,56 @@
 
             <LinearLayout
                 android:id="@+id/duration6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/square_edgy_btn"
                 android:backgroundTint="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="8dp">
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
+
                 <TextView
                     android:id="@+id/periodMain6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    
+
                     android:background="@drawable/roundcontainerbox"
-                    android:textColor="?attr/foreground_text_color"
-                    
                     android:paddingStart="8dp"
+
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="16sp" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
+
                 <TextView
                     android:id="@+id/classMain6"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
-                    android:textColor="?attr/foreground_text_color"
-                    
-                    android:paddingStart="8dp"
                     android:gravity="bottom"
+
+                    android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:text="@string/loading"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="18sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -510,32 +540,35 @@
 
             <LinearLayout
                 android:id="@+id/duration7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/square_edgy_btn"
                 android:backgroundTint="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="8dp">
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
+
                 <TextView
                     android:id="@+id/periodMain7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    
+
                     android:background="@drawable/roundcontainerbox"
-                    android:textColor="?attr/foreground_text_color"
-                    
                     android:paddingStart="8dp"
+
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="16sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -546,15 +579,16 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
-                    android:textColor="?attr/foreground_text_color"
-                    
                     android:paddingStart="8dp"
+
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:text="@string/loading"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="18sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -565,30 +599,33 @@
 
             <LinearLayout
                 android:id="@+id/duration8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:background="@drawable/square_edgy_btn"
                 android:backgroundTint="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="8dp">
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
+
                 <TextView
                     android:id="@+id/periodMain8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
-                    android:textColor="?attr/foreground_text_color"
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="16sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -599,15 +636,16 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
-                    android:textColor="?attr/foreground_text_color"
-                    
                     android:paddingStart="8dp"
+
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:text="@string/loading"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="18sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -618,31 +656,34 @@
 
             <LinearLayout
                 android:id="@+id/duration9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="44dp"
                 android:background="@drawable/square_edgy_btn"
                 android:backgroundTint="@android:color/transparent"
                 android:clickable="true"
                 android:focusable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:layout_marginBottom="44dp"
                 android:padding="8dp">
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="1" />
+
                 <TextView
                     android:id="@+id/periodMain9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
-                    android:textColor="?attr/foreground_text_color"
                     android:paddingStart="8dp"
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="16sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -653,15 +694,16 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/roundcontainerbox"
-                    android:textColor="?attr/foreground_text_color"
-                    
                     android:paddingStart="8dp"
+
                     android:paddingTop="18dp"
                     android:paddingEnd="8dp"
                     android:paddingBottom="18dp"
                     android:singleLine="false"
                     android:text="@string/loading"
+                    android:textColor="?attr/foreground_text_color"
                     android:textSize="18sp" />
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -670,83 +712,85 @@
         </LinearLayout>
 
     </ScrollView>
+
     <ImageView
         android:id="@+id/noclassImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="22dp"
         android:visibility="gone"
-        app:srcCompat="@drawable/ic_redsunsetbeachgradient"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="@id/noclasstext"
+        app:layout_constraintBottom_toTopOf="@id/noclasstext"
         app:layout_constraintEnd_toEndOf="@id/noclasstext"
         app:layout_constraintHorizontal_bias="0.5"
-        android:layout_marginBottom="22dp"
-        app:layout_constraintBottom_toTopOf="@id/noclasstext"
-        app:layout_constraintVertical_bias="1"/>
+        app:layout_constraintStart_toStartOf="@id/noclasstext"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1"
+        app:srcCompat="@drawable/ic_redsunsetbeachgradient" />
+
     <TextView
         android:id="@+id/noclasstext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:visibility="gone"
         android:text="@string/no_classes_today_enjoy"
         android:textAllCaps="true"
-        android:textSize="26sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="?attr/heading_text_color"
+        android:textSize="26sp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.65"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.65" />
+
     <TextView
         android:id="@+id/noclassreason"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:visibility="gone"
-        android:textAllCaps="false"
-        android:textSize="20sp"
-        android:textColor="?attr/group_card_text_color"
         android:layout_marginTop="22dp"
+        android:gravity="center"
+        android:textAllCaps="false"
+        android:textColor="?attr/group_card_text_color"
+        android:textSize="20sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/noclasstext"
-        app:layout_constraintVertical_bias="0"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@id/noclasstext"
-        app:layout_constraintTop_toBottomOf="@id/noclasstext" />
+        app:layout_constraintTop_toBottomOf="@id/noclasstext"
+        app:layout_constraintVertical_bias="0" />
 
     <View
         android:id="@+id/translucent_layer"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:alpha="0"
         android:background="@drawable/toproundview"
         android:backgroundTint="@color/black"
-        android:alpha="0"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_weight="1" />
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="1"
-        android:translationZ="12dp"
         android:elevation="12dp"
         android:outlineAmbientShadowColor="@color/black"
         android:outlineSpotShadowColor="@color/black"
+        android:translationZ="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1"
         tools:targetApi="q">
 
-        <include
-            layout="@layout/bottom_drawer"
-        />
+        <include layout="@layout/bottom_drawer" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

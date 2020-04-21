@@ -24,12 +24,15 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class CustomOnOptListener extends AppCompatDialog {
     private OnOptionChosenListener onOptionChosenListener;
-    private  Button set, cancel;
+    private Button set, cancel;
+
     public CustomOnOptListener(Context context, OnOptionChosenListener onOptionChosenListener) {
         super(context);
         this.onOptionChosenListener = onOptionChosenListener;
     }
+
     private ImageView choiceimg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,23 +47,21 @@ public class CustomOnOptListener extends AppCompatDialog {
         radioGroup = findViewById(R.id.radiogroup);
         RadioButton r102 = findViewById(R.id.radio2);
         RadioButton r101 = findViewById(R.id.radio1);
-        assert r101!=null;
-        assert r102!=null;
-        if(getThemeStatus()==101) {
+        assert r101 != null;
+        assert r102 != null;
+        if (getThemeStatus() == 101) {
             r101.setChecked(true);
             choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterlightmockup));
-        }
-        else if(getThemeStatus()==102){
+        } else if (getThemeStatus() == 102) {
             r102.setChecked(true);
             choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterdarkmockup));
-        }
-        else{
+        } else {
             r101.setChecked(true);
             choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterlightmockup));
         }
 
         Objects.requireNonNull(cancel).setOnClickListener(view -> dismiss());
-        
+
         if (radioGroup != null) {
             radioGroup.setOnCheckedChangeListener((rGroup, radioid) -> {
                 switch (radioid) {
@@ -70,7 +71,8 @@ public class CustomOnOptListener extends AppCompatDialog {
                     case R.id.radio2:
                         choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterdarkmockup));
                         break;
-                        default:choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterlightmockup));
+                    default:
+                        choiceimg.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_schemesterlightmockup));
                 }
                 set.setOnClickListener(view -> {
                     switch (radioid) {
@@ -88,7 +90,8 @@ public class CustomOnOptListener extends AppCompatDialog {
             });
         }
     }
-    private void storeThemeStatus(int themechoice){
+
+    private void storeThemeStatus(int themechoice) {
         SharedPreferences mSharedPreferences = getContext().getSharedPreferences("schemeTheme", MODE_PRIVATE);
         SharedPreferences.Editor mEditor = mSharedPreferences.edit();
         mEditor.putInt("themeCode", themechoice);

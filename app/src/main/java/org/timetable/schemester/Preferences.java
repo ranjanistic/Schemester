@@ -1,8 +1,5 @@
 package org.timetable.schemester;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -22,7 +19,12 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -45,18 +47,18 @@ import org.timetable.schemester.listener.OnDialogDownloadLoadListener;
 import org.timetable.schemester.listener.OnDialogLoadListener;
 import org.timetable.schemester.listener.OnDialogTextListener;
 import org.timetable.schemester.student.AdditionalLoginInfo;
-import org.w3c.dom.Document;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
 @TargetApi(Build.VERSION_CODES.Q)
 public class Preferences extends AppCompatActivity {
     ApplicationSchemester schemester;
     Switch timeFormatSwitch;
-    LinearLayout dobUpdate, emailChange, rollChange, appUpdate,crStatBtn, deleteAcc, restartBtn, themeBtn, appUpdateNotifyBtn,
-            feedback, clockTypeSwitch, loginAgain, anonymousOps, userOps, ccySwitch, ccyGroup,devOpsGroup;
+    LinearLayout dobUpdate, emailChange, rollChange, appUpdate, crStatBtn, deleteAcc, restartBtn, themeBtn, appUpdateNotifyBtn,
+            feedback, clockTypeSwitch, loginAgain, anonymousOps, userOps, ccySwitch, ccyGroup, devOpsGroup;
     CheckBox appUpdateNotifyCheck;
     ImageButton returnBtn;
     TextView timeText;
@@ -91,13 +93,15 @@ public class Preferences extends AppCompatActivity {
         super.onStart();
         setAllActivityStarterButtonsDisabled(false);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         setAllActivityStarterButtonsDisabled(false);
     }
+
     //Startup functions
-    private void findViewsAndSetObjects(){
+    private void findViewsAndSetObjects() {
         anonymousOps = findViewById(R.id.anonymousOptions);
         userOps = findViewById(R.id.accountOptions);
         ccyGroup = findViewById(R.id.ccyOptions);
@@ -121,18 +125,18 @@ public class Preferences extends AppCompatActivity {
         appUpdateNotifyCheck = findViewById(R.id.appUpdateNotificationCheckbox);
     }
 
-    private void setThemeConsequences(){
-        if(getThemeStatus() == ApplicationSchemester.CODE_THEME_LIGHT) {
+    private void setThemeConsequences() {
+        if (getThemeStatus() == ApplicationSchemester.CODE_THEME_LIGHT) {
             window.setStatusBarColor(this.getResources().getColor(R.color.white));
             window.setNavigationBarColor(this.getResources().getColor(R.color.blue));
-        } else if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO){
+        } else if (getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO) {
             window.setStatusBarColor(this.getResources().getColor(R.color.black_overlay));
             window.setNavigationBarColor(this.getResources().getColor(R.color.black));
         } else {
             window.setStatusBarColor(this.getResources().getColor(R.color.charcoal));
             window.setNavigationBarColor(this.getResources().getColor(R.color.spruce));
         }
-        if(getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO){
+        if (getThemeStatus() == ApplicationSchemester.CODE_THEME_INCOGNITO) {
             anonymousOps.setVisibility(View.VISIBLE);
             userOps.setVisibility(View.GONE);
             ccyGroup.setVisibility(View.GONE);
@@ -146,10 +150,13 @@ public class Preferences extends AppCompatActivity {
             themeBtn.setVisibility(View.VISIBLE);
         }
     }
-    private void initiateCustomDialogs(){
+
+    private void initiateCustomDialogs() {
         customLoadDialogClass = new CustomLoadDialogClass(Preferences.this, new OnDialogLoadListener() {
             @Override
-            public void onLoad() { }
+            public void onLoad() {
+            }
+
             @Override
             public String onLoadText() {
                 return schemester.getStringResource(R.string.just_a_moment);
@@ -157,12 +164,13 @@ public class Preferences extends AppCompatActivity {
         });
 
     }
-    private void setListenersAndInitialize(){
+
+    private void setListenersAndInitialize() {
         appUpdateNotifyCheck.setChecked(userWantsUpdateNotification());
         returnBtn.setOnClickListener(view -> finish());
         loginAgain.setOnClickListener(view -> startActivity(new Intent(Preferences.this, ModeOfConduct.class)));
         ccySwitch.setOnClickListener(view -> {
-            if(checkIfEmailVerified()) {
+            if (checkIfEmailVerified()) {
                 setAllActivityStarterButtonsDisabled(true);
                 Intent ccyIntent = new Intent(Preferences.this, AdditionalLoginInfo.class);
                 startActivity(ccyIntent);
@@ -186,21 +194,23 @@ public class Preferences extends AppCompatActivity {
                                     DocumentSnapshot document = task.getResult();
                                     if (Objects.requireNonNull(document).exists()) {
                                         String code = document.getString(schemester.getFIELD_CR_CODE());
-                                        storeCRStatus(Objects.equals(text,code),code);
+                                        storeCRStatus(Objects.equals(text, code), code);
                                         customLoadDialogClass.hide();
                                     }
                                 }
                             });
-                    if(studentIsCR()){
+                    if (studentIsCR()) {
                         schemester.toasterLong("Welcome, class representative!");
                     } else {
                         schemester.toasterLong("Problem in authentication, contact your authority");
                     }
                 }
+
                 @Override
                 public String onCallText() {
                     return "Enter the code given by your authority to activate your CR status.";
                 }
+
                 @Override
                 public int textType() {
                     return 0;
@@ -230,10 +240,12 @@ public class Preferences extends AppCompatActivity {
                     public void onDismiss() {
                         restartApplication();
                     }
+
                     @Override
                     public String onCallText() {
                         return schemester.getStringResource(R.string.requires_restart);
                     }
+
                     @Override
                     public String onCallSub() {
                         return schemester.getStringResource(R.string.changing_theme_requires_restart);
@@ -245,10 +257,10 @@ public class Preferences extends AppCompatActivity {
         });
 
         emailChange.setOnClickListener(view -> {
-        customVerificationDialogEmailChange = new CustomVerificationDialog(Preferences.this, (email, password) -> {
-            customLoadDialogClass.show();
-            authenticate(email, password, CODE_CHANGE_EMAIL);
-        });
+            customVerificationDialogEmailChange = new CustomVerificationDialog(Preferences.this, (email, password) -> {
+                customLoadDialogClass.show();
+                authenticate(email, password, CODE_CHANGE_EMAIL);
+            });
             customVerificationDialogEmailChange.show();
             customLoadDialogClass.hide();
         });
@@ -263,9 +275,9 @@ public class Preferences extends AppCompatActivity {
                 snackbar.setActionTextColor(getResources().getColor(R.color.yellow));
                 snackbar.setAction(schemester.getStringResource(R.string.send), view1 -> {
                     Snackbar.make(view1, schemester.getStringResource(R.string.sending), Snackbar.LENGTH_INDEFINITE)
-                        .setBackgroundTint(getResources().getColor(R.color.dark_blue))
-                        .setTextColor(getResources().getColor(R.color.white))
-                        .show();
+                            .setBackgroundTint(getResources().getColor(R.color.dark_blue))
+                            .setTextColor(getResources().getColor(R.color.white))
+                            .show();
                     setNavbarColor(R.color.dark_blue);
                     resetLinkSender(getCredentials()[0]);
                 });
@@ -273,9 +285,9 @@ public class Preferences extends AppCompatActivity {
                 setNavbarColor(R.color.dead_blue);
             } else {
                 Snackbar.make(view, schemester.getStringResource(R.string.network_error_occurred), Snackbar.LENGTH_LONG)
-                    .setBackgroundTint(getResources().getColor(R.color.dark_red))
-                    .setTextColor(getResources().getColor(R.color.white))
-                    .show();
+                        .setBackgroundTint(getResources().getColor(R.color.dark_red))
+                        .setTextColor(getResources().getColor(R.color.white))
+                        .show();
                 setNavbarColor(R.color.dark_red);
             }
         });
@@ -288,7 +300,7 @@ public class Preferences extends AppCompatActivity {
         timeFormatSwitch.setChecked(getTimeFormat() == 12);
         clockTypeSwitch.setOnClickListener(view -> timeFormatSwitch.setChecked(!timeFormatSwitch.isChecked()));
 
-        if(timeFormatSwitch.isChecked()) {
+        if (timeFormatSwitch.isChecked()) {
             timeText.setText(getResources().getString(R.string.time_format_12_hours));
         } else {
             timeText.setText(getResources().getString(R.string.time_format_24_hours));
@@ -297,14 +309,14 @@ public class Preferences extends AppCompatActivity {
             if (isChecked) {
                 timeText.setText(getResources().getString(R.string.time_format_12_hours));
                 storeTimeFormat(12);
-                Snackbar.make(buttonView,schemester.getStringResource(R.string.time_format_12_notify),Snackbar.LENGTH_LONG)
+                Snackbar.make(buttonView, schemester.getStringResource(R.string.time_format_12_notify), Snackbar.LENGTH_LONG)
                         .setBackgroundTint(getResources().getColor(R.color.dead_blue))
                         .setTextColor(getResources().getColor(R.color.white))
                         .show();
             } else {
                 timeText.setText(getResources().getString(R.string.time_format_24_hours));
                 storeTimeFormat(24);
-                Snackbar.make(buttonView,schemester.getStringResource(R.string.time_format_24_notify),Snackbar.LENGTH_LONG)
+                Snackbar.make(buttonView, schemester.getStringResource(R.string.time_format_24_notify), Snackbar.LENGTH_LONG)
                         .setBackgroundTint(getResources().getColor(R.color.dead_blue))
                         .setTextColor(getResources().getColor(R.color.white))
                         .show();
@@ -316,7 +328,7 @@ public class Preferences extends AppCompatActivity {
             appUpdateNotifyCheck.setChecked(userWantsUpdateNotification());
         });
         appUpdateNotifyCheck.setOnCheckedChangeListener((compoundButton, b) -> {
-            if(b) {         //if checked
+            if (b) {         //if checked
                 Snackbar.make(compoundButton, schemester.getStringResource(R.string.update_notification_enabled_text), 5000)
                         .setBackgroundTint(getResources().getColor(R.color.dead_blue))
                         .setTextColor(getResources().getColor(R.color.white))
@@ -333,7 +345,7 @@ public class Preferences extends AppCompatActivity {
                         .show();
             }
         });
-        
+
         appUpdateNotifyBtn.setOnClickListener(view -> {
             storeUpdateNotificationPreference(!userWantsUpdateNotification());
             appUpdateNotifyCheck.setChecked(userWantsUpdateNotification());
@@ -346,12 +358,12 @@ public class Preferences extends AppCompatActivity {
         });
     }
 
-    private void setNavbarColor(int color){
+    private void setNavbarColor(int color) {
         window.setNavigationBarColor(schemester.getColorResource(color));
     }
 
     //Account action functions
-    private void resetLinkSender(final String email){
+    private void resetLinkSender(final String email) {
         FirebaseAuth.getInstance().sendPasswordResetEmail(email)
                 .addOnCompleteListener(task -> Snackbar.make(findViewById(R.id.preferencesID), schemester.getStringResource(R.string.email_sent_notif), Snackbar.LENGTH_LONG)
                         .setBackgroundTint(getResources().getColor(R.color.dead_blue))
@@ -362,40 +374,44 @@ public class Preferences extends AppCompatActivity {
                         .setTextColor(getResources().getColor(R.color.white))
                         .show());
     }
-    private void authenticate(final String uid, String passphrase, final int taskCode){
+
+    private void authenticate(final String uid, String passphrase, final int taskCode) {
         customLoadDialogClass.show();
-        if(!uid.equals(getCredentials()[0])){
+        if (!uid.equals(getCredentials()[0])) {
             schemester.toasterLong(schemester.getStringResource(R.string.incorrect_credentials));
             customLoadDialogClass.hide();
             return;
         }
-        AuthCredential credential = EmailAuthProvider
-                .getCredential(uid, passphrase);
+        AuthCredential credential = EmailAuthProvider.getCredential(uid, passphrase);
         user.reauthenticate(credential)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         schemester.toasterShort(schemester.getStringResource(R.string.authentication_passed));
-                        if(taskCode == CODE_DELETE_ACCOUNT){
+                        if (taskCode == CODE_DELETE_ACCOUNT) {
                             CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(Preferences.this, new OnDialogConfirmListener() {
                                 @Override
                                 public void onApply(Boolean confirm) {
-                                  if(confirm){
-                                      db.collection(schemester.getCOLLECTION_USERBASE()).document(getCredentials()[0]).delete();
-                                      deleteUser();
-                                  } else { customLoadDialogClass.hide(); }
+                                    if (confirm) {
+                                        db.collection(schemester.getCOLLECTION_USERBASE()).document(getCredentials()[0]).delete();
+                                        deleteUser();
+                                    } else {
+                                        customLoadDialogClass.hide();
+                                    }
                                 }
+
                                 @Override
                                 public String onCallText() {
                                     return schemester.getStringResource(R.string.delete_account_permanently);
                                 }
+
                                 @Override
                                 public String onCallSub() {
-                                    return schemester.getStringResource(R.string.delete_account_warning_text)+uid+"\'?";
+                                    return schemester.getStringResource(R.string.delete_account_warning_text) + uid + "\'?";
                                 }
                             });
                             customConfirmDialogClass.setCanceledOnTouchOutside(false);
                             customConfirmDialogClass.show();
-                        } else if(taskCode == CODE_CHANGE_EMAIL){
+                        } else if (taskCode == CODE_CHANGE_EMAIL) {
                             updateEmail();
                         }
                         customLoadDialogClass.hide();
@@ -405,9 +421,10 @@ public class Preferences extends AppCompatActivity {
                     }
                 });
     }
-    private void deleteUser(){
+
+    private void deleteUser() {
         customLoadDialogClass.show();
-        if(isNetworkConnected()) {
+        if (isNetworkConnected()) {
             user.delete()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
@@ -428,7 +445,8 @@ public class Preferences extends AppCompatActivity {
             schemester.toasterLong(schemester.getStringResource(R.string.network_problem));
         }
     }
-    private void rollUpdater(){
+
+    private void rollUpdater() {
         customTextDialog = new CustomTextDialog(Preferences.this, new OnDialogTextListener() {
             @Override
             public void onApply(String text) {
@@ -436,13 +454,19 @@ public class Preferences extends AppCompatActivity {
                     final CustomTextDialog customTextDialog1 = new CustomTextDialog(Preferences.this, new OnDialogTextListener() {
                         @Override
                         public void onApply(String text) {
-                            if(text.matches("[0-9]+/[0-9]+")) {
+                            if (text.matches("[0-9]+/[0-9]+")) {
                                 storeCredentials(null, text);
                                 schemester.toasterLong(schemester.getStringResource(R.string.roll_num_updated));
-                            } else { schemester.toasterLong(schemester.getStringResource(R.string.invalid_roll)); }
+                            } else {
+                                schemester.toasterLong(schemester.getStringResource(R.string.invalid_roll));
+                            }
                         }
+
                         @Override
-                        public String onCallText() { return schemester.getStringResource(R.string.enter_new_roll); }
+                        public String onCallText() {
+                            return schemester.getStringResource(R.string.enter_new_roll);
+                        }
+
                         @Override
                         public int textType() {
                             return 7011;        //roll = 7011
@@ -450,10 +474,16 @@ public class Preferences extends AppCompatActivity {
                     });
                     customTextDialog1.setCanceledOnTouchOutside(false);
                     customTextDialog1.show();
-                } else { schemester.toasterLong(schemester.getStringResource(R.string.incorrect_roll)); }
+                } else {
+                    schemester.toasterLong(schemester.getStringResource(R.string.incorrect_roll));
+                }
             }
+
             @Override
-            public String onCallText() { return schemester.getStringResource(R.string.enter_previous_roll); }
+            public String onCallText() {
+                return schemester.getStringResource(R.string.enter_previous_roll);
+            }
+
             @Override
             public int textType() {
                 return 0;
@@ -461,8 +491,10 @@ public class Preferences extends AppCompatActivity {
         });
         customTextDialog.show();
     }
+
     String newMail;
-    private void updateEmail(){
+
+    private void updateEmail() {
         customLoadDialogClass.hide();
         customTextDialog = new CustomTextDialog(Preferences.this, new OnDialogTextListener() {
             @Override
@@ -470,14 +502,16 @@ public class Preferences extends AppCompatActivity {
                 customLoadDialogClass.show();
                 newMail = text;
                 setEmailIfConfirmed(schemester.getStringResource(R.string.email_to_be_verified),
-                        schemester.getStringResource(R.string.verification_will_be_sent_to)+newMail
-                        +schemester.getStringResource(R.string.confirm_this_is_yours), newMail);
+                        schemester.getStringResource(R.string.verification_will_be_sent_to) + newMail
+                                + schemester.getStringResource(R.string.confirm_this_is_yours), newMail);
                 customLoadDialogClass.hide();
             }
+
             @Override
             public String onCallText() {
                 return schemester.getStringResource(R.string.enter_new_email);
             }
+
             @Override
             public int textType() {
                 return 38411;
@@ -486,6 +520,7 @@ public class Preferences extends AppCompatActivity {
         customTextDialog.setCanceledOnTouchOutside(false);
         customTextDialog.show();
     }
+
     private void setEmailIfConfirmed(final String head, final String body, final String updateMail) {
         final CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(Preferences.this, new OnDialogConfirmListener() {
             @Override
@@ -519,6 +554,7 @@ public class Preferences extends AppCompatActivity {
         customConfirmDialogClass.setCanceledOnTouchOutside(false);
         customConfirmDialogClass.show();
     }
+
     private void migrateDataAtEmailChange(final String migrateFrom, final String migrateTo) {
         db.collection(schemester.getCOLLECTION_USERBASE()).document(migrateFrom)
                 .get()
@@ -530,25 +566,28 @@ public class Preferences extends AppCompatActivity {
                                 .set(statusData, SetOptions.merge());
                         db.collection(schemester.getCOLLECTION_USERBASE()).document(migrateFrom).delete();
                     } else {
-                        setEmailIfConfirmed(schemester.getStringResource(R.string.failed_to_migrate), schemester.getStringResource(R.string.migration_failed_text)+"\n"+
-                                schemester.getStringResource(R.string.check_connection_try_again),migrateFrom);
+                        setEmailIfConfirmed(schemester.getStringResource(R.string.failed_to_migrate), schemester.getStringResource(R.string.migration_failed_text) + "\n" +
+                                schemester.getStringResource(R.string.check_connection_try_again), migrateFrom);
                     }
                 });
 
     }
-    private void setEmailChangedAlert(final String body){
+
+    private void setEmailChangedAlert(final String body) {
         CustomAlertDialog customAlertDialog = new CustomAlertDialog(Preferences.this, new OnDialogAlertListener() {
             @Override
-            public void onDismiss(){
+            public void onDismiss() {
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(Preferences.this, LoginActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
                 overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
             }
+
             @Override
             public String onCallText() {
                 return schemester.getStringResource(R.string.email_change_success_text);
             }
+
             @Override
             public String onCallSub() {
                 return body;
@@ -556,8 +595,9 @@ public class Preferences extends AppCompatActivity {
         });
         customAlertDialog.show();
     }
-    private void readVersionCheckUpdate(){
-        if(isNetworkConnected()) {
+
+    private void readVersionCheckUpdate() {
+        if (isNetworkConnected()) {
             db.collection(schemester.COLLECTION_APP_CONFIGURATION).document(schemester.DOCUMENT_VERSION_CURRENT)
                     .get()
                     .addOnCompleteListener(task -> {
@@ -569,7 +609,7 @@ public class Preferences extends AppCompatActivity {
                                 final String link = document.getString(schemester.FIELD_DOWNLOAD_LINK);
                                 customLoadDialogClass.hide();
                                 if (vcode != ApplicationSchemester.versionCode || !Objects.equals(vname, ApplicationSchemester.versionName)) {
-                                    schemester.toasterLong( schemester.getStringResource(R.string.update_available));
+                                    schemester.toasterLong(schemester.getStringResource(R.string.update_available));
                                     final CustomConfirmDialogClass customConfirmDialogClass = new CustomConfirmDialogClass(Preferences.this, new OnDialogConfirmListener() {
                                         @Override
                                         public void onApply(Boolean confirm) {
@@ -579,10 +619,10 @@ public class Preferences extends AppCompatActivity {
                                                     public void onApply(Boolean confirm) {
                                                         customLoadDialogClass.dismiss();
                                                         requestStoragePermission();
-                                                        if (storagePermissionGranted()){
-                                                            if(isNetworkConnected()) {
-                                                                File file = new File(Environment.getExternalStorageDirectory() +"/Schemester/org.timetable.schemester-"+vname+".apk");
-                                                                if(file.exists()){
+                                                        if (storagePermissionGranted()) {
+                                                            if (isNetworkConnected()) {
+                                                                File file = new File(Environment.getExternalStorageDirectory() + "/Schemester/org.timetable.schemester-" + vname + ".apk");
+                                                                if (file.exists()) {
                                                                     showPackageAlert(vname);
                                                                 } else {
                                                                     downloader(link, vname);
@@ -594,10 +634,12 @@ public class Preferences extends AppCompatActivity {
                                                             customLoadDialogClass.dismiss();
                                                         }
                                                     }
+
                                                     @Override
                                                     public String onCallText() {
                                                         return schemester.getStringResource(R.string.storage_permit_required);
                                                     }
+
                                                     @Override
                                                     public String onCallSub() {
                                                         return schemester.getStringResource(R.string.storage_permit_request_text);
@@ -605,18 +647,20 @@ public class Preferences extends AppCompatActivity {
                                                 });
                                                 permissionDialog.show();
                                             } else {
-                                                File file = new File(Environment.getExternalStorageDirectory() +"/Schemester/org.timetable.schemester-"+vname+".apk");
-                                                if(file.exists()){
+                                                File file = new File(Environment.getExternalStorageDirectory() + "/Schemester/org.timetable.schemester-" + vname + ".apk");
+                                                if (file.exists()) {
                                                     showPackageAlert(vname);
                                                 } else {
-                                                    downloader(link,vname);
+                                                    downloader(link, vname);
                                                 }
                                             }
                                         }
+
                                         @Override
                                         public String onCallText() {
                                             return "An update is available";
                                         }
+
                                         @Override
                                         public String onCallSub() {
                                             return schemester.getStringResource(R.string.your_app_ver_colon)
@@ -645,16 +689,18 @@ public class Preferences extends AppCompatActivity {
     }
 
     //App update step functions
-    private void downloader(final String link,final  String version){
+    private void downloader(final String link, final String version) {
         CustomDownloadLoadDialog customDownloadLoadDialog = new CustomDownloadLoadDialog(Preferences.this, new OnDialogDownloadLoadListener() {
             @Override
             public String getLink() {
                 return link;
             }
+
             @Override
             public String getVersion() {
                 return version;
             }
+
             @Override
             public void afterFinish(Boolean isCompleted) {
                 if (isCompleted) {
@@ -667,89 +713,121 @@ public class Preferences extends AppCompatActivity {
         });
         customDownloadLoadDialog.show();
     }
-    private void showPackageAlert(final String newVname){
+
+    private void showPackageAlert(final String newVname) {
         CustomAlertDialog downloadFinishAlert = new CustomAlertDialog(Preferences.this, new OnDialogAlertListener() {
             @Override
-            public void onDismiss() {}
+            public void onDismiss() {
+                File file = new File(Environment.getExternalStorageDirectory() + "/Schemester/", "org.timetable.schemester-" + newVname + ".apk");
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(FileProvider.getUriForFile(getApplicationContext(),
+                        getApplicationContext().getPackageName() + ".provider", file),
+                        "application/vnd.android.package-archive");
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(intent);
+            }
+
             @Override
             public String onCallText() {
                 return schemester.getStringResource(R.string.download_completed);
             }
+
             @Override
             public String onCallSub() {
-                return "Latest version is downloaded. \n\nGo to File manager > Internal Storage > Schemester >\n\nHere you'll find the latest package ("+ newVname +" ) to install.\n\n(Delete that file if it is causing problems and try again)";
+                return "Latest version is downloaded. \n\nGo to File manager > Internal Storage > Schemester >\n\nHere you'll find the latest package (" + newVname + " ) to install.\n\n(Delete that file if it is causing problems and try again)";
             }
-        });downloadFinishAlert.show();
+        });
+        downloadFinishAlert.show();
     }
-    private boolean storagePermissionGranted(){
+
+    private boolean storagePermissionGranted() {
         return (ContextCompat.checkSelfPermission(Preferences.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            == (PackageManager.PERMISSION_GRANTED));
+                == (PackageManager.PERMISSION_GRANTED));
     }
-    private void requestStoragePermission(){
+
+    private void requestStoragePermission() {
         ActivityCompat.requestPermissions(Preferences.this,
                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                 1);
     }
 
     //Stored preference dependent functions
-    private void storeCredentials(String mail, String roll){
+    private void storeCredentials(String mail, String roll) {
         SharedPreferences.Editor mEditor = getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE).edit();
-        if(mail != null) mEditor.putString(schemester.getPREF_KEY_EMAIL(), mail).apply();
-        if(roll != null) mEditor.putString(schemester.getPREF_KEY_ROLL(), roll).apply();
+        if (mail != null) mEditor.putString(schemester.getPREF_KEY_EMAIL(), mail).apply();
+        if (roll != null) mEditor.putString(schemester.getPREF_KEY_ROLL(), roll).apply();
     }
-    private String[] getCredentials(){
+
+    private String[] getCredentials() {
         String[] cred = new String[2];
         SharedPreferences mSharedPreferences = getSharedPreferences(schemester.getPREF_HEAD_CREDENTIALS(), MODE_PRIVATE);
-        cred[0] =  mSharedPreferences.getString(schemester.getPREF_KEY_EMAIL(), null);
-        cred[1] =  mSharedPreferences.getString(schemester.getPREF_KEY_ROLL(), null);
+        cred[0] = mSharedPreferences.getString(schemester.getPREF_KEY_EMAIL(), null);
+        cred[1] = mSharedPreferences.getString(schemester.getPREF_KEY_ROLL(), null);
         return cred;
     }
-    private void storeCRStatus(Boolean isCR, String code){
+
+    private void storeCRStatus(Boolean isCR, String code) {
         getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE).edit()
                 .putBoolean(schemester.getPREF_KEY_STUDENT_CR(), isCR)
                 .putString(schemester.getPREF_KEY_CR_CODE(), code)
                 .apply();
     }
-    private boolean studentIsCR(){
+
+    private boolean studentIsCR() {
         return getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE)
                 .getBoolean(schemester.getPREF_KEY_STUDENT_CR(), false);
     }
-    private void storeLoginStatus(Boolean logged){
+
+    private void storeLoginStatus(Boolean logged) {
         getSharedPreferences(schemester.PREF_HEAD_LOGIN_STAT, MODE_PRIVATE).edit()
                 .putBoolean(schemester.PREF_KEY_LOGIN_STAT, logged).apply();
     }
-    private void storeUpdateNotificationPreference(Boolean getUpdateNotification){
+
+    private void storeUpdateNotificationPreference(Boolean getUpdateNotification) {
         getSharedPreferences(schemester.getPREF_HEAD_UPDATE_NOTIFY(), MODE_PRIVATE).edit()
-                .putBoolean(schemester.getPREF_KEY_UPDATE_NOTIFY(),getUpdateNotification).apply();
+                .putBoolean(schemester.getPREF_KEY_UPDATE_NOTIFY(), getUpdateNotification).apply();
     }
-    private Boolean userWantsUpdateNotification(){
+
+    private Boolean userWantsUpdateNotification() {
         return getSharedPreferences(schemester.getPREF_HEAD_UPDATE_NOTIFY(), MODE_PRIVATE)
                 .getBoolean(schemester.getPREF_KEY_UPDATE_NOTIFY(), true);
     }
-    private void storeTimeFormat(int format){
+
+    private void storeTimeFormat(int format) {
         getSharedPreferences(schemester.getPREF_HEAD_TIME_FORMAT(), MODE_PRIVATE).edit()
                 .putInt(schemester.getPREF_KEY_TIME_FORMAT(), format).apply();
     }
+
     private int getTimeFormat() {
         return this.getSharedPreferences(schemester.getPREF_HEAD_TIME_FORMAT(), MODE_PRIVATE)
                 .getInt(schemester.getPREF_KEY_TIME_FORMAT(), 24);
     }
-    private void storeThemeStatus(int themeChoice){
+
+    private void storeThemeStatus(int themeChoice) {
         getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE).edit()
                 .putInt(schemester.getPREF_KEY_THEME(), themeChoice).apply();
     }
-    private String readUserPosition(){
+
+    private String readUserPosition() {
         return this.getSharedPreferences(schemester.getPREF_HEAD_USER_DEF(), MODE_PRIVATE)
                 .getString(schemester.getPREF_KEY_USER_DEF(), null);
     }
+
     public void setAppTheme() {
         switch (this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
                 .getInt(schemester.getPREF_KEY_THEME(), 101)) {
-            case ApplicationSchemester.CODE_THEME_INCOGNITO: setTheme(R.style.IncognitoTheme);break;
-            case ApplicationSchemester.CODE_THEME_DARK: setTheme(R.style.BlueWhiteThemeDark);break;
-            case ApplicationSchemester.CODE_THEME_LIGHT: default:setTheme(R.style.BlueWhiteThemeLight);
+            case ApplicationSchemester.CODE_THEME_INCOGNITO:
+                setTheme(R.style.IncognitoTheme);
+                break;
+            case ApplicationSchemester.CODE_THEME_DARK:
+                setTheme(R.style.BlueWhiteThemeDark);
+                break;
+            case ApplicationSchemester.CODE_THEME_LIGHT:
+            default:
+                setTheme(R.style.BlueWhiteThemeLight);
         }
     }
+
     private int getThemeStatus() {
         return this.getSharedPreferences(schemester.getPREF_HEAD_THEME(), MODE_PRIVATE)
                 .getInt(schemester.getPREF_KEY_THEME(), 101);
@@ -759,14 +837,17 @@ public class Preferences extends AppCompatActivity {
     private Boolean checkIfEmailVerified() {
         return Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).isEmailVerified();
     }
-    private void restartApplication(){
+
+    private void restartApplication() {
         startActivity(new Intent(Preferences.this, Splash.class)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right);
     }
-    private void setAllActivityStarterButtonsDisabled(Boolean state){
+
+    private void setAllActivityStarterButtonsDisabled(Boolean state) {
         ccySwitch.setClickable(!state);
     }
+
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return (cm != null ? Objects.requireNonNull(cm).getActiveNetworkInfo() : null) != null && Objects.requireNonNull(cm.getActiveNetworkInfo()).isConnected();
